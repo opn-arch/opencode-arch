@@ -42,6 +42,15 @@ def main():
     metrics_p.add_argument("--tool", default=None, help="Filter by tool name")
     metrics_p.add_argument("--last", type=int, default=10, help="Number of records (default: 10)")
 
+    # regen-loop
+    regen_p = subparsers.add_parser("regen-loop", help="Run decomposed regen loop")
+    regen_p.add_argument("--repo", required=True, help="Path to the target repository")
+    regen_p.add_argument("--max-iterations", type=int, default=5, help="Max iterations per subsystem (default: 5)")
+    regen_p.add_argument("--target", type=float, default=0.5, help="Target pass rate (default: 0.5)")
+    regen_p.add_argument("--subsystem", default=None, help="Process only this subsystem")
+    regen_p.add_argument("--model", default=None, help="Model override (provider/model)")
+    regen_p.add_argument("--timeout", type=int, default=600, help="Timeout seconds per LLM call (default: 600)")
+
     args = parser.parse_args()
 
     if args.command == "extract":
@@ -74,6 +83,19 @@ def main():
     elif args.command == "metrics":
         from opencode_arch.cli.metrics import show_metrics
         show_metrics(tool=args.tool, last=args.last)
+
+    elif args.command == "regen-loop":
+        from opencode_arch.cli.regen_loop import run_regen_loop
+        from opencode_arch.runner.opencode import OpencodeRunner
+        runner = OpencodeRunner(timeout=args.timeout, model=args.model)
+        result = asyncio.run(run_regen_loop(
+            repo_path=Path(args.repo),
+            runner=runner,
+            max_iterations=args.max_iterations,
+            target_pass_rate=args.target,
+            subsystem_name=args.subsystem,
+        ))
+        _print_regen_result(result)
 
 
 def _print_extract_result(result: dict):
@@ -119,6 +141,29 @@ def _print_bench_results(results: list[dict], output_file: str | None):
     if output_file:
         Path(output_file).write_text(json.dumps(results, indent=2))
         print(f"\n  Saved to: {output_file}")
+
+
+def _print_regen_result(result: dict):
+    if result.get("error"):
+        print(f"Regen-loop failed: {result['error']}")
+        sys.exit(1)
+
+    print(f"\nRegen-Loop Results")
+    print("-" * 60)
+    print(f"  Subsystems:  {result['total_subsystems']}")
+    print(f"  Converged:   {result['converged_subsystems']}/{result['total_subsystems']}")
+    print(f"  Time:        {result['time_seconds']:.1f}s")
+
+    sub_results = result.get("subsystem_results", {})
+    if sub_results:
+        print(f"\n  Per-subsystem:")
+        for name, sub in sub_results.items():
+            status = "OK" if sub.get("converged") else "INCOMPLETE"
+            print(f"    [{status:10}] {name:20} pass_rate={sub.get('pass_rate', 0):.0%} iter={sub.get('iterations', 0)}")
+
+    full = result.get("full_test_result", {})
+    if full.get("total", 0) > 0:
+        print(f"\n  Full suite:  {full['passed']}/{full['total']} ({full['pass_rate']:.0%})")
 
 
 if __name__ == "__main__":
