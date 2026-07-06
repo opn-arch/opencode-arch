@@ -10,7 +10,7 @@ try:
 
     mcp = FastMCP(
         "opencode-arch",
-        description="Architecture context compression, validation, and code quality tools",
+        instructions="Architecture context compression, validation, and code quality tools",
     )
 
     from opencode_arch.mcp.tools.scan import scan_repository
