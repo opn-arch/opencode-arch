@@ -70,35 +70,6 @@ class TestValidateTool:
         assert len(result["issues"]) > 0
 
     @pytest.mark.asyncio
-    async def test_validate_with_oracle_scoring(self):
-        """Validation with oracle should include oracle_score."""
-        mock_oracle = AsyncMock()
-        mock_oracle.score_extraction.return_value = {"score": 92, "feedback": "Excellent"}
-
-        with patch("opencode_arch.mcp.tools.validate._get_oracle", return_value=mock_oracle):
-            result = await validate_architecture(
-                model_yaml=VALID_YAML,
-                source_code="def process(): pass",
-                use_oracle=True,
-            )
-            assert "oracle_score" in result
-            assert result["oracle_score"] == 92
-            assert result["oracle_feedback"] == "Excellent"
-
-    @pytest.mark.asyncio
-    async def test_validate_oracle_unavailable(self):
-        """Validation should work without oracle (returns None)."""
-        with patch("opencode_arch.mcp.tools.validate._get_oracle", return_value=None):
-            result = await validate_architecture(
-                model_yaml=VALID_YAML,
-                source_code="def process(): pass",
-                use_oracle=True,
-            )
-            # Should still return structural score, just no oracle_score
-            assert "score" in result
-            assert "oracle_score" not in result
-
-    @pytest.mark.asyncio
     async def test_validate_empty_model(self):
         """Empty model should validate but with low/zero score."""
         empty_yaml = "meta:\n  schema_version: '1.3'\n  project: test\nentities: {}\nrelationships: []\n"

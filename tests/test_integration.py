@@ -47,40 +47,6 @@ async def test_extract_then_validate_loop():
 
 
 @pytest.mark.asyncio
-async def test_extract_validate_with_oracle():
-    """Full loop with oracle scoring."""
-    mock_surrogate = AsyncMock()
-    mock_surrogate.generate.return_value = (
-        "meta:\n"
-        "  schema_version: '1.3'\n"
-        "  project: test-app\n"
-        "entities:\n"
-        "  components:\n"
-        "    - id: COMP-1\n"
-        "      name: App\n"
-        "      status: ACTIVE\n"
-        "relationships: []\n"
-    )
-    mock_oracle = AsyncMock()
-    mock_oracle.score_extraction.return_value = {"score": 75, "feedback": "Missing capabilities"}
-
-    with patch("opencode_arch.mcp.tools.extract._get_surrogate", return_value=mock_surrogate):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            Path(tmpdir, "app.py").write_text("class App:\n    pass\n")
-            yaml_result = await extract_architecture(repo_path=tmpdir)
-
-    with patch("opencode_arch.mcp.tools.validate._get_oracle", return_value=mock_oracle):
-        validation = await validate_architecture(
-            model_yaml=yaml_result,
-            source_code="class App: pass",
-            use_oracle=True,
-        )
-        assert "oracle_score" in validation
-        assert validation["oracle_score"] == 75
-        assert "Missing" in validation["oracle_feedback"]
-
-
-@pytest.mark.asyncio
 async def test_no_surrogate_fallback_still_validates():
     """When no surrogate, manifest-based extraction should still be validatable."""
     with patch("opencode_arch.mcp.tools.extract._get_surrogate", return_value=None):

@@ -23,13 +23,9 @@ try:
         return await extract_architecture(repo_path=repo_path, focus=focus)
 
     @mcp.tool()
-    async def architect_validate(model_yaml: str, source_code: str = "", use_oracle: bool = False) -> dict:
+    async def architect_validate(model_yaml: str) -> dict:
         """Validate an architecture model for structural correctness."""
-        return await validate_architecture(
-            model_yaml=model_yaml,
-            source_code=source_code or None,
-            use_oracle=use_oracle,
-        )
+        return await validate_architecture(model_yaml=model_yaml)
 
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
