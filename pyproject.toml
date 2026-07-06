@@ -20,6 +20,9 @@ mcp = ["mcp>=1.0"]
 [tool.hatch.build.targets.wheel]
 packages = ["src/opencode_arch"]
 
+[project.scripts]
+opencode-arch = "opencode_arch.cli.main:main"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
