@@ -21,7 +21,7 @@ def main():
     extract_p.add_argument("--focus", default="all", help="Focus: all, F-block ID, layer name")
     extract_p.add_argument("--target-score", type=int, default=80, help="Min validation score (default: 80)")
     extract_p.add_argument("--model", default=None, help="Model override (provider/model)")
-    extract_p.add_argument("--timeout", type=int, default=300, help="Timeout seconds (default: 300)")
+    extract_p.add_argument("--timeout", type=int, default=600, help="Timeout seconds (default: 600)")
 
     # generate
     gen_p = subparsers.add_parser("generate", help="Generate code and run tests")
@@ -29,7 +29,7 @@ def main():
     gen_p.add_argument("--max-iter", type=int, default=3, help="Max retries (default: 3)")
     gen_p.add_argument("--test-command", default=None, help="Custom test command")
     gen_p.add_argument("--model", default=None, help="Model override (provider/model)")
-    gen_p.add_argument("--timeout", type=int, default=300, help="Timeout seconds (default: 300)")
+    gen_p.add_argument("--timeout", type=int, default=600, help="Timeout seconds (default: 600)")
 
     # bench
     bench_p = subparsers.add_parser("bench", help="Benchmark extraction on multiple repos")

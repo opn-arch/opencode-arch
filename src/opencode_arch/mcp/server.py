@@ -73,3 +73,11 @@ try:
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
+
+
+if __name__ == "__main__":
+    if mcp is not None:
+        mcp.run()
+    else:
+        print("Error: mcp package not installed. Install with: pip install 'opencode-arch[mcp]'")
+        raise SystemExit(1)
