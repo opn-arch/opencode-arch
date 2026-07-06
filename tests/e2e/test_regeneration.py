@@ -13,13 +13,32 @@ from pathlib import Path
 import pytest
 
 
+def _delete_source_preserve_tests(src_path: Path) -> None:
+    """Delete source .py files but preserve test directories and test files."""
+    preserve_dirs = {"tests", "test", "testing", "__pycache__"}
+    preserve_patterns = {"test_", "_test.py", "conftest.py"}
+
+    for item in list(src_path.rglob("*")):
+        if not item.exists():
+            continue
+        if item.is_dir():
+            continue
+        if any(part in preserve_dirs for part in item.relative_to(src_path).parts):
+            continue
+        if any(item.name.startswith(p) or item.name.endswith(p) for p in preserve_patterns):
+            continue
+        if item.suffix != ".py":
+            continue
+        item.write_text("# Deleted for regeneration benchmark\n")
+
+
 @pytest.mark.e2e
 class TestRegeneration:
     """Delete source code, regenerate from architecture model, run real tests."""
 
     TIMEOUT = 600  # 10 minutes per repo
 
-    def test_regenerate_passes_tests(self, repo_info, results_dir):
+    def test_regenerate_passes_tests(self, repo_info, results_dir, project_dir):
         """Regenerate source from architecture model and run test suite."""
         repo_path = repo_info["path"]
         repo_name = repo_info["name"]
@@ -27,12 +46,13 @@ class TestRegeneration:
 
         # Step 1: Extract architecture first (we need a model to regenerate from)
         extract_prompt = (
-            f"Use architect_scan to scan this repo, then use architect_extract "
-            f"to store a validated architecture model. Include all components with "
-            f"their functions and symbols."
+            f"Use architect_scan to scan the repository at {repo_path}, then use "
+            f"architect_extract to store a validated architecture model in that directory. "
+            f"Include all components with their functions and symbols."
         )
         subprocess.run(
-            ["opencode", "run", extract_prompt, "--dir", str(repo_path)],
+            ["opencode", "run", extract_prompt, "--dir", str(project_dir),
+             "--dangerously-skip-permissions"],
             capture_output=True, text=True, timeout=self.TIMEOUT,
         )
 
@@ -48,28 +68,27 @@ class TestRegeneration:
             shutil.copytree(repo_path, tmp_path / repo_name, dirs_exist_ok=True)
             work_dir = tmp_path / repo_name
 
-            # Delete source directory (what we'll regenerate)
+            # Delete source directory (what we'll regenerate) but preserve tests
             src_path = work_dir / subdir
             if src_path.exists():
-                shutil.rmtree(src_path)
-                src_path.mkdir(parents=True)
-                # Keep __init__.py so package is importable
-                (src_path / "__init__.py").write_text("")
+                _delete_source_preserve_tests(src_path)
 
             start = time.time()
 
             # Step 3: Ask agent to regenerate from the architecture model
             regen_prompt = (
-                f"The source code in '{subdir}/' has been deleted. "
-                f"Read .architecture-model.yaml for the architecture model. "
-                f"Regenerate the Python source files for the '{subdir}/' package "
-                f"based on the architecture model's components, symbols, and relationships. "
-                f"Then use architect_generate to run the test suite and verify your code passes. "
+                f"The source code in '{subdir}/' has been deleted (tests preserved) "
+                f"at {work_dir}. Read {work_dir}/.architecture-model.yaml for the "
+                f"architecture model. Regenerate the Python source files for the "
+                f"'{subdir}/' package in {work_dir}/ based on the architecture model's "
+                f"components, symbols, and relationships. Then use architect_generate "
+                f"with repo_path='{work_dir}' to run the test suite. "
                 f"Iterate until tests pass or you've tried 3 times."
             )
 
             result = subprocess.run(
-                ["opencode", "run", regen_prompt, "--dir", str(work_dir)],
+                ["opencode", "run", regen_prompt, "--dir", str(project_dir),
+                 "--dangerously-skip-permissions"],
                 capture_output=True, text=True, timeout=self.TIMEOUT,
             )
 
@@ -116,9 +135,10 @@ class TestRegeneration:
 
 
 def _parse_test_counts(output: str) -> tuple[int, int, int]:
-    """Parse pytest output for passed/failed/total counts."""
+    """Parse pytest output for passed/failed/error counts."""
     passed = 0
     failed = 0
+    errors = 0
     for line in output.split("\n"):
         parts = line.strip().split()
         for i, part in enumerate(parts):
@@ -132,5 +152,10 @@ def _parse_test_counts(output: str) -> tuple[int, int, int]:
                     failed = int(parts[i - 1])
                 except ValueError:
                     pass
-    total = passed + failed
-    return passed, failed, total
+            elif part in ("error", "errors") and i > 0:
+                try:
+                    errors = int(parts[i - 1])
+                except ValueError:
+                    pass
+    total = passed + failed + errors
+    return passed, failed + errors, total

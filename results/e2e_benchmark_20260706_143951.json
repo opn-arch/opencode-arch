@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-07-06T14:39:51.188107",
+  "config": {
+    "repos": 1,
+    "extract": true,
+    "regen": false
+  },
+  "results": [
+    {
+      "repo": "python-dotenv",
+      "subdir": "src/dotenv",
+      "extraction": {
+        "success": true,
+        "score": 100,
+        "entities": 14,
+        "relationships": 19,
+        "issues": [],
+        "time_seconds": 89.39398884773254
+      }
+    }
+  ]
+}

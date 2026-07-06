@@ -16,7 +16,7 @@ class TestExtraction:
 
     TIMEOUT = 600  # 10 minutes per repo
 
-    def test_extract_produces_valid_model(self, repo_info, results_dir):
+    def test_extract_produces_valid_model(self, repo_info, results_dir, project_dir):
         """Extract architecture and verify score >= 80."""
         repo_path = str(repo_info["path"])
         repo_name = repo_info["name"]
@@ -25,16 +25,17 @@ class TestExtraction:
 
         # Call opencode run with extraction prompt
         prompt = (
-            f"Use architect_scan to scan this repo, then produce a valid "
-            f".architecture-model.yaml. Use architect_extract to validate and store it. "
-            f"The model must score >= 80. Include meta (project: {repo_name}, "
-            f"schema_version: '1.3'), entities (capabilities, components), "
-            f"and relationships (realizes, depends-on, contains). "
+            f"Use architect_scan to scan the repository at {repo_path}, then produce "
+            f"a valid .architecture-model.yaml in that directory. Use architect_extract "
+            f"to validate and store it. The model must score >= 80. Include meta "
+            f"(project: {repo_name}, schema_version: '1.3'), entities (capabilities, "
+            f"components), and relationships (realizes, depends-on, contains). "
             f"Output the final YAML between ```yaml fences."
         )
 
         result = subprocess.run(
-            ["opencode", "run", prompt, "--dir", repo_path],
+            ["opencode", "run", prompt, "--dir", str(project_dir),
+             "--dangerously-skip-permissions"],
             capture_output=True, text=True, timeout=self.TIMEOUT,
         )
 

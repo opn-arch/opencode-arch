@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-07-06T15:21:02.460679",
+  "config": {
+    "repos": 1,
+    "extract": false,
+    "regen": true
+  },
+  "results": [
+    {
+      "repo": "python-dotenv",
+      "subdir": "src/dotenv",
+      "regeneration": {
+        "pass_rate": 0.0,
+        "passed_tests": 0,
+        "failed_tests": 0,
+        "total_tests": 0,
+        "time_seconds": 602.2402188777924
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-07-06T15:05:51.001602",
+  "config": {
+    "repos": 1,
+    "extract": false,
+    "regen": true
+  },
+  "results": [
+    {
+      "repo": "colorama",
+      "subdir": "colorama",
+      "regeneration": {
+        "pass_rate": 0.0,
+        "passed_tests": 0,
+        "failed_tests": 0,
+        "total_tests": 0,
+        "time_seconds": 485.62867403030396
+      }
+    }
+  ]
+}

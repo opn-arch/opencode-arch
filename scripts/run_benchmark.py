@@ -22,6 +22,9 @@ from pathlib import Path
 
 CLONE_DIR = Path("/tmp/test-repos")
 RESULTS_DIR = Path(__file__).parent.parent / "results"
+# Project dir where MCP tools are available (not opencode-arch itself, which
+# confuses the agent into reading tool source instead of calling MCP tools)
+PROJECT_DIR = Path(__file__).parent.parent.parent / "architecture-model-standard"
 
 DEFAULT_REPOS = [
     {"name": "python-dotenv", "subdir": "src/dotenv"},
@@ -53,16 +56,17 @@ ALL_REPOS = DEFAULT_REPOS + [
 def run_extraction(repo_path: Path, name: str) -> dict:
     """Run extraction on a single repo via opencode run."""
     prompt = (
-        f"Use architect_scan to scan this repo, then produce a valid "
-        f".architecture-model.yaml. Use architect_extract to validate and store it. "
-        f"The model must score >= 80. Include meta (project: {name}, "
+        f"Use architect_scan to scan the repository at {repo_path}, then produce a valid "
+        f".architecture-model.yaml in that directory. Use architect_extract to validate "
+        f"and store it. The model must score >= 80. Include meta (project: {name}, "
         f"schema_version: '1.3'), entities (capabilities, components), "
         f"and relationships (realizes, depends-on, contains)."
     )
     start = time.time()
     try:
         result = subprocess.run(
-            ["opencode", "run", prompt, "--dir", str(repo_path)],
+            ["opencode", "run", prompt, "--dir", str(PROJECT_DIR),
+             "--dangerously-skip-permissions"],
             capture_output=True, text=True, timeout=600,
         )
         elapsed = time.time() - start
@@ -96,6 +100,31 @@ def run_extraction(repo_path: Path, name: str) -> dict:
         return {"success": False, "error": str(e), "time_seconds": time.time() - start}
 
 
+def _delete_source_preserve_tests(src_path: Path) -> None:
+    """Delete source .py files but preserve test directories and test files."""
+    # Identify test directories and files to preserve
+    preserve_dirs = {"tests", "test", "testing", "__pycache__"}
+    preserve_patterns = {"test_", "_test.py", "conftest.py"}
+
+    for item in list(src_path.rglob("*")):
+        if not item.exists():
+            continue
+        # Skip directories (we handle files only)
+        if item.is_dir():
+            continue
+        # Preserve anything in test directories
+        if any(part in preserve_dirs for part in item.relative_to(src_path).parts):
+            continue
+        # Preserve test files
+        if any(item.name.startswith(p) or item.name.endswith(p) for p in preserve_patterns):
+            continue
+        # Preserve non-Python files (setup.cfg, etc.)
+        if item.suffix != ".py":
+            continue
+        # Delete this source file, replace with empty stub
+        item.write_text(f"# Deleted for regeneration benchmark\n")
+
+
 def run_regeneration(repo_path: Path, name: str, subdir: str) -> dict:
     """Run regeneration benchmark: delete source, regenerate, run tests."""
     model_file = repo_path / ".architecture-model.yaml"
@@ -110,41 +139,51 @@ def run_regeneration(repo_path: Path, name: str, subdir: str) -> dict:
         work_dir = Path(tmpdir) / name
         shutil.copytree(repo_path, work_dir)
 
-        # Delete source directory
+        # Delete source files but preserve tests and __init__.py
         src_path = work_dir / subdir
         if src_path.exists():
-            shutil.rmtree(src_path)
-            src_path.mkdir(parents=True)
-            (src_path / "__init__.py").write_text("")
+            _delete_source_preserve_tests(src_path)
 
         start = time.time()
         prompt = (
-            f"The source code in '{subdir}/' has been deleted. "
-            f"Read .architecture-model.yaml for the architecture model. "
-            f"Regenerate the Python source files for the '{subdir}/' package "
+            f"The source code in '{subdir}/' has been deleted (tests preserved) at {work_dir}. "
+            f"Read {work_dir}/.architecture-model.yaml for the architecture model. "
+            f"Regenerate the Python source files for the '{subdir}/' package in {work_dir}/ "
             f"based on the architecture model's components, symbols, and relationships. "
-            f"Then use architect_generate to run the test suite and verify your code passes. "
+            f"Then use architect_generate with repo_path='{work_dir}' to run the test suite. "
             f"Iterate until tests pass or you've tried 3 times."
         )
         try:
             subprocess.run(
-                ["opencode", "run", prompt, "--dir", str(work_dir)],
+                ["opencode", "run", prompt, "--dir", str(PROJECT_DIR),
+                 "--dangerously-skip-permissions"],
                 capture_output=True, text=True, timeout=600,
             )
         except subprocess.TimeoutExpired:
             pass
 
-        # Run tests ourselves to verify
+        # Install the package in the work dir so tests can import it
+        try:
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "-e", str(work_dir),
+                 "--no-deps", "-q"],
+                capture_output=True, text=True, timeout=60,
+            )
+        except Exception:
+            pass
+
+        # Run tests ourselves to verify (use work_dir for discovery, not specific subdir)
         try:
             test_result = subprocess.run(
-                [sys.executable, "-m", "pytest", str(work_dir), "-v", "--tb=short", "-q"],
+                [sys.executable, "-m", "pytest", str(work_dir), "-v",
+                 "--tb=short", "-q"],
                 capture_output=True, text=True, timeout=120, cwd=str(work_dir),
             )
             test_output = test_result.stdout + test_result.stderr
         except subprocess.TimeoutExpired:
             test_output = ""
-        except Exception:
-            test_output = ""
+        except Exception as e:
+            test_output = str(e)
 
         elapsed = time.time() - start
         passed, failed, total = _parse_test_counts(test_output)
@@ -160,9 +199,10 @@ def run_regeneration(repo_path: Path, name: str, subdir: str) -> dict:
 
 
 def _parse_test_counts(output: str) -> tuple[int, int, int]:
-    """Parse pytest output for passed/failed/total counts."""
+    """Parse pytest output for passed/failed/error counts."""
     passed = 0
     failed = 0
+    errors = 0
     for line in output.split("\n"):
         parts = line.strip().split()
         for i, part in enumerate(parts):
@@ -176,8 +216,13 @@ def _parse_test_counts(output: str) -> tuple[int, int, int]:
                     failed = int(parts[i - 1])
                 except ValueError:
                     pass
-    total = passed + failed
-    return passed, failed, total
+            elif part in ("error", "errors") and i > 0:
+                try:
+                    errors = int(parts[i - 1])
+                except ValueError:
+                    pass
+    total = passed + failed + errors
+    return passed, failed + errors, total
 
 
 def run_benchmark(repos: list[dict], extract: bool = True, regen: bool = True) -> list[dict]:

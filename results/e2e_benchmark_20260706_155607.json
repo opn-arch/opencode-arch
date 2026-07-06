@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-07-06T15:56:07.495722",
+  "config": {
+    "repos": 5,
+    "extract": true,
+    "regen": false
+  },
+  "results": [
+    {
+      "repo": "python-dotenv",
+      "subdir": "src/dotenv",
+      "extraction": {
+        "success": true,
+        "score": 98,
+        "entities": 13,
+        "relationships": 15,
+        "issues": [
+          "[WARNING] MISSING_META: Model meta.source_artifacts is empty"
+        ],
+        "time_seconds": 82.10178089141846
+      }
+    },
+    {
+      "repo": "colorama",
+      "subdir": "colorama",
+      "extraction": {
+        "success": true,
+        "score": 98,
+        "entities": 10,
+        "relationships": 15,
+        "issues": [
+          "[WARNING] MISSING_META: Model meta.source_artifacts is empty"
+        ],
+        "time_seconds": 93.56637167930603
+      }
+    },
+    {
+      "repo": "tqdm",
+      "subdir": "tqdm",
+      "extraction": {
+        "success": true,
+        "score": 98,
+        "entities": 30,
+        "relationships": 48,
+        "issues": [
+          "[WARNING] MISSING_META: Model meta.source_artifacts is empty"
+        ],
+        "time_seconds": 108.3715603351593
+      }
+    },
+    {
+      "repo": "structlog",
+      "subdir": "src/structlog",
+      "extraction": {
+        "success": true,
+        "score": 98,
+        "entities": 20,
+        "relationships": 24,
+        "issues": [
+          "[WARNING] MISSING_META: Model meta.source_artifacts is empty"
+        ],
+        "time_seconds": 131.85852313041687
+      }
+    }
+  ]
+}

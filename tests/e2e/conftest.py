@@ -14,6 +14,9 @@ BENCHMARK_REPOS = [
 ]
 
 CLONE_DIR = Path("/tmp/test-repos")
+# Project dir where MCP tools are available (not opencode-arch, which confuses
+# the agent into reading tool source code instead of calling MCP tools)
+PROJECT_DIR = Path(__file__).parent.parent.parent.parent / "architecture-model-standard"
 
 
 def pytest_addoption(parser):
@@ -26,6 +29,12 @@ def pytest_collection_modifyitems(config, items):
         for item in items:
             if "e2e" in item.keywords:
                 item.add_marker(skip)
+
+
+@pytest.fixture(scope="session")
+def project_dir():
+    """Project directory where MCP tools are configured."""
+    return PROJECT_DIR
 
 
 @pytest.fixture(scope="session")
