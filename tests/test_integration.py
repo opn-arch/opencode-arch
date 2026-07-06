@@ -1,66 +1,90 @@
-"""Integration test: extract → validate → score loop."""
+# tests/test_integration.py
+"""Integration tests: scan → slice → (agent reasons) → extract → validate."""
 import pytest
 import tempfile
 from pathlib import Path
-from unittest.mock import patch, AsyncMock
 
-from opencode_arch.mcp.tools.extract import extract_architecture
+from opencode_arch.mcp.tools.scan import scan_repository
+from opencode_arch.mcp.tools.slice import slice_context
 from opencode_arch.mcp.tools.validate import validate_architecture
+from opencode_arch.mcp.tools.extract import store_extraction
 
 
 @pytest.mark.asyncio
-async def test_extract_then_validate_loop():
-    """Full loop: extract architecture from a repo, then validate it."""
-    # Mock surrogate to return a valid architecture model
-    mock_surrogate = AsyncMock()
-    mock_surrogate.generate.return_value = (
-        "meta:\n"
-        "  schema_version: '1.3'\n"
-        "  project: test-project\n"
-        "entities:\n"
-        "  capabilities:\n"
-        "    - id: CAP-F1\n"
-        "      name: Configuration\n"
-        "      status: ACTIVE\n"
-        "  components:\n"
-        "    - id: COMP-1\n"
-        "      name: ConfigLoader\n"
-        "      status: ACTIVE\n"
-        "relationships:\n"
-        "  - type: realizes\n"
-        "    from: COMP-1\n"
-        "    to: CAP-F1\n"
-    )
+async def test_full_extraction_flow():
+    """Simulate: scan → slice → validate agent output → store."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Create a small project (proper package so scanner detects modules)
+        pkg = Path(tmpdir, "myapp")
+        pkg.mkdir()
+        (pkg / "__init__.py").write_text("")
+        (pkg / "models.py").write_text("class User:\n    name: str\n")
+        (pkg / "views.py").write_text("def index():\n    return 'hello'\n")
 
-    with patch("opencode_arch.mcp.tools.extract._get_surrogate", return_value=mock_surrogate):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            Path(tmpdir, "config.py").write_text("class ConfigLoader:\n    pass\n")
+        # Step 1: Scan
+        manifest = await scan_repository(repo_path=tmpdir)
+        assert "modules" in manifest
+        assert len(manifest["modules"]) >= 2
 
-            # Step 1: Extract
-            yaml_result = await extract_architecture(repo_path=tmpdir)
-            assert "entities" in yaml_result or "components" in yaml_result
+        # Step 2: Slice (get context for agent)
+        context = await slice_context(repo_path=tmpdir, budget=2000)
+        assert isinstance(context, str)
+        assert len(context) > 0
 
-            # Step 2: Validate
-            validation = await validate_architecture(model_yaml=yaml_result)
-            assert "score" in validation
-            assert validation["score"] >= 0  # Valid parse at minimum
+        # Step 3: Simulate agent output (normally agent produces this)
+        agent_yaml = (
+            "meta:\n"
+            "  project: test\n"
+            "  schema_version: '1.3'\n"
+            "entities:\n"
+            "  components:\n"
+            "    - id: COMP-1\n"
+            "      name: Models\n"
+            "      status: ACTIVE\n"
+            "    - id: COMP-2\n"
+            "      name: Views\n"
+            "      status: ACTIVE\n"
+            "  capabilities:\n"
+            "    - id: CAP-F1\n"
+            "      name: UserManagement\n"
+            "      status: ACTIVE\n"
+            "relationships:\n"
+            "  - from: COMP-1\n"
+            "    to: CAP-F1\n"
+            "    type: realizes\n"
+        )
+
+        # Step 4: Validate
+        validation = await validate_architecture(model_yaml=agent_yaml)
+        assert validation["score"] >= 70
+        assert validation["is_valid"] is True
+
+        # Step 5: Store
+        stored = await store_extraction(repo_path=tmpdir, model_yaml=agent_yaml, context_tokens=len(context) // 4)
+        assert stored["stored"] is True
+        assert Path(tmpdir, ".architecture-model.yaml").exists()
 
 
 @pytest.mark.asyncio
-async def test_no_surrogate_fallback_still_validates():
-    """When no surrogate, manifest-based extraction should still be validatable."""
-    with patch("opencode_arch.mcp.tools.extract._get_surrogate", return_value=None):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            Path(tmpdir, "main.py").write_text("def main():\n    print('hello')\n")
+async def test_slice_uses_stored_model():
+    """After storing a model, slice should use it for richer context."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        Path(tmpdir, "app.py").write_text("class App: pass\n")
 
-            # Extract without surrogate (returns raw manifest YAML)
-            yaml_result = await extract_architecture(repo_path=tmpdir)
-            assert isinstance(yaml_result, str)
-            assert len(yaml_result) > 0
+        # Store a model
+        model_yaml = (
+            "meta:\n"
+            "  project: test\n"
+            "  schema_version: '1.3'\n"
+            "entities:\n"
+            "  components:\n"
+            "    - id: COMP-1\n"
+            "      name: App\n"
+            "      status: ACTIVE\n"
+        )
+        Path(tmpdir, ".architecture-model.yaml").write_text(model_yaml)
 
-            # Validate should handle this gracefully (may not score high
-            # since it's not in architecture model format)
-            validation = await validate_architecture(model_yaml=yaml_result)
-            assert "score" in validation
-            # Even if score is 0 (manifest format != architecture format),
-            # it shouldn't crash
+        # Now slice should detect the model file and use rich path
+        context = await slice_context(repo_path=tmpdir)
+        assert isinstance(context, str)
+        assert len(context) > 0

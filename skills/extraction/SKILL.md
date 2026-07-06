@@ -2,43 +2,41 @@
 
 ## When to Use
 
-Use when the user asks to:
-- Extract architecture from a codebase
-- Document system structure
-- Analyze architectural patterns in a repository
-- Generate an `.architecture-model.yaml` file
+Use when the user asks to extract, document, or analyze the architecture of a codebase.
 
 ## Workflow
 
-1. **Identify target**: Determine the repo path and any focus area.
-   - Ask: "Which repository?" (use current workspace if obvious)
-   - Ask: "Full extraction or focused?" (layer, component, feature area)
+1. **Scan**: Call `architect_scan(repo_path)` to generate the reality manifest.
+   - Review module count, metrics, functional blocks.
 
-2. **Run extraction**: Call the `architect_extract` tool:
-   - `repo_path`: Absolute path to the repository root
-   - `focus`: "all" for full extraction, or a layer/component name
+2. **Slice**: Call `architect_slice(repo_path, focus, budget=4000)` to get compressed context.
+   - For large repos, start with focus on a specific layer or F-block.
+   - Default budget of 4000 tokens is usually sufficient.
 
-3. **Validate result**: Call `architect_validate` with the extracted YAML:
-   - Check structural score (target: 80+)
-   - Review any issues flagged
-   - Optionally use oracle scoring (`use_oracle=true`) for quality assessment
+3. **Extract**: Using the context from the slice, produce a YAML architecture model following the 7-entity, 8-relationship schema:
+   - Entities: capabilities, components, layers, behaviors, interfaces, constraints, actors
+   - Relationships: realizes, uses, constrains, contains, triggers, depends_on, implements, exposes
+   - Every entity needs: id, name, status (ACTIVE/PLANNED/DEPRECATED)
+   - Every relationship needs: from, to, type
 
-4. **Present to user**: Show the extracted model with:
-   - Entity summary (count by type: capabilities, components, layers, etc.)
-   - Key relationships discovered
-   - Validation score and any issues
-   - Oracle feedback (if available)
+4. **Validate**: Call `architect_validate(model_yaml)` to check structural quality.
+   - Target score: 80+
+   - If score < 80: review issues, fix the model, re-validate.
+   - Common issues: orphaned entities, dangling references, missing meta.
 
-5. **Offer refinement**: Ask if the user wants to:
-   - Focus on a specific layer or component for more detail
-   - Add/correct missing entities or relationships
-   - Save as `.architecture-model.yaml` in the repo root
-   - Re-extract with different focus
+5. **Store**: Call `architect_extract(repo_path, model_yaml, context_tokens)` to persist.
+   - Writes .architecture-model.yaml to the repo root.
+   - Records telemetry for future optimization.
+
+## Escalation (Full Workflow)
+
+If initial extraction scores below 60:
+- Re-scan with narrower focus
+- Increase budget: `architect_slice(repo_path, budget=8000, detail="full")`
+- Extract one layer at a time, then merge
 
 ## Notes
 
-- Extraction quality improves over time via the self-learning loop
-- For large repos (100+ files), focus on one layer at a time for better results
-- The oracle scorer provides quality feedback when copilot-relay is running
-- Validation score of 80+ indicates a structurally sound model
-- Score below 60 suggests re-extraction with narrower focus
+- Smaller budget = cheaper but less context = may need more iterations
+- First extraction of a repo usually needs higher budget (~4000)
+- Subsequent refinements can use lower budget (~1000) focusing on specific areas

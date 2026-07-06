@@ -1,4 +1,4 @@
-"""architect_extract MCP tool — extract architecture from source code."""
+"""architect_extract MCP tool — validate and store an architecture extraction."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -7,67 +7,72 @@ from typing import Any
 import yaml
 
 
-async def _get_surrogate():
-    """Get the configured surrogate model for extraction.
-
-    Tries arch-agent Surrogate (Ollama) first, returns None if unavailable.
-    """
-    try:
-        from arch_agent.training.surrogate import Surrogate
-        return Surrogate(model="qwen2.5:7b")
-    except (ImportError, Exception):
-        return None
-
-
-async def extract_architecture(
+async def store_extraction(
     repo_path: str,
-    focus: str = "all",
-) -> str:
-    """Extract architecture model from a repository.
+    model_yaml: str,
+    context_tokens: int = 0,
+) -> dict[str, Any]:
+    """Validate and store an architecture model extraction.
+
+    Called AFTER the agent has produced a YAML architecture model.
+    Validates the model, writes it to .architecture-model.yaml,
+    and records telemetry.
 
     Args:
-        repo_path: Path to the repository root.
-        focus: Focus scope - "all", a layer name, or a component pattern.
+        repo_path: Path to the repository root (where to save the model).
+        model_yaml: The YAML architecture model produced by the agent.
+        context_tokens: How many tokens of context the agent used (for telemetry).
 
     Returns:
-        YAML string of the extracted architecture model.
+        Dict with: stored (bool), score (int), issues (list), telemetry_recorded (bool).
     """
     path = Path(repo_path)
-    if not path.exists():
-        return f"Error: Repository path does not exist: {repo_path}"
 
     try:
-        # Step 1: Generate reality manifest (AST scan)
-        from architecture_model.manifest.generator import generate_manifest
-        manifest = generate_manifest(path)
+        # Parse the YAML
+        raw = yaml.safe_load(model_yaml)
+        if not isinstance(raw, dict):
+            return {"stored": False, "error": "YAML did not parse to a dict", "score": 0}
 
-        # Step 2: Use surrogate model to synthesize architecture from manifest
-        surrogate = await _get_surrogate()
-        if surrogate is None:
-            # Fallback: return manifest as basic YAML structure
-            return yaml.dump(manifest, default_flow_style=False, sort_keys=False)
+        # Validate using architecture_model
+        from architecture_model.core.parser import _parse_raw
+        from architecture_model.core.validator import validate_model
 
-        # Build prompt from manifest
-        system = (
-            "You are an architecture extraction engine. Given a code manifest, "
-            "produce a YAML architecture model following the 7-entity, 8-relationship schema. "
-            "Entities: actors, capabilities, behaviors, interfaces, constraints, layers, components. "
-            "Output ONLY valid YAML."
-        )
+        model = _parse_raw(raw)
+        validation = validate_model(model)
 
-        manifest_text = yaml.dump(manifest, default_flow_style=False, sort_keys=False)
-        user = f"Extract architecture from this manifest:\n\n```yaml\n{manifest_text[:12000]}\n```"
+        score = validation.score
+        issues = [str(issue) for issue in validation.issues]
 
-        if focus != "all":
-            user += f"\n\nFocus specifically on: {focus}"
+        # Write to repo
+        output_path = path / ".architecture-model.yaml"
+        output_path.write_text(model_yaml)
 
-        result = await surrogate.generate(system, user)
+        # Record telemetry
+        telemetry_recorded = False
+        try:
+            from opencode_arch.telemetry.store import TelemetryStore
+            store = TelemetryStore()
+            store.record(
+                tool="architect_extract",
+                repo=str(path.name),
+                context_tokens=context_tokens,
+                output_quality=score,
+                iterations=1,
+            )
+            telemetry_recorded = True
+        except Exception:
+            pass  # Telemetry failure shouldn't block the tool
 
-        # Strip markdown fences if present
-        if result.startswith("```"):
-            result = result.split("\n", 1)[1].rsplit("```", 1)[0]
+        return {
+            "stored": True,
+            "score": score,
+            "issues": issues,
+            "path": str(output_path),
+            "telemetry_recorded": telemetry_recorded,
+        }
 
-        return result.strip()
-
+    except yaml.YAMLError as e:
+        return {"stored": False, "error": f"Invalid YAML: {e}", "score": 0}
     except Exception as e:
-        return f"Error during extraction: {e}"
+        return {"stored": False, "error": f"Validation failed: {e}", "score": 0}
