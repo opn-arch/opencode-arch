@@ -76,6 +76,14 @@ Runs the repository's test suite against generated code.
 ```
 src/opencode_arch/
 ├── __init__.py
+├── cli/
+│   ├── __init__.py
+│   ├── main.py           — argparse entry point (opencode-arch command)
+│   ├── extract.py        — run_extract() loop
+│   ├── generate.py       — run_generate() loop
+│   ├── bench.py          — run_bench() multi-repo
+│   ├── metrics.py        — show_metrics() display
+│   └── prompts.py        — prompt templates for agent
 ├── context/
 │   └── __init__.py
 ├── mcp/
@@ -88,6 +96,10 @@ src/opencode_arch/
 │       ├── validate.py   — validate_architecture()
 │       ├── extract.py    — store_extraction()
 │       └── generate.py   — run_tests_on_generated_code()
+├── runner/
+│   ├── __init__.py
+│   ├── base.py           — RunResult, RunnerBackend protocol
+│   └── opencode.py       — OpencodeRunner (subprocess)
 └── telemetry/
     ├── __init__.py
     ├── store.py          — TelemetryStore (SQLite)
@@ -178,19 +190,76 @@ relationships:
 
 **Important:** Entities must be nested under the `entities:` key (not top-level).
 
+## CLI (`opencode-arch`)
+
+### Setup
+```bash
+pip install -e .        # installs the opencode-arch command
+opencode mcp add        # register MCP server with OpenCode (one-time)
+```
+
+### Commands
+
+```bash
+# Extract architecture from a repository (uses OpenCode as the agent):
+opencode-arch extract /path/to/repo --budget=4000 --focus=all --target-score=80
+
+# Generate code with test verification:
+opencode-arch generate /path/to/repo --max-iter=3
+
+# Benchmark extraction on multiple repos:
+opencode-arch bench /path/to/repo1 /path/to/repo2 --output=metrics.json
+
+# View recorded metrics:
+opencode-arch metrics --tool=extract --last=10
+```
+
+### How it works
+
+The CLI delegates the "thinking" step to OpenCode via subprocess (`opencode run`), then validates/stores/measures locally:
+
+```
+opencode-arch extract <repo>
+  → builds prompt with instructions
+  → calls: opencode run "<prompt>" --dir <repo>
+  → parses YAML from agent output
+  → validates via architecture-model-standard
+  → stores .architecture-model.yaml
+  → records telemetry (score, tokens, time)
+  → prints results
+```
+
+### Runner backends
+
+The CLI uses a pluggable runner protocol:
+- **OpencodeRunner** (default) — subprocess `opencode run`
+- **Custom** (future) — swap in your own model via `RunnerBackend` protocol
+
+```python
+# To add your own model:
+from opencode_arch.runner.base import RunResult, RunnerBackend
+
+class MyRunner:
+    async def run(self, prompt: str, repo_path: str) -> RunResult:
+        # Call your model here
+        return RunResult(output=yaml_str, exit_code=0, success=True)
+```
+
 ## Related Repos
 
 | Repo | Purpose | Status |
 |------|---------|--------|
 | `architecture-model-standard` | Schema, validator, CLI, manifest generator | v0.3.0, 271 tests |
-| `opencode-arch` | MCP extension (this repo) | v0.2.0, 28 tests |
+| `opencode-arch` | MCP extension (this repo) | v0.3.0, 47 tests |
 | `arch-agent` | Training pipeline + surrogate model | v0.1.0, 574 tests |
 
 ## Instructions for Development
 
 - Use TDD: write failing tests first, then implement
 - All changes must pass existing tests (no regressions)
+- Run tests: `pytest tests/ -v` (47 tests, ~1.6s)
 - The `architecture-model-standard` package is a dependency — don't duplicate its code
 - Telemetry failures should never block tool operation (swallow exceptions)
 - MCP server import is wrapped in try/except — tools work without mcp package
 - Integration tests simulate the agent's role (produce YAML, then store/validate)
+- CLI tests mock the runner (don't actually call `opencode run`)
