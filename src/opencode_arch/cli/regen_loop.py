@@ -168,8 +168,7 @@ def _setup_blind_workdir(repo_path: Path, test_files: list[Path]) -> Path:
             if not init_dest.exists():
                 init_dest.parent.mkdir(parents=True, exist_ok=True)
                 if init_src.exists():
-                    # Copy empty __init__.py (don't leak source content)
-                    init_dest.write_text("")
+                    shutil.copy2(init_src, init_dest)
                 else:
                     init_dest.write_text("")
             current = current.parent
@@ -200,8 +199,51 @@ def _setup_blind_workdir(repo_path: Path, test_files: list[Path]) -> Path:
     if root_conftest.exists() and Path(".") not in copied_conftest_dirs:
         shutil.copy2(root_conftest, work_dir / "conftest.py")
 
-    # Copy pyproject.toml / setup.py for import resolution
-    for config_file in ("pyproject.toml", "setup.py", "setup.cfg"):
+    # Copy test helper modules (non-test .py files) from test directories.
+    # These are shared utilities that test files import (e.g., tests/helpers.py).
+    # A file is a "test file" if: test_*.py, tests_*.py, or *_test.py
+    def _is_test_file(name: str) -> bool:
+        return (
+            name.startswith("test_")
+            or name.startswith("tests_")
+            or name.endswith("_test.py")
+        ) and name.endswith(".py")
+
+    def _find_test_root(test_file: Path) -> Path | None:
+        """Find the closest ancestor directory named 'tests' or 'test'."""
+        rel = test_file.relative_to(repo_path)
+        # Walk up the path to find a directory named tests/test
+        for i, part in enumerate(rel.parts):
+            if part in ("tests", "test"):
+                return repo_path / Path(*rel.parts[: i + 1])
+        # Fallback: use the direct parent of the test file
+        return test_file.parent
+
+    # Find test root directories from the test file paths
+    resolved_test_files = {tf.resolve() for tf in test_files if tf.exists()}
+    test_roots: set[Path] = set()
+    for tf in resolved_test_files:
+        root = _find_test_root(tf)
+        if root and root.is_dir():
+            test_roots.add(root)
+
+    # Walk each test root and copy infrastructure files (helpers, __init__.py, conftest.py)
+    for test_root in test_roots:
+        for py_file in test_root.rglob("*.py"):
+            if not py_file.is_file():
+                continue
+            # Skip test files that aren't in our subsystem
+            if _is_test_file(py_file.name) and py_file.resolve() not in resolved_test_files:
+                continue
+            # Copy infrastructure files (conftest, __init__, helpers) if not already present
+            rel = py_file.relative_to(repo_path)
+            dest = work_dir / rel
+            if not dest.exists():
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(py_file, dest)
+
+    # Copy pyproject.toml / setup.py / pytest config for import resolution
+    for config_file in ("pyproject.toml", "setup.py", "setup.cfg", "pytest.ini", "tox.ini"):
         src = repo_path / config_file
         if src.exists():
             shutil.copy2(src, work_dir / config_file)
