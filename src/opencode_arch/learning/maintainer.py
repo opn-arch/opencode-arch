@@ -82,7 +82,8 @@ def _check_version_sync(project_root: Path) -> DriftFlag | None:
     
     # Find __init__.py
     for init_path in project_root.rglob("__init__.py"):
-        if "test" in str(init_path) or ".venv" in str(init_path):
+        rel = str(init_path.relative_to(project_root))
+        if "test" in rel or ".venv" in rel:
             continue
         try:
             init_content = init_path.read_text(encoding="utf-8")
@@ -256,8 +257,12 @@ def auto_fix_drift(flags: list[DriftFlag], project_root: Path) -> list[DriftFlag
             elif "Python" in flag.issue:
                 # Fix Python version
                 match = re.search(r"Python ([\d.]+)\+.*Python ([\d.]+)\+", flag.suggested_fix)
-                if not match:
-                    # Try alternate parsing
+                if match:
+                    old_ver = match.group(1)
+                    new_ver = match.group(2)
+                    new_content = content.replace(f"Python {old_ver}+", f"Python {new_ver}+")
+                else:
+                    # Try alternate parsing from issue text
                     old_match = re.search(r"says Python ([\d.]+)", flag.issue)
                     new_match_ver = re.search(r"requires >=([\d.]+)", flag.issue)
                     if old_match and new_match_ver:
