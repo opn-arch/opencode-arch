@@ -592,14 +592,96 @@ def _load_model_context(repo_path: Path) -> str:
 
 
 def _build_dependency_context(subsystem, repo_path: Path) -> str:
-    """Build context string for dependency APIs (public interfaces of upstream subsystems)."""
+    """Build rich context string for dependency APIs.
+
+    Loads the architecture model and extracts the public API surface
+    (constants, classes, function signatures) of each dependency subsystem's
+    components. This gives the blind regen agent enough information to produce
+    correct imports and usage without access to source files.
+
+    Args:
+        subsystem: Subsystem object with .dependencies list of dep names.
+        repo_path: Path to repo root (where .architecture-model.yaml lives).
+
+    Returns:
+        Formatted string with API surface per dependency, or "" if no deps.
+    """
     if not subsystem.dependencies:
         return ""
 
-    parts = []
+    model_file = repo_path / ".architecture-model.yaml"
+    if not model_file.exists():
+        # Fallback: just list dependency names
+        parts = []
+        for dep_name in subsystem.dependencies:
+            parts.append(f"- Depends on subsystem '{dep_name}'")
+        return "\n".join(parts)
+
+    try:
+        from architecture_model.core.parser import load_model
+
+        model = load_model(model_file)
+    except Exception:
+        # Model failed to load — fallback to names only
+        parts = []
+        for dep_name in subsystem.dependencies:
+            parts.append(f"- Depends on subsystem '{dep_name}'")
+        return "\n".join(parts)
+
+    # Build a mapping from dependency name -> matched components
+    sections = []
+
     for dep_name in subsystem.dependencies:
-        parts.append(f"- Depends on subsystem '{dep_name}'")
-    return "\n".join(parts)
+        # Find components that match this dependency (by component name or file stem)
+        matched_components = []
+        for comp in model.entities.components:
+            comp_files = getattr(comp, "files", [])
+            comp_stems = {Path(f).stem for f in comp_files} if comp_files else set()
+
+            if dep_name in comp_stems or comp.name == dep_name:
+                matched_components.append(comp)
+
+        if not matched_components:
+            sections.append(f"#### Module: {dep_name}\n  (no model data available)")
+            continue
+
+        for comp in matched_components:
+            lines = [f"#### Module: {dep_name}"]
+
+            # Constants
+            for const in getattr(comp, "constants", []) or []:
+                const_type = getattr(const, "type", None) or ""
+                const_value = getattr(const, "value", None) or ""
+                if const_type and const_value:
+                    lines.append(f"  {const.name}: {const_type} = {const_value}")
+                elif const_value:
+                    lines.append(f"  {const.name} = {const_value}")
+                else:
+                    lines.append(f"  {const.name}")
+
+            # Class symbols
+            for sym in getattr(comp, "symbols", []) or []:
+                kind = getattr(sym, "kind", "")
+                if kind == "class":
+                    supers = getattr(sym, "supers", []) or []
+                    supers_str = ", ".join(supers) if supers else ""
+                    if supers_str:
+                        lines.append(f"  class {sym.name}({supers_str}):")
+                    else:
+                        lines.append(f"  class {sym.name}:")
+                    members = getattr(sym, "members", []) or []
+                    for member in members:
+                        lines.append(f"    .{member}")
+
+            # Function signatures (NO body_hint for deps — that's only for current subsystem)
+            for sig in getattr(comp, "signatures", []) or []:
+                params = ", ".join(sig.params) if sig.params else ""
+                ret = f" -> {sig.returns}" if getattr(sig, "returns", None) else ""
+                lines.append(f"  def {sig.name}({params}){ret}")
+
+            sections.append("\n".join(lines))
+
+    return "\n\n".join(sections)
 
 
 def _record_outcome(repo_path: Path, subsystem, result: dict[str, Any]):
