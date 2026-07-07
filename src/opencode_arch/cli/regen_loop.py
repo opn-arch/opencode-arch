@@ -346,6 +346,7 @@ def _build_prompt(
     max_iterations: int,
     previous_feedback: str,
     source_equivalent_tokens: int = 0,
+    contract_cap: int = 50,
 ) -> tuple[str, PromptMetrics]:
     """Build the regen prompt for a subsystem iteration.
 
@@ -381,9 +382,9 @@ def _build_prompt(
         contract_parts = []
         for c in contracts:
             contract_parts.append(f"- [{c.contract_type}] {c.assertion} (from {c.test_method})")
-        contracts_str = "\n".join(contract_parts[:50])  # Cap at 50 to manage token budget
-        if len(contracts) > 50:
-            contracts_str += f"\n  ... and {len(contracts) - 50} more"
+        contracts_str = "\n".join(contract_parts[:contract_cap])
+        if len(contracts) > contract_cap:
+            contracts_str += f"\n  ... and {len(contracts) - contract_cap} more"
     else:
         contracts_str = "(none extracted)"
 
@@ -542,6 +543,7 @@ async def run_regen_loop(
             repo_path=repo_path,
             subsystem=subsystem,
             result=sub_result,
+            mode="blind" if blind else "normal",
         )
 
     # Step 5: Run full test suite as integration check
@@ -583,6 +585,87 @@ async def run_regen_loop(
     except Exception:
         pass  # Telemetry is best-effort
 
+    # --- Learning loop: generate report card ---
+    report_card = None
+    try:
+        from opencode_arch.learning.assessor import generate_report_card
+        from opencode_arch.telemetry.store import TelemetryStore
+        import json
+
+        store = TelemetryStore()
+
+        # Get previous fidelity/compression for trend detection
+        prev_cards = store.get_report_cards(limit=1)
+        prev_fidelity = prev_cards[0]["fidelity"] if prev_cards else None
+        prev_compression = prev_cards[0]["compression_ratio"] if prev_cards else None
+
+        report_card = generate_report_card(
+            repo=repo_path.name,
+            mode="blind" if blind else "normal",
+            subsystem_results=results,
+            previous_fidelity=prev_fidelity,
+            previous_compression=prev_compression,
+        )
+
+        # Store report card
+        store.record_report_card(
+            repo=report_card.repo,
+            mode=report_card.mode,
+            grade=report_card.grade,
+            fidelity=report_card.fidelity,
+            compression_ratio=report_card.compression_ratio,
+            failure_patterns=json.dumps(report_card.failure_patterns),
+            novel_patterns=report_card.novel_patterns,
+            improvement_actions=json.dumps(report_card.improvement_actions),
+        )
+    except Exception:
+        pass  # Report card generation is best-effort
+
+    # --- Learning loop: extract lessons ---
+    try:
+        from opencode_arch.learning.lessons import extract_lessons
+        from opencode_arch.telemetry.store import TelemetryStore
+        import json
+
+        store = TelemetryStore()
+        lessons = extract_lessons(
+            repo=repo_path.name,
+            mode="blind" if blind else "normal",
+            subsystem_results=results,
+        )
+        for lesson in lessons:
+            store.record_lesson(
+                lesson_id=lesson.lesson_id,
+                discovered_repo=lesson.discovered_repo,
+                category=lesson.category,
+                description=lesson.description,
+                evidence=json.dumps(lesson.evidence),
+            )
+    except Exception:
+        pass  # Lesson extraction is best-effort
+
+    # --- Learning loop: detect and fix documentation drift ---
+    try:
+        from opencode_arch.learning.maintainer import detect_drift, auto_fix_drift
+        from opencode_arch.telemetry.store import TelemetryStore
+
+        store = TelemetryStore()
+        drift_flags = detect_drift(repo_path)
+        if drift_flags:
+            # Record flags
+            for flag in drift_flags:
+                store.record_drift_flag(
+                    file=flag.file,
+                    issue=flag.issue,
+                    severity=flag.severity,
+                    auto_fixable=flag.auto_fixable,
+                    suggested_fix=flag.suggested_fix,
+                )
+            # Attempt auto-fix
+            auto_fix_drift(drift_flags, repo_path)
+    except Exception:
+        pass  # Drift detection is best-effort
+
     return {
         "success": True,
         "subsystem_results": results,
@@ -590,6 +673,12 @@ async def run_regen_loop(
         "converged_subsystems": converged,
         "full_test_result": full_result,
         "time_seconds": elapsed,
+        "report_card": {
+            "grade": report_card.grade,
+            "fidelity": report_card.fidelity,
+            "compression_ratio": report_card.compression_ratio,
+            "improvement_actions": report_card.improvement_actions,
+        } if report_card else None,
     }
 
 
@@ -665,11 +754,34 @@ async def _process_subsystem(
         subsystem, repo_path, all_subsystems or []
     )
 
+    # --- Learning loop: proactive adaptations ---
+    contract_cap = 50
+    try:
+        from opencode_arch.learning.adapter import get_adaptations, apply_adaptations
+
+        # Compute body_hint coverage for this subsystem
+        sigs_with_hints = sum(1 for s in signatures if getattr(s, "body_hint", ""))
+        body_hint_coverage = sigs_with_hints / len(signatures) if signatures else 0.0
+
+        adaptations = get_adaptations(
+            subsystem_name=subsystem.name,
+            dependency_count=len(subsystem.dependencies),
+            signature_count=len(signatures),
+            contract_count=len(all_contracts),
+            body_hint_coverage=body_hint_coverage,
+        )
+        if adaptations:
+            adapted = apply_adaptations(adaptations, contract_cap=50)
+            contract_cap = adapted.get("contract_cap", 50)
+    except Exception:
+        pass  # Learning adaptations are best-effort
+
     # Iterative loop
     best_pass_rate = 0.0
     feedback = ""
     iterations_used = 0
     last_metrics: PromptMetrics | None = None
+    all_failure_patterns: dict[str, int] = {}
 
     for iteration in range(1, max_iterations + 1):
         iterations_used = iteration
@@ -692,6 +804,7 @@ async def _process_subsystem(
             max_iterations=max_iterations,
             previous_feedback=feedback,
             source_equivalent_tokens=source_equivalent_tokens,
+            contract_cap=contract_cap,
         )
         last_metrics = metrics
 
@@ -720,8 +833,24 @@ async def _process_subsystem(
                     "contract_count": len(all_contracts),
                 },
                 "token_metrics": token_metrics,
+                "failure_patterns": all_failure_patterns,
                 "time_seconds": time.time() - start_time,
             }
+
+        # --- Learning loop: classify failures ---
+        try:
+            from opencode_arch.learning.classifier import classify_failures
+            classifications = classify_failures(
+                test_output=test_result["output"],
+                pass_rate=pass_rate,
+                total_tests=test_result["total"],
+                failed_tests=test_result["failed"],
+            )
+            for c in classifications:
+                pattern_name = c.pattern.value
+                all_failure_patterns[pattern_name] = all_failure_patterns.get(pattern_name, 0) + 1
+        except Exception:
+            pass  # Classification is best-effort
 
         # Analyze gaps for next iteration
         feedback = analyze_gaps(test_result["output"], model_context)
@@ -741,6 +870,7 @@ async def _process_subsystem(
             "contract_count": len(all_contracts),
         },
         "token_metrics": token_metrics,
+        "failure_patterns": all_failure_patterns,
         "time_seconds": time.time() - start_time,
     }
 
@@ -871,7 +1001,7 @@ def _format_token_metrics(metrics: PromptMetrics) -> dict[str, Any]:
     }
 
 
-def _record_outcome(repo_path: Path, subsystem, result: dict[str, Any]):
+def _record_outcome(repo_path: Path, subsystem, result: dict[str, Any], mode: str = "normal"):
     """Record regen outcome to telemetry store."""
     try:
         from opencode_arch.telemetry.store import TelemetryStore
@@ -892,6 +1022,7 @@ def _record_outcome(repo_path: Path, subsystem, result: dict[str, Any]):
             prompt_tokens=token_metrics.get("prompt_tokens", 0),
             source_equivalent_tokens=token_metrics.get("source_equivalent_tokens", 0),
             compression_ratio=token_metrics.get("compression_ratio", 0.0),
+            mode=mode,
         )
     except Exception:
         pass  # Telemetry is best-effort

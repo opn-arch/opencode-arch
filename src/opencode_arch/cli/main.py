@@ -41,6 +41,13 @@ def main():
     metrics_p = subparsers.add_parser("metrics", help="Display recorded metrics")
     metrics_p.add_argument("--tool", default=None, help="Filter by tool name")
     metrics_p.add_argument("--last", type=int, default=10, help="Number of records (default: 10)")
+    metrics_p.add_argument("--learning-curve", action="store_true", help="Show learning curve data")
+    metrics_p.add_argument("--drift", action="store_true", help="Show documentation drift flags")
+
+    # report
+    report_p = subparsers.add_parser("report", help="Display latest report card")
+    report_p.add_argument("--repo", default=None, help="Filter by repository name")
+    report_p.add_argument("--last", type=int, default=5, help="Number of report cards (default: 5)")
 
     # regen-loop
     regen_p = subparsers.add_parser("regen-loop", help="Run decomposed regen loop")
@@ -83,7 +90,16 @@ def main():
 
     elif args.command == "metrics":
         from opencode_arch.cli.metrics import show_metrics
-        show_metrics(tool=args.tool, last=args.last)
+        show_metrics(
+            tool=args.tool,
+            last=args.last,
+            learning_curve=args.learning_curve,
+            drift=args.drift,
+        )
+
+    elif args.command == "report":
+        from opencode_arch.cli.metrics import show_report
+        show_report(repo=args.repo, last=args.last)
 
     elif args.command == "regen-loop":
         from opencode_arch.cli.regen_loop import run_regen_loop
@@ -166,6 +182,17 @@ def _print_regen_result(result: dict):
     full = result.get("full_test_result", {})
     if full.get("total", 0) > 0:
         print(f"\n  Full suite:  {full['passed']}/{full['total']} ({full['pass_rate']:.0%})")
+
+    # Show report card if available
+    report = result.get("report_card")
+    if report:
+        print(f"\n  Report Card: Grade {report['grade']}")
+        print(f"    Fidelity:    {report['fidelity']:.0%}")
+        print(f"    Compression: {report['compression_ratio']:.1f}x")
+        if report.get("improvement_actions"):
+            print(f"    Actions:")
+            for action in report["improvement_actions"]:
+                print(f"      - {action}")
 
 
 if __name__ == "__main__":
