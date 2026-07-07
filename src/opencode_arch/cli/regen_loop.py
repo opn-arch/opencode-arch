@@ -266,6 +266,8 @@ async def _process_subsystem(
     target_pass_rate: float,
 ) -> dict[str, Any]:
     """Process a single subsystem through the regen loop."""
+    start_time = time.time()
+
     # Analyze test files for contracts and constants
     all_contracts = []
     all_constants = []
@@ -324,6 +326,12 @@ async def _process_subsystem(
                 "iterations": iteration,
                 "tests_passed": test_result["passed"],
                 "tests_total": test_result["total"],
+                "features": {
+                    "constant_count": len(all_constants),
+                    "signature_count": 0,
+                    "contract_count": len(all_contracts),
+                },
+                "time_seconds": time.time() - start_time,
             }
 
         # Analyze gaps for next iteration
@@ -337,6 +345,12 @@ async def _process_subsystem(
         "tests_passed": 0,
         "tests_total": 0,
         "last_feedback": feedback,
+        "features": {
+            "constant_count": len(all_constants),
+            "signature_count": 0,
+            "contract_count": len(all_contracts),
+        },
+        "time_seconds": time.time() - start_time,
     }
 
 
@@ -372,17 +386,18 @@ def _record_outcome(repo_path: Path, subsystem, result: dict[str, Any]):
     try:
         from opencode_arch.telemetry.store import TelemetryStore
         store = TelemetryStore()
+        features = result.get("features", {})
         store.log_regen_outcome(
             repo=repo_path.name,
             subsystem=subsystem.name,
             iteration=result.get("iterations", 0),
             features={
-                "constant_count": 0,
-                "signature_count": 0,
-                "contract_count": 0,
+                "constant_count": features.get("constant_count", 0),
+                "signature_count": features.get("signature_count", 0),
+                "contract_count": features.get("contract_count", 0),
             },
             pass_rate=result.get("pass_rate", 0.0),
-            time_seconds=0.0,
+            time_seconds=result.get("time_seconds", 0.0),
         )
     except Exception:
         pass  # Telemetry is best-effort
