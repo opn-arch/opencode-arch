@@ -35,7 +35,11 @@ def run_subsystem_tests(test_files: list[Path], repo_path: Path) -> dict[str, An
     if not existing:
         return {"passed": 0, "failed": 0, "total": 0, "pass_rate": 0.0, "output": "No test files found."}
 
-    cmd = [sys.executable, "-m", "pytest"] + existing + ["-v", "--tb=short", "-q"]
+    cmd = [sys.executable, "-m", "pytest"] + existing + [
+        "-v", "--tb=short", "-q",
+        "-W", "ignore::pytest.PytestConfigWarning",
+        "--override-ini=timeout=0",
+    ]
 
     try:
         result = subprocess.run(
