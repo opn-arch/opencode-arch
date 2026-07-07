@@ -48,6 +48,7 @@ def main():
     regen_p.add_argument("--max-iterations", type=int, default=5, help="Max iterations per subsystem (default: 5)")
     regen_p.add_argument("--target", type=float, default=0.5, help="Target pass rate (default: 0.5)")
     regen_p.add_argument("--subsystem", default=None, help="Process only this subsystem")
+    regen_p.add_argument("--blind", action="store_true", default=False, help="Blind mode: agent only gets model context, no source access")
     regen_p.add_argument("--model", default=None, help="Model override (provider/model)")
     regen_p.add_argument("--timeout", type=int, default=600, help="Timeout seconds per LLM call (default: 600)")
 
@@ -94,6 +95,7 @@ def main():
             max_iterations=args.max_iterations,
             target_pass_rate=args.target,
             subsystem_name=args.subsystem,
+            blind=args.blind,
         ))
         _print_regen_result(result)
 

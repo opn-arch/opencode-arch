@@ -1,8 +1,10 @@
 """Regen-loop orchestrator — iterative subsystem-decomposed code regeneration."""
 from __future__ import annotations
 
+import shutil
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 from typing import Any
@@ -104,6 +106,132 @@ def _parse_pytest_summary(output: str) -> tuple[int, int, int]:
     return passed, failed, total
 
 
+def _setup_blind_workdir(repo_path: Path, test_files: list[Path]) -> Path:
+    """Create a temporary working directory for blind mode.
+
+    Copies only test infrastructure (test files, __init__.py for package
+    structure, conftest.py, pyproject.toml/setup.py) into a temp dir.
+    The agent cannot see original source files — all behavioral info
+    must come from the prompt.
+
+    Args:
+        repo_path: Original repository root.
+        test_files: Test files to copy into the blind workdir.
+
+    Returns:
+        Path to the temporary working directory.
+    """
+    work_dir = Path(tempfile.mkdtemp(prefix="blind-regen-"))
+    repo_path = repo_path.resolve()
+
+    # Copy test files, preserving relative path structure
+    for test_file in test_files:
+        if not test_file.exists():
+            continue
+        test_file = test_file.resolve()
+        rel = test_file.relative_to(repo_path)
+        dest = work_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(test_file, dest)
+
+    # Create __init__.py files for all parent packages to maintain import structure
+    for test_file in test_files:
+        if not test_file.exists():
+            continue
+        test_file = test_file.resolve()
+        rel = test_file.relative_to(repo_path)
+        # Walk up from test file's parent to repo root, creating __init__.py
+        current = rel.parent
+        while current != Path("."):
+            init_src = repo_path / current / "__init__.py"
+            init_dest = work_dir / current / "__init__.py"
+            if not init_dest.exists():
+                init_dest.parent.mkdir(parents=True, exist_ok=True)
+                if init_src.exists():
+                    # Copy empty __init__.py (don't leak source content)
+                    init_dest.write_text("")
+                else:
+                    init_dest.write_text("")
+            current = current.parent
+
+    # Copy conftest.py files from directories containing test files
+    copied_conftest_dirs: set[Path] = set()
+    for test_file in test_files:
+        if not test_file.exists():
+            continue
+        test_file = test_file.resolve()
+        rel = test_file.relative_to(repo_path)
+        # Check test file's directory and all parents for conftest.py
+        current = rel.parent
+        while True:
+            if current not in copied_conftest_dirs:
+                conftest_src = repo_path / current / "conftest.py"
+                if conftest_src.exists():
+                    conftest_dest = work_dir / current / "conftest.py"
+                    conftest_dest.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(conftest_src, conftest_dest)
+                copied_conftest_dirs.add(current)
+            if current == Path("."):
+                break
+            current = current.parent
+
+    # Also check root-level conftest.py
+    root_conftest = repo_path / "conftest.py"
+    if root_conftest.exists() and Path(".") not in copied_conftest_dirs:
+        shutil.copy2(root_conftest, work_dir / "conftest.py")
+
+    # Copy pyproject.toml / setup.py for import resolution
+    for config_file in ("pyproject.toml", "setup.py", "setup.cfg"):
+        src = repo_path / config_file
+        if src.exists():
+            shutil.copy2(src, work_dir / config_file)
+
+    return work_dir
+
+
+def _extract_signatures_for_subsystem(repo_path: Path, subsystem) -> list:
+    """Extract FunctionSignature data from the architecture model for a subsystem.
+
+    Loads the .architecture-model.yaml and finds signatures associated with
+    the subsystem's components. Returns signature objects with body_hint included.
+
+    Args:
+        repo_path: Path to the repository (where .architecture-model.yaml lives).
+        subsystem: Subsystem with source_files to match against components.
+
+    Returns:
+        List of signature-like objects with name, params, returns, body_hint.
+    """
+    model_file = repo_path / ".architecture-model.yaml"
+    if not model_file.exists():
+        return []
+
+    try:
+        from architecture_model.core.parser import load_model
+
+        model = load_model(model_file)
+        signatures = []
+
+        # Get source file stems for matching
+        source_stems = {f.stem for f in subsystem.source_files}
+
+        for comp in getattr(model, "components", []):
+            # Match component to subsystem by checking if its source files overlap
+            comp_files = getattr(comp, "files", [])
+            comp_stems = {Path(f).stem for f in comp_files} if comp_files else set()
+
+            if not source_stems.intersection(comp_stems) and comp_stems:
+                continue
+
+            # Extract signatures from component
+            for sig in getattr(comp, "signatures", []):
+                signatures.append(sig)
+
+        return signatures
+    except Exception:
+        return []
+
+
 def _build_prompt(
     subsystem_name: str,
     source_files: list[Path],
@@ -177,6 +305,7 @@ async def run_regen_loop(
     max_iterations: int = 5,
     target_pass_rate: float = 0.5,
     subsystem_name: str | None = None,
+    blind: bool = False,
 ) -> dict[str, Any]:
     """Run the test-as-oracle decomposed regen loop.
 
@@ -190,6 +319,7 @@ async def run_regen_loop(
         max_iterations: Max iterations per subsystem (default 5).
         target_pass_rate: Stop when this pass rate is achieved (default 0.5).
         subsystem_name: If set, only process this subsystem.
+        blind: If True, agent works in temp dir without source file access.
 
     Returns:
         Summary dict with per-subsystem results and overall metrics.
@@ -225,6 +355,7 @@ async def run_regen_loop(
             model_context=model_context,
             max_iterations=max_iterations,
             target_pass_rate=target_pass_rate,
+            blind=blind,
         )
         results[subsystem.name] = sub_result
 
@@ -264,9 +395,35 @@ async def _process_subsystem(
     model_context: str,
     max_iterations: int,
     target_pass_rate: float,
+    blind: bool = False,
 ) -> dict[str, Any]:
     """Process a single subsystem through the regen loop."""
     start_time = time.time()
+
+    # In blind mode, set up isolated working directory
+    work_dir: Path | None = None
+    if blind:
+        work_dir = _setup_blind_workdir(repo_path, subsystem.test_files)
+
+    # Determine effective paths for runner and tests
+    effective_path = work_dir if blind else repo_path
+
+    # In blind mode, remap test file paths to the work_dir
+    if blind and work_dir:
+        effective_test_files = []
+        for tf in subsystem.test_files:
+            if tf.exists():
+                rel = tf.resolve().relative_to(repo_path)
+                effective_test_files.append(work_dir / rel)
+            else:
+                effective_test_files.append(tf)
+    else:
+        effective_test_files = subsystem.test_files
+
+    # In blind mode, extract signatures from architecture model
+    signatures = []
+    if blind:
+        signatures = _extract_signatures_for_subsystem(repo_path, subsystem)
 
     # Analyze test files for contracts and constants
     all_contracts = []
@@ -300,7 +457,7 @@ async def _process_subsystem(
             source_files=subsystem.source_files,
             model_context=model_context,
             constants=all_constants,
-            signatures=[],  # Filled when model has enriched components
+            signatures=signatures,
             contracts=all_contracts,
             dependency_apis=dependency_apis,
             iteration=iteration,
@@ -309,10 +466,10 @@ async def _process_subsystem(
         )
 
         # Call LLM via runner
-        run_result = await runner.run(prompt=prompt, repo_path=str(repo_path))
+        run_result = await runner.run(prompt=prompt, repo_path=str(effective_path))
 
         # Run subsystem tests
-        test_result = run_subsystem_tests(subsystem.test_files, repo_path)
+        test_result = run_subsystem_tests(effective_test_files, effective_path)
         pass_rate = test_result["pass_rate"]
 
         if pass_rate > best_pass_rate:
@@ -328,7 +485,7 @@ async def _process_subsystem(
                 "tests_total": test_result["total"],
                 "features": {
                     "constant_count": len(all_constants),
-                    "signature_count": 0,
+                    "signature_count": len(signatures),
                     "contract_count": len(all_contracts),
                 },
                 "time_seconds": time.time() - start_time,
@@ -347,7 +504,7 @@ async def _process_subsystem(
         "last_feedback": feedback,
         "features": {
             "constant_count": len(all_constants),
-            "signature_count": 0,
+            "signature_count": len(signatures),
             "contract_count": len(all_contracts),
         },
         "time_seconds": time.time() - start_time,
