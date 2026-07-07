@@ -215,12 +215,16 @@ def _extract_signatures_for_subsystem(repo_path: Path, subsystem) -> list:
         # Get source file stems for matching
         source_stems = {f.stem for f in subsystem.source_files}
 
-        for comp in getattr(model, "components", []):
+        for comp in model.entities.components:
             # Match component to subsystem by checking if its source files overlap
             comp_files = getattr(comp, "files", [])
             comp_stems = {Path(f).stem for f in comp_files} if comp_files else set()
 
-            if not source_stems.intersection(comp_stems) and comp_stems:
+            # Also match by component name (stem of source file)
+            if comp_stems:
+                if not source_stems.intersection(comp_stems):
+                    continue
+            elif comp.name not in source_stems:
                 continue
 
             # Extract signatures from component
@@ -228,6 +232,42 @@ def _extract_signatures_for_subsystem(repo_path: Path, subsystem) -> list:
                 signatures.append(sig)
 
         return signatures
+    except Exception:
+        return []
+
+
+def _extract_constants_for_subsystem(repo_path: Path, subsystem) -> list:
+    """Extract Constant objects from the architecture model for a subsystem.
+
+    Returns constants from matched components (module constants, class attributes,
+    module-level instances) that may not appear in test-derived constants.
+    """
+    model_file = repo_path / ".architecture-model.yaml"
+    if not model_file.exists():
+        return []
+
+    try:
+        from architecture_model.core.parser import load_model
+
+        model = load_model(model_file)
+        constants = []
+
+        source_stems = {f.stem for f in subsystem.source_files}
+
+        for comp in model.entities.components:
+            comp_files = getattr(comp, "files", [])
+            comp_stems = {Path(f).stem for f in comp_files} if comp_files else set()
+
+            if comp_stems:
+                if not source_stems.intersection(comp_stems):
+                    continue
+            elif comp.name not in source_stems:
+                continue
+
+            for const in getattr(comp, "constants", []):
+                constants.append(const)
+
+        return constants
     except Exception:
         return []
 
@@ -254,13 +294,17 @@ def _build_prompt(
     else:
         consts_str = "(none extracted)"
 
-    # Format signatures
+    # Format signatures (include body_hint for blind regen)
     if signatures:
         sigs_parts = []
         for sig in signatures:
             params = ", ".join(sig.params) if sig.params else ""
             ret = f" -> {sig.returns}" if sig.returns else ""
-            sigs_parts.append(f"- {sig.name}({params}){ret}")
+            hint = getattr(sig, "body_hint", "")
+            if hint:
+                sigs_parts.append(f"- {sig.name}({params}){ret}  [body: {hint}]")
+            else:
+                sigs_parts.append(f"- {sig.name}({params}){ret}")
         sigs_str = "\n".join(sigs_parts)
     else:
         sigs_str = "(none extracted)"
@@ -422,8 +466,10 @@ async def _process_subsystem(
 
     # In blind mode, extract signatures from architecture model
     signatures = []
+    model_constants = []
     if blind:
         signatures = _extract_signatures_for_subsystem(repo_path, subsystem)
+        model_constants = _extract_constants_for_subsystem(repo_path, subsystem)
 
     # Analyze test files for contracts and constants
     all_contracts = []
@@ -440,6 +486,15 @@ async def _process_subsystem(
             except Exception:
                 pass  # Gracefully skip unparseable test files
 
+    # In blind mode, merge model constants (module-level, class attrs, instances)
+    # with test-derived constants, deduplicating by name
+    if blind and model_constants:
+        existing_names = {c.name for c in all_constants}
+        for mc in model_constants:
+            if mc.name not in existing_names:
+                all_constants.append(mc)
+                existing_names.add(mc.name)
+
     # Build dependency context (APIs from subsystems we depend on)
     dependency_apis = _build_dependency_context(subsystem, repo_path)
 
@@ -451,10 +506,15 @@ async def _process_subsystem(
     for iteration in range(1, max_iterations + 1):
         iterations_used = iteration
 
-        # Build prompt
+        # Build prompt — in blind mode, show relative paths for file creation
+        if blind:
+            display_files = [f.resolve().relative_to(repo_path) for f in subsystem.source_files if f.exists()]
+        else:
+            display_files = subsystem.source_files
+
         prompt = _build_prompt(
             subsystem_name=subsystem.name,
-            source_files=subsystem.source_files,
+            source_files=display_files,
             model_context=model_context,
             constants=all_constants,
             signatures=signatures,
