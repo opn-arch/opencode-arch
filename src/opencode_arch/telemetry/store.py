@@ -43,6 +43,36 @@ class TelemetryStore:
                 contract_count INTEGER DEFAULT 0,
                 pass_rate REAL DEFAULT 0.0,
                 time_seconds REAL DEFAULT 0.0,
+                prompt_tokens INTEGER DEFAULT 0,
+                source_equivalent_tokens INTEGER DEFAULT 0,
+                compression_ratio REAL DEFAULT 0.0,
+                mode TEXT DEFAULT 'normal',
+                timestamp TEXT
+            )
+        """)
+        # Migration: add token columns if they don't exist (for existing DBs)
+        try:
+            conn.execute("ALTER TABLE regen_outcomes ADD COLUMN prompt_tokens INTEGER DEFAULT 0")
+            conn.execute("ALTER TABLE regen_outcomes ADD COLUMN source_equivalent_tokens INTEGER DEFAULT 0")
+            conn.execute("ALTER TABLE regen_outcomes ADD COLUMN compression_ratio REAL DEFAULT 0.0")
+            conn.execute("ALTER TABLE regen_outcomes ADD COLUMN mode TEXT DEFAULT 'normal'")
+        except sqlite3.OperationalError:
+            pass  # columns already exist
+
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS learning_curve (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                repo TEXT NOT NULL,
+                repo_sequence INTEGER NOT NULL,
+                mode TEXT NOT NULL DEFAULT 'normal',
+                total_subsystems INTEGER DEFAULT 0,
+                converged_subsystems INTEGER DEFAULT 0,
+                avg_pass_rate REAL DEFAULT 0.0,
+                avg_iterations REAL DEFAULT 0.0,
+                avg_prompt_tokens REAL DEFAULT 0.0,
+                avg_source_equivalent REAL DEFAULT 0.0,
+                avg_compression_ratio REAL DEFAULT 0.0,
+                total_time_seconds REAL DEFAULT 0.0,
                 timestamp TEXT
             )
         """)
@@ -102,6 +132,10 @@ class TelemetryStore:
         features: dict[str, int],
         pass_rate: float,
         time_seconds: float,
+        prompt_tokens: int = 0,
+        source_equivalent_tokens: int = 0,
+        compression_ratio: float = 0.0,
+        mode: str = "normal",
     ):
         """Log a regeneration attempt outcome.
 
@@ -112,12 +146,17 @@ class TelemetryStore:
             features: Dict with constant_count, signature_count, contract_count.
             pass_rate: Final pass rate achieved.
             time_seconds: Wall-clock time for this subsystem.
+            prompt_tokens: Tokens used in the prompt.
+            source_equivalent_tokens: Tokens agent would need without extension.
+            compression_ratio: source_equivalent / prompt_tokens.
+            mode: Regen mode ('normal' or 'blind').
         """
         conn = sqlite3.connect(self.db_path)
         conn.execute(
             "INSERT INTO regen_outcomes "
             "(repo, subsystem, iteration, constant_count, signature_count, contract_count, "
-            "pass_rate, time_seconds, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "pass_rate, time_seconds, prompt_tokens, source_equivalent_tokens, "
+            "compression_ratio, mode, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 repo,
                 subsystem,
@@ -127,6 +166,10 @@ class TelemetryStore:
                 features.get("contract_count", 0),
                 pass_rate,
                 time_seconds,
+                prompt_tokens,
+                source_equivalent_tokens,
+                compression_ratio,
+                mode,
                 datetime.now(timezone.utc).isoformat(),
             ),
         )
@@ -199,6 +242,78 @@ class TelemetryStore:
             rows = conn.execute(
                 "SELECT * FROM regen_outcomes ORDER BY timestamp DESC LIMIT ?",
                 (limit,),
+            ).fetchall()
+
+        conn.close()
+        return [dict(row) for row in rows]
+
+    # ------------------------------------------------------------------
+    # Learning curve tracking
+    # ------------------------------------------------------------------
+
+    def record_learning_curve(
+        self,
+        repo: str,
+        mode: str,
+        total_subsystems: int,
+        converged_subsystems: int,
+        avg_pass_rate: float,
+        avg_iterations: float,
+        avg_prompt_tokens: float,
+        avg_source_equivalent: float,
+        avg_compression_ratio: float,
+        total_time_seconds: float,
+    ):
+        """Record per-repo summary for learning curve trend analysis.
+
+        repo_sequence is auto-computed as the count of previous entries + 1.
+        This allows tracking: does the system get better with each new repo?
+        """
+        conn = sqlite3.connect(self.db_path)
+        # Auto-compute sequence number
+        row = conn.execute(
+            "SELECT COALESCE(MAX(repo_sequence), 0) FROM learning_curve"
+        ).fetchone()
+        seq = (row[0] or 0) + 1
+
+        conn.execute(
+            "INSERT INTO learning_curve "
+            "(repo, repo_sequence, mode, total_subsystems, converged_subsystems, "
+            "avg_pass_rate, avg_iterations, avg_prompt_tokens, avg_source_equivalent, "
+            "avg_compression_ratio, total_time_seconds, timestamp) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (repo, seq, mode, total_subsystems, converged_subsystems,
+             avg_pass_rate, avg_iterations, avg_prompt_tokens, avg_source_equivalent,
+             avg_compression_ratio, total_time_seconds,
+             datetime.now(timezone.utc).isoformat()),
+        )
+        conn.commit()
+        conn.close()
+
+    def get_learning_curve(self, mode: str | None = None) -> list[dict[str, Any]]:
+        """Get learning curve data ordered by repo sequence.
+
+        Shows how metrics improve with each successive repo processed.
+        Key metrics that should IMPROVE (go down):
+        - avg_iterations: fewer attempts needed
+        - avg_prompt_tokens: more efficient prompts
+
+        Key metrics that should IMPROVE (go up):
+        - avg_pass_rate: higher fidelity
+        - avg_compression_ratio: better token arbitrage
+        - converged_subsystems / total_subsystems: higher success rate
+        """
+        conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row
+
+        if mode:
+            rows = conn.execute(
+                "SELECT * FROM learning_curve WHERE mode = ? ORDER BY repo_sequence ASC",
+                (mode,),
+            ).fetchall()
+        else:
+            rows = conn.execute(
+                "SELECT * FROM learning_curve ORDER BY repo_sequence ASC"
             ).fetchall()
 
         conn.close()

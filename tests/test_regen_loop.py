@@ -79,7 +79,7 @@ class TestParsePytestSummary:
 
 class TestBuildPrompt:
     def test_basic_prompt(self):
-        prompt = _build_prompt(
+        prompt, _metrics = _build_prompt(
             subsystem_name="core",
             source_files=[Path("src/core.py")],
             model_context="Component: Core",
@@ -104,7 +104,7 @@ class TestBuildPrompt:
         assert "Depends on 'utils'" in prompt
 
     def test_with_feedback(self):
-        prompt = _build_prompt(
+        prompt, _metrics = _build_prompt(
             subsystem_name="parser",
             source_files=[],
             model_context="",
@@ -121,7 +121,7 @@ class TestBuildPrompt:
         assert "Feedback from previous iteration" in prompt
 
     def test_no_constants(self):
-        prompt = _build_prompt(
+        prompt, _metrics = _build_prompt(
             subsystem_name="minimal",
             source_files=[],
             model_context="",

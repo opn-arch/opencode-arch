@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +16,21 @@ from architecture_model.manifest.test_analyzer import analyze_test_file
 from opencode_arch.cli.gap_analyzer import analyze_gaps
 from opencode_arch.prompts.regen import FEEDBACK_HEADER, REGEN_PROMPT
 from opencode_arch.runner.base import RunnerBackend
+
+
+@dataclass
+class PromptMetrics:
+    """Token metrics for each prompt section."""
+
+    total_tokens: int
+    model_context_tokens: int
+    signatures_tokens: int
+    constants_tokens: int
+    contracts_tokens: int
+    dependency_tokens: int
+    feedback_tokens: int
+    source_equivalent_tokens: int  # what agent would read without extension
+    compression_ratio: float  # source_equivalent / total
 
 
 def run_subsystem_tests(test_files: list[Path], repo_path: Path) -> dict[str, Any]:
@@ -287,8 +303,13 @@ def _build_prompt(
     iteration: int,
     max_iterations: int,
     previous_feedback: str,
-) -> str:
-    """Build the regen prompt for a subsystem iteration."""
+    source_equivalent_tokens: int = 0,
+) -> tuple[str, PromptMetrics]:
+    """Build the regen prompt for a subsystem iteration.
+
+    Returns:
+        Tuple of (prompt_string, PromptMetrics with per-section token counts).
+    """
     # Format source files
     files_str = "\n".join(f"- {f}" for f in source_files) if source_files else "- (none specified)"
 
@@ -333,18 +354,84 @@ def _build_prompt(
     else:
         feedback_str = ""
 
-    return REGEN_PROMPT.format(
+    # Compute per-section token counts (chars / 4 approximation)
+    model_context_str = model_context or "(no architecture model available)"
+    dependency_str = dependency_apis or "(no dependency context)"
+
+    model_context_tokens = len(model_context_str) // 4
+    signatures_tokens = len(sigs_str) // 4
+    constants_tokens = len(consts_str) // 4
+    contracts_tokens = len(contracts_str) // 4
+    dependency_tokens = len(dependency_str) // 4
+    feedback_tokens = len(feedback_str) // 4
+
+    prompt_str = REGEN_PROMPT.format(
         subsystem_name=subsystem_name,
         iteration=iteration,
         max_iterations=max_iterations,
         source_files=files_str,
-        model_context=model_context or "(no architecture model available)",
+        model_context=model_context_str,
         constants=consts_str,
         signatures=sigs_str,
         test_contracts=contracts_str,
-        dependency_apis=dependency_apis or "(no dependency context)",
+        dependency_apis=dependency_str,
         previous_feedback=feedback_str,
     )
+
+    total_tokens = len(prompt_str) // 4
+    compression_ratio = (
+        source_equivalent_tokens / total_tokens if total_tokens > 0 else 0.0
+    )
+
+    metrics = PromptMetrics(
+        total_tokens=total_tokens,
+        model_context_tokens=model_context_tokens,
+        signatures_tokens=signatures_tokens,
+        constants_tokens=constants_tokens,
+        contracts_tokens=contracts_tokens,
+        dependency_tokens=dependency_tokens,
+        feedback_tokens=feedback_tokens,
+        source_equivalent_tokens=source_equivalent_tokens,
+        compression_ratio=compression_ratio,
+    )
+
+    return prompt_str, metrics
+
+
+def _compute_source_equivalent(subsystem, repo_path: Path, all_subsystems: list) -> int:
+    """Compute tokens needed to read source + deps (the 'without extension' baseline).
+
+    This represents what the agent would need to read WITHOUT the architecture
+    model extension — the raw source files of the subsystem plus all its
+    dependencies.
+
+    Args:
+        subsystem: Subsystem object with .source_files and .dependencies.
+        repo_path: Root path of the repository.
+        all_subsystems: All subsystems (to resolve dependency source files).
+
+    Returns:
+        Estimated token count (chars / 4).
+    """
+    total_chars = 0
+    # Own source files
+    for f in subsystem.source_files:
+        path = repo_path / f if not Path(f).is_absolute() else Path(f)
+        try:
+            total_chars += len(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError):
+            pass
+    # Dependency source files
+    for dep_name in subsystem.dependencies:
+        for s in all_subsystems:
+            if s.name == dep_name:
+                for sf in s.source_files:
+                    path = repo_path / sf if not Path(sf).is_absolute() else Path(sf)
+                    try:
+                        total_chars += len(path.read_text(encoding="utf-8"))
+                    except (OSError, UnicodeDecodeError):
+                        pass
+    return total_chars // 4
 
 
 async def run_regen_loop(
@@ -404,6 +491,7 @@ async def run_regen_loop(
             max_iterations=max_iterations,
             target_pass_rate=target_pass_rate,
             blind=blind,
+            all_subsystems=subsystems,
         )
         results[subsystem.name] = sub_result
 
@@ -426,6 +514,33 @@ async def run_regen_loop(
     converged = sum(1 for r in results.values() if r.get("converged", False))
     total_subs = len(results)
 
+    # Record learning curve entry
+    try:
+        from opencode_arch.telemetry.store import TelemetryStore
+        store = TelemetryStore()
+
+        all_metrics = [r.get("token_metrics", {}) for r in results.values()]
+        avg_prompt = sum(m.get("prompt_tokens", 0) for m in all_metrics) / max(len(all_metrics), 1)
+        avg_source = sum(m.get("source_equivalent_tokens", 0) for m in all_metrics) / max(len(all_metrics), 1)
+        avg_compression = sum(m.get("compression_ratio", 0) for m in all_metrics) / max(len(all_metrics), 1)
+        avg_iters = sum(r.get("iterations", 0) for r in results.values()) / max(len(results), 1)
+        avg_pass = sum(r.get("pass_rate", 0) for r in results.values()) / max(len(results), 1)
+
+        store.record_learning_curve(
+            repo=repo_path.name,
+            mode="blind" if blind else "normal",
+            total_subsystems=total_subs,
+            converged_subsystems=converged,
+            avg_pass_rate=avg_pass,
+            avg_iterations=avg_iters,
+            avg_prompt_tokens=avg_prompt,
+            avg_source_equivalent=avg_source,
+            avg_compression_ratio=avg_compression,
+            total_time_seconds=elapsed,
+        )
+    except Exception:
+        pass  # Telemetry is best-effort
+
     return {
         "success": True,
         "subsystem_results": results,
@@ -444,6 +559,7 @@ async def _process_subsystem(
     max_iterations: int,
     target_pass_rate: float,
     blind: bool = False,
+    all_subsystems: list | None = None,
 ) -> dict[str, Any]:
     """Process a single subsystem through the regen loop."""
     start_time = time.time()
@@ -502,10 +618,16 @@ async def _process_subsystem(
     # Build dependency context (APIs from subsystems we depend on)
     dependency_apis = _build_dependency_context(subsystem, repo_path)
 
+    # Compute source-equivalent token baseline
+    source_equivalent_tokens = _compute_source_equivalent(
+        subsystem, repo_path, all_subsystems or []
+    )
+
     # Iterative loop
     best_pass_rate = 0.0
     feedback = ""
     iterations_used = 0
+    last_metrics: PromptMetrics | None = None
 
     for iteration in range(1, max_iterations + 1):
         iterations_used = iteration
@@ -516,7 +638,7 @@ async def _process_subsystem(
         else:
             display_files = subsystem.source_files
 
-        prompt = _build_prompt(
+        prompt, metrics = _build_prompt(
             subsystem_name=subsystem.name,
             source_files=display_files,
             model_context=model_context,
@@ -527,7 +649,9 @@ async def _process_subsystem(
             iteration=iteration,
             max_iterations=max_iterations,
             previous_feedback=feedback,
+            source_equivalent_tokens=source_equivalent_tokens,
         )
+        last_metrics = metrics
 
         # Call LLM via runner
         run_result = await runner.run(prompt=prompt, repo_path=str(effective_path))
@@ -541,6 +665,7 @@ async def _process_subsystem(
 
         # Check convergence
         if pass_rate >= target_pass_rate:
+            token_metrics = _format_token_metrics(metrics)
             return {
                 "converged": True,
                 "pass_rate": pass_rate,
@@ -552,6 +677,7 @@ async def _process_subsystem(
                     "signature_count": len(signatures),
                     "contract_count": len(all_contracts),
                 },
+                "token_metrics": token_metrics,
                 "time_seconds": time.time() - start_time,
             }
 
@@ -559,6 +685,7 @@ async def _process_subsystem(
         feedback = analyze_gaps(test_result["output"], model_context)
 
     # Did not converge
+    token_metrics = _format_token_metrics(last_metrics) if last_metrics else {}
     return {
         "converged": False,
         "pass_rate": best_pass_rate,
@@ -571,6 +698,7 @@ async def _process_subsystem(
             "signature_count": len(signatures),
             "contract_count": len(all_contracts),
         },
+        "token_metrics": token_metrics,
         "time_seconds": time.time() - start_time,
     }
 
@@ -684,12 +812,30 @@ def _build_dependency_context(subsystem, repo_path: Path) -> str:
     return "\n\n".join(sections)
 
 
+def _format_token_metrics(metrics: PromptMetrics) -> dict[str, Any]:
+    """Format PromptMetrics into a serializable dict for result tracking."""
+    return {
+        "prompt_tokens": metrics.total_tokens,
+        "source_equivalent_tokens": metrics.source_equivalent_tokens,
+        "compression_ratio": metrics.compression_ratio,
+        "sections": {
+            "model_context": metrics.model_context_tokens,
+            "signatures": metrics.signatures_tokens,
+            "constants": metrics.constants_tokens,
+            "contracts": metrics.contracts_tokens,
+            "dependency_apis": metrics.dependency_tokens,
+            "feedback": metrics.feedback_tokens,
+        },
+    }
+
+
 def _record_outcome(repo_path: Path, subsystem, result: dict[str, Any]):
     """Record regen outcome to telemetry store."""
     try:
         from opencode_arch.telemetry.store import TelemetryStore
         store = TelemetryStore()
         features = result.get("features", {})
+        token_metrics = result.get("token_metrics", {})
         store.log_regen_outcome(
             repo=repo_path.name,
             subsystem=subsystem.name,
@@ -701,6 +847,9 @@ def _record_outcome(repo_path: Path, subsystem, result: dict[str, Any]):
             },
             pass_rate=result.get("pass_rate", 0.0),
             time_seconds=result.get("time_seconds", 0.0),
+            prompt_tokens=token_metrics.get("prompt_tokens", 0),
+            source_equivalent_tokens=token_metrics.get("source_equivalent_tokens", 0),
+            compression_ratio=token_metrics.get("compression_ratio", 0.0),
         )
     except Exception:
         pass  # Telemetry is best-effort
