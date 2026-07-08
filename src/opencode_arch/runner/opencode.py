@@ -14,25 +14,28 @@ class OpencodeRunner:
         self.model = model
 
     async def run(self, prompt: str, repo_path: str) -> RunResult:
-        """Run OpenCode with a prompt in the given repo directory."""
-        cmd = [
-            "opencode", "run",
-            "--dangerously-skip-permissions",
-            prompt,
-            "--dir", repo_path,
-        ]
+        """Run OpenCode with a prompt in the given repo directory.
+
+        Uses stdin to pass the prompt (avoids ARG_MAX limits for long prompts).
+        Uses cwd to set the working directory (no --dir flag needed).
+        """
+        cmd = ["opencode", "run"]
         if self.model:
             cmd.extend(["--model", self.model])
 
         try:
             result = subprocess.run(
                 cmd,
+                input=prompt,
                 capture_output=True,
                 text=True,
                 timeout=self.timeout,
+                cwd=repo_path,
             )
+            # Strip ANSI escape codes from output
+            output = _strip_ansi(result.stdout)
             return RunResult(
-                output=result.stdout + result.stderr,
+                output=output,
                 exit_code=result.returncode,
                 success=result.returncode == 0,
             )
@@ -54,3 +57,10 @@ class OpencodeRunner:
                 exit_code=-1,
                 success=False,
             )
+
+
+def _strip_ansi(text: str) -> str:
+    """Remove ANSI escape sequences from text."""
+    import re
+    ansi_pattern = re.compile(r'\x1b\[[0-9;]*m|\x1b\[\?[0-9;]*[a-zA-Z]|\x1b\[[0-9;]*[a-zA-Z]')
+    return ansi_pattern.sub('', text)
