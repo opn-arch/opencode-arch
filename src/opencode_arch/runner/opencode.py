@@ -9,13 +9,18 @@ from opencode_arch.runner.base import RunResult
 class OpencodeRunner:
     """Invokes `opencode run` as a subprocess."""
 
-    def __init__(self, timeout: int = 300, model: str | None = None):
+    def __init__(self, timeout: int = 600, model: str | None = None):
         self.timeout = timeout
         self.model = model
 
     async def run(self, prompt: str, repo_path: str) -> RunResult:
         """Run OpenCode with a prompt in the given repo directory."""
-        cmd = ["opencode", "run", prompt, "--dir", repo_path]
+        cmd = [
+            "opencode", "run",
+            "--dangerously-skip-permissions",
+            prompt,
+            "--dir", repo_path,
+        ]
         if self.model:
             cmd.extend(["--model", self.model])
 
