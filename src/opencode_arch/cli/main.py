@@ -59,6 +59,30 @@ def main():
     regen_p.add_argument("--model", default=None, help="Model override (provider/model)")
     regen_p.add_argument("--timeout", type=int, default=600, help="Timeout seconds per LLM call (default: 600)")
 
+    # docs (with sub-subcommands: generate, list)
+    docs_p = subparsers.add_parser("docs", help="Generate SE documentation")
+    docs_sub = docs_p.add_subparsers(dest="docs_command", required=True)
+
+    # docs generate
+    docs_gen_p = docs_sub.add_parser("generate", help="Generate documentation artifacts")
+    docs_gen_p.add_argument("project_path", help="Path to the target project")
+    docs_gen_p.add_argument("--output-dir", default=None, help="Output directory (default: docs/se/)")
+    docs_gen_p.add_argument("--artifacts", default=None, help="Comma-separated artifact IDs to generate")
+    docs_gen_p.add_argument("--model-path", default=None, help="Path to .architecture-model.yaml")
+    docs_gen_p.add_argument("--model", default=None, help="Model override (provider/model)")
+    docs_gen_p.add_argument("--timeout", type=int, default=600, help="Timeout seconds (default: 600)")
+
+    # docs list
+    docs_list_p = docs_sub.add_parser("list", help="List artifacts that would be generated")
+    docs_list_p.add_argument("project_path", help="Path to the target project")
+    docs_list_p.add_argument("--model-path", default=None, help="Path to .architecture-model.yaml")
+
+    # docs validate
+    docs_val_p = docs_sub.add_parser("validate", help="Validate generated documentation")
+    docs_val_p.add_argument("project_path", help="Path to the target project")
+    docs_val_p.add_argument("--docs-dir", default=None, help="Docs directory (default: docs/se/)")
+    docs_val_p.add_argument("--model-path", default=None, help="Path to .architecture-model.yaml")
+
     args = parser.parse_args()
 
     if args.command == "extract":
@@ -114,6 +138,80 @@ def main():
             blind=args.blind,
         ))
         _print_regen_result(result)
+
+    elif args.command == "docs":
+        from opencode_arch.cli.docs import run_docs_generate, run_docs_list
+        if args.docs_command == "generate":
+            from opencode_arch.runner.opencode import OpencodeRunner
+            runner = OpencodeRunner(timeout=args.timeout, model=args.model)
+            output_dir = Path(args.output_dir) if args.output_dir else None
+            artifact_filter = args.artifacts.split(",") if args.artifacts else None
+            model_path = Path(args.model_path) if args.model_path else None
+            result = asyncio.run(run_docs_generate(
+                repo_path=Path(args.project_path),
+                runner=runner,
+                output_dir=output_dir,
+                artifact_filter=artifact_filter,
+                model_path=model_path,
+            ))
+            _print_docs_result(result)
+        elif args.docs_command == "list":
+            model_path = Path(args.model_path) if args.model_path else None
+            artifacts = asyncio.run(run_docs_list(
+                repo_path=Path(args.project_path),
+                model_path=model_path,
+            ))
+            _print_docs_list(artifacts)
+        elif args.docs_command == "validate":
+            from opencode_arch.cli.docs_validator import validate_docs, DocsValidationResult
+            from architecture_model import load_model, generate_manifest
+            project_path = Path(args.project_path)
+            model_path = Path(args.model_path) if args.model_path else project_path / ".architecture-model.yaml"
+            docs_dir = Path(args.docs_dir) if args.docs_dir else project_path / "docs" / "se"
+            model = load_model(model_path)
+            try:
+                manifest = generate_manifest(project_path)
+            except Exception:
+                manifest = None
+            result = validate_docs(docs_dir, model, manifest)
+            _print_validation_result(result)
+
+
+def _print_docs_result(result):
+    from opencode_arch.cli.docs import DocsResult
+    if result.error:
+        print(f"Docs generation failed: {result.error}")
+        sys.exit(1)
+    print(f"\nDocs Generation Complete")
+    print(f"  Output:    {result.output_dir}")
+    print(f"  Generated: {len(result.generated)} artifacts")
+    if result.failed:
+        print(f"  Failed:    {len(result.failed)} ({', '.join(result.failed)})")
+    print(f"  Time:      {result.time_seconds:.1f}s")
+
+
+def _print_docs_list(artifacts: list[dict]):
+    print(f"\nArtifacts that would be generated ({len(artifacts)}):")
+    print(f"{'ID':<25} {'Name':<25} {'Category':<15} {'Priority'}")
+    print("-" * 75)
+    for a in artifacts:
+        print(f"{a['id']:<25} {a['name']:<25} {a['category']:<15} {a['priority']}")
+
+
+def _print_validation_result(result):
+    from opencode_arch.cli.docs_validator import DocsValidationResult
+    status = "PASS" if result.is_valid else "FAIL"
+    print(f"\nDocs Validation: {status}")
+    print(f"  Artifacts: {result.total_artifacts} ({result.passed} passed, {result.failed} failed)")
+    if result.issues:
+        print(f"  Issues:    {len(result.issues)}")
+        for issue in result.issues[:20]:  # cap display
+            sev = "ERR" if issue.severity == "error" else "WRN"
+            print(f"    [{sev}] {issue.artifact_id}:{issue.line} {issue.issue_type}: {issue.message}")
+        if len(result.issues) > 20:
+            print(f"    ... and {len(result.issues) - 20} more")
+    if not result.is_valid:
+        sys.exit(1)
 
 
 def _print_extract_result(result: dict):
