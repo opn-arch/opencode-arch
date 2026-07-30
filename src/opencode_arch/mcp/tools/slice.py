@@ -39,9 +39,16 @@ async def slice_context(
         model_file = path / ".architecture-model.yaml"
 
         if model_file.exists():
-            return _slice_from_model(path, focus, budget, detail)
+            result = _slice_from_model(path, focus, budget, detail)
         else:
-            return _slice_from_manifest(path, focus, budget)
+            result = _slice_from_manifest(path, focus, budget)
+
+        try:
+            from opencode_arch.telemetry.collector import drain_and_store
+            drain_and_store(tool="architect_slice", repo=path.name)
+        except Exception:
+            pass
+        return result
 
     except Exception as e:
         return f"Error during context slicing: {e}"
@@ -50,7 +57,7 @@ async def slice_context(
 def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) -> str:
     """Slice context using the architecture model (rich path)."""
     from architecture_model.core.parser import load_model
-    from architecture_model.integrations.llm_context import (
+    from opencode_arch.context import (
         format_model_context,
         format_fblock_context,
         format_artifact_context,

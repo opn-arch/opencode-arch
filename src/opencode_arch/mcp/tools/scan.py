@@ -26,6 +26,11 @@ async def scan_repository(repo_path: str) -> dict[str, Any]:
     try:
         from architecture_model.manifest.generator import generate_manifest
         manifest = generate_manifest(path)
+        try:
+            from opencode_arch.telemetry.collector import drain_and_store
+            drain_and_store(tool="architect_scan", repo=path.name)
+        except Exception:
+            pass
         return manifest
     except Exception as e:
         return {"error": f"Scan failed: {e}"}

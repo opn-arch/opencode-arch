@@ -46,7 +46,15 @@ async def run_tests_on_generated_code(
 
         # Parse pytest output
         output = result.stdout + result.stderr
-        return _parse_pytest_output(output, result.returncode)
+        parsed = _parse_pytest_output(output, result.returncode)
+
+        try:
+            from opencode_arch.telemetry.collector import drain_and_store
+            drain_and_store(tool="architect_generate", repo=path.name)
+        except Exception:
+            pass
+
+        return parsed
 
     except subprocess.TimeoutExpired:
         return {"error": "Test execution timed out (120s)", "passed": False, "pass_rate": 0.0, "total_tests": 0}

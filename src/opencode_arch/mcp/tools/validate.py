@@ -35,6 +35,12 @@ async def validate_architecture(
         model = _parse_raw(raw)
         validation_result = validate_model(model)
 
+        try:
+            from opencode_arch.telemetry.collector import drain_and_store
+            drain_and_store(tool="architect_validate", repo="")
+        except Exception:
+            pass
+
         return {
             "score": validation_result.score,
             "issues": [str(issue) for issue in validation_result.issues],

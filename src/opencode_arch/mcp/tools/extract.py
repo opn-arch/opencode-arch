@@ -64,6 +64,12 @@ async def store_extraction(
         except Exception:
             pass  # Telemetry failure shouldn't block the tool
 
+        try:
+            from opencode_arch.telemetry.collector import drain_and_store
+            drain_and_store(tool="architect_extract", repo=path.name)
+        except Exception:
+            pass
+
         return {
             "stored": True,
             "score": score,
