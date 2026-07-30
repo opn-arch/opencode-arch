@@ -59,6 +59,16 @@ def main():
     regen_p.add_argument("--model", default=None, help="Model override (provider/model)")
     regen_p.add_argument("--timeout", type=int, default=600, help="Timeout seconds per LLM call (default: 600)")
 
+    # confidence
+    conf_p = subparsers.add_parser("confidence", help="Show confidence report for extracted model")
+    conf_p.add_argument("repo_path", help="Path to the target repository")
+
+    # calibrate
+    cal_p = subparsers.add_parser("calibrate", help="Spot-check confidence by attempting regeneration")
+    cal_p.add_argument("repo_path", help="Path to the target repository")
+    cal_p.add_argument("--n", type=int, default=3, help="Number of components to calibrate (default: 3)")
+    cal_p.add_argument("--min-confidence", type=float, default=0.7, help="Min confidence threshold (default: 0.7)")
+
     # docs (with sub-subcommands: generate, list)
     docs_p = subparsers.add_parser("docs", help="Generate SE documentation")
     docs_sub = docs_p.add_subparsers(dest="docs_command", required=True)
@@ -138,6 +148,32 @@ def main():
             blind=args.blind,
         ))
         _print_regen_result(result)
+
+    elif args.command == "confidence":
+        from opencode_arch.cli.confidence import run_confidence
+        output = run_confidence(args.repo_path)
+        print(output)
+
+    elif args.command == "calibrate":
+        from opencode_arch.cli.calibrate import select_calibration_targets, format_calibration_prompt
+        from architecture_model.core.parser import load_model
+        from architecture_model.core.confidence import compute_model_confidence
+        model_file = Path(args.repo_path) / ".architecture-model.yaml"
+        if not model_file.exists():
+            model_file = Path(args.repo_path) / ".architecture-model-extracted.yaml"
+        if not model_file.exists():
+            print("Error: No model found. Run extraction first.")
+            sys.exit(1)
+        model = load_model(model_file)
+        compute_model_confidence(model)
+        targets = select_calibration_targets(model, n=args.n, min_confidence=args.min_confidence)
+        if not targets:
+            print("No calibration targets found.")
+            sys.exit(0)
+        for comp in targets:
+            prompt = format_calibration_prompt(comp)
+            print(prompt)
+            print()
 
     elif args.command == "docs":
         from opencode_arch.cli.docs import run_docs_generate, run_docs_list
