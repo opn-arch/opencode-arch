@@ -115,6 +115,20 @@ class TelemetryStore:
                 timestamp TEXT
             )
         """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS function_metrics (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                timestamp REAL NOT NULL,
+                tool TEXT NOT NULL,
+                function TEXT NOT NULL,
+                module TEXT NOT NULL DEFAULT '',
+                repo TEXT DEFAULT '',
+                time_ms REAL DEFAULT 0.0,
+                quality_scores TEXT DEFAULT '{}',
+                input_metrics TEXT DEFAULT '{}',
+                output_metrics TEXT DEFAULT '{}'
+            )
+        """)
         conn.commit()
         conn.close()
 
@@ -477,3 +491,47 @@ class TelemetryStore:
         conn.execute("UPDATE drift_flags SET resolved = 1 WHERE id = ?", (flag_id,))
         conn.commit()
         conn.close()
+
+    # ------------------------------------------------------------------
+    # Function metrics
+    # ------------------------------------------------------------------
+
+    def record_function_metric(self, tool: str, function: str, module: str = "",
+                               repo: str = "", time_ms: float = 0.0,
+                               quality_scores: str = "{}", input_metrics: str = "{}",
+                               output_metrics: str = "{}") -> None:
+        """Record a function-level metric."""
+        conn = sqlite3.connect(self.db_path)
+        conn.execute(
+            """INSERT INTO function_metrics
+               (timestamp, tool, function, module, repo, time_ms, quality_scores, input_metrics, output_metrics)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (time.time(), tool, function, module, repo, time_ms, quality_scores, input_metrics, output_metrics),
+        )
+        conn.commit()
+        conn.close()
+
+    def get_function_metrics(self, *, repo: str = None, function: str = None,
+                             tool: str = None, last: int = None) -> list[dict]:
+        """Query function metrics with optional filters."""
+        conn = sqlite3.connect(self.db_path)
+        query = "SELECT * FROM function_metrics WHERE 1=1"
+        params: list = []
+        if repo:
+            query += " AND repo = ?"
+            params.append(repo)
+        if function:
+            query += " AND function = ?"
+            params.append(function)
+        if tool:
+            query += " AND tool = ?"
+            params.append(tool)
+        query += " ORDER BY timestamp DESC"
+        if last:
+            query += " LIMIT ?"
+            params.append(last)
+        cursor = conn.execute(query, params)
+        columns = [desc[0] for desc in cursor.description]
+        rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        conn.close()
+        return rows
