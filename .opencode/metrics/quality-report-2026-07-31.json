@@ -1,0 +1,1371 @@
+{
+  "date": "2026-07-31",
+  "version": "0.5.0",
+  "repos": {
+    "flask": {
+      "benchmark": {
+        "name": "flask",
+        "language": "python",
+        "modules": 6,
+        "import_edges": 8,
+        "components": 6,
+        "interfaces": 16,
+        "avg_confidence": 0.808,
+        "contracts": 6,
+        "patterns": 4,
+        "source_kb": 575,
+        "compression_ratio_16k": 9.2
+      },
+      "quality": {
+        "repo": "flask",
+        "components": 6,
+        "modules": 6,
+        "validation_score": 98,
+        "validation_issues": 13,
+        "file_coverage": 100.0,
+        "relationship_accuracy": 100.0,
+        "boundary_coherence": 100.0,
+        "overall_repr": 100.0,
+        "uncovered_files": 0,
+        "confidence_buckets": {
+          "<0.3": 0,
+          "0.3-0.5": 0,
+          "0.5-0.7": 1,
+          "0.7-0.9": 3,
+          ">=0.9": 2
+        },
+        "field_completeness": {
+          "signatures": 6,
+          "symbols": 5,
+          "contracts": 6,
+          "patterns": 4,
+          "interfaces": 6,
+          "test_contracts": 0,
+          "responsibilities": 5
+        },
+        "low_confidence_components": []
+      },
+      "performance": {
+        "repo": "flask",
+        "wall_time_ms": 389.0,
+        "monitored_functions": 7,
+        "total_monitored_ms": 688.9,
+        "breakdown": {
+          "orchestration.pipeline.run_pipeline": {
+            "calls": 1,
+            "ms": 388.9
+          },
+          "manifest.generator.generate_manifest": {
+            "calls": 1,
+            "ms": 121.4
+          },
+          "manifest.recursive.generate_recursive_manifests": {
+            "calls": 1,
+            "ms": 101.4
+          },
+          "orchestration.decompose.decompose_model": {
+            "calls": 1,
+            "ms": 70.9
+          },
+          "orchestration.auto_enrich.enrich_from_manifest": {
+            "calls": 1,
+            "ms": 6.0
+          },
+          "manifest.recursive.compute_block_dependencies": {
+            "calls": 1,
+            "ms": 0.2
+          },
+          "core.confidence.compute_model_confidence": {
+            "calls": 4,
+            "ms": 0.1
+          }
+        }
+      },
+      "pipeline": {
+        "name": "flask",
+        "language": "python",
+        "modules": 6,
+        "components": 6,
+        "interfaces": 16,
+        "avg_confidence": 0.808,
+        "contracts": 6,
+        "patterns": 4,
+        "fblocks": 1,
+        "source_kb": 575,
+        "compression_ratio_16k": 9.2,
+        "time_s": 0.2,
+        "errors": 0,
+        "import_edges": 8
+      },
+      "modules_per_component": 1.0,
+      "confidence_tier": "excellent",
+      "field_fill_rates": {
+        "signatures": 100.0,
+        "symbols": 83.3,
+        "contracts": 100.0,
+        "patterns": 66.7,
+        "interfaces": 100.0,
+        "test_contracts": 0.0,
+        "responsibilities": 83.3
+      },
+      "avg_field_fill": 76.2
+    },
+    "celery": {
+      "benchmark": {
+        "name": "celery",
+        "language": "python",
+        "modules": 161,
+        "import_edges": 550,
+        "components": 23,
+        "interfaces": 140,
+        "avg_confidence": 0.86,
+        "contracts": 23,
+        "patterns": 17,
+        "source_kb": 3470,
+        "compression_ratio_16k": 55.5
+      },
+      "quality": {
+        "repo": "celery",
+        "components": 23,
+        "modules": 161,
+        "validation_score": 98,
+        "validation_issues": 47,
+        "file_coverage": 100.0,
+        "relationship_accuracy": 100.0,
+        "boundary_coherence": 38.2,
+        "overall_repr": 84.0,
+        "uncovered_files": 0,
+        "confidence_buckets": {
+          "<0.3": 0,
+          "0.3-0.5": 1,
+          "0.5-0.7": 1,
+          "0.7-0.9": 5,
+          ">=0.9": 16
+        },
+        "field_completeness": {
+          "signatures": 23,
+          "symbols": 22,
+          "contracts": 23,
+          "patterns": 17,
+          "interfaces": 22,
+          "test_contracts": 0,
+          "responsibilities": 21
+        },
+        "low_confidence_components": [
+          [
+            "Init",
+            0.45
+          ]
+        ]
+      },
+      "performance": {
+        "repo": "celery",
+        "wall_time_ms": 3912.0,
+        "monitored_functions": 7,
+        "total_monitored_ms": 7055.9,
+        "breakdown": {
+          "orchestration.pipeline.run_pipeline": {
+            "calls": 1,
+            "ms": 3911.9
+          },
+          "manifest.generator.generate_manifest": {
+            "calls": 1,
+            "ms": 1375.6
+          },
+          "manifest.recursive.generate_recursive_manifests": {
+            "calls": 1,
+            "ms": 1126.8
+          },
+          "orchestration.decompose.decompose_model": {
+            "calls": 1,
+            "ms": 636.4
+          },
+          "manifest.recursive.compute_block_dependencies": {
+            "calls": 1,
+            "ms": 4.4
+          },
+          "orchestration.auto_enrich.enrich_from_manifest": {
+            "calls": 1,
+            "ms": 0.5
+          },
+          "core.confidence.compute_model_confidence": {
+            "calls": 4,
+            "ms": 0.3
+          }
+        }
+      },
+      "pipeline": {
+        "name": "celery",
+        "language": "python",
+        "modules": 161,
+        "components": 23,
+        "interfaces": 140,
+        "avg_confidence": 0.86,
+        "contracts": 23,
+        "patterns": 17,
+        "fblocks": 16,
+        "source_kb": 3470,
+        "compression_ratio_16k": 55.5,
+        "time_s": 3.3,
+        "errors": 0,
+        "import_edges": 550
+      },
+      "modules_per_component": 7.0,
+      "confidence_tier": "excellent",
+      "field_fill_rates": {
+        "signatures": 100.0,
+        "symbols": 95.7,
+        "contracts": 100.0,
+        "patterns": 73.9,
+        "interfaces": 95.7,
+        "test_contracts": 0.0,
+        "responsibilities": 91.3
+      },
+      "avg_field_fill": 79.5
+    },
+    "django": {
+      "benchmark": {
+        "name": "django",
+        "language": "python",
+        "modules": 905,
+        "import_edges": 3083,
+        "components": 219,
+        "interfaces": 1200,
+        "avg_confidence": 0.656,
+        "contracts": 219,
+        "patterns": 55,
+        "source_kb": 19039,
+        "compression_ratio_16k": 304.6
+      },
+      "quality": {
+        "repo": "django",
+        "components": 219,
+        "modules": 905,
+        "validation_score": 98,
+        "validation_issues": 439,
+        "file_coverage": 100.0,
+        "relationship_accuracy": 100.0,
+        "boundary_coherence": 73.5,
+        "overall_repr": 92.7,
+        "uncovered_files": 0,
+        "confidence_buckets": {
+          "<0.3": 0,
+          "0.3-0.5": 26,
+          "0.5-0.7": 99,
+          "0.7-0.9": 75,
+          ">=0.9": 19
+        },
+        "field_completeness": {
+          "signatures": 195,
+          "symbols": 168,
+          "contracts": 219,
+          "patterns": 55,
+          "interfaces": 211,
+          "test_contracts": 0,
+          "responsibilities": 134
+        },
+        "low_confidence_components": [
+          [
+            "Migrations",
+            0.42
+          ],
+          [
+            "Migrations",
+            0.42
+          ],
+          [
+            "Migrations",
+            0.42
+          ],
+          [
+            "Apps",
+            0.42
+          ],
+          [
+            "Validators",
+            0.47
+          ],
+          [
+            "Modwsgi",
+            0.45
+          ],
+          [
+            "Admin",
+            0.42
+          ],
+          [
+            "Apps",
+            0.42
+          ],
+          [
+            "0001Initial",
+            0.42
+          ],
+          [
+            "Apps",
+            0.42
+          ]
+        ]
+      },
+      "performance": {
+        "repo": "django",
+        "wall_time_ms": 23462.0,
+        "monitored_functions": 7,
+        "total_monitored_ms": 40925.4,
+        "breakdown": {
+          "orchestration.pipeline.run_pipeline": {
+            "calls": 1,
+            "ms": 23461.1
+          },
+          "manifest.generator.generate_manifest": {
+            "calls": 1,
+            "ms": 7541.1
+          },
+          "manifest.recursive.generate_recursive_manifests": {
+            "calls": 1,
+            "ms": 6188.2
+          },
+          "orchestration.decompose.decompose_model": {
+            "calls": 1,
+            "ms": 3712.7
+          },
+          "manifest.recursive.compute_block_dependencies": {
+            "calls": 1,
+            "ms": 13.1
+          },
+          "orchestration.auto_enrich.enrich_from_manifest": {
+            "calls": 1,
+            "ms": 7.3
+          },
+          "core.confidence.compute_model_confidence": {
+            "calls": 4,
+            "ms": 2.0
+          }
+        }
+      },
+      "pipeline": {
+        "name": "django",
+        "language": "python",
+        "modules": 905,
+        "components": 219,
+        "interfaces": 1200,
+        "avg_confidence": 0.656,
+        "contracts": 219,
+        "patterns": 55,
+        "fblocks": 52,
+        "source_kb": 19039,
+        "compression_ratio_16k": 304.6,
+        "time_s": 24.3,
+        "errors": 0,
+        "import_edges": 3083
+      },
+      "modules_per_component": 4.13,
+      "confidence_tier": "good",
+      "field_fill_rates": {
+        "signatures": 89.0,
+        "symbols": 76.7,
+        "contracts": 100.0,
+        "patterns": 25.1,
+        "interfaces": 96.3,
+        "test_contracts": 0.0,
+        "responsibilities": 61.2
+      },
+      "avg_field_fill": 64.0
+    },
+    "sqlalchemy": {
+      "benchmark": {
+        "name": "sqlalchemy",
+        "language": "python",
+        "modules": 73,
+        "import_edges": 18,
+        "components": 33,
+        "interfaces": 0,
+        "avg_confidence": 0.583,
+        "contracts": 33,
+        "patterns": 3,
+        "source_kb": 19987,
+        "compression_ratio_16k": 319.8
+      },
+      "quality": {
+        "repo": "sqlalchemy",
+        "components": 33,
+        "modules": 73,
+        "validation_score": 98,
+        "validation_issues": 67,
+        "file_coverage": 100.0,
+        "relationship_accuracy": 100.0,
+        "boundary_coherence": 99.0,
+        "overall_repr": 99.7,
+        "uncovered_files": 0,
+        "confidence_buckets": {
+          "<0.3": 0,
+          "0.3-0.5": 2,
+          "0.5-0.7": 29,
+          "0.7-0.9": 2,
+          ">=0.9": 0
+        },
+        "field_completeness": {
+          "signatures": 31,
+          "symbols": 33,
+          "contracts": 33,
+          "patterns": 3,
+          "interfaces": 0,
+          "test_contracts": 0,
+          "responsibilities": 18
+        },
+        "low_confidence_components": [
+          [
+            "DictOfSetsWithDefault",
+            0.4
+          ],
+          [
+            "Concrete",
+            0.37
+          ]
+        ]
+      },
+      "performance": {
+        "repo": "sqlalchemy",
+        "wall_time_ms": 799.0,
+        "monitored_functions": 7,
+        "total_monitored_ms": 1466.5,
+        "breakdown": {
+          "orchestration.pipeline.run_pipeline": {
+            "calls": 1,
+            "ms": 798.6
+          },
+          "manifest.generator.generate_manifest": {
+            "calls": 1,
+            "ms": 316.9
+          },
+          "manifest.recursive.generate_recursive_manifests": {
+            "calls": 1,
+            "ms": 233.6
+          },
+          "orchestration.decompose.decompose_model": {
+            "calls": 1,
+            "ms": 112.1
+          },
+          "manifest.recursive.compute_block_dependencies": {
+            "calls": 1,
+            "ms": 3.9
+          },
+          "orchestration.auto_enrich.enrich_from_manifest": {
+            "calls": 1,
+            "ms": 1.3
+          },
+          "core.confidence.compute_model_confidence": {
+            "calls": 4,
+            "ms": 0.1
+          }
+        }
+      },
+      "pipeline": {
+        "name": "sqlalchemy",
+        "language": "python",
+        "modules": 73,
+        "components": 33,
+        "interfaces": 0,
+        "avg_confidence": 0.583,
+        "contracts": 33,
+        "patterns": 3,
+        "fblocks": 2,
+        "source_kb": 19987,
+        "compression_ratio_16k": 319.8,
+        "time_s": 0.7,
+        "errors": 0,
+        "import_edges": 18
+      },
+      "modules_per_component": 2.21,
+      "confidence_tier": "needs_work",
+      "field_fill_rates": {
+        "signatures": 93.9,
+        "symbols": 100.0,
+        "contracts": 100.0,
+        "patterns": 9.1,
+        "interfaces": 0.0,
+        "test_contracts": 0.0,
+        "responsibilities": 54.5
+      },
+      "avg_field_fill": 51.1
+    },
+    "pydantic": {
+      "benchmark": {
+        "name": "pydantic",
+        "language": "python",
+        "modules": 69,
+        "import_edges": 229,
+        "components": 40,
+        "interfaces": 244,
+        "avg_confidence": 0.712,
+        "contracts": 40,
+        "patterns": 16,
+        "source_kb": 7101,
+        "compression_ratio_16k": 113.6
+      },
+      "quality": {
+        "repo": "pydantic",
+        "components": 40,
+        "modules": 69,
+        "validation_score": 98,
+        "validation_issues": 81,
+        "file_coverage": 100.0,
+        "relationship_accuracy": 100.0,
+        "boundary_coherence": 97.5,
+        "overall_repr": 98.0,
+        "uncovered_files": 0,
+        "confidence_buckets": {
+          "<0.3": 0,
+          "0.3-0.5": 1,
+          "0.5-0.7": 15,
+          "0.7-0.9": 16,
+          ">=0.9": 8
+        },
+        "field_completeness": {
+          "signatures": 39,
+          "symbols": 27,
+          "contracts": 40,
+          "patterns": 16,
+          "interfaces": 32,
+          "test_contracts": 0,
+          "responsibilities": 16
+        },
+        "low_confidence_components": [
+          [
+            "Config",
+            0.37
+          ]
+        ]
+      },
+      "performance": {
+        "repo": "pydantic",
+        "wall_time_ms": 2626.0,
+        "monitored_functions": 7,
+        "total_monitored_ms": 4710.9,
+        "breakdown": {
+          "orchestration.pipeline.run_pipeline": {
+            "calls": 1,
+            "ms": 2620.8
+          },
+          "manifest.generator.generate_manifest": {
+            "calls": 1,
+            "ms": 896.6
+          },
+          "manifest.recursive.generate_recursive_manifests": {
+            "calls": 1,
+            "ms": 793.6
+          },
+          "orchestration.decompose.decompose_model": {
+            "calls": 1,
+            "ms": 396.8
+          },
+          "manifest.recursive.compute_block_dependencies": {
+            "calls": 1,
+            "ms": 1.8
+          },
+          "orchestration.auto_enrich.enrich_from_manifest": {
+            "calls": 1,
+            "ms": 1.0
+          },
+          "core.confidence.compute_model_confidence": {
+            "calls": 4,
+            "ms": 0.2
+          }
+        }
+      },
+      "pipeline": {
+        "name": "pydantic",
+        "language": "python",
+        "modules": 69,
+        "components": 40,
+        "interfaces": 244,
+        "avg_confidence": 0.712,
+        "contracts": 40,
+        "patterns": 16,
+        "fblocks": 2,
+        "source_kb": 7101,
+        "compression_ratio_16k": 113.6,
+        "time_s": 1.8,
+        "errors": 0,
+        "import_edges": 229
+      },
+      "modules_per_component": 1.73,
+      "confidence_tier": "good",
+      "field_fill_rates": {
+        "signatures": 97.5,
+        "symbols": 67.5,
+        "contracts": 100.0,
+        "patterns": 40.0,
+        "interfaces": 80.0,
+        "test_contracts": 0.0,
+        "responsibilities": 40.0
+      },
+      "avg_field_fill": 60.7
+    },
+    "fastapi": {
+      "benchmark": {
+        "name": "fastapi",
+        "language": "python",
+        "modules": 25,
+        "import_edges": 30,
+        "components": 9,
+        "interfaces": 10,
+        "avg_confidence": 0.639,
+        "contracts": 9,
+        "patterns": 2,
+        "source_kb": 3898,
+        "compression_ratio_16k": 62.4
+      },
+      "quality": {
+        "repo": "fastapi",
+        "components": 9,
+        "modules": 25,
+        "validation_score": 98,
+        "validation_issues": 19,
+        "file_coverage": 100.0,
+        "relationship_accuracy": 100.0,
+        "boundary_coherence": 93.7,
+        "overall_repr": 98.1,
+        "uncovered_files": 0,
+        "confidence_buckets": {
+          "<0.3": 0,
+          "0.3-0.5": 1,
+          "0.5-0.7": 3,
+          "0.7-0.9": 4,
+          ">=0.9": 1
+        },
+        "field_completeness": {
+          "signatures": 8,
+          "symbols": 6,
+          "contracts": 9,
+          "patterns": 2,
+          "interfaces": 5,
+          "test_contracts": 0,
+          "responsibilities": 5
+        },
+        "low_confidence_components": [
+          [
+            "Asyncexitstack",
+            0.4
+          ]
+        ]
+      },
+      "performance": {
+        "repo": "fastapi",
+        "wall_time_ms": 441.0,
+        "monitored_functions": 7,
+        "total_monitored_ms": 814.5,
+        "breakdown": {
+          "orchestration.pipeline.run_pipeline": {
+            "calls": 1,
+            "ms": 440.5
+          },
+          "manifest.generator.generate_manifest": {
+            "calls": 1,
+            "ms": 204.9
+          },
+          "manifest.recursive.generate_recursive_manifests": {
+            "calls": 1,
+            "ms": 120.6
+          },
+          "orchestration.decompose.decompose_model": {
+            "calls": 1,
+            "ms": 47.5
+          },
+          "manifest.recursive.compute_block_dependencies": {
+            "calls": 1,
+            "ms": 0.5
+          },
+          "orchestration.auto_enrich.enrich_from_manifest": {
+            "calls": 1,
+            "ms": 0.3
+          },
+          "core.confidence.compute_model_confidence": {
+            "calls": 4,
+            "ms": 0.1
+          }
+        }
+      },
+      "pipeline": {
+        "name": "fastapi",
+        "language": "python",
+        "modules": 25,
+        "components": 9,
+        "interfaces": 10,
+        "avg_confidence": 0.639,
+        "contracts": 9,
+        "patterns": 2,
+        "fblocks": 2,
+        "source_kb": 3898,
+        "compression_ratio_16k": 62.4,
+        "time_s": 0.5,
+        "errors": 0,
+        "import_edges": 30
+      },
+      "modules_per_component": 2.78,
+      "confidence_tier": "good",
+      "field_fill_rates": {
+        "signatures": 88.9,
+        "symbols": 66.7,
+        "contracts": 100.0,
+        "patterns": 22.2,
+        "interfaces": 55.6,
+        "test_contracts": 0.0,
+        "responsibilities": 55.6
+      },
+      "avg_field_fill": 55.6
+    },
+    "httpx": {
+      "benchmark": {
+        "name": "httpx",
+        "language": "python",
+        "modules": 6,
+        "import_edges": 10,
+        "components": 5,
+        "interfaces": 8,
+        "avg_confidence": 0.85,
+        "contracts": 5,
+        "patterns": 5,
+        "source_kb": 556,
+        "compression_ratio_16k": 8.9
+      },
+      "quality": {
+        "repo": "httpx",
+        "components": 5,
+        "modules": 6,
+        "validation_score": 98,
+        "validation_issues": 11,
+        "file_coverage": 100.0,
+        "relationship_accuracy": 100.0,
+        "boundary_coherence": 100.0,
+        "overall_repr": 100.0,
+        "uncovered_files": 0,
+        "confidence_buckets": {
+          "<0.3": 0,
+          "0.3-0.5": 0,
+          "0.5-0.7": 0,
+          "0.7-0.9": 5,
+          ">=0.9": 0
+        },
+        "field_completeness": {
+          "signatures": 5,
+          "symbols": 5,
+          "contracts": 5,
+          "patterns": 5,
+          "interfaces": 5,
+          "test_contracts": 0,
+          "responsibilities": 5
+        },
+        "low_confidence_components": []
+      },
+      "performance": {
+        "repo": "httpx",
+        "wall_time_ms": 98.0,
+        "monitored_functions": 7,
+        "total_monitored_ms": 180.5,
+        "breakdown": {
+          "orchestration.pipeline.run_pipeline": {
+            "calls": 1,
+            "ms": 98.3
+          },
+          "manifest.generator.generate_manifest": {
+            "calls": 1,
+            "ms": 40.2
+          },
+          "manifest.recursive.generate_recursive_manifests": {
+            "calls": 1,
+            "ms": 27.9
+          },
+          "orchestration.decompose.decompose_model": {
+            "calls": 1,
+            "ms": 13.9
+          },
+          "manifest.recursive.compute_block_dependencies": {
+            "calls": 1,
+            "ms": 0.1
+          },
+          "core.confidence.compute_model_confidence": {
+            "calls": 4,
+            "ms": 0.1
+          },
+          "orchestration.auto_enrich.enrich_from_manifest": {
+            "calls": 1,
+            "ms": 0.0
+          }
+        }
+      },
+      "pipeline": {
+        "name": "httpx",
+        "language": "python",
+        "modules": 6,
+        "components": 5,
+        "interfaces": 8,
+        "avg_confidence": 0.85,
+        "contracts": 5,
+        "patterns": 5,
+        "fblocks": 1,
+        "source_kb": 556,
+        "compression_ratio_16k": 8.9,
+        "time_s": 0.1,
+        "errors": 0,
+        "import_edges": 10
+      },
+      "modules_per_component": 1.2,
+      "confidence_tier": "excellent",
+      "field_fill_rates": {
+        "signatures": 100.0,
+        "symbols": 100.0,
+        "contracts": 100.0,
+        "patterns": 100.0,
+        "interfaces": 100.0,
+        "test_contracts": 0.0,
+        "responsibilities": 100.0
+      },
+      "avg_field_fill": 85.7
+    },
+    "requests": {
+      "benchmark": {
+        "name": "requests",
+        "language": "python",
+        "modules": 19,
+        "import_edges": 65,
+        "components": 9,
+        "interfaces": 36,
+        "avg_confidence": 0.672,
+        "contracts": 9,
+        "patterns": 2,
+        "source_kb": 397,
+        "compression_ratio_16k": 6.4
+      },
+      "quality": {
+        "repo": "requests",
+        "components": 9,
+        "modules": 19,
+        "validation_score": 98,
+        "validation_issues": 19,
+        "file_coverage": 100.0,
+        "relationship_accuracy": 100.0,
+        "boundary_coherence": 78.7,
+        "overall_repr": 94.2,
+        "uncovered_files": 0,
+        "confidence_buckets": {
+          "<0.3": 0,
+          "0.3-0.5": 0,
+          "0.5-0.7": 5,
+          "0.7-0.9": 3,
+          ">=0.9": 1
+        },
+        "field_completeness": {
+          "signatures": 8,
+          "symbols": 5,
+          "contracts": 9,
+          "patterns": 2,
+          "interfaces": 8,
+          "test_contracts": 0,
+          "responsibilities": 4
+        },
+        "low_confidence_components": []
+      },
+      "performance": {
+        "repo": "requests",
+        "wall_time_ms": 627.0,
+        "monitored_functions": 7,
+        "total_monitored_ms": 1124.5,
+        "breakdown": {
+          "orchestration.pipeline.run_pipeline": {
+            "calls": 1,
+            "ms": 626.6
+          },
+          "manifest.generator.generate_manifest": {
+            "calls": 1,
+            "ms": 215.0
+          },
+          "manifest.recursive.generate_recursive_manifests": {
+            "calls": 1,
+            "ms": 184.4
+          },
+          "orchestration.decompose.decompose_model": {
+            "calls": 1,
+            "ms": 97.7
+          },
+          "manifest.recursive.compute_block_dependencies": {
+            "calls": 1,
+            "ms": 0.4
+          },
+          "orchestration.auto_enrich.enrich_from_manifest": {
+            "calls": 1,
+            "ms": 0.3
+          },
+          "core.confidence.compute_model_confidence": {
+            "calls": 4,
+            "ms": 0.1
+          }
+        }
+      },
+      "pipeline": {
+        "name": "requests",
+        "language": "python",
+        "modules": 19,
+        "components": 9,
+        "interfaces": 36,
+        "avg_confidence": 0.672,
+        "contracts": 9,
+        "patterns": 2,
+        "fblocks": 2,
+        "source_kb": 397,
+        "compression_ratio_16k": 6.4,
+        "time_s": 0.4,
+        "errors": 0,
+        "import_edges": 65
+      },
+      "modules_per_component": 2.11,
+      "confidence_tier": "good",
+      "field_fill_rates": {
+        "signatures": 88.9,
+        "symbols": 55.6,
+        "contracts": 100.0,
+        "patterns": 22.2,
+        "interfaces": 88.9,
+        "test_contracts": 0.0,
+        "responsibilities": 44.4
+      },
+      "avg_field_fill": 57.1
+    },
+    "invoke": {
+      "benchmark": {
+        "name": "invoke",
+        "language": "python",
+        "modules": 31,
+        "import_edges": 56,
+        "components": 4,
+        "interfaces": 4,
+        "avg_confidence": 0.7,
+        "contracts": 4,
+        "patterns": 1,
+        "source_kb": 699,
+        "compression_ratio_16k": 11.2
+      },
+      "quality": {
+        "repo": "invoke",
+        "components": 4,
+        "modules": 31,
+        "validation_score": 98,
+        "validation_issues": 9,
+        "file_coverage": 100.0,
+        "relationship_accuracy": 100.0,
+        "boundary_coherence": 100.0,
+        "overall_repr": 99.2,
+        "uncovered_files": 0,
+        "confidence_buckets": {
+          "<0.3": 0,
+          "0.3-0.5": 0,
+          "0.5-0.7": 1,
+          "0.7-0.9": 3,
+          ">=0.9": 0
+        },
+        "field_completeness": {
+          "signatures": 4,
+          "symbols": 3,
+          "contracts": 4,
+          "patterns": 1,
+          "interfaces": 3,
+          "test_contracts": 0,
+          "responsibilities": 3
+        },
+        "low_confidence_components": []
+      },
+      "performance": {
+        "repo": "invoke",
+        "wall_time_ms": 481.0,
+        "monitored_functions": 7,
+        "total_monitored_ms": 940.2,
+        "breakdown": {
+          "orchestration.pipeline.run_pipeline": {
+            "calls": 1,
+            "ms": 480.9
+          },
+          "manifest.generator.generate_manifest": {
+            "calls": 1,
+            "ms": 271.6
+          },
+          "manifest.recursive.generate_recursive_manifests": {
+            "calls": 1,
+            "ms": 164.9
+          },
+          "orchestration.decompose.decompose_model": {
+            "calls": 1,
+            "ms": 22.4
+          },
+          "manifest.recursive.compute_block_dependencies": {
+            "calls": 1,
+            "ms": 0.3
+          },
+          "orchestration.auto_enrich.enrich_from_manifest": {
+            "calls": 1,
+            "ms": 0.1
+          },
+          "core.confidence.compute_model_confidence": {
+            "calls": 4,
+            "ms": 0.0
+          }
+        }
+      },
+      "pipeline": {
+        "name": "invoke",
+        "language": "python",
+        "modules": 31,
+        "components": 4,
+        "interfaces": 4,
+        "avg_confidence": 0.7,
+        "contracts": 4,
+        "patterns": 1,
+        "fblocks": 1,
+        "source_kb": 699,
+        "compression_ratio_16k": 11.2,
+        "time_s": 0.5,
+        "errors": 0,
+        "import_edges": 56
+      },
+      "modules_per_component": 7.75,
+      "confidence_tier": "good",
+      "field_fill_rates": {
+        "signatures": 100.0,
+        "symbols": 75.0,
+        "contracts": 100.0,
+        "patterns": 25.0,
+        "interfaces": 75.0,
+        "test_contracts": 0.0,
+        "responsibilities": 75.0
+      },
+      "avg_field_fill": 64.3
+    },
+    "rich": {
+      "benchmark": {
+        "name": "rich",
+        "language": "python",
+        "modules": 23,
+        "import_edges": 1,
+        "components": 1,
+        "interfaces": 0,
+        "avg_confidence": 0.5,
+        "contracts": 1,
+        "patterns": 0,
+        "source_kb": 1704,
+        "compression_ratio_16k": 27.3
+      },
+      "quality": {
+        "repo": "rich",
+        "components": 1,
+        "modules": 23,
+        "validation_score": 98,
+        "validation_issues": 3,
+        "file_coverage": 100.0,
+        "relationship_accuracy": 100.0,
+        "boundary_coherence": 100.0,
+        "overall_repr": 100.0,
+        "uncovered_files": 0,
+        "confidence_buckets": {
+          "<0.3": 0,
+          "0.3-0.5": 0,
+          "0.5-0.7": 1,
+          "0.7-0.9": 0,
+          ">=0.9": 0
+        },
+        "field_completeness": {
+          "signatures": 1,
+          "symbols": 0,
+          "contracts": 1,
+          "patterns": 0,
+          "interfaces": 0,
+          "test_contracts": 0,
+          "responsibilities": 0
+        },
+        "low_confidence_components": []
+      },
+      "performance": {
+        "repo": "rich",
+        "wall_time_ms": 315.0,
+        "monitored_functions": 7,
+        "total_monitored_ms": 627.2,
+        "breakdown": {
+          "orchestration.pipeline.run_pipeline": {
+            "calls": 1,
+            "ms": 315.1
+          },
+          "manifest.generator.generate_manifest": {
+            "calls": 1,
+            "ms": 197.6
+          },
+          "manifest.recursive.generate_recursive_manifests": {
+            "calls": 1,
+            "ms": 108.8
+          },
+          "orchestration.decompose.decompose_model": {
+            "calls": 1,
+            "ms": 5.5
+          },
+          "manifest.recursive.compute_block_dependencies": {
+            "calls": 1,
+            "ms": 0.1
+          },
+          "orchestration.auto_enrich.enrich_from_manifest": {
+            "calls": 1,
+            "ms": 0.0
+          },
+          "core.confidence.compute_model_confidence": {
+            "calls": 4,
+            "ms": 0.0
+          }
+        }
+      },
+      "pipeline": {
+        "name": "rich",
+        "language": "python",
+        "modules": 23,
+        "components": 1,
+        "interfaces": 0,
+        "avg_confidence": 0.5,
+        "contracts": 1,
+        "patterns": 0,
+        "fblocks": 1,
+        "source_kb": 1704,
+        "compression_ratio_16k": 27.3,
+        "time_s": 0.3,
+        "errors": 0,
+        "import_edges": 1
+      },
+      "modules_per_component": 23.0,
+      "confidence_tier": "needs_work",
+      "field_fill_rates": {
+        "signatures": 100.0,
+        "symbols": 0.0,
+        "contracts": 100.0,
+        "patterns": 0.0,
+        "interfaces": 0.0,
+        "test_contracts": 0.0,
+        "responsibilities": 0.0
+      },
+      "avg_field_fill": 28.6
+    },
+    "express": {
+      "benchmark": {
+        "name": "express",
+        "language": "javascript",
+        "modules": 50,
+        "import_edges": 22,
+        "components": 15,
+        "interfaces": 0,
+        "avg_confidence": 0.3,
+        "contracts": 15,
+        "patterns": 0,
+        "source_kb": 535,
+        "compression_ratio_16k": 8.6
+      },
+      "pipeline": {
+        "name": "express",
+        "language": "javascript",
+        "modules": 50,
+        "components": 15,
+        "interfaces": 0,
+        "fblocks": 2,
+        "source_kb": 535,
+        "compression_ratio_16k": 8.6,
+        "time_s": 0.1,
+        "import_edges": 22,
+        "avg_confidence": 0.05,
+        "contracts": 0,
+        "patterns": 0
+      },
+      "modules_per_component": 3.33,
+      "confidence_tier": "poor"
+    },
+    "gin": {
+      "benchmark": {
+        "name": "gin",
+        "language": "go",
+        "modules": 58,
+        "import_edges": 10,
+        "components": 14,
+        "interfaces": 14,
+        "avg_confidence": 0.332,
+        "contracts": 14,
+        "patterns": 0,
+        "source_kb": 674,
+        "compression_ratio_16k": 10.8
+      },
+      "pipeline": {
+        "name": "gin",
+        "language": "go",
+        "modules": 58,
+        "components": 14,
+        "interfaces": 14,
+        "fblocks": 5,
+        "source_kb": 674,
+        "compression_ratio_16k": 10.8,
+        "time_s": 0.0,
+        "import_edges": 10,
+        "avg_confidence": 0.082,
+        "contracts": 0,
+        "patterns": 0
+      },
+      "modules_per_component": 4.14,
+      "confidence_tier": "poor"
+    },
+    "axum": {
+      "benchmark": {
+        "name": "axum",
+        "language": "rust",
+        "modules": 239,
+        "import_edges": 0,
+        "components": 24,
+        "interfaces": 0,
+        "avg_confidence": 0.3,
+        "contracts": 24,
+        "patterns": 0,
+        "source_kb": 1312,
+        "compression_ratio_16k": 21.0
+      },
+      "pipeline": {
+        "name": "axum",
+        "language": "rust",
+        "modules": 239,
+        "components": 24,
+        "interfaces": 0,
+        "fblocks": 11,
+        "source_kb": 1312,
+        "compression_ratio_16k": 21.0,
+        "time_s": 0.0,
+        "import_edges": 0,
+        "avg_confidence": 0.05,
+        "contracts": 0,
+        "patterns": 0
+      },
+      "modules_per_component": 9.96,
+      "confidence_tier": "poor"
+    }
+  },
+  "aggregates": {
+    "confidence": {
+      "mean": 0.698,
+      "median": 0.686,
+      "min": 0.5,
+      "max": 0.86,
+      "stdev": 0.115
+    },
+    "representativeness": {
+      "mean": 96.6,
+      "median": 98.7,
+      "min": 84.0,
+      "max": 100.0
+    },
+    "boundary_coherence": {
+      "mean": 88.1,
+      "median": 98.2,
+      "min": 38.2,
+      "max": 100.0
+    }
+  },
+  "field_fill_global": {
+    "signatures": 91.7,
+    "symbols": 78.5,
+    "contracts": 100.0,
+    "patterns": 30.1,
+    "interfaces": 83.7,
+    "test_contracts": 0.0,
+    "responsibilities": 60.5
+  },
+  "findings": [
+    {
+      "severity": "CRITICAL",
+      "finding": "test_contracts 0% everywhere",
+      "detail": "15% confidence weight unreachable, 0/350 components have test_contracts",
+      "impact": "Confidence ceiling capped at 0.85 for all repos"
+    },
+    {
+      "severity": "CRITICAL",
+      "finding": "Flat repos collapse to single F-block",
+      "detail": "Flask 6mod, httpx 6, rich 23, invoke 31 all produce only F0",
+      "impact": "No architectural decomposition for 4/10 Python repos"
+    },
+    {
+      "severity": "HIGH",
+      "finding": "Celery boundary coherence 38.2%",
+      "detail": "Components don't align with import clusters",
+      "impact": "Model doesn't reflect actual code organization"
+    },
+    {
+      "severity": "HIGH",
+      "finding": "Non-Python repos near-zero confidence",
+      "detail": "express 0.30, gin 0.33, axum 0.30, zero enrichment",
+      "impact": "Non-Python extraction produces unusable models"
+    },
+    {
+      "severity": "HIGH",
+      "finding": "SQLAlchemy 0 interface contracts despite 33 components",
+      "detail": "Only 18 import edges detected",
+      "impact": "No provides/requires data for a major ORM"
+    },
+    {
+      "severity": "MEDIUM",
+      "finding": "Django 26 low-confidence components (<0.5)",
+      "detail": "Mostly Migrations/Apps boilerplate",
+      "impact": "Inflates component count, dilutes avg confidence"
+    },
+    {
+      "severity": "MEDIUM",
+      "finding": "Rich trivial filter too aggressive",
+      "detail": "22/23 modules filtered, 1 component for 23 modules",
+      "impact": "Modules per component ratio of 23:1"
+    },
+    {
+      "severity": "LOW",
+      "finding": "Pattern detection varies widely",
+      "detail": "Flask 67%, pydantic 40%, django 25%, sqlalchemy 9%, rich 0%",
+      "impact": "Inconsistent enrichment quality across repos"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "P1",
+      "title": "Populate test_contracts",
+      "effort": "medium",
+      "impact": "high",
+      "detail": "Scan test files, match to source modules, extract assertion contracts. Unlocks 15% confidence weight."
+    },
+    {
+      "priority": "P2",
+      "title": "Import-affinity decomposition for flat repos",
+      "effort": "medium",
+      "impact": "high",
+      "detail": "Fall back to import-graph clustering when auto_fblocks produces only F0. Fixes 4/10 repos."
+    },
+    {
+      "priority": "P3",
+      "title": "Fix trivial module filter",
+      "effort": "low",
+      "impact": "medium",
+      "detail": "Only exclude modules with 0 functions AND 0 classes. Currently excludes function-only modules like rich's."
+    },
+    {
+      "priority": "P4",
+      "title": "Non-Python enrichment pipeline",
+      "effort": "high",
+      "impact": "high",
+      "detail": "Extend signature/pattern/symbol extraction to JS/Go/Rust via SourceGraph."
+    },
+    {
+      "priority": "P5",
+      "title": "Boundary-coherence-aware grouping",
+      "effort": "medium",
+      "impact": "medium",
+      "detail": "Factor import-cluster alignment into group_modules(). Improve Celery 38%, Requests 79%."
+    },
+    {
+      "priority": "P6",
+      "title": "Filter boilerplate components",
+      "effort": "low",
+      "impact": "low",
+      "detail": "Detect Django migrations/apps, exclude or merge. Clean up 26 low-confidence components."
+    }
+  ]
+}

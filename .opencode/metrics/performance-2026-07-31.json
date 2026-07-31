@@ -1,0 +1,362 @@
+[
+  {
+    "repo": "flask",
+    "wall_time_ms": 389.0,
+    "monitored_functions": 7,
+    "total_monitored_ms": 688.9,
+    "breakdown": {
+      "orchestration.pipeline.run_pipeline": {
+        "calls": 1,
+        "ms": 388.9
+      },
+      "manifest.generator.generate_manifest": {
+        "calls": 1,
+        "ms": 121.4
+      },
+      "manifest.recursive.generate_recursive_manifests": {
+        "calls": 1,
+        "ms": 101.4
+      },
+      "orchestration.decompose.decompose_model": {
+        "calls": 1,
+        "ms": 70.9
+      },
+      "orchestration.auto_enrich.enrich_from_manifest": {
+        "calls": 1,
+        "ms": 6.0
+      },
+      "manifest.recursive.compute_block_dependencies": {
+        "calls": 1,
+        "ms": 0.2
+      },
+      "core.confidence.compute_model_confidence": {
+        "calls": 4,
+        "ms": 0.1
+      }
+    }
+  },
+  {
+    "repo": "celery",
+    "wall_time_ms": 3912.0,
+    "monitored_functions": 7,
+    "total_monitored_ms": 7055.9,
+    "breakdown": {
+      "orchestration.pipeline.run_pipeline": {
+        "calls": 1,
+        "ms": 3911.9
+      },
+      "manifest.generator.generate_manifest": {
+        "calls": 1,
+        "ms": 1375.6
+      },
+      "manifest.recursive.generate_recursive_manifests": {
+        "calls": 1,
+        "ms": 1126.8
+      },
+      "orchestration.decompose.decompose_model": {
+        "calls": 1,
+        "ms": 636.4
+      },
+      "manifest.recursive.compute_block_dependencies": {
+        "calls": 1,
+        "ms": 4.4
+      },
+      "orchestration.auto_enrich.enrich_from_manifest": {
+        "calls": 1,
+        "ms": 0.5
+      },
+      "core.confidence.compute_model_confidence": {
+        "calls": 4,
+        "ms": 0.3
+      }
+    }
+  },
+  {
+    "repo": "django",
+    "wall_time_ms": 23462.0,
+    "monitored_functions": 7,
+    "total_monitored_ms": 40925.4,
+    "breakdown": {
+      "orchestration.pipeline.run_pipeline": {
+        "calls": 1,
+        "ms": 23461.1
+      },
+      "manifest.generator.generate_manifest": {
+        "calls": 1,
+        "ms": 7541.1
+      },
+      "manifest.recursive.generate_recursive_manifests": {
+        "calls": 1,
+        "ms": 6188.2
+      },
+      "orchestration.decompose.decompose_model": {
+        "calls": 1,
+        "ms": 3712.7
+      },
+      "manifest.recursive.compute_block_dependencies": {
+        "calls": 1,
+        "ms": 13.1
+      },
+      "orchestration.auto_enrich.enrich_from_manifest": {
+        "calls": 1,
+        "ms": 7.3
+      },
+      "core.confidence.compute_model_confidence": {
+        "calls": 4,
+        "ms": 2.0
+      }
+    }
+  },
+  {
+    "repo": "pydantic",
+    "wall_time_ms": 2626.0,
+    "monitored_functions": 7,
+    "total_monitored_ms": 4710.9,
+    "breakdown": {
+      "orchestration.pipeline.run_pipeline": {
+        "calls": 1,
+        "ms": 2620.8
+      },
+      "manifest.generator.generate_manifest": {
+        "calls": 1,
+        "ms": 896.6
+      },
+      "manifest.recursive.generate_recursive_manifests": {
+        "calls": 1,
+        "ms": 793.6
+      },
+      "orchestration.decompose.decompose_model": {
+        "calls": 1,
+        "ms": 396.8
+      },
+      "manifest.recursive.compute_block_dependencies": {
+        "calls": 1,
+        "ms": 1.8
+      },
+      "orchestration.auto_enrich.enrich_from_manifest": {
+        "calls": 1,
+        "ms": 1.0
+      },
+      "core.confidence.compute_model_confidence": {
+        "calls": 4,
+        "ms": 0.2
+      }
+    }
+  },
+  {
+    "repo": "fastapi",
+    "wall_time_ms": 441.0,
+    "monitored_functions": 7,
+    "total_monitored_ms": 814.5,
+    "breakdown": {
+      "orchestration.pipeline.run_pipeline": {
+        "calls": 1,
+        "ms": 440.5
+      },
+      "manifest.generator.generate_manifest": {
+        "calls": 1,
+        "ms": 204.9
+      },
+      "manifest.recursive.generate_recursive_manifests": {
+        "calls": 1,
+        "ms": 120.6
+      },
+      "orchestration.decompose.decompose_model": {
+        "calls": 1,
+        "ms": 47.5
+      },
+      "manifest.recursive.compute_block_dependencies": {
+        "calls": 1,
+        "ms": 0.5
+      },
+      "orchestration.auto_enrich.enrich_from_manifest": {
+        "calls": 1,
+        "ms": 0.3
+      },
+      "core.confidence.compute_model_confidence": {
+        "calls": 4,
+        "ms": 0.1
+      }
+    }
+  },
+  {
+    "repo": "httpx",
+    "wall_time_ms": 98.0,
+    "monitored_functions": 7,
+    "total_monitored_ms": 180.5,
+    "breakdown": {
+      "orchestration.pipeline.run_pipeline": {
+        "calls": 1,
+        "ms": 98.3
+      },
+      "manifest.generator.generate_manifest": {
+        "calls": 1,
+        "ms": 40.2
+      },
+      "manifest.recursive.generate_recursive_manifests": {
+        "calls": 1,
+        "ms": 27.9
+      },
+      "orchestration.decompose.decompose_model": {
+        "calls": 1,
+        "ms": 13.9
+      },
+      "manifest.recursive.compute_block_dependencies": {
+        "calls": 1,
+        "ms": 0.1
+      },
+      "core.confidence.compute_model_confidence": {
+        "calls": 4,
+        "ms": 0.1
+      },
+      "orchestration.auto_enrich.enrich_from_manifest": {
+        "calls": 1,
+        "ms": 0.0
+      }
+    }
+  },
+  {
+    "repo": "requests",
+    "wall_time_ms": 627.0,
+    "monitored_functions": 7,
+    "total_monitored_ms": 1124.5,
+    "breakdown": {
+      "orchestration.pipeline.run_pipeline": {
+        "calls": 1,
+        "ms": 626.6
+      },
+      "manifest.generator.generate_manifest": {
+        "calls": 1,
+        "ms": 215.0
+      },
+      "manifest.recursive.generate_recursive_manifests": {
+        "calls": 1,
+        "ms": 184.4
+      },
+      "orchestration.decompose.decompose_model": {
+        "calls": 1,
+        "ms": 97.7
+      },
+      "manifest.recursive.compute_block_dependencies": {
+        "calls": 1,
+        "ms": 0.4
+      },
+      "orchestration.auto_enrich.enrich_from_manifest": {
+        "calls": 1,
+        "ms": 0.3
+      },
+      "core.confidence.compute_model_confidence": {
+        "calls": 4,
+        "ms": 0.1
+      }
+    }
+  },
+  {
+    "repo": "invoke",
+    "wall_time_ms": 481.0,
+    "monitored_functions": 7,
+    "total_monitored_ms": 940.2,
+    "breakdown": {
+      "orchestration.pipeline.run_pipeline": {
+        "calls": 1,
+        "ms": 480.9
+      },
+      "manifest.generator.generate_manifest": {
+        "calls": 1,
+        "ms": 271.6
+      },
+      "manifest.recursive.generate_recursive_manifests": {
+        "calls": 1,
+        "ms": 164.9
+      },
+      "orchestration.decompose.decompose_model": {
+        "calls": 1,
+        "ms": 22.4
+      },
+      "manifest.recursive.compute_block_dependencies": {
+        "calls": 1,
+        "ms": 0.3
+      },
+      "orchestration.auto_enrich.enrich_from_manifest": {
+        "calls": 1,
+        "ms": 0.1
+      },
+      "core.confidence.compute_model_confidence": {
+        "calls": 4,
+        "ms": 0.0
+      }
+    }
+  },
+  {
+    "repo": "sqlalchemy",
+    "wall_time_ms": 799.0,
+    "monitored_functions": 7,
+    "total_monitored_ms": 1466.5,
+    "breakdown": {
+      "orchestration.pipeline.run_pipeline": {
+        "calls": 1,
+        "ms": 798.6
+      },
+      "manifest.generator.generate_manifest": {
+        "calls": 1,
+        "ms": 316.9
+      },
+      "manifest.recursive.generate_recursive_manifests": {
+        "calls": 1,
+        "ms": 233.6
+      },
+      "orchestration.decompose.decompose_model": {
+        "calls": 1,
+        "ms": 112.1
+      },
+      "manifest.recursive.compute_block_dependencies": {
+        "calls": 1,
+        "ms": 3.9
+      },
+      "orchestration.auto_enrich.enrich_from_manifest": {
+        "calls": 1,
+        "ms": 1.3
+      },
+      "core.confidence.compute_model_confidence": {
+        "calls": 4,
+        "ms": 0.1
+      }
+    }
+  },
+  {
+    "repo": "rich",
+    "wall_time_ms": 315.0,
+    "monitored_functions": 7,
+    "total_monitored_ms": 627.2,
+    "breakdown": {
+      "orchestration.pipeline.run_pipeline": {
+        "calls": 1,
+        "ms": 315.1
+      },
+      "manifest.generator.generate_manifest": {
+        "calls": 1,
+        "ms": 197.6
+      },
+      "manifest.recursive.generate_recursive_manifests": {
+        "calls": 1,
+        "ms": 108.8
+      },
+      "orchestration.decompose.decompose_model": {
+        "calls": 1,
+        "ms": 5.5
+      },
+      "manifest.recursive.compute_block_dependencies": {
+        "calls": 1,
+        "ms": 0.1
+      },
+      "orchestration.auto_enrich.enrich_from_manifest": {
+        "calls": 1,
+        "ms": 0.0
+      },
+      "core.confidence.compute_model_confidence": {
+        "calls": 4,
+        "ms": 0.0
+      }
+    }
+  }
+]
