@@ -70,7 +70,7 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
     if focus == "all":
         return format_model_context(model, max_tokens=budget, detail_level=detail)
     elif focus.startswith("F") and focus[1:].isdigit():
-        return format_fblock_context(model, f_block=focus, max_tokens=budget)
+        return format_fblock_context(model, f_block=focus, max_tokens=budget, project_root=project_root)
     elif focus in (
         "functional-architecture", "logical-architecture", "use-cases",
         "icd", "requirements-analysis", "operations-manual", "conops",
