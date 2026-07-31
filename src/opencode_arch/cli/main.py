@@ -69,6 +69,12 @@ def main():
     cal_p.add_argument("--n", type=int, default=3, help="Number of components to calibrate (default: 3)")
     cal_p.add_argument("--min-confidence", type=float, default=0.7, help="Min confidence threshold (default: 0.7)")
 
+    # export-data
+    export_p = subparsers.add_parser("export-data", help="Export training corpus from .architecture/ artifacts")
+    export_p.add_argument("repos", nargs="*", default=["."], help="Paths to repos (default: current dir)")
+    export_p.add_argument("--output", "-o", default="corpus.jsonl", help="Output file (default: corpus.jsonl)")
+    export_p.add_argument("--include-telemetry", action="store_true", help="Include telemetry DB records")
+
     # docs (with sub-subcommands: generate, list)
     docs_p = subparsers.add_parser("docs", help="Generate SE documentation")
     docs_sub = docs_p.add_subparsers(dest="docs_command", required=True)
@@ -174,6 +180,14 @@ def main():
             prompt = format_calibration_prompt(comp)
             print(prompt)
             print()
+
+    elif args.command == "export-data":
+        from opencode_arch.cli.export_data import run_export_data
+        run_export_data(
+            repos=args.repos,
+            output=args.output,
+            include_telemetry=args.include_telemetry,
+        )
 
     elif args.command == "docs":
         from opencode_arch.cli.docs import run_docs_generate, run_docs_list
