@@ -27,10 +27,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/anomalyco/opencode-arch"
-Repository = "https://github.com/anomalyco/opencode-arch"
-Documentation = "https://github.com/anomalyco/opencode-arch#readme"
-"Bug Tracker" = "https://github.com/anomalyco/opencode-arch/issues"
+Homepage = "https://github.com/opn-arch/opencode-arch"
+Repository = "https://github.com/opn-arch/opencode-arch"
+Documentation = "https://github.com/opn-arch/opencode-arch#readme"
+"Bug Tracker" = "https://github.com/opn-arch/opencode-arch/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0", "pytest-asyncio>=0.21", "pytest-cov>=4.0"]
