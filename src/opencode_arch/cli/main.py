@@ -8,9 +8,22 @@ from pathlib import Path
 
 
 def main():
+    # If no args or first arg looks like a path (not a subcommand), launch interactive
+    if len(sys.argv) <= 1 or (
+        len(sys.argv) == 2 and not sys.argv[1].startswith("-")
+        and sys.argv[1] not in (
+            "extract", "generate", "bench", "metrics", "report",
+            "regen-loop", "confidence", "calibrate", "export-data", "docs",
+        )
+    ):
+        from opencode_arch.cli.launch import run_launch
+        repo_path = sys.argv[1] if len(sys.argv) == 2 else None
+        run_launch(repo_path=repo_path)
+        return
+
     parser = argparse.ArgumentParser(
         prog="opencode-arch",
-        description="Architecture extraction, generation, and benchmarking CLI",
+        description="Architecture-aware development — launch interactive session or run commands",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 

@@ -44,14 +44,19 @@ Requires Python 3.11+.
 ## Quick Start
 
 ```bash
-# 1. Extract architecture from any Python repo
-opencode-arch extract /path/to/your/repo
+# Launch interactive architecture-aware development
+opencode-arch
 
-# 2. Check representativeness scores
-opencode-arch metrics --last=1
+# Or target a specific repo
+opencode-arch /path/to/your/repo
+```
 
-# 3. Export training data
-opencode-arch export-data
+This scans the codebase (<1s), loads/bootstraps the architecture model, injects compressed context into your session, and launches OpenCode with full architecture awareness.
+
+```bash
+# One-shot commands also available:
+opencode-arch extract /path/to/repo    # Extract architecture
+opencode-arch export-data              # Export training data
 ```
 
 After extraction, your repo contains:
@@ -67,11 +72,12 @@ After extraction, your repo contains:
 
 | Command | Purpose |
 |---------|---------|
+| `opencode-arch` | **Launch interactive session** (default — scans, injects context, opens OpenCode) |
 | `opencode-arch extract <repo>` | Extract architecture model from a repository |
 | `opencode-arch generate <repo>` | Generate code with test-guided verification |
 | `opencode-arch bench <repo1> <repo2> ...` | Benchmark extraction across multiple repos |
 | `opencode-arch metrics` | View extraction history and scores |
-| `opencode-arch export-data` | Export training corpus |
+| `opencode-arch export-data` | Export training corpus (JSONL) |
 
 Options for `extract`:
 
@@ -90,7 +96,7 @@ Register as an MCP server for use with AI coding agents:
 opencode mcp add
 ```
 
-### 7 Tools
+### 9 Tools
 
 | Tool | Purpose |
 |------|---------|
@@ -101,6 +107,8 @@ opencode mcp add
 | `architect_generate` | Run test suite against generated code |
 | `architect_group` | Auto-group modules into logical components |
 | `architect_check` | Verify representativeness (4 sub-scores) |
+| `architect_require` | Capture functional requirements from conversation |
+| `architect_feedback` | Record corrections, ratings, and training data |
 
 ### Typical Agent Workflow
 

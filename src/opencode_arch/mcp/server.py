@@ -20,6 +20,8 @@ try:
     from opencode_arch.mcp.tools.generate import run_tests_on_generated_code
     from opencode_arch.mcp.tools.group import group_repository
     from opencode_arch.mcp.tools.check import check_representativeness
+    from opencode_arch.mcp.tools.require import capture_requirement
+    from opencode_arch.mcp.tools.feedback import record_feedback
 
     @mcp.tool()
     async def architect_scan(repo_path: str) -> dict:
@@ -94,6 +96,63 @@ try:
         boundary_coherence, and overall (0-100).
         """
         return await check_representativeness(repo_path=repo_path, model_yaml=model_yaml)
+
+    @mcp.tool()
+    async def architect_require(
+        repo_path: str,
+        requirement: str,
+        component_id: str = "",
+        priority: str = "must",
+        context: str = "",
+    ) -> dict:
+        """Capture a functional requirement linked to an architecture component.
+
+        Stores requirements in .architecture/requirements.yaml with MoSCoW priority.
+
+        Args:
+            repo_path: Absolute path to the repository.
+            requirement: The requirement text.
+            component_id: Component ID (e.g., "COMP-3"). Empty string = unlinked.
+            priority: must | should | could (MoSCoW).
+            context: Additional context from conversation.
+        """
+        return await capture_requirement(
+            repo_path=repo_path,
+            requirement=requirement,
+            component_id=component_id or None,
+            priority=priority,
+            context=context,
+        )
+
+    @mcp.tool()
+    async def architect_feedback(
+        repo_path: str,
+        feedback_type: str,
+        content: str,
+        context: dict | None = None,
+        rating: int | None = None,
+        correction: dict | None = None,
+    ) -> dict:
+        """Record user feedback for model improvement and training.
+
+        Appends feedback to .architecture/feedback.jsonl for future training use.
+
+        Args:
+            repo_path: Absolute path to the repository.
+            feedback_type: "correction" | "rating" | "tool_feedback" | "training".
+            content: The feedback content (human-readable).
+            context: Optional context dict.
+            rating: Optional 1-5 quality rating.
+            correction: Optional structured correction {entity_id, field, old, new}.
+        """
+        return await record_feedback(
+            repo_path=repo_path,
+            feedback_type=feedback_type,
+            content=content,
+            context=context,
+            rating=rating,
+            correction=correction,
+        )
 
 except ImportError:
     # mcp package not available - tools still work as standalone async functions

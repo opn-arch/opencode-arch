@@ -71,10 +71,33 @@ def run_export_data(
                     block_metrics = block_dir / "metrics.json"
                     if block_metrics.exists():
                         block["metrics"] = json.loads(block_metrics.read_text())
-                    if block:
+                     if block:
                         blocks[block_dir.name] = block
             if blocks:
                 record["blocks"] = blocks
+
+        # Requirements
+        req_path = arch_dir / "requirements.yaml" if arch_dir.exists() else None
+        if req_path and req_path.exists():
+            try:
+                import yaml
+                req_data = yaml.safe_load(req_path.read_text()) or {}
+                record["requirements"] = req_data.get("requirements", [])
+            except Exception:
+                pass
+
+        # Feedback
+        feedback_path = arch_dir / "feedback.jsonl" if arch_dir.exists() else None
+        if feedback_path and feedback_path.exists():
+            try:
+                feedback_entries = []
+                for line in feedback_path.read_text().splitlines():
+                    if line.strip():
+                        feedback_entries.append(json.loads(line))
+                if feedback_entries:
+                    record["feedback"] = feedback_entries
+            except Exception:
+                pass
 
         # Telemetry records (from SQLite DB)
         if include_telemetry:
