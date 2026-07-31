@@ -52,33 +52,63 @@ def format_model_context(
     """
     char_budget = max_tokens * 4
 
-    sections: list[str] = []
-    sections.append(_format_header(model))
+    # Progressive summarization: add sections by priority, stop before exceeding budget
+    priority_1: list[str] = []
+    priority_2: list[str] = []
+    priority_3: list[str] = []
+    priority_4: list[str] = []
 
+    # Priority 1: Header + component names (always included)
+    priority_1.append(_format_header(model))
+    if model.entities.components:
+        lines = [f"\n## Components ({len(model.entities.components)})"]
+        for comp in model.entities.components:
+            file_count = len(comp.files) if comp.files else 0
+            lines.append(f"  {comp.id}: {comp.name} ({file_count} files)")
+        priority_1.append("\n".join(lines))
+
+    # Priority 2: Key relationships (grouped by type, top connections)
+    if model.relationships:
+        priority_2.append(_format_relationships_compact(model))
+
+    # Priority 3: Capabilities + behaviors (compact)
     if detail_level in ("standard", "full"):
-        sections.append(_format_capabilities(model))
-        sections.append(_format_actors(model))
+        priority_3.append(_format_capabilities(model))
+        priority_3.append(_format_actors(model))
+        if detail_level == "full":
+            priority_3.append(_format_behaviors(model))
+        else:
+            priority_3.append(_format_behaviors_compact(model))
 
+    # Priority 4: Full detail (interfaces, layers, constraints)
     if detail_level == "full":
-        sections.append(_format_behaviors(model))
-        sections.append(_format_interfaces(model))
-        sections.append(_format_layers(model))
-        sections.append(_format_components(model))
-        sections.append(_format_constraints(model))
+        priority_4.append(_format_interfaces(model))
+        priority_4.append(_format_layers(model))
+        priority_4.append(_format_constraints(model))
     elif detail_level == "standard":
-        sections.append(_format_behaviors_compact(model))
-        sections.append(_format_interfaces_compact(model))
-        sections.append(_format_layers_compact(model))
+        priority_4.append(_format_interfaces_compact(model))
+        priority_4.append(_format_layers_compact(model))
 
-    sections.append(_format_relationships_compact(model))
+    # Progressively add sections until budget is reached
+    result_parts: list[str] = []
+    used = 0
 
-    result = "\n".join(s for s in sections if s)
+    for section_group in [priority_1, priority_2, priority_3, priority_4]:
+        for section in section_group:
+            if not section:
+                continue
+            section_len = len(section)
+            if used + section_len <= char_budget:
+                result_parts.append(section)
+                used += section_len
+            else:
+                # Don't truncate mid-section; stop here
+                break
+        else:
+            continue
+        break
 
-    # Truncate if over budget
-    if len(result) > char_budget:
-        result = result[: char_budget - 20] + "\n[... truncated]"
-
-    return result
+    return "\n".join(result_parts)
 
 
 def format_fblock_context(

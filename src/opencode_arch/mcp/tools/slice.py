@@ -7,10 +7,30 @@ from typing import Any
 import yaml
 
 
+def compute_adaptive_budget(module_count: int, base: int = 4000) -> int:
+    """Scale token budget with repository size.
+    
+    Small repos (<=20 modules): base budget (4000 tokens)
+    Medium repos: +200 tokens per 10 modules over 20
+    Large repos: capped at 16000 tokens
+    
+    Examples:
+        20 modules → 4000 tokens
+        50 modules → 4600 tokens  
+        100 modules → 5600 tokens
+        161 modules → 6800 tokens
+        500 modules → 16000 tokens (capped)
+    """
+    if module_count <= 20:
+        return base
+    extra = ((module_count - 20) // 10) * 200
+    return min(base + extra, 16000)
+
+
 async def slice_context(
     repo_path: str,
     focus: str = "all",
-    budget: int = 4000,
+    budget: int = 0,
     detail: str = "standard",
 ) -> str:
     """Generate an optimized context slice from a repository.
@@ -37,6 +57,18 @@ async def slice_context(
 
     try:
         model_file = path / ".architecture-model.yaml"
+
+        # Adaptive budget: compute from repo size if not specified
+        if budget <= 0:
+            if model_file.exists():
+                from architecture_model.core.parser import load_model
+                model = load_model(model_file)
+                file_count = sum(len(getattr(c, 'files', [])) for c in model.entities.components)
+                budget = compute_adaptive_budget(file_count)
+            else:
+                from architecture_model.manifest.generator import generate_manifest
+                manifest = generate_manifest(path)
+                budget = compute_adaptive_budget(len(manifest.modules))
 
         if model_file.exists():
             result = _slice_from_model(path, focus, budget, detail)

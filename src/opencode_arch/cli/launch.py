@@ -101,7 +101,9 @@ def run_launch(repo_path: str | None = None, skip_exec: bool = False) -> dict:
     if model and manifest:
         try:
             from architecture_model.integrations.llm_context import format_model_context
-            context_slice = format_model_context(model, budget=4000, detail="standard")
+            from opencode_arch.mcp.tools.slice import compute_adaptive_budget
+            adaptive_budget = compute_adaptive_budget(len(manifest.modules))
+            context_slice = format_model_context(model, budget=adaptive_budget, detail="standard")
             results["context_tokens"] = len(context_slice) // 4  # rough estimate
             results["steps"].append("slice")
         except Exception:
