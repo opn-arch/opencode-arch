@@ -70,6 +70,29 @@ async def store_extraction(
         except Exception:
             pass
 
+        # After the model is stored successfully, persist full project snapshot
+        try:
+            from architecture_model.manifest.generator import generate_manifest
+            from architecture_model.persistence.store import save_project
+
+            manifest = generate_manifest(Path(repo_path))
+
+            # Try to compute representativeness
+            rep = None
+            try:
+                from architecture_model.core.representativeness import compute_representativeness
+                rep = compute_representativeness(model, manifest)
+            except Exception:
+                pass
+
+            save_project(
+                Path(repo_path), model, manifest,
+                representativeness=rep,
+                telemetry={"context_tokens": context_tokens} if context_tokens else None,
+            )
+        except Exception:
+            pass  # Persistence failures should never block tool operation
+
         return {
             "stored": True,
             "score": score,
