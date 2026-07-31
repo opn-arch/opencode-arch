@@ -11,9 +11,10 @@ import yaml
 async def check_representativeness(repo_path: str, model_yaml: str) -> dict[str, Any]:
     """Check how well an architecture model represents the actual codebase.
 
-    Supports two modes:
-    - Flat mode: standard 3-score check (file_coverage, relationship_accuracy, boundary_coherence)
-    - Hierarchical mode: root + per-block scores when recursive manifests are available
+    Supports three modes:
+    - Hierarchical (config): uses pre-existing fblock_dict from config
+    - Hierarchical (auto): generates F-blocks from module grouping when no config exists
+    - Flat: fallback when neither hierarchical path is available
 
     Args:
         repo_path: Absolute path to the repository root.
@@ -41,8 +42,11 @@ async def check_representativeness(repo_path: str, model_yaml: str) -> dict[str,
         finally:
             Path(tmp_path).unlink(missing_ok=True)
 
-        # Try hierarchical mode
+        # Try hierarchical mode (config-based)
         output = _try_hierarchical(path, model)
+        if output is None:
+            # Try auto-F-block hierarchical mode
+            output = _try_auto_hierarchical(path, model)
         if output is None:
             # Fall back to flat mode
             manifest = generate_manifest(path)
@@ -71,7 +75,7 @@ async def check_representativeness(repo_path: str, model_yaml: str) -> dict[str,
 
 
 def _try_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
-    """Attempt hierarchical check if recursive manifests are available."""
+    """Attempt hierarchical check if recursive manifests are available via config."""
     try:
         from architecture_model.manifest.recursive import generate_recursive_manifests
         from architecture_model.core.representativeness import compute_hierarchical_representativeness
@@ -85,36 +89,71 @@ def _try_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
         if not recursive_manifests:
             return None
 
-        # For now, use root model for all blocks (sub-models = root model)
-        # In future, load per-block sub-models from .architecture-models/ directory
         result = compute_hierarchical_representativeness(
             root_model, {}, recursive_manifests
         )
 
-        output: dict[str, Any] = {
-            "mode": "hierarchical",
-            "root": {
-                "file_coverage": round(result.root.file_coverage, 1),
-                "relationship_accuracy": round(result.root.relationship_accuracy, 1),
-                "boundary_coherence": round(result.root.boundary_coherence, 1),
-                "overall": round(result.root.overall, 1),
-            },
-            "blocks": {},
-            "overall": round(result.overall, 1),
-            "uncovered_files": result.root.uncovered_files,
-            "unverified_relationships": result.root.unverified_relationships,
-            "low_coherence_components": result.root.low_coherence_components,
-        }
+        return _format_hierarchical_output(result)
 
-        for block_id, block_result in result.blocks.items():
-            output["blocks"][block_id] = {
-                "file_coverage": round(block_result.file_coverage, 1),
-                "relationship_accuracy": round(block_result.relationship_accuracy, 1),
-                "boundary_coherence": round(block_result.boundary_coherence, 1),
-                "overall": round(block_result.overall, 1),
-            }
+    except Exception:
+        return None
 
+
+def _try_auto_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
+    """Attempt hierarchical check using auto-generated F-blocks from module grouping."""
+    try:
+        from architecture_model.manifest.generator import generate_manifest
+        from architecture_model.manifest.grouping import group_modules, auto_fblocks
+        from architecture_model.manifest.recursive import generate_recursive_manifests
+        from architecture_model.core.representativeness import compute_hierarchical_representativeness
+
+        manifest = generate_manifest(path)
+        groups = group_modules(manifest.modules, manifest.interfaces)
+        fblock_config = auto_fblocks(groups)
+
+        if not fblock_config or len(fblock_config) < 2:
+            return None
+
+        recursive_manifests = generate_recursive_manifests(path, fblock_override=fblock_config)
+        if not recursive_manifests:
+            return None
+
+        result = compute_hierarchical_representativeness(
+            root_model, {}, recursive_manifests
+        )
+
+        output = _format_hierarchical_output(result)
+        output["mode"] = "hierarchical_auto"
+        output["fblock_count"] = len(fblock_config)
         return output
 
     except Exception:
         return None
+
+
+def _format_hierarchical_output(result) -> dict[str, Any]:
+    """Format a hierarchical representativeness result into output dict."""
+    output: dict[str, Any] = {
+        "mode": "hierarchical",
+        "root": {
+            "file_coverage": round(result.root.file_coverage, 1),
+            "relationship_accuracy": round(result.root.relationship_accuracy, 1),
+            "boundary_coherence": round(result.root.boundary_coherence, 1),
+            "overall": round(result.root.overall, 1),
+        },
+        "blocks": {},
+        "overall": round(result.overall, 1),
+        "uncovered_files": result.root.uncovered_files,
+        "unverified_relationships": result.root.unverified_relationships,
+        "low_coherence_components": result.root.low_coherence_components,
+    }
+
+    for block_id, block_result in result.blocks.items():
+        output["blocks"][block_id] = {
+            "file_coverage": round(block_result.file_coverage, 1),
+            "relationship_accuracy": round(block_result.relationship_accuracy, 1),
+            "boundary_coherence": round(block_result.boundary_coherence, 1),
+            "overall": round(block_result.overall, 1),
+        }
+
+    return output
