@@ -19,6 +19,7 @@ try:
     from opencode_arch.mcp.tools.extract import store_extraction
     from opencode_arch.mcp.tools.generate import run_tests_on_generated_code
     from opencode_arch.mcp.tools.group import group_repository
+    from opencode_arch.mcp.tools.check import check_representativeness
 
     @mcp.tool()
     async def architect_scan(repo_path: str) -> dict:
@@ -83,6 +84,16 @@ try:
             target_groups: Desired number of groups (0 = auto-calculate).
         """
         return await group_repository(repo_path=repo_path, target_groups=target_groups)
+
+    @mcp.tool()
+    async def architect_check(repo_path: str, model_yaml: str) -> dict:
+        """Verify model representativeness against code reality.
+
+        Computes three sub-scores comparing model against AST-derived ground truth.
+        Target: 100% on all three. Returns file_coverage, relationship_accuracy,
+        boundary_coherence, and overall (0-100).
+        """
+        return await check_representativeness(repo_path=repo_path, model_yaml=model_yaml)
 
 except ImportError:
     # mcp package not available - tools still work as standalone async functions

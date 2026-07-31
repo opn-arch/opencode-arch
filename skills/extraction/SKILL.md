@@ -35,6 +35,13 @@ Use when the user asks to extract, document, or analyze the architecture of a co
    - Writes .architecture-model.yaml to the repo root.
    - Records telemetry for future optimization.
 
+7. **Check**: Call `architect_check(repo_path, model_yaml)` to verify representativeness.
+   - Target: 100% on all three sub-scores.
+   - If file_coverage < 100%: add uncovered files to appropriate components.
+   - If relationship_accuracy < 100%: verify unverified relationships or remove them.
+   - If boundary_coherence < 100%: consider re-grouping low-coherence components.
+   - Iterate until overall = 100%.
+
 ## Escalation (Full Workflow)
 
 If initial extraction scores below 60:

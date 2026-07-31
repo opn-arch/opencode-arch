@@ -29,6 +29,10 @@
       {
         "name": "architect_group",
         "description": "Group repository modules into logical architecture components using multi-signal affinity analysis."
+      },
+      {
+        "name": "architect_check",
+        "description": "Verify model representativeness against code reality. Returns file coverage, relationship accuracy, and boundary coherence scores (target: 100%)."
       }
     ]
   }

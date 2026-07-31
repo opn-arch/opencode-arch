@@ -81,6 +81,18 @@ Groups repository modules into logical architecture components using multi-signa
 
 **When to use:** After scan, before extraction — get suggested component boundaries.
 
+### 7. `architect_check(repo_path: str, model_yaml: str) -> dict`
+Verifies model representativeness against code reality using three mechanical sub-scores.
+
+**Returns:** `{file_coverage, relationship_accuracy, boundary_coherence, overall, uncovered_files, unverified_relationships, low_coherence_components}`
+
+**Sub-scores:**
+- `file_coverage`: % of source files mapped to components (target: 100%)
+- `relationship_accuracy`: % of model relationships backed by real import edges (target: 100%)
+- `boundary_coherence`: avg internal cohesion of component file groupings (target: 100%)
+
+**When to use:** After extraction — verify the model is 100% representative before accepting it.
+
 ## Package Structure
 
 ```
@@ -106,7 +118,8 @@ src/opencode_arch/
 │       ├── validate.py   — validate_architecture()
 │       ├── extract.py    — store_extraction()
 │       ├── generate.py   — run_tests_on_generated_code()
-│       └── group.py      — group_repository()
+│       ├── group.py      — group_repository()
+│       └── check.py      — check_representativeness()
 ├── runner/
 │   ├── __init__.py
 │   ├── base.py           — RunResult, RunnerBackend protocol
