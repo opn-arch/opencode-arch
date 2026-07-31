@@ -883,7 +883,7 @@ def _load_model_context(repo_path: Path) -> str:
 
     try:
         from architecture_model.core.parser import load_model
-        from architecture_model.integrations.llm_context import format_model_context
+        from opencode_arch.context import format_model_context
 
         model = load_model(model_file)
         return format_model_context(model, max_tokens=2000, detail_level="standard")

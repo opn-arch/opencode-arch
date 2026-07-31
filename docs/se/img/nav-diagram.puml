@@ -1,0 +1,71 @@
+@startuml
+title Architecture Navigation - opencode-arch
+left to right direction
+
+actor "Developer\nACT-DEV" as ACT_DEV
+actor "LLM Agent\nACT-AGENT" as ACT_AGENT
+actor "OpenCode Runner\nACT-OPENCODE" as ACT_OPENCODE
+
+package "Functional View" {
+    usecase "Architecture Extraction\nCAP-EXTRACT" as CAP_EXTRACT
+    usecase "Code Generation\nCAP-GENERATE" as CAP_GENERATE
+    usecase "SE Document Generation\nCAP-DOCS" as CAP_DOCS
+    usecase "Subsystem Regen-Loop\nCAP-REGEN" as CAP_REGEN
+    usecase "Learning Loop\nCAP-LEARN" as CAP_LEARN
+    usecase "MCP Tool Serving\nCAP-MCP" as CAP_MCP
+    usecase "Telemetry & Metrics\nCAP-TELEMETRY" as CAP_TELEMETRY
+}
+
+package "Behavioral View" {
+    rectangle "Extract Architecture\nBEH-EXTRACT" as BEH_EXTRACT <<behavior>>
+    rectangle "Regen-Loop Iteration\nBEH-REGEN" as BEH_REGEN <<behavior>>
+    rectangle "Generate Documentation\nBEH-DOCS" as BEH_DOCS <<behavior>>
+    rectangle "MCP Scan Tool\nBEH-MCP-SCAN" as BEH_MCP_SCAN <<behavior>>
+}
+
+package "CLI Layer" as LAYER_CLI {
+    component "CLI Commands\nCOMP-CLI" as COMP_CLI
+    component "Prompt Templates\nCOMP-PROMPTS" as COMP_PROMPTS
+}
+package "MCP Server Layer" as LAYER_MCP {
+    component "MCP Server\nCOMP-MCP" as COMP_MCP
+}
+package "Learning Layer" as LAYER_LEARNING {
+    component "Learning Loop\nCOMP-LEARNING" as COMP_LEARNING
+}
+package "Runner Layer" as LAYER_RUNNER {
+    component "OpenCode Runner\nCOMP-RUNNER" as COMP_RUNNER
+}
+package "Telemetry Layer" as LAYER_TELEMETRY {
+    component "Telemetry Store\nCOMP-TELEMETRY" as COMP_TELEMETRY
+}
+
+() "CLI Interface\nIF-CLI" as IF_CLI
+() "MCP Tool Protocol\nIF-MCP" as IF_MCP
+() "Runner Backend Protocol\nIF-RUNNER" as IF_RUNNER
+() "Telemetry Store Interface\nIF-TELEMETRY" as IF_TELEMETRY
+() "Architecture Model API\nIF-ARCH-MODEL" as IF_ARCH_MODEL
+
+card "Token Budget Constraint\nCON-TOKENS" as CON_TOKENS
+card "No Hallucination Constraint\nCON-NO-HALLUCINATION" as CON_NO_HALLUCINATION
+card "Runner Timeout\nCON-TIMEOUT" as CON_TIMEOUT
+card "Cross-Directory Access\nCON-PERMISSIONS" as CON_PERMISSIONS
+
+COMP_CLI --> COMP_RUNNER : depends-on
+COMP_CLI --> COMP_TELEMETRY : depends-on
+COMP_CLI --> COMP_LEARNING : depends-on
+COMP_CLI --> COMP_PROMPTS : depends-on
+COMP_MCP ..> IF_ARCH_MODEL : consumes
+COMP_LEARNING --> COMP_TELEMETRY : depends-on
+COMP_CLI --> CAP_EXTRACT : realizes
+COMP_CLI --> CAP_GENERATE : realizes
+COMP_CLI --> CAP_DOCS : realizes
+COMP_CLI --> CAP_REGEN : realizes
+COMP_MCP --> CAP_MCP : realizes
+COMP_LEARNING --> CAP_LEARN : realizes
+COMP_TELEMETRY --> CAP_TELEMETRY : realizes
+CON_TOKENS --> COMP_MCP : constrained-by
+CON_NO_HALLUCINATION --> COMP_CLI : constrained-by
+CON_TIMEOUT --> COMP_RUNNER : constrained-by
+
+@enduml

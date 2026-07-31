@@ -1,0 +1,81 @@
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BENCHMARKING: pydantic
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    Extracting architecture model for pydantic (timeout=1200s)...
+    Running blind regen loop (max_iter=5, target=100%)...
+    Done: 0/39 subsystems converged in 9923s
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BENCHMARKING: black
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    Extracting architecture model for black (timeout=1200s)...
+/private/tmp/bench-repos/black/tests/data/cases/pep_701.py:134: SyntaxWarning: invalid escape sequence '\{'
+  f'{1}\{{'
+/private/tmp/bench-repos/black/tests/data/cases/pep_701.py:135: SyntaxWarning: invalid escape sequence '\{'
+  f'{2} foo \{{[\}}'
+/private/tmp/bench-repos/black/tests/data/cases/pep_701.py:135: SyntaxWarning: invalid escape sequence '\}'
+  f'{2} foo \{{[\}}'
+/private/tmp/bench-repos/black/tests/data/cases/pep_701.py:136: SyntaxWarning: invalid escape sequence '\{'
+  f'\{3}'
+/private/tmp/bench-repos/black/tests/data/cases/pep_701.py:273: SyntaxWarning: invalid escape sequence '\{'
+  f"{1}\{{"
+/private/tmp/bench-repos/black/tests/data/cases/pep_701.py:274: SyntaxWarning: invalid escape sequence '\{'
+  f"{2} foo \{{[\}}"
+/private/tmp/bench-repos/black/tests/data/cases/pep_701.py:274: SyntaxWarning: invalid escape sequence '\}'
+  f"{2} foo \{{[\}}"
+/private/tmp/bench-repos/black/tests/data/cases/pep_701.py:275: SyntaxWarning: invalid escape sequence '\{'
+  f"\{3}"
+/private/tmp/bench-repos/black/tests/data/cases/docstring.py:163: SyntaxWarning: invalid escape sequence '\ '
+  """\ """
+/private/tmp/bench-repos/black/tests/data/cases/docstring.py:167: SyntaxWarning: invalid escape sequence '\ '
+  '''
+/private/tmp/bench-repos/black/tests/data/cases/docstring.py:173: SyntaxWarning: invalid escape sequence '\ '
+  '''
+/private/tmp/bench-repos/black/tests/data/cases/docstring.py:178: SyntaxWarning: invalid escape sequence '\ '
+  """
+/private/tmp/bench-repos/black/tests/data/cases/docstring.py:225: SyntaxWarning: invalid escape sequence '\ '
+  """
+/private/tmp/bench-repos/black/tests/data/cases/docstring.py:391: SyntaxWarning: invalid escape sequence '\ '
+  """\ """
+/private/tmp/bench-repos/black/tests/data/cases/docstring.py:395: SyntaxWarning: invalid escape sequence '\ '
+  """
+/private/tmp/bench-repos/black/tests/data/cases/docstring.py:401: SyntaxWarning: invalid escape sequence '\ '
+  """
+/private/tmp/bench-repos/black/tests/data/cases/docstring.py:407: SyntaxWarning: invalid escape sequence '\ '
+  """
+/private/tmp/bench-repos/black/tests/data/cases/docstring.py:454: SyntaxWarning: invalid escape sequence '\ '
+  """
+/private/tmp/bench-repos/black/tests/data/cases/docstring_no_string_normalization.py:108: SyntaxWarning: invalid escape sequence '\ '
+  '\ '
+/private/tmp/bench-repos/black/tests/data/cases/docstring_no_string_normalization.py:112: SyntaxWarning: invalid escape sequence '\ '
+  '''
+/private/tmp/bench-repos/black/tests/data/cases/docstring_no_string_normalization.py:118: SyntaxWarning: invalid escape sequence '\ '
+  '''
+/private/tmp/bench-repos/black/tests/data/cases/docstring_no_string_normalization.py:234: SyntaxWarning: invalid escape sequence '\ '
+  '\ '
+/private/tmp/bench-repos/black/tests/data/cases/docstring_no_string_normalization.py:238: SyntaxWarning: invalid escape sequence '\ '
+  '''
+/private/tmp/bench-repos/black/tests/data/cases/docstring_no_string_normalization.py:244: SyntaxWarning: invalid escape sequence '\ '
+  '''
+    Running blind regen loop (max_iter=5, target=100%)...
+    Done: 2/8 subsystems converged in 5440s
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BENCHMARKING: celery
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    Extracting architecture model for celery (timeout=1200s)...
+    Running blind regen loop (max_iter=5, target=100%)...
+    Done: 47/84 subsystems converged in 29950s
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BENCHMARKING: sqlalchemy
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    Extracting architecture model for sqlalchemy (timeout=1200s)...
+    Running blind regen loop (max_iter=5, target=100%)...
+    Done: 6/21 subsystems converged in 11532s
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BENCHMARKING: django
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    Extracting architecture model for django (timeout=1200s)...

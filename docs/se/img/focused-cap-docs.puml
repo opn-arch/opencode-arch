@@ -1,0 +1,26 @@
+@startuml
+title Focus: CAP-DOCS (SE Document Generation) - depth 2
+
+usecase "SE Document Generation\nCAP-DOCS" as CAP_DOCS #LightBlue
+component "CLI Commands\nCOMP-CLI" as COMP_CLI
+usecase "Architecture Extraction\nCAP-EXTRACT" as CAP_EXTRACT
+component "Learning Loop\nCOMP-LEARNING" as COMP_LEARNING
+usecase "Subsystem Regen-Loop\nCAP-REGEN" as CAP_REGEN
+usecase "Code Generation\nCAP-GENERATE" as CAP_GENERATE
+component "OpenCode Runner\nCOMP-RUNNER" as COMP_RUNNER
+card "No Hallucination Constraint\nCON-NO-HALLUCINATION" as CON_NO_HALLUCINATION
+component "Prompt Templates\nCOMP-PROMPTS" as COMP_PROMPTS
+component "Telemetry Store\nCOMP-TELEMETRY" as COMP_TELEMETRY
+
+COMP_CLI --> COMP_RUNNER : depends-on
+COMP_CLI --> COMP_TELEMETRY : depends-on
+COMP_CLI --> COMP_LEARNING : depends-on
+COMP_CLI --> COMP_PROMPTS : depends-on
+COMP_LEARNING --> COMP_TELEMETRY : depends-on
+COMP_CLI --> CAP_EXTRACT : realizes
+COMP_CLI --> CAP_GENERATE : realizes
+COMP_CLI --> CAP_DOCS : realizes
+COMP_CLI --> CAP_REGEN : realizes
+CON_NO_HALLUCINATION --> COMP_CLI : constrained-by
+
+@enduml

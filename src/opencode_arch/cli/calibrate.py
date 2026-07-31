@@ -99,11 +99,15 @@ def format_calibration_prompt(comp: Component) -> str:
     return "\n".join(sections)
 
 
-def compare_regeneration(original_path: Path, generated_code: str) -> dict[str, Any]:
-    """Compare generated code against original source."""
-    original_code = original_path.read_text()
+def compare_regeneration(original: "str | Path", generated: str) -> dict:
+    """Compare original and generated source code by public API coverage.
+    
+    original can be a string of source code or a Path to a file.
+    """
+    if isinstance(original, Path):
+        original = original.read_text()
 
-    def extract_names(code: str) -> tuple[set[str], set[str]]:
+    def _extract_names(code: str) -> tuple[set[str], set[str]]:
         try:
             tree = ast.parse(code)
         except SyntaxError:
@@ -112,12 +116,15 @@ def compare_regeneration(original_path: Path, generated_code: str) -> dict[str, 
         classes = {node.name for node in ast.walk(tree) if isinstance(node, ast.ClassDef)}
         return functions, classes
 
-    orig_funcs, orig_classes = extract_names(original_code)
-    gen_funcs, gen_classes = extract_names(generated_code)
+    orig_funcs, orig_classes = _extract_names(original)
+    gen_funcs, gen_classes = _extract_names(generated)
 
     func_match = len(orig_funcs & gen_funcs) / len(orig_funcs) if orig_funcs else 1.0
     class_match = len(orig_classes & gen_classes) / len(orig_classes) if orig_classes else 1.0
-    line_ratio = len(generated_code.splitlines()) / max(1, len(original_code.splitlines()))
+    line_ratio = len(generated.splitlines()) / max(1, len(original.splitlines()))
+
+    covered = orig_funcs & gen_funcs
+    api_coverage = len(covered) / len(orig_funcs) if orig_funcs else 1.0
 
     return {
         "function_match": func_match,
@@ -126,6 +133,9 @@ def compare_regeneration(original_path: Path, generated_code: str) -> dict[str, 
         "original_functions": len(orig_funcs),
         "generated_functions": len(gen_funcs),
         "calibration_score": (func_match * 0.5 + class_match * 0.3 + min(line_ratio, 1.0) * 0.2),
+        "api_coverage": api_coverage,
+        "missing_apis": sorted(orig_funcs - gen_funcs),
+        "extra_apis": sorted(gen_funcs - orig_funcs),
     }
 
 
@@ -176,32 +186,6 @@ def format_regeneration_prompt(component_context: dict) -> str:
     return "\n".join(lines)
 
 
-def compare_regeneration(original: str, generated: str) -> dict:
-    """Compare original and generated source code by public API coverage."""
-
-    def _public_apis(code: str) -> set[str]:
-        try:
-            tree = ast.parse(code)
-        except SyntaxError:
-            return set()
-        names: set[str] = set()
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                if not node.name.startswith("_"):
-                    names.add(node.name)
-        return names
-
-    orig_apis = _public_apis(original)
-    gen_apis = _public_apis(generated)
-
-    covered = orig_apis & gen_apis
-    coverage = len(covered) / len(orig_apis) if orig_apis else 1.0
-
-    return {
-        "api_coverage": coverage,
-        "missing_apis": sorted(orig_apis - gen_apis),
-        "extra_apis": sorted(gen_apis - orig_apis),
-    }
 
 
 # --- Task 6: Calibration Suite ---

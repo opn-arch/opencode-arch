@@ -6,10 +6,10 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from architecture_model import load_model, generate_manifest, select_artifacts, assemble_artifact_context, TEMPLATES
-from architecture_model.artifacts import get_template, ArtifactSpec
+from architecture_model import load_model, generate_manifest
 from architecture_model.core.types import ArchitectureModel
 
+from opencode_arch.artifacts import select_artifacts, assemble_artifact_context, TEMPLATES, get_template, ArtifactSpec, format_capability_detail_context, API_DETAIL_TEMPLATE
 from opencode_arch.runner.base import RunnerBackend, RunResult
 
 
@@ -115,6 +115,39 @@ async def run_docs_generate(
     generated_artifacts: list[tuple[str, str]] = []  # (artifact_id, filename)
 
     for spec in selected:
+        # Per-capability API detail artifacts use specialized context
+        if spec.id.startswith("api-detail-"):
+            cap_id = spec.id.replace("api-detail-", "").upper()
+            template = API_DETAIL_TEMPLATE
+            filename = f"api-detail-{cap_id.lower()}.md"
+
+            # Assemble capability-specific context
+            try:
+                cap_context = format_capability_detail_context(cap_id, model, manifest)
+            except Exception:
+                failed.append(spec.id)
+                continue
+
+            # Build prompt with template structure + capability data
+            prompt = _build_capability_detail_prompt(template, cap_context, spec.name)
+
+            # Call runner
+            try:
+                result = await runner.run(prompt, str(repo_path))
+            except Exception:
+                failed.append(spec.id)
+                continue
+
+            if not result.success:
+                failed.append(spec.id)
+                continue
+
+            _write_artifact(output_dir, filename, spec.id, result.output)
+            generated.append(spec.id)
+            generated_artifacts.append((spec.id, filename))
+            continue
+
+        # Standard artifacts
         template = TEMPLATES.get(spec.id)
         if template is None:
             template = get_template(spec.id)
@@ -215,6 +248,40 @@ def _build_generation_prompt(context: str, template_artifact_id: str) -> str:
         f"\n"
         f"Write a complete, well-structured markdown document. Use the DATA sections above\n"
         f"as your source of truth. Do NOT invent information not present in the data.\n"
+        f"\n"
+        f"Output ONLY the markdown content, no code fences or explanations.\n"
+        f"---\n"
+    )
+
+
+def _build_capability_detail_prompt(template, cap_context: str, cap_name: str) -> str:
+    """Build the prompt for a per-capability API detail artifact.
+
+    Uses the API_DETAIL_TEMPLATE sections as instructions, with the
+    capability-specific context as the grounding data.
+    """
+    sections_instructions = "\n".join(
+        f"  {s.heading}: {s.instructions}"
+        for s in template.sections
+    )
+
+    return (
+        f"---\n"
+        f"SYSTEM: {template.system_prompt}\n"
+        f"\n"
+        f"## Architecture Model Data for: {cap_name}\n\n"
+        f"{cap_context}\n"
+        f"\n"
+        f"---\n"
+        f"TASK: Generate a detailed API documentation file for this capability.\n"
+        f"\n"
+        f"Required sections:\n"
+        f"{sections_instructions}\n"
+        f"\n"
+        f"Write a complete, well-structured markdown document. Use the DATA above\n"
+        f"as your source of truth. Include exact function signatures, parameters,\n"
+        f"return types, algorithm steps, and behavioral sequences.\n"
+        f"Do NOT invent information not present in the data.\n"
         f"\n"
         f"Output ONLY the markdown content, no code fences or explanations.\n"
         f"---\n"

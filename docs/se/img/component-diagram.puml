@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+
+title Component Diagram - opencode-arch
+
+Person(ACT_DEV, "Developer")
+System_Ext(ACT_AGENT, "LLM Agent")
+System_Ext(ACT_OPENCODE, "OpenCode Runner")
+
+Container_Boundary(LAYER_CLI, "CLI Layer") {
+    Component(COMP_CLI, "CLI Commands", "argparse", "module")
+    Component(COMP_PROMPTS, "Prompt Templates", "Python strings", "library")
+}
+
+Container_Boundary(LAYER_MCP, "MCP Server Layer") {
+    Component(COMP_MCP, "MCP Server", "FastMCP", "service")
+}
+
+Container_Boundary(LAYER_LEARNING, "Learning Layer") {
+    Component(COMP_LEARNING, "Learning Loop", "dataclasses", "module")
+}
+
+Container_Boundary(LAYER_RUNNER, "Runner Layer") {
+    Component(COMP_RUNNER, "OpenCode Runner", "subprocess", "library")
+}
+
+Container_Boundary(LAYER_TELEMETRY, "Telemetry Layer") {
+    Component(COMP_TELEMETRY, "Telemetry Store", "SQLite", "data-store")
+}
+
+Rel(COMP_CLI, COMP_RUNNER, "depends-on")
+Rel(COMP_CLI, COMP_TELEMETRY, "depends-on")
+Rel(COMP_CLI, COMP_LEARNING, "depends-on")
+Rel(COMP_CLI, COMP_PROMPTS, "depends-on")
+Rel(COMP_MCP, IF_ARCH_MODEL, "consumes")
+Rel(COMP_LEARNING, COMP_TELEMETRY, "depends-on")
+
+@enduml

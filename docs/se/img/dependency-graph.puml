@@ -1,0 +1,19 @@
+@startuml
+title Dependency Graph - opencode-arch
+
+rectangle "CLI Commands" as COMP_CLI
+rectangle "Learning Loop" as COMP_LEARNING
+rectangle "MCP Server" as COMP_MCP
+rectangle "Prompt Templates" as COMP_PROMPTS
+rectangle "OpenCode Runner" as COMP_RUNNER
+rectangle "Telemetry Store" as COMP_TELEMETRY
+rectangle "Architecture Model API" as IF_ARCH_MODEL
+
+COMP_CLI --> COMP_RUNNER : depends-on
+COMP_CLI --> COMP_TELEMETRY : depends-on
+COMP_CLI --> COMP_LEARNING : depends-on
+COMP_CLI --> COMP_PROMPTS : depends-on
+COMP_MCP ..> IF_ARCH_MODEL : consumes
+COMP_LEARNING --> COMP_TELEMETRY : depends-on
+
+@enduml
