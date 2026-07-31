@@ -91,19 +91,34 @@ def _slice_from_manifest(project_root: Path, focus: str, budget: int) -> str:
 
     manifest = generate_manifest(project_root)
 
+    # Try to include grouped component suggestions for richer context
+    groups_info = []
+    try:
+        from architecture_model.manifest.grouping import group_modules
+        groups = group_modules(manifest.modules, manifest.interfaces)
+        groups_info = [
+            {"name": g.name, "files": g.modules, "primary": g.primary_file}
+            for g in groups
+        ]
+    except Exception:
+        pass
+
     manifest_yaml = yaml.dump(manifest, default_flow_style=False, sort_keys=False)
 
     char_budget = budget * 4
     if len(manifest_yaml) > char_budget:
-        summary = {
+        summary: dict[str, Any] = {
             "project_root": manifest.get("project_root"),
             "metrics": manifest.get("metrics", {}),
-            "functional_blocks": {
-                k: {"file_count": len(v.get("sub_functions", []))}
-                for k, v in manifest.get("functional_blocks", {}).items()
-            },
             "module_count": len(manifest.get("modules", [])),
         }
+        if groups_info:
+            summary["suggested_components"] = groups_info
+        else:
+            summary["functional_blocks"] = {
+                k: {"file_count": len(v.get("sub_functions", []))}
+                for k, v in manifest.get("functional_blocks", {}).items()
+            }
         if focus != "all":
             summary["focus"] = focus
         manifest_yaml = yaml.dump(summary, default_flow_style=False, sort_keys=False)

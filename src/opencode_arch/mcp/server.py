@@ -18,6 +18,7 @@ try:
     from opencode_arch.mcp.tools.validate import validate_architecture
     from opencode_arch.mcp.tools.extract import store_extraction
     from opencode_arch.mcp.tools.generate import run_tests_on_generated_code
+    from opencode_arch.mcp.tools.group import group_repository
 
     @mcp.tool()
     async def architect_scan(repo_path: str) -> dict:
@@ -69,6 +70,19 @@ try:
         Returns pass rate, failures, and total test count.
         """
         return await run_tests_on_generated_code(repo_path=repo_path, test_command=test_command or None)
+
+    @mcp.tool()
+    async def architect_group(repo_path: str, target_groups: int = 0) -> dict:
+        """Group repository modules into logical architecture components.
+
+        Uses multi-signal affinity (subdirectory, name-prefix, imports) to
+        suggest component boundaries. Call after scan, before extraction.
+
+        Args:
+            repo_path: Absolute path to the repository.
+            target_groups: Desired number of groups (0 = auto-calculate).
+        """
+        return await group_repository(repo_path=repo_path, target_groups=target_groups)
 
 except ImportError:
     # mcp package not available - tools still work as standalone async functions

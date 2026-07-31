@@ -30,10 +30,10 @@ architecture-model-standard (library)
   └── integrations/llm_context.py — context formatting
 ```
 
-## The 5 MCP Tools
+## The 6 MCP Tools
 
 ### 1. `architect_scan(repo_path: str) -> dict`
-Generates a reality manifest via AST scanning. Returns modules, functions, classes, imports, metrics, functional blocks.
+Generates a reality manifest via AST scanning. Returns modules, functions, classes, imports, metrics, functional blocks, and `suggested_components` (auto-grouped modules).
 
 **When to use:** First step in any extraction — understand what's in the repo.
 
@@ -71,6 +71,16 @@ Runs the repository's test suite against generated code.
 
 **When to use:** Quality gate for code generation — verify generated code passes tests.
 
+### 6. `architect_group(repo_path: str, target_groups: int) -> dict`
+Groups repository modules into logical architecture components using multi-signal affinity (subdirectory, name-prefix, imports).
+
+**Parameters:**
+- `target_groups`: Desired number of groups (0 = auto-calculate)
+
+**Returns:** `{groups: [{name, files, file_count, primary_file}], total_modules, total_groups}`
+
+**When to use:** After scan, before extraction — get suggested component boundaries.
+
 ## Package Structure
 
 ```
@@ -88,14 +98,15 @@ src/opencode_arch/
 │   └── __init__.py
 ├── mcp/
 │   ├── __init__.py
-│   ├── server.py         — FastMCP server (registers 5 tools)
+│   ├── server.py         — FastMCP server (registers 6 tools)
 │   └── tools/
 │       ├── __init__.py
 │       ├── scan.py       — scan_repository()
 │       ├── slice.py      — slice_context()
 │       ├── validate.py   — validate_architecture()
 │       ├── extract.py    — store_extraction()
-│       └── generate.py   — run_tests_on_generated_code()
+│       ├── generate.py   — run_tests_on_generated_code()
+│       └── group.py      — group_repository()
 ├── runner/
 │   ├── __init__.py
 │   ├── base.py           — RunResult, RunnerBackend protocol
@@ -143,7 +154,7 @@ pip install -e ".[dev]"
 pytest tests/ -v
 ```
 
-Current: **28 tests passing** (0.95s)
+Current: **278 tests passing** (~20s)
 
 ### Test breakdown
 | File | Tests | Covers |
@@ -250,14 +261,14 @@ class MyRunner:
 | Repo | Purpose | Status |
 |------|---------|--------|
 | `architecture-model-standard` | Schema, validator, CLI, manifest generator | v0.3.0, 271 tests |
-| `opencode-arch` | MCP extension (this repo) | v0.3.0, 47 tests |
+| `opencode-arch` | MCP extension (this repo) | v0.4.0, 278 tests |
 | `arch-agent` | Training pipeline + surrogate model | v0.1.0, 574 tests |
 
 ## Instructions for Development
 
 - Use TDD: write failing tests first, then implement
 - All changes must pass existing tests (no regressions)
-- Run tests: `pytest tests/ -v` (47 tests, ~1.6s)
+- Run tests: `pytest tests/ -v` (278 tests, ~20s)
 - The `architecture-model-standard` package is a dependency — don't duplicate its code
 - Telemetry failures should never block tool operation (swallow exceptions)
 - MCP server import is wrapped in try/except — tools work without mcp package

@@ -26,11 +26,28 @@ async def scan_repository(repo_path: str) -> dict[str, Any]:
     try:
         from architecture_model.manifest.generator import generate_manifest
         manifest = generate_manifest(path)
+
+        # Include suggested component groupings
+        suggested = None
+        try:
+            from architecture_model.manifest.grouping import group_modules
+            groups = group_modules(manifest.modules, manifest.interfaces)
+            suggested = [
+                {"name": g.name, "files": g.modules, "file_count": len(g.modules)}
+                for g in groups
+            ]
+        except Exception:
+            pass
+
         try:
             from opencode_arch.telemetry.collector import drain_and_store
             drain_and_store(tool="architect_scan", repo=path.name)
         except Exception:
             pass
-        return manifest
+
+        result = manifest
+        if suggested and isinstance(result, dict):
+            result["suggested_components"] = suggested
+        return result
     except Exception as e:
         return {"error": f"Scan failed: {e}"}
