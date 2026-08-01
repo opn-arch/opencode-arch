@@ -141,6 +141,43 @@ Architecture extraction was benchmarked across 13 repositories (10 Python, 3 non
 | P5 | Coherence-aware grouping | Medium | Medium | Factor import-cluster alignment into group_modules(). Target: Celery >70%. |
 | P6 | Filter boilerplate components | Low | Low | Auto-detect Django migrations/apps, exclude or merge into parent. |
 
+## Post-Fix Results (v0.5.1)
+
+Fixes applied: test_contracts wiring (P1), basename path matching (P2), flat-repo fallback (P2), SourceGraph enrichment (P4).
+
+### Python Repos — Before vs After
+
+| Repo | Confidence | Test Contracts | F-blocks | Coherence |
+|------|-----------|---------------|----------|-----------|
+| flask | 0.808 → **0.825** | 0/6 → **4/6** | 1 → **6** | 100 → 100 |
+| celery | 0.860 → 0.777 | 0/23 → 0/23 | 16 → 16 | 38.2 → **42.5** |
+| httpx | 0.850 → 0.830 | 0/5 → **1/5** | 2 → **5** | 100 → 100 |
+| invoke | 0.700 → 0.650 | 0/4 → 0/4 | 4 → 4 | 100 → 100 |
+| requests | 0.672 → **0.744** | 0/9 → **9/9** | 2 → 2 | 78.7 → 78.7 |
+| pydantic | 0.712 → **0.766** | 0/40 → **31/40** | 6 → 2 | 97.5 → 97.5 |
+
+**Key wins:**
+- test_contracts now populated for repos with matching test files (requests 9/9, pydantic 31/40)
+- Flask decomposition: 1 → 6 F-blocks (flat-repo fallback activated)
+- httpx decomposition: 2 → 5 F-blocks
+- Confidence improved for repos with test_contracts: requests +0.072, pydantic +0.054
+
+### Non-Python Repos — Before vs After
+
+| Repo | Confidence | Symbols | Contracts |
+|------|-----------|---------|-----------|
+| express | 0.05 → **0.370** | 0/15 → 0/15 | 0/15 → **15/15** |
+| gin | 0.082 → **0.491** | 0/14 → **9/14** | 0/14 → **14/14** |
+| axum | 0.05 → **0.439** | 0/24 → **22/24** | 0/24 → **24/24** |
+
+**Non-Python confidence improved 6-9x** through SourceGraph-based enrichment. Remaining gap vs Python (0.4 vs 0.7) is due to missing `signature` data in SourceGraph JSON — when agents populate ExportedSymbol.signature, confidence will approach Python levels.
+
+### Remaining Gaps
+
+- **Celery/invoke test_contracts = 0**: test naming conventions don't match (Celery uses `test_*.py` in nested `tests/` dirs, invoke uses different structure)
+- **Celery coherence still low (42.5%)**: structural issue — tightly coupled framework where every subsystem imports from every other
+- **Pydantic F-blocks dropped 6→2**: fewer subdirectories detected after grouping changes (investigate)
+
 ## What's Working Well
 
 - **100% file coverage** across all Python repos — every source file is mapped to a component
