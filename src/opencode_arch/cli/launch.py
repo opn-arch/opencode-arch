@@ -144,10 +144,6 @@ def run_launch(repo_path: str | None = None, skip_exec: bool = False) -> dict:
     _update_context_md(repo, model, context_slice, rep, manifest)
     results["steps"].append("context_md")
 
-    # Step 7: Ensure opencode.json
-    _ensure_opencode_json(repo)
-    results["steps"].append("opencode_json")
-
     elapsed = time.time() - start
     results["elapsed_s"] = round(elapsed, 2)
     _status(f"Ready ({elapsed:.1f}s)")
