@@ -22,6 +22,7 @@ try:
     from opencode_arch.mcp.tools.check import check_representativeness
     from opencode_arch.mcp.tools.require import capture_requirement
     from opencode_arch.mcp.tools.feedback import record_feedback
+    from opencode_arch.mcp.tools.ingest import ingest_source_graph
 
     @mcp.tool()
     async def architect_scan(repo_path: str) -> dict:
@@ -153,6 +154,21 @@ try:
             rating=rating,
             correction=correction,
         )
+
+    @mcp.tool()
+    async def architect_ingest(repo_path: str, source_graph_json: str) -> dict:
+        """Ingest a SourceGraph JSON for any language repository.
+
+        Accepts dependency and export data (from external tools or agent analysis),
+        groups modules into components, extracts interface contracts, and stores
+        the architecture model.
+
+        Args:
+            repo_path: Absolute path to the repository.
+            source_graph_json: JSON string with SourceGraph data. Format:
+                {"language": "typescript", "units": [{"file": "...", "exports": [...]}], "edges": [...]}
+        """
+        return await ingest_source_graph(repo_path=repo_path, source_graph_json=source_graph_json)
 
 except ImportError:
     # mcp package not available - tools still work as standalone async functions

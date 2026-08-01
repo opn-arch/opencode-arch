@@ -27,6 +27,28 @@ def compute_adaptive_budget(module_count: int, base: int = 4000) -> int:
     return min(base + extra, 16000)
 
 
+# Compression ratio thresholds (from telemetry analysis of 389 regen outcomes)
+# <2x: 78% pass | 2-10x: 69% | 10-50x: 55% | 50-200x: 44% | >200x: 19%
+COMPRESSION_WARN_THRESHOLD = 50  # warn above this
+COMPRESSION_CRITICAL_THRESHOLD = 200  # strongly recommend per-block above this
+
+
+def _estimate_source_size(path: Path) -> int:
+    """Estimate total source code size in chars (quick heuristic)."""
+    total = 0
+    for ext in ("*.py", "*.ts", "*.js", "*.go", "*.rs", "*.java"):
+        for f in path.rglob(ext):
+            # Skip vendor, node_modules, .git
+            parts = f.parts
+            if any(p in parts for p in ("vendor", "_vendor", "node_modules", ".git", "__pycache__")):
+                continue
+            try:
+                total += f.stat().st_size
+            except OSError:
+                pass
+    return total
+
+
 async def slice_context(
     repo_path: str,
     focus: str = "all",
@@ -70,10 +92,37 @@ async def slice_context(
                 manifest = generate_manifest(path)
                 budget = compute_adaptive_budget(len(manifest.modules))
 
+            # Secondary check: ensure compression ratio stays below 50x
+            source_size = _estimate_source_size(path)
+            min_budget_for_50x = source_size // (50 * 4)  # 50x compression, 4 chars/token
+            if min_budget_for_50x > budget:
+                budget = min(min_budget_for_50x, 16000)  # cap at 16K tokens
+
         if model_file.exists():
             result = _slice_from_model(path, focus, budget, detail)
         else:
             result = _slice_from_manifest(path, focus, budget)
+
+        # Compression ratio guard: warn if context is dangerously compressed
+        source_size = _estimate_source_size(path)
+        char_budget = budget * 4
+        if source_size > 0 and char_budget > 0:
+            ratio = source_size / char_budget
+            if ratio > COMPRESSION_CRITICAL_THRESHOLD:
+                warning = (
+                    f"# COMPRESSION WARNING: {ratio:.0f}x compression detected!\n"
+                    f"# Source: {source_size // 1024}KB compressed into {char_budget // 1024}KB context.\n"
+                    f"# At >200x compression, regeneration pass rate drops to ~19%.\n"
+                    f"# RECOMMENDATION: Use focused slicing (architect_slice with focus='F1', 'F2', etc.)\n"
+                    f"# to slice per-block. Available F-blocks can be found via architect_scan.\n\n"
+                )
+                result = warning + result
+            elif ratio > COMPRESSION_WARN_THRESHOLD:
+                warning = (
+                    f"# NOTE: {ratio:.0f}x compression ratio (>50x reduces pass rate).\n"
+                    f"# Consider per-block slicing for better regeneration outcomes.\n\n"
+                )
+                result = warning + result
 
         try:
             from opencode_arch.telemetry.collector import drain_and_store
@@ -102,7 +151,9 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
     if focus == "all":
         return format_model_context(model, max_tokens=budget, detail_level=detail)
     elif focus.startswith("F") and focus[1:].isdigit():
-        return format_fblock_context(model, f_block=focus, max_tokens=budget, project_root=project_root)
+        # Complexity-proportional budget: complex blocks get more tokens
+        block_budget = _compute_block_budget(model, focus, budget)
+        return format_fblock_context(model, f_block=focus, max_tokens=block_budget, project_root=project_root)
     elif focus in (
         "functional-architecture", "logical-architecture", "use-cases",
         "icd", "requirements-analysis", "operations-manual", "conops",
@@ -115,6 +166,32 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
             return format_model_context(sliced, max_tokens=budget, detail_level=detail)
         except (KeyError, ValueError):
             return format_model_context(model, max_tokens=budget, detail_level=detail)
+
+
+def _compute_block_budget(model: Any, f_block: str, total_budget: int) -> int:
+    """Allocate budget proportionally to block complexity.
+
+    Complex blocks (many signatures/files) get more tokens.
+    Simple blocks get the minimum needed.
+    Telemetry: <10 signatures reliably converge; complex blocks need 2-3x more context.
+    """
+    components = [c for c in model.entities.components if getattr(c, 'f_block', '') == f_block]
+    if not components:
+        # No f_block match — give full budget
+        return total_budget
+
+    # Complexity = total signatures + total files
+    sig_count = sum(len(getattr(c, 'signatures', [])) for c in components)
+    file_count = sum(len(getattr(c, 'files', [])) for c in components)
+    complexity = sig_count + file_count
+
+    # Simple (< 10): base budget, Complex (10-30): 1.5x, Very complex (>30): 2x
+    if complexity < 10:
+        return min(total_budget, 4000)
+    elif complexity < 30:
+        return min(int(total_budget * 1.5), 8000)
+    else:
+        return min(total_budget * 2, 16000)
 
 
 def _slice_from_manifest(project_root: Path, focus: str, budget: int) -> str:

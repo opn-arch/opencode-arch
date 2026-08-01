@@ -65,6 +65,11 @@ def format_model_context(
         for comp in model.entities.components:
             file_count = len(comp.files) if comp.files else 0
             lines.append(f"  {comp.id}: {comp.name} ({file_count} files)")
+            # Include interface contracts at full detail
+            if detail_level == "full" and hasattr(comp, "interfaces") and comp.interfaces:
+                for iface in comp.interfaces:
+                    sym_str = f" [{', '.join(iface.symbols[:5])}]" if iface.symbols else ""
+                    lines.append(f"    {iface.kind}: {iface.target_component}{sym_str}")
         priority_1.append("\n".join(lines))
 
     # Priority 2: Key relationships (grouped by type, top connections)
@@ -121,10 +126,24 @@ def format_fblock_context(
     Format context for a single F-block (for artifact section regeneration).
 
     Produces: capability description, related UCs, components, interfaces.
-    If *project_root* is given, sub-models are auto-loaded for richer detail.
+    If *project_root* is given, sub-models are auto-loaded for richer detail,
+    and per-block manifests are consumed for function-level context.
     """
     sliced = slice_by_fblock(model, f_block, project_root=project_root)
-    return format_model_context(sliced, max_tokens=max_tokens, detail_level="full")
+    base_context = format_model_context(sliced, max_tokens=max_tokens, detail_level="full")
+
+    # Consume per-block manifest if available (reduces compression ratio)
+    if project_root:
+        block_manifest = _load_block_manifest(project_root, f_block)
+        if block_manifest:
+            char_budget = max_tokens * 4
+            remaining = char_budget - len(base_context)
+            if remaining > 200:
+                manifest_section = _format_block_manifest(block_manifest, remaining)
+                if manifest_section:
+                    base_context += "\n" + manifest_section
+
+    return base_context
 
 
 def format_artifact_context(
@@ -408,3 +427,66 @@ def _find_entity_name(model: ArchitectureModel, entity_id: str) -> str:
             if e.id == entity_id:
                 return e.name
     return entity_id
+
+
+# ---------------------------------------------------------------------------
+# Block manifest consumption
+# ---------------------------------------------------------------------------
+
+
+def _load_block_manifest(project_root: "Path", f_block: str) -> dict | None:
+    """Load per-block manifest.json if it exists."""
+    import json
+    from pathlib import Path
+
+    # Try common locations
+    for subdir in (f_block, f_block.lower(), f"block_{f_block}"):
+        manifest_path = Path(project_root) / ".architecture-models" / subdir / "manifest.json"
+        if manifest_path.exists():
+            try:
+                return json.loads(manifest_path.read_text())
+            except (json.JSONDecodeError, OSError):
+                pass
+    return None
+
+
+def _format_block_manifest(manifest: dict, char_budget: int) -> str:
+    """Format block manifest data as compact context.
+
+    Includes: module names, key function signatures, imports.
+    This fills the semantic gap that causes cross_dep failures.
+    """
+    lines = ["\n## Block Manifest (function-level detail)"]
+
+    modules = manifest.get("modules", [])
+    for mod in modules:
+        file_path = mod.get("file", mod.get("path", "unknown"))
+        lines.append(f"  {file_path}:")
+
+        # Functions with signatures (critical for cross_dep)
+        functions = mod.get("functions", [])
+        for fn in functions[:10]:
+            name = fn.get("name", "") if isinstance(fn, dict) else fn
+            sig = fn.get("signature", "") if isinstance(fn, dict) else ""
+            if name.startswith("_"):
+                continue
+            if sig:
+                lines.append(f"    {name}{sig}")
+            else:
+                lines.append(f"    {name}()")
+
+        # Classes
+        classes = mod.get("classes", [])
+        for cls in classes[:5]:
+            name = cls.get("name", "") if isinstance(cls, dict) else cls
+            if not name.startswith("_"):
+                lines.append(f"    class {name}")
+
+        # Check budget
+        current = "\n".join(lines)
+        if len(current) >= char_budget * 0.9:
+            lines.append("    ... (truncated)")
+            break
+
+    result = "\n".join(lines)
+    return result[:char_budget]
