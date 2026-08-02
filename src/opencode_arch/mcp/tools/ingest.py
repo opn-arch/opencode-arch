@@ -53,11 +53,36 @@ async def ingest_source_graph(
                 files=group.modules,
             ))
 
-        # Build model
+        # Build model with relationships from edges
+        from architecture_model.core.types import Relationship, RelationType
+        
+        # Map files to component IDs
+        file_to_comp: dict[str, str] = {}
+        for comp in components:
+            for f in (comp.files or []):
+                file_to_comp[f] = comp.id
+        
+        # Convert edges to relationships between components
+        relationships: list[Relationship] = []
+        seen_rels: set[tuple[str, str]] = set()
+        for edge in graph.edges:
+            source_comp = file_to_comp.get(edge.source)
+            target_comp = file_to_comp.get(edge.target)
+            if source_comp and target_comp and source_comp != target_comp:
+                pair = (source_comp, target_comp)
+                if pair not in seen_rels:
+                    seen_rels.add(pair)
+                    relationships.append(Relationship(
+                        type=RelationType.DEPENDS_ON,
+                        from_id=source_comp,
+                        to_id=target_comp,
+                        description=f"{edge.source} -> {edge.target}",
+                    ))
+
         model = ArchitectureModel(
             meta=ModelMeta(project=project_root.name, schema_version="1.3"),
             entities=Entities(components=components),
-            relationships=[],
+            relationships=relationships,
         )
 
         # Extract interface contracts
