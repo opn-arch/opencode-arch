@@ -30,6 +30,8 @@ try:
     from opencode_arch.mcp.tools.export import export_repository
     from opencode_arch.mcp.tools.llm_audit import run_llm_audit
     from opencode_arch.mcp.tools.trace_requirements import trace_requirements
+    from opencode_arch.mcp.tools.author import author_architecture
+    from opencode_arch.mcp.tools.gate import check_gate
 
     @mcp.tool()
     async def architect_scan(repo_path: str) -> dict:
@@ -306,6 +308,32 @@ try:
             model_yaml=model_yaml,
             requirements_doc=requirements_doc,
         )
+
+    @mcp.tool()
+    async def architect_author(repo_path: str, requirements_text: str) -> dict:
+        """Forward-author an architecture model from requirements text.
+
+        Parses requirements (actors, capabilities, constraints) and produces
+        a concept-phase .architecture-model.yaml. Use before code exists.
+
+        Args:
+            repo_path: Absolute path to the repository root.
+            requirements_text: Free-form or structured requirements document.
+        """
+        return await author_architecture(repo_path=repo_path, requirements_text=requirements_text)
+
+    @mcp.tool()
+    async def architect_gate(repo_path: str, model_yaml: str = "") -> dict:
+        """Check development gate readiness for an architecture model.
+
+        Evaluates capability realization, constraint allocation, and file coverage
+        against code reality. Returns phase_requirements_met boolean.
+
+        Args:
+            repo_path: Absolute path to the repository root.
+            model_yaml: Optional model YAML. If empty, reads .architecture-model.yaml.
+        """
+        return await check_gate(repo_path=repo_path, model_yaml=model_yaml)
 
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
