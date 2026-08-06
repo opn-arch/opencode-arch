@@ -23,6 +23,13 @@ try:
     from opencode_arch.mcp.tools.require import capture_requirement
     from opencode_arch.mcp.tools.feedback import record_feedback
     from opencode_arch.mcp.tools.ingest import ingest_source_graph
+    from opencode_arch.mcp.tools.stats import get_stats
+    from opencode_arch.mcp.tools.correct import store_correction
+    from opencode_arch.mcp.tools.docs import generate_docs
+    from opencode_arch.mcp.tools.decompose import decompose_repository
+    from opencode_arch.mcp.tools.export import export_repository
+    from opencode_arch.mcp.tools.llm_audit import run_llm_audit
+    from opencode_arch.mcp.tools.trace_requirements import trace_requirements
 
     @mcp.tool()
     async def architect_scan(repo_path: str) -> dict:
@@ -169,6 +176,136 @@ try:
                 {"language": "typescript", "units": [{"file": "...", "exports": [...]}], "edges": [...]}
         """
         return await ingest_source_graph(repo_path=repo_path, source_graph_json=source_graph_json)
+
+    @mcp.tool()
+    async def architect_stats(repo_path: str = "", tool_filter: str = "") -> dict:
+        """Aggregate session and historical quality metrics.
+
+        Returns session stats, historical telemetry summary, and actionable suggestions.
+
+        Args:
+            repo_path: Optional - filter stats to specific repo.
+            tool_filter: Optional - filter to specific tool name.
+        """
+        return await get_stats(repo_path=repo_path, tool_filter=tool_filter)
+
+    @mcp.tool()
+    async def architect_correct(
+        repo_path: str,
+        correction_type: str,
+        target: str,
+        reason: str,
+        suggestion: dict | None = None,
+    ) -> dict:
+        """Store a structured correction for the architecture model.
+
+        Corrections are consumed on next pipeline run to improve the model.
+
+        Args:
+            repo_path: Absolute path to the repository.
+            correction_type: split_component | merge_components | add_component |
+                remove_component | add_relationship | remove_relationship | rename | reclassify.
+            target: Entity ID being corrected (e.g., "COMP-3").
+            reason: Why this correction is needed.
+            suggestion: Optional structured suggestion dict.
+        """
+        return await store_correction(
+            repo_path=repo_path,
+            correction_type=correction_type,
+            target=target,
+            reason=reason,
+            suggestion=suggestion,
+        )
+
+    @mcp.tool()
+    async def architect_docs(repo_path: str, formats: str = "all") -> dict:
+        """Generate standard SE documentation from architecture model.
+
+        Produces component specs, ICDs, dependency matrix, health report from
+        .architecture-model.yaml. Run after extraction.
+
+        Args:
+            repo_path: Absolute path to the repository.
+            formats: Comma-separated doc types: all, component_spec, icd,
+                dependency_matrix, health, drift, index.
+        """
+        return await generate_docs(repo_path=repo_path, formats=formats)
+
+    @mcp.tool()
+    async def architect_decompose(repo_path: str) -> dict:
+        """Decompose architecture model into per-block sub-models and recursive manifests.
+
+        Reads .architecture-model.yaml, traces relationships per F-block,
+        writes sub-models to .architecture-models/ and per-block manifests to
+        .architecture/manifests/. Run after extraction.
+
+        Args:
+            repo_path: Absolute path to the repository.
+        """
+        return await decompose_repository(repo_path=repo_path)
+
+    @mcp.tool()
+    async def architect_export(
+        repo_path: str,
+        output_dir: str = "",
+        output_format: str = "dir",
+        prefix: str = "",
+    ) -> dict:
+        """Export repository architecture as flat files for mobile AI.
+
+        Builds a set of flat files (model, sub-models, docs, manifests, specs,
+        diagrams, skills, reference docs) for use in token-limited AI environments.
+
+        Args:
+            repo_path: Absolute path to the repository.
+            output_dir: Where to write output. Default: {repo_path}/.architecture-export/
+            output_format: "dir" (flat directory) or "zip" (single zip file).
+            prefix: File prefix override. Default: auto-derived from repo name.
+        """
+        return await export_repository(
+            repo_path=repo_path,
+            output_dir=output_dir,
+            output_format=output_format,
+            prefix=prefix,
+        )
+
+    @mcp.tool()
+    async def architect_llm_audit(repo_path: str, model_yaml: str = "") -> dict:
+        """Run two-stage LLM functional-decomposition audit.
+
+        Independent second opinion on F-block boundaries. Compares blind LLM
+        decomposition against tool's assignment + quality metrics.
+        Flag-gated: never auto-invoked.
+
+        Args:
+            repo_path: Absolute path to the repository.
+            model_yaml: Optional model YAML. If empty, reads .architecture-model.yaml.
+        """
+        return await run_llm_audit(repo_path=repo_path, model_yaml=model_yaml)
+
+    @mcp.tool()
+    async def architect_trace_requirements(
+        repo_path: str,
+        model_yaml: str = "",
+        requirements_doc: str = "",
+    ) -> dict:
+        """Trace requirements to functions.
+
+        If requirements_doc provided: parse structurally, fall back to LLM for freeform.
+        If no requirements_doc: use retroactive derivation from model.
+        Then match functions to requirements.
+        Output: .architecture-models/requirements-trace.json
+
+        Args:
+            repo_path: Absolute path to the repository.
+            model_yaml: Optional model YAML. If empty, reads .architecture-model.yaml.
+            requirements_doc: Optional path to requirements document.
+        """
+        return await trace_requirements(
+            repo_path=repo_path,
+            model_yaml=model_yaml,
+            requirements_doc=requirements_doc,
+        )
 
 except ImportError:
     # mcp package not available - tools still work as standalone async functions

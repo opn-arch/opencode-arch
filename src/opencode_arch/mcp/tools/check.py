@@ -7,12 +7,15 @@ from typing import Any
 
 import yaml
 
+from opencode_arch.mcp.quality import with_quality
 
+
+@with_quality
 async def check_representativeness(repo_path: str, model_yaml: str) -> dict[str, Any]:
     """Check how well an architecture model represents the actual codebase.
 
     Supports three modes:
-    - Hierarchical (config): uses pre-existing fblock_dict from config
+    - Hierarchical (config): uses pre-existing source_block_dict from config
     - Hierarchical (auto): generates F-blocks from module grouping when no config exists
     - Flat: fallback when neither hierarchical path is available
 
@@ -82,7 +85,7 @@ def _try_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
         from architecture_model.config.loader import get_config
 
         config = get_config(path)
-        if not config.fblock_dict or len(config.fblock_dict) < 2:
+        if not config.source_block_dict or len(config.source_block_dict) < 2:
             return None
 
         recursive_manifests = generate_recursive_manifests(path)
@@ -103,18 +106,18 @@ def _try_auto_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
     """Attempt hierarchical check using auto-generated F-blocks from module grouping."""
     try:
         from architecture_model.manifest.generator import generate_manifest
-        from architecture_model.manifest.grouping import group_modules, auto_fblocks
+        from architecture_model.manifest.grouping import group_modules, auto_source_blocks
         from architecture_model.manifest.recursive import generate_recursive_manifests
         from architecture_model.core.representativeness import compute_hierarchical_representativeness
 
         manifest = generate_manifest(path)
         groups = group_modules(manifest.modules, manifest.interfaces)
-        fblock_config = auto_fblocks(groups)
+        source_block_config = auto_source_blocks(groups)
 
-        if not fblock_config or len(fblock_config) < 2:
+        if not source_block_config or len(source_block_config) < 2:
             return None
 
-        recursive_manifests = generate_recursive_manifests(path, fblock_override=fblock_config)
+        recursive_manifests = generate_recursive_manifests(path, source_block_override=source_block_config)
         if not recursive_manifests:
             return None
 
@@ -124,7 +127,7 @@ def _try_auto_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
 
         output = _format_hierarchical_output(result)
         output["mode"] = "hierarchical_auto"
-        output["fblock_count"] = len(fblock_config)
+        output["source_block_count"] = len(source_block_config)
         return output
 
     except Exception:

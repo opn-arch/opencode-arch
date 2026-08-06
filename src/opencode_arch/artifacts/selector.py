@@ -199,7 +199,7 @@ def should_decompose(model: ArchitectureModel, manifest: dict | None = None) -> 
     """Determine if system is complex enough to warrant per-subsystem docs.
 
     Heuristic: returns True if ANY of:
-    - More than 5 functional blocks (distinct f_block values on components)
+    - More than 5 functional blocks (distinct source_block values on components)
     - More than 50 source files in manifest
     - More than 20 components
     """
@@ -207,9 +207,9 @@ def should_decompose(model: ArchitectureModel, manifest: dict | None = None) -> 
     if len(model.entities.components) > 20:
         return True
 
-    # Check distinct f_block values
-    fblocks = {c.f_block for c in model.entities.components if c.f_block}
-    if len(fblocks) > 5:
+    # Check distinct source_block values
+    source_blocks = {c.source_block for c in model.entities.components if c.source_block}
+    if len(source_blocks) > 5:
         return True
 
     # Check file count from manifest

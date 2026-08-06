@@ -1,444 +1,422 @@
 meta:
+  schema_version: '1.4'
   project: opencode-arch
   system: OpenCode Architecture Extension
-  schema_version: '1.4'
   generated_at: '2026-07-08'
   source_language: python
-
 entities:
   actors:
-    - id: ACT-DEV
-      name: Developer
-      status: ACTIVE
-      type: human
-      goals:
-        - Extract architecture from repositories
-        - Generate SE documentation
-        - Validate code against models
-    - id: ACT-AGENT
-      name: LLM Agent
-      status: ACTIVE
-      type: system
-      goals:
-        - Consume compressed context via MCP tools
-        - Produce architecture models
-        - Regenerate code from models
-    - id: ACT-OPENCODE
-      name: OpenCode Runner
-      status: ACTIVE
-      type: external-service
-      goals:
-        - Execute LLM prompts as subprocess
-
+  - id: ACT-DEV
+    name: Developer
+    status: ACTIVE
+    type: human
+    goals:
+    - Extract architecture from repositories
+    - Generate SE documentation
+    - Validate code against models
+  - id: ACT-AGENT
+    name: LLM Agent
+    status: ACTIVE
+    type: system
+    goals:
+    - Consume compressed context via MCP tools
+    - Produce architecture models
+    - Regenerate code from models
+  - id: ACT-OPENCODE
+    name: OpenCode Runner
+    status: ACTIVE
+    type: external-service
+    goals:
+    - Execute LLM prompts as subprocess
   capabilities:
-    - id: CAP-EXTRACT
-      name: Architecture Extraction
-      status: ACTIVE
-      f_block: F1
-      priority: high
-      requirements:
-        - Scan repository AST
-        - Produce validated architecture model
-        - Achieve score >= 80/100
-    - id: CAP-GENERATE
-      name: Code Generation
-      status: ACTIVE
-      f_block: F1
-      priority: high
-      requirements:
-        - Regenerate code from model
-        - Run tests to validate
-        - Iterate until pass rate met
-    - id: CAP-DOCS
-      name: SE Document Generation
-      status: ACTIVE
-      f_block: F1
-      priority: high
-      requirements:
-        - Select artifacts based on model richness
-        - Assemble context from model and manifest
-        - Generate grounded documentation
-    - id: CAP-REGEN
-      name: Subsystem Regen-Loop
-      status: ACTIVE
-      f_block: F1
-      priority: high
-      requirements:
-        - Decompose system into subsystems
-        - Iterate per-subsystem until convergence
-        - Support blind mode (model-only context)
-    - id: CAP-LEARN
-      name: Learning Loop
-      status: ACTIVE
-      f_block: F3
-      priority: medium
-      requirements:
-        - Classify failure patterns
-        - Adapt prompts based on patterns
-        - Generate report cards
-        - Extract and store lessons
-    - id: CAP-MCP
-      name: MCP Tool Serving
-      status: ACTIVE
-      f_block: F4
-      priority: high
-      requirements:
-        - Expose scan/slice/validate/extract tools
-        - Compress context within token budget
-        - Serve via stdio MCP protocol
-    - id: CAP-TELEMETRY
-      name: Telemetry & Metrics
-      status: ACTIVE
-      f_block: F7
-      priority: medium
-      requirements:
-        - Record tool invocations
-        - Track regen outcomes
-        - Store learning curve data
-
+  - id: CAP-EXTRACT
+    name: Architecture Extraction
+    status: ACTIVE
+    source_block: F1
+    priority: high
+    requirements:
+    - Scan repository AST
+    - Produce validated architecture model
+    - Achieve score >= 80/100
+  - id: CAP-GENERATE
+    name: Code Generation
+    status: ACTIVE
+    source_block: F1
+    priority: high
+    requirements:
+    - Regenerate code from model
+    - Run tests to validate
+    - Iterate until pass rate met
+  - id: CAP-DOCS
+    name: SE Document Generation
+    status: ACTIVE
+    source_block: F1
+    priority: high
+    requirements:
+    - Select artifacts based on model richness
+    - Assemble context from model and manifest
+    - Generate grounded documentation
+  - id: CAP-REGEN
+    name: Subsystem Regen-Loop
+    status: ACTIVE
+    source_block: F1
+    priority: high
+    requirements:
+    - Decompose system into subsystems
+    - Iterate per-subsystem until convergence
+    - Support blind mode (model-only context)
+  - id: CAP-LEARN
+    name: Learning Loop
+    status: ACTIVE
+    source_block: F3
+    requirements:
+    - Classify failure patterns
+    - Adapt prompts based on patterns
+    - Generate report cards
+    - Extract and store lessons
+  - id: CAP-MCP
+    name: MCP Tool Serving
+    status: ACTIVE
+    source_block: F4
+    priority: high
+    requirements:
+    - Expose scan/slice/validate/extract tools
+    - Compress context within token budget
+    - Serve via stdio MCP protocol
+  - id: CAP-TELEMETRY
+    name: Telemetry & Metrics
+    status: ACTIVE
+    source_block: F7
+    requirements:
+    - Record tool invocations
+    - Track regen outcomes
+    - Store learning curve data
   behaviors:
-    - id: BEH-EXTRACT
-      name: Extract Architecture
-      status: ACTIVE
-      trigger: CLI command 'opencode-arch extract'
-      actor: ACT-DEV
-      steps:
-        - Scan repository to generate manifest
-        - Format context from manifest within token budget
-        - Send extraction prompt to runner
-        - Parse YAML response into model
-        - Validate model (target score >= 80)
-        - Store model to .architecture-model.yaml
-      pattern: sequential
-    - id: BEH-REGEN
-      name: Regen-Loop Iteration
-      status: ACTIVE
-      trigger: CLI command 'opencode-arch regen-loop'
-      actor: ACT-DEV
-      steps:
-        - Load model and decompose into subsystems
-        - For each subsystem build prompt with model context
-        - Send prompt to runner (blind or normal mode)
-        - Run subsystem tests
-        - If failing, analyze gaps and build feedback
-        - Iterate until convergence or max iterations
-        - Run full test suite
-        - Generate report card
-      pattern: pipeline
-    - id: BEH-DOCS
-      name: Generate Documentation
-      status: ACTIVE
-      trigger: CLI command 'opencode-arch docs generate'
-      actor: ACT-DEV
-      steps:
-        - Load architecture model
-        - Generate reality manifest
-        - Select artifacts based on model richness
-        - For each artifact assemble context
-        - Send generation prompt to runner
-        - Write result with frontmatter
-        - Generate index.md
-        - Run validation
-      pattern: sequential
-    - id: BEH-MCP-SCAN
-      name: MCP Scan Tool
-      status: ACTIVE
-      trigger: Agent calls architect_scan
-      actor: ACT-AGENT
-      steps:
-        - Receive repo_path from agent
-        - Call generate_manifest on target
-        - Return manifest dict to agent
-      pattern: sequential
-
+  - id: BEH-CRUD-_unknown
+    name: 'CRUD: 4 CRUD endpoints (1 AGENT, 3 CLI)'
+    status: ACTIVE
+    trigger: 4 endpoints
+    steps:
+    - Extract Architecture
+    - Regen-Loop Iteration
+    - Generate Documentation
+    - MCP Scan Tool
   interfaces:
-    - id: IF-CLI
-      name: CLI Interface
-      status: ACTIVE
-      type: internal
-      protocol: argparse
-      provider: COMP-CLI
-      consumer: ACT-DEV
-      endpoints:
-        - {method: extract, path: 'opencode-arch extract <repo>'}
-        - {method: generate, path: 'opencode-arch generate <repo>'}
-        - {method: regen-loop, path: 'opencode-arch regen-loop --repo <path>'}
-        - {method: docs, path: 'opencode-arch docs {generate,list,validate}'}
-        - {method: metrics, path: 'opencode-arch metrics'}
-        - {method: report, path: 'opencode-arch report'}
-    - id: IF-MCP
-      name: MCP Tool Protocol
-      status: ACTIVE
-      type: external
-      protocol: MCP stdio
-      provider: COMP-MCP
-      consumer: ACT-AGENT
-      endpoints:
-        - {method: architect_scan, path: tools/scan}
-        - {method: architect_slice, path: tools/slice}
-        - {method: architect_validate, path: tools/validate}
-        - {method: architect_extract, path: tools/extract}
-        - {method: architect_generate, path: tools/generate}
-    - id: IF-RUNNER
-      name: Runner Backend Protocol
-      status: ACTIVE
-      type: internal
-      protocol: subprocess
-      provider: COMP-RUNNER
-      consumer: COMP-CLI
-      endpoints:
-        - {method: run, path: 'opencode run <prompt> --dir <path>'}
-    - id: IF-TELEMETRY
-      name: Telemetry Store Interface
-      status: ACTIVE
-      type: internal
-      protocol: SQLite
-      provider: COMP-TELEMETRY
-      consumer: COMP-CLI
-      endpoints:
-        - {method: record, path: store.record()}
-        - {method: query, path: store.query()}
-        - {method: log_regen_outcome, path: store.log_regen_outcome()}
-    - id: IF-ARCH-MODEL
-      name: Architecture Model API
-      status: ACTIVE
-      type: internal
-      protocol: Python import
-      provider: ACT-OPENCODE
-      consumer: COMP-CLI
-      endpoints:
-        - {method: load_model, path: architecture_model.load_model()}
-        - {method: generate_manifest, path: architecture_model.generate_manifest()}
-        - {method: select_artifacts, path: architecture_model.select_artifacts()}
-        - {method: validate_model, path: architecture_model.validate_model()}
-
+  - id: IF-CLI
+    name: CLI Interface
+    status: ACTIVE
+    type: internal
+    protocol: argparse
+    provider: COMP-CLI
+    consumer: ACT-DEV
+    endpoints:
+    - method: extract
+      path: opencode-arch extract <repo>
+    - method: generate
+      path: opencode-arch generate <repo>
+    - method: regen-loop
+      path: opencode-arch regen-loop --repo <path>
+    - method: docs
+      path: opencode-arch docs {generate,list,validate}
+    - method: metrics
+      path: opencode-arch metrics
+    - method: report
+      path: opencode-arch report
+  - id: IF-MCP
+    name: MCP Tool Protocol
+    status: ACTIVE
+    type: external
+    protocol: MCP stdio
+    provider: COMP-MCP
+    consumer: ACT-AGENT
+    endpoints:
+    - method: architect_scan
+      path: tools/scan
+    - method: architect_slice
+      path: tools/slice
+    - method: architect_validate
+      path: tools/validate
+    - method: architect_extract
+      path: tools/extract
+    - method: architect_generate
+      path: tools/generate
+  - id: IF-RUNNER
+    name: Runner Backend Protocol
+    status: ACTIVE
+    type: internal
+    protocol: subprocess
+    provider: COMP-RUNNER
+    consumer: COMP-CLI
+    endpoints:
+    - method: run
+      path: opencode run <prompt> --dir <path>
+  - id: IF-TELEMETRY
+    name: Telemetry Store Interface
+    status: ACTIVE
+    type: internal
+    protocol: SQLite
+    provider: COMP-TELEMETRY
+    consumer: COMP-CLI
+    endpoints:
+    - method: record
+      path: store.record()
+    - method: query
+      path: store.query()
+    - method: log_regen_outcome
+      path: store.log_regen_outcome()
+  - id: IF-ARCH-MODEL
+    name: Architecture Model API
+    status: ACTIVE
+    type: internal
+    protocol: Python import
+    provider: ACT-OPENCODE
+    consumer: COMP-CLI
+    endpoints:
+    - method: load_model
+      path: architecture_model.load_model()
+    - method: generate_manifest
+      path: architecture_model.generate_manifest()
+    - method: select_artifacts
+      path: architecture_model.select_artifacts()
+    - method: validate_model
+      path: architecture_model.validate_model()
   constraints:
-    - id: CON-TOKENS
-      name: Token Budget Constraint
-      status: ACTIVE
-      type: performance
-      metric: context_tokens
-      threshold: '4000 tokens default, configurable'
-      rationale: LLM context windows are limited; compression enables larger repos
-    - id: CON-NO-HALLUCINATION
-      name: No Hallucination Constraint
-      status: ACTIVE
-      type: reliability
-      metric: grounding_accuracy
-      threshold: '100% — all claims must trace to model/manifest'
-      rationale: Core value proposition is grounded documentation
-    - id: CON-TIMEOUT
-      name: Runner Timeout
-      status: ACTIVE
-      type: performance
-      metric: execution_time
-      threshold: '600 seconds per LLM call'
-      rationale: Prevent hung subprocesses from blocking pipeline
-    - id: CON-PERMISSIONS
-      name: Cross-Directory Access
-      status: ACTIVE
-      type: security
-      metric: filesystem_access
-      threshold: 'Requires --dangerously-skip-permissions flag'
-      rationale: opencode run needs access to target repos outside CWD
-
+  - id: CON-TOKENS
+    name: Token Budget Constraint
+    status: ACTIVE
+    type: performance
+    metric: context_tokens
+    threshold: 4000 tokens default, configurable
+    rationale: LLM context windows are limited; compression enables larger repos
+  - id: CON-NO-HALLUCINATION
+    name: No Hallucination Constraint
+    status: ACTIVE
+    type: reliability
+    metric: grounding_accuracy
+    threshold: 100% — all claims must trace to model/manifest
+    rationale: Core value proposition is grounded documentation
+  - id: CON-TIMEOUT
+    name: Runner Timeout
+    status: ACTIVE
+    type: performance
+    metric: execution_time
+    threshold: 600 seconds per LLM call
+    rationale: Prevent hung subprocesses from blocking pipeline
+  - id: CON-PERMISSIONS
+    name: Cross-Directory Access
+    status: ACTIVE
+    type: security
+    metric: filesystem_access
+    threshold: Requires --dangerously-skip-permissions flag
+    rationale: opencode run needs access to target repos outside CWD
   layers:
-    - id: LAYER-CLI
-      name: CLI Layer
-      status: ACTIVE
-      order: 1
-      technology: [argparse, asyncio]
-      directories: [src/opencode_arch/cli]
-    - id: LAYER-MCP
-      name: MCP Server Layer
-      status: ACTIVE
-      order: 1
-      technology: [FastMCP, mcp-protocol]
-      directories: [src/opencode_arch/mcp]
-    - id: LAYER-LEARNING
-      name: Learning Layer
-      status: ACTIVE
-      order: 2
-      technology: [dataclasses, regex]
-      directories: [src/opencode_arch/learning]
-    - id: LAYER-RUNNER
-      name: Runner Layer
-      status: ACTIVE
-      order: 3
-      technology: [subprocess, Protocol]
-      directories: [src/opencode_arch/runner]
-    - id: LAYER-TELEMETRY
-      name: Telemetry Layer
-      status: ACTIVE
-      order: 3
-      technology: [SQLite]
-      directories: [src/opencode_arch/telemetry]
-
+  - id: LAYER-CLI
+    name: CLI Layer
+    status: ACTIVE
+    order: 1
+    technology:
+    - argparse
+    - asyncio
+    directories:
+    - src/opencode_arch/cli
+  - id: LAYER-MCP
+    name: MCP Server Layer
+    status: ACTIVE
+    order: 1
+    technology:
+    - FastMCP
+    - mcp-protocol
+    directories:
+    - src/opencode_arch/mcp
+  - id: LAYER-LEARNING
+    name: Learning Layer
+    status: ACTIVE
+    order: 2
+    technology:
+    - dataclasses
+    - regex
+    directories:
+    - src/opencode_arch/learning
+  - id: LAYER-RUNNER
+    name: Runner Layer
+    status: ACTIVE
+    order: 3
+    technology:
+    - subprocess
+    - Protocol
+    directories:
+    - src/opencode_arch/runner
+  - id: LAYER-TELEMETRY
+    name: Telemetry Layer
+    status: ACTIVE
+    order: 3
+    technology:
+    - SQLite
+    directories:
+    - src/opencode_arch/telemetry
   components:
-    - id: COMP-CLI
-      name: CLI Commands
-      status: ACTIVE
-      layer: LAYER-CLI
-      f_block: F1
-      technology: argparse
-      kind: module
-      files:
-        - src/opencode_arch/cli/main.py
-        - src/opencode_arch/cli/extract.py
-        - src/opencode_arch/cli/generate.py
-        - src/opencode_arch/cli/bench.py
-        - src/opencode_arch/cli/regen_loop.py
-        - src/opencode_arch/cli/docs.py
-        - src/opencode_arch/cli/docs_validator.py
-        - src/opencode_arch/cli/metrics.py
-        - src/opencode_arch/cli/gap_analyzer.py
-      responsibilities:
-        - Parse CLI arguments
-        - Orchestrate extraction, generation, regen-loop, docs workflows
-        - Display results to user
-    - id: COMP-MCP
-      name: MCP Server
-      status: ACTIVE
-      layer: LAYER-MCP
-      f_block: F4
-      technology: FastMCP
-      kind: service
-      files:
-        - src/opencode_arch/mcp/__main__.py
-        - src/opencode_arch/mcp/server.py
-        - src/opencode_arch/mcp/tools/scan.py
-        - src/opencode_arch/mcp/tools/slice.py
-        - src/opencode_arch/mcp/tools/validate.py
-        - src/opencode_arch/mcp/tools/extract.py
-        - src/opencode_arch/mcp/tools/generate.py
-      responsibilities:
-        - Expose architecture tools via MCP protocol
-        - Compress context within token budget
-        - Bridge between LLM agent and architecture-model-standard
-    - id: COMP-RUNNER
-      name: OpenCode Runner
-      status: ACTIVE
-      layer: LAYER-RUNNER
-      f_block: F6
-      technology: subprocess
-      kind: library
-      files:
-        - src/opencode_arch/runner/base.py
-        - src/opencode_arch/runner/opencode.py
-      responsibilities:
-        - Invoke opencode run as subprocess
-        - Handle timeouts and errors
-        - Return structured RunResult
-    - id: COMP-LEARNING
-      name: Learning Loop
-      status: ACTIVE
-      layer: LAYER-LEARNING
-      f_block: F3
-      technology: dataclasses
-      kind: module
-      files:
-        - src/opencode_arch/learning/classifier.py
-        - src/opencode_arch/learning/adapter.py
-        - src/opencode_arch/learning/assessor.py
-        - src/opencode_arch/learning/lessons.py
-        - src/opencode_arch/learning/maintainer.py
-        - src/opencode_arch/learning/patterns.py
-      responsibilities:
-        - Classify test failure patterns
-        - Adapt prompts based on patterns
-        - Generate report cards with grades
-        - Extract and store lessons
-        - Detect documentation drift
-    - id: COMP-TELEMETRY
-      name: Telemetry Store
-      status: ACTIVE
-      layer: LAYER-TELEMETRY
-      f_block: F7
-      technology: SQLite
-      kind: data-store
-      files:
-        - src/opencode_arch/telemetry/store.py
-        - src/opencode_arch/telemetry/recorder.py
-      responsibilities:
-        - Persist tool invocation metrics
-        - Store regen outcomes and learning data
-        - Provide query interface for metrics display
-    - id: COMP-PROMPTS
-      name: Prompt Templates
-      status: ACTIVE
-      layer: LAYER-CLI
-      f_block: F5
-      technology: Python strings
-      kind: library
-      files:
-        - src/opencode_arch/prompts/regen.py
-        - src/opencode_arch/prompts/extract.py
-      responsibilities:
-        - Define LLM prompt templates
-        - Structure system/user prompts for extraction and regen
-
+  - id: COMP-CLI
+    name: CLI Commands
+    status: ACTIVE
+    layer: LAYER-CLI
+    source_block: F1
+    technology: argparse
+    files:
+    - src/opencode_arch/cli/main.py
+    - src/opencode_arch/cli/extract.py
+    - src/opencode_arch/cli/generate.py
+    - src/opencode_arch/cli/bench.py
+    - src/opencode_arch/cli/regen_loop.py
+    - src/opencode_arch/cli/docs.py
+    - src/opencode_arch/cli/docs_validator.py
+    - src/opencode_arch/cli/metrics.py
+    - src/opencode_arch/cli/gap_analyzer.py
+    responsibilities:
+    - Parse CLI arguments
+    - Orchestrate extraction, generation, regen-loop, docs workflows
+    - Display results to user
+    kind: module
+  - id: COMP-MCP
+    name: MCP Server
+    status: ACTIVE
+    layer: LAYER-MCP
+    source_block: F4
+    technology: FastMCP
+    files:
+    - src/opencode_arch/mcp/__main__.py
+    - src/opencode_arch/mcp/server.py
+    - src/opencode_arch/mcp/tools/scan.py
+    - src/opencode_arch/mcp/tools/slice.py
+    - src/opencode_arch/mcp/tools/validate.py
+    - src/opencode_arch/mcp/tools/extract.py
+    - src/opencode_arch/mcp/tools/generate.py
+    responsibilities:
+    - Expose architecture tools via MCP protocol
+    - Compress context within token budget
+    - Bridge between LLM agent and architecture-model-standard
+  - id: COMP-RUNNER
+    name: OpenCode Runner
+    status: ACTIVE
+    layer: LAYER-RUNNER
+    source_block: F6
+    technology: subprocess
+    files:
+    - src/opencode_arch/runner/base.py
+    - src/opencode_arch/runner/opencode.py
+    responsibilities:
+    - Invoke opencode run as subprocess
+    - Handle timeouts and errors
+    - Return structured RunResult
+    kind: library
+  - id: COMP-LEARNING
+    name: Learning Loop
+    status: ACTIVE
+    layer: LAYER-LEARNING
+    source_block: F3
+    technology: dataclasses
+    files:
+    - src/opencode_arch/learning/classifier.py
+    - src/opencode_arch/learning/adapter.py
+    - src/opencode_arch/learning/assessor.py
+    - src/opencode_arch/learning/lessons.py
+    - src/opencode_arch/learning/maintainer.py
+    - src/opencode_arch/learning/patterns.py
+    responsibilities:
+    - Classify test failure patterns
+    - Adapt prompts based on patterns
+    - Generate report cards with grades
+    - Extract and store lessons
+    - Detect documentation drift
+    kind: module
+  - id: COMP-TELEMETRY
+    name: Telemetry Store
+    status: ACTIVE
+    layer: LAYER-TELEMETRY
+    source_block: F7
+    technology: SQLite
+    files:
+    - src/opencode_arch/telemetry/store.py
+    - src/opencode_arch/telemetry/recorder.py
+    responsibilities:
+    - Persist tool invocation metrics
+    - Store regen outcomes and learning data
+    - Provide query interface for metrics display
+    kind: data-store
+  - id: COMP-PROMPTS
+    name: Prompt Templates
+    status: ACTIVE
+    layer: LAYER-CLI
+    source_block: F5
+    technology: Python strings
+    files:
+    - src/opencode_arch/prompts/regen.py
+    - src/opencode_arch/prompts/extract.py
+    responsibilities:
+    - Define LLM prompt templates
+    - Structure system/user prompts for extraction and regen
+    kind: library
 relationships:
-  - from: COMP-CLI
-    to: COMP-RUNNER
-    type: depends-on
-    description: CLI uses runner to invoke LLM
-  - from: COMP-CLI
-    to: COMP-TELEMETRY
-    type: depends-on
-    description: CLI records metrics after operations
-  - from: COMP-CLI
-    to: COMP-LEARNING
-    type: depends-on
-    description: Regen-loop uses learning for adaptation
-  - from: COMP-CLI
-    to: COMP-PROMPTS
-    type: depends-on
-    description: CLI uses prompt templates
-  - from: COMP-MCP
-    to: IF-ARCH-MODEL
-    type: consumes
-    description: MCP tools call architecture-model-standard APIs
-  - from: COMP-LEARNING
-    to: COMP-TELEMETRY
-    type: depends-on
-    description: Learning stores lessons and patterns
-  - from: COMP-CLI
-    to: CAP-EXTRACT
-    type: realizes
-    description: extract command realizes extraction capability
-  - from: COMP-CLI
-    to: CAP-GENERATE
-    type: realizes
-    description: generate command realizes generation capability
-  - from: COMP-CLI
-    to: CAP-DOCS
-    type: realizes
-    description: docs command realizes documentation capability
-  - from: COMP-CLI
-    to: CAP-REGEN
-    type: realizes
-    description: regen-loop realizes subsystem regeneration
-  - from: COMP-MCP
-    to: CAP-MCP
-    type: realizes
-    description: MCP server realizes tool serving
-  - from: COMP-LEARNING
-    to: CAP-LEARN
-    type: realizes
-    description: Learning module realizes learning loop
-  - from: COMP-TELEMETRY
-    to: CAP-TELEMETRY
-    type: realizes
-    description: Telemetry store realizes metrics tracking
-  - from: CON-TOKENS
-    to: COMP-MCP
-    type: constrained-by
-    description: MCP tools must respect token budget
-  - from: CON-NO-HALLUCINATION
-    to: COMP-CLI
-    type: constrained-by
-    description: Docs generator must only use grounded data
-  - from: CON-TIMEOUT
-    to: COMP-RUNNER
-    type: constrained-by
-    description: Runner enforces timeout on subprocess
+- type: depends-on
+  from: COMP-CLI
+  to: COMP-RUNNER
+  description: CLI uses runner to invoke LLM
+- type: depends-on
+  from: COMP-CLI
+  to: COMP-TELEMETRY
+  description: CLI records metrics after operations
+- type: depends-on
+  from: COMP-CLI
+  to: COMP-LEARNING
+  description: Regen-loop uses learning for adaptation
+- type: depends-on
+  from: COMP-CLI
+  to: COMP-PROMPTS
+  description: CLI uses prompt templates
+- type: consumes
+  from: COMP-MCP
+  to: IF-ARCH-MODEL
+  description: MCP tools call architecture-model-standard APIs
+- type: depends-on
+  from: COMP-LEARNING
+  to: COMP-TELEMETRY
+  description: Learning stores lessons and patterns
+- type: realizes
+  from: COMP-CLI
+  to: CAP-EXTRACT
+  description: extract command realizes extraction capability
+- type: realizes
+  from: COMP-CLI
+  to: CAP-GENERATE
+  description: generate command realizes generation capability
+- type: realizes
+  from: COMP-CLI
+  to: CAP-DOCS
+  description: docs command realizes documentation capability
+- type: realizes
+  from: COMP-CLI
+  to: CAP-REGEN
+  description: regen-loop realizes subsystem regeneration
+- type: realizes
+  from: COMP-MCP
+  to: CAP-MCP
+  description: MCP server realizes tool serving
+- type: realizes
+  from: COMP-LEARNING
+  to: CAP-LEARN
+  description: Learning module realizes learning loop
+- type: realizes
+  from: COMP-TELEMETRY
+  to: CAP-TELEMETRY
+  description: Telemetry store realizes metrics tracking
+- type: constrained-by
+  from: CON-TOKENS
+  to: COMP-MCP
+  description: MCP tools must respect token budget
+- type: constrained-by
+  from: CON-NO-HALLUCINATION
+  to: COMP-CLI
+  description: Docs generator must only use grounded data
+- type: constrained-by
+  from: CON-TIMEOUT
+  to: COMP-RUNNER
+  description: Runner enforces timeout on subprocess

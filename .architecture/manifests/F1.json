@@ -1,0 +1,528 @@
+{
+  "generated_at": "2026-08-03T01:26:18.290776+00:00",
+  "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
+  "metrics": {
+    "py_files": 5,
+    "total_lines": 1725,
+    "functions": 14,
+    "classes": 4,
+    "constants": 0
+  },
+  "functional_blocks": {},
+  "modules": [
+    {
+      "file": "src/opencode_arch/artifacts/__init__.py",
+      "name": "Artifact selection and registry for model",
+      "docstring": "Artifact selection and registry for model-driven SE document generation.",
+      "functions": [],
+      "imports": [
+        "opencode_arch.artifacts.selector",
+        "opencode_arch.artifacts.templates",
+        "opencode_arch.artifacts.context",
+        "opencode_arch.artifacts.diagrams"
+      ],
+      "line_count": 48,
+      "status": "dormant",
+      "classes": [],
+      "exports": [
+        "API_DETAIL_TEMPLATE",
+        "ArtifactSpec",
+        "ArtifactTemplate",
+        "ARTIFACT_REGISTRY",
+        "SUBSYSTEM_ARTIFACTS",
+        "SubsystemInfo",
+        "TEMPLATES",
+        "TemplateSection",
+        "assemble_artifact_context",
+        "format_capability_detail_context",
+        "generate_all_diagrams",
+        "generate_component_diagram",
+        "generate_dependency_diagram",
+        "generate_focused_diagram",
+        "generate_nav_diagram",
+        "generate_sequence_diagram",
+        "get_artifact_spec",
+        "get_template",
+        "select_artifacts",
+        "select_capability_detail_artifacts",
+        "select_subsystem_artifacts",
+        "should_decompose"
+      ],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "opencode_arch.artifacts.selector",
+          "symbols": [
+            "ArtifactSpec",
+            "ARTIFACT_REGISTRY",
+            "SUBSYSTEM_ARTIFACTS",
+            "SubsystemInfo",
+            "get_artifact_spec",
+            "select_artifacts",
+            "select_capability_detail_artifacts",
+            "select_subsystem_artifacts",
+            "should_decompose"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.artifacts.templates",
+          "symbols": [
+            "ArtifactTemplate",
+            "TemplateSection",
+            "TEMPLATES",
+            "get_template",
+            "API_DETAIL_TEMPLATE"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.artifacts.context",
+          "symbols": [
+            "assemble_artifact_context",
+            "format_capability_detail_context"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.artifacts.diagrams",
+          "symbols": [
+            "generate_all_diagrams",
+            "generate_component_diagram",
+            "generate_dependency_diagram",
+            "generate_focused_diagram",
+            "generate_nav_diagram",
+            "generate_sequence_diagram"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/artifacts/context.py",
+      "name": "Context assembler for artifact generation",
+      "docstring": "Context assembler for artifact generation.\n\nGiven an artifact template + architecture model + optional manifest,\nassembles the formatted context string included in the LLM prompt.\n\nExtracts relevant model/manifest data for each template section and\nformats it concisely for LLM consumption.",
+      "functions": [
+        {
+          "name": "assemble_artifact_context",
+          "signature": "assemble_artifact_context(template: ArtifactTemplate, model: ArchitectureModel, manifest: dict | None, max_tokens: int) -> str",
+          "calls": [
+            "_extract_section_data",
+            "append",
+            "join",
+            "len",
+            "rstrip"
+          ],
+          "docstring": "Assemble formatted context for artifact generation.\n\nReturns a structured prompt string containing:\n1. System prompt from template\n2. For each section: heading + extracted data + instructions\n\nToken budget is approximate (1 token ~ 4 chars). If total exceeds budget,\ntruncate section data (not instructions)."
+        },
+        {
+          "name": "format_capability_detail_context",
+          "signature": "format_capability_detail_context(cap_id: str, model: ArchitectureModel, manifest: dict | None) -> str",
+          "calls": [
+            "append",
+            "set",
+            "join",
+            "extend",
+            "get",
+            "add",
+            "update",
+            "enumerate",
+            "len"
+          ],
+          "docstring": "Assemble rich context for generating a per-capability API detail doc.\n\nExtracts the full neighborhood of a single capability:\n- The capability entity itself\n- Realizing component(s) and their files/signatures/constants\n- Related behaviors (steps, triggers, pre/postconditions)\n- Exposed interfaces (endpoints, protocol)\n- Applicable constraints\n- Upstream/downstream relationships\n\nReturns a structured text block suitable for LLM prompt injection."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "opencode_arch.artifacts.diagrams",
+        "opencode_arch.artifacts.templates",
+        "architecture_model.core.types",
+        "architecture_model.core.types"
+      ],
+      "line_count": 451,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.artifacts.diagrams",
+          "symbols": [
+            "generate_component_diagram",
+            "generate_dependency_diagram",
+            "generate_sequence_diagram"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.artifacts.templates",
+          "symbols": [
+            "ArtifactTemplate"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.types",
+          "symbols": [
+            "ArchitectureModel"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.types",
+          "symbols": [
+            "RelationType"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/artifacts/diagrams.py",
+      "name": "PlantUML diagram generation from architecture model data",
+      "docstring": "PlantUML diagram generation from architecture model data.\n\nGenerates deterministic PlantUML syntax strings from model entities and\nrelationships. These can be embedded in documentation or rendered by any\nPlantUML-compatible tool.",
+      "functions": [
+        {
+          "name": "generate_component_diagram",
+          "signature": "generate_component_diagram(model: ArchitectureModel) -> str",
+          "calls": [
+            "append",
+            "join",
+            "_sanitize_id",
+            "get"
+          ],
+          "docstring": "Generate a C4-style component diagram showing system structure.\n\nGroups components by layer, renders actors, and shows\ndepends-on/exposes/consumes relationships."
+        },
+        {
+          "name": "generate_dependency_diagram",
+          "signature": "generate_dependency_diagram(model: ArchitectureModel) -> str",
+          "calls": [
+            "append",
+            "set",
+            "sorted",
+            "join",
+            "add",
+            "_sanitize_id",
+            "get"
+          ],
+          "docstring": "Generate a dependency graph showing component relationships.\n\nSimpler than C4 \u2014 plain PlantUML with rectangles and arrows.\nOnly includes entities that participate in at least one relationship."
+        },
+        {
+          "name": "generate_sequence_diagram",
+          "signature": "generate_sequence_diagram(behavior: Behavior, model: ArchitectureModel) -> str",
+          "calls": [
+            "append",
+            "enumerate",
+            "join",
+            "_sanitize_id"
+          ],
+          "docstring": "Generate a sequence diagram from a behavior's steps.\n\nReturns empty string if behavior has no steps."
+        },
+        {
+          "name": "generate_nav_diagram",
+          "signature": "generate_nav_diagram(model: ArchitectureModel) -> str",
+          "calls": [
+            "append",
+            "set",
+            "join",
+            "get",
+            "_sanitize_id",
+            "add"
+          ],
+          "docstring": "Generate a full-model navigational traceability diagram.\n\nShows ALL entities (typed shapes) and ALL relationships (labeled edges)\non a single page. Components are nested inside their layer packages.\nEvery node displays its ID for precise referencing by systems engineers."
+        },
+        {
+          "name": "generate_focused_diagram",
+          "signature": "generate_focused_diagram(model: ArchitectureModel, entity_id: str, depth: int) -> str",
+          "calls": [
+            "append",
+            "sorted",
+            "join",
+            "set",
+            "pop",
+            "get",
+            "items",
+            "_sanitize_id",
+            "add",
+            "len"
+          ],
+          "docstring": "Generate a focused subgraph centered on a specific entity.\n\nPerforms BFS from entity_id through relationships (both directions)\nup to `depth` hops. Renders only the reachable subgraph with the\nfocus entity highlighted.\n\nReturns empty string if entity_id is not found in the model."
+        },
+        {
+          "name": "generate_all_diagrams",
+          "signature": "generate_all_diagrams(model: ArchitectureModel) -> dict[str, str]",
+          "calls": [
+            "any",
+            "len",
+            "generate_component_diagram",
+            "generate_dependency_diagram",
+            "generate_nav_diagram",
+            "generate_sequence_diagram"
+          ],
+          "docstring": "Generate all applicable diagrams for the model.\n\nReturns dict mapping diagram name to PlantUML string.\nOnly includes diagrams where there's enough data."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "architecture_model.core.types"
+      ],
+      "line_count": 451,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.types",
+          "symbols": [
+            "ArchitectureModel",
+            "ActorType",
+            "Behavior",
+            "RelationType"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/artifacts/selector.py",
+      "name": "Model",
+      "docstring": "Model-driven artifact selector.\n\nDetermines which SE documentation artifacts are appropriate to generate\nbased on the richness of an ArchitectureModel. Pure function \u2014 no I/O, no LLM calls.",
+      "functions": [
+        {
+          "name": "select_artifacts",
+          "signature": "select_artifacts(model: ArchitectureModel, manifest: dict | None, include_capability_details: bool) -> list[ArtifactSpec]",
+          "calls": [
+            "sort",
+            "all",
+            "extend",
+            "append",
+            "select_capability_detail_artifacts",
+            "_requirement_met"
+          ],
+          "docstring": "Return artifacts appropriate for this model's richness.\n\nFor each artifact in the registry, check if the model has the required entities.\nReturn only those artifacts whose requirements are met.\nResults sorted by priority (1 first), then alphabetically by id.\n\nIf include_capability_details is True, also generates per-capability\napi-detail-{cap_id} artifacts for every realized capability."
+        },
+        {
+          "name": "get_artifact_spec",
+          "signature": "get_artifact_spec(artifact_id: str) -> ArtifactSpec | None",
+          "docstring": "Look up a single artifact spec by ID."
+        },
+        {
+          "name": "should_decompose",
+          "signature": "should_decompose(model: ArchitectureModel, manifest: dict | None) -> bool",
+          "calls": [
+            "len",
+            "get"
+          ],
+          "docstring": "Determine if system is complex enough to warrant per-subsystem docs.\n\nHeuristic: returns True if ANY of:\n- More than 5 functional blocks (distinct f_block values on components)\n- More than 50 source files in manifest\n- More than 20 components"
+        },
+        {
+          "name": "select_subsystem_artifacts",
+          "signature": "select_subsystem_artifacts(subsystem: SubsystemInfo, model: ArchitectureModel, manifest: dict | None) -> list[ArtifactSpec]",
+          "calls": [
+            "sort",
+            "all",
+            "append",
+            "_subsystem_requirement_met"
+          ],
+          "docstring": "Select artifacts appropriate for a subsystem (subset of system-level).\n\nOnly returns artifacts from SUBSYSTEM_ARTIFACTS that:\n1. Are in the SUBSYSTEM_ARTIFACTS list\n2. Have their requirements met (scoped to subsystem's components)\n\nReturns empty list if subsystem has no components."
+        },
+        {
+          "name": "select_capability_detail_artifacts",
+          "signature": "select_capability_detail_artifacts(model: ArchitectureModel) -> list[ArtifactSpec]",
+          "calls": [
+            "set",
+            "sort",
+            "append",
+            "add",
+            "ArtifactSpec",
+            "lower"
+          ],
+          "docstring": "Generate one ArtifactSpec per capability for detailed API docs.\n\nOnly includes capabilities that have at least one realizing component\n(via 'realizes' relationship). Each gets artifact_id = \"api-detail-{cap.id}\"."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "architecture_model.core.types",
+        "architecture_model.core.types"
+      ],
+      "line_count": 331,
+      "status": "active",
+      "classes": [
+        {
+          "name": "ArtifactSpec",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        },
+        {
+          "name": "SubsystemInfo",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass",
+            "field"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.types",
+          "symbols": [
+            "ArchitectureModel"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.types",
+          "symbols": [
+            "RelationType"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/artifacts/templates.py",
+      "name": "Artifact template definitions",
+      "docstring": "Artifact template definitions.\n\nEach template describes HOW to generate a specific SE documentation artifact:\n- What sections it has\n- What model/manifest data feeds each section\n- What instructions the LLM follows for each section",
+      "functions": [
+        {
+          "name": "get_template",
+          "signature": "get_template(artifact_id: str) -> ArtifactTemplate | None",
+          "calls": [
+            "startswith",
+            "get"
+          ],
+          "docstring": "Look up template by artifact ID. Returns None if not found."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "dataclasses"
+      ],
+      "line_count": 444,
+      "status": "active",
+      "classes": [
+        {
+          "name": "TemplateSection",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        },
+        {
+          "name": "ArtifactTemplate",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass",
+            "field"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    }
+  ],
+  "interfaces": [
+    {
+      "source": "src/opencode_arch/artifacts/__init__.py",
+      "target": "src/opencode_arch/artifacts/selector.py",
+      "import_path": "opencode_arch.artifacts.selector"
+    },
+    {
+      "source": "src/opencode_arch/artifacts/__init__.py",
+      "target": "src/opencode_arch/artifacts/templates.py",
+      "import_path": "opencode_arch.artifacts.templates"
+    },
+    {
+      "source": "src/opencode_arch/artifacts/__init__.py",
+      "target": "src/opencode_arch/artifacts/context.py",
+      "import_path": "opencode_arch.artifacts.context"
+    },
+    {
+      "source": "src/opencode_arch/artifacts/__init__.py",
+      "target": "src/opencode_arch/artifacts/diagrams.py",
+      "import_path": "opencode_arch.artifacts.diagrams"
+    },
+    {
+      "source": "src/opencode_arch/artifacts/context.py",
+      "target": "src/opencode_arch/artifacts/diagrams.py",
+      "import_path": "opencode_arch.artifacts.diagrams"
+    },
+    {
+      "source": "src/opencode_arch/artifacts/context.py",
+      "target": "src/opencode_arch/artifacts/templates.py",
+      "import_path": "opencode_arch.artifacts.templates"
+    }
+  ]
+}

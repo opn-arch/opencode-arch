@@ -1,0 +1,29 @@
+meta:
+  schema_version: '2.0'
+  project: opencode-arch/Runner
+  system: Runner
+  generated_at: '2026-07-08'
+  manifest_path: manifest.json
+  parent_model: ../../.architecture-model.yaml
+  refines_component: COMP-RUNNER
+entities:
+  components:
+  - id: COMP-RUNNER
+    name: OpenCode Runner
+    status: ACTIVE
+    layer: LAYER-RUNNER
+    source_block: F6
+    technology: subprocess
+    files:
+    - src/opencode_arch/runner/base.py
+    - src/opencode_arch/runner/opencode.py
+    responsibilities:
+    - Invoke opencode run as subprocess
+    - Handle timeouts and errors
+    - Return structured RunResult
+    kind: library
+relationships:
+- type: depends-on
+  from: COMP-CLI
+  to: COMP-RUNNER
+  description: CLI uses runner to invoke LLM

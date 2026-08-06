@@ -18,12 +18,12 @@ entities:
       name: App
       status: ACTIVE
   capabilities:
-    - id: CAP-F1
+    - id: CAP-S1
       name: Core
       status: ACTIVE
 relationships:
   - from: COMP-1
-    to: CAP-F1
+    to: CAP-S1
     type: realizes
 """
 

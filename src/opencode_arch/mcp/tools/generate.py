@@ -8,7 +8,10 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from opencode_arch.mcp.quality import with_quality
 
+
+@with_quality
 async def run_tests_on_generated_code(
     repo_path: str,
     test_command: str | None = None,

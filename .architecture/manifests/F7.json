@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-08-03T01:26:18.416994+00:00",
+  "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
+  "metrics": {
+    "py_files": 2,
+    "total_lines": 37,
+    "functions": 0,
+    "classes": 0,
+    "constants": 2
+  },
+  "functional_blocks": {},
+  "modules": [
+    {
+      "file": "src/opencode_arch/prompts/__init__.py",
+      "name": "Prompt templates for regen",
+      "docstring": "Prompt templates for regen-loop and related workflows.",
+      "functions": [],
+      "imports": [],
+      "line_count": 1,
+      "status": "dormant",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/prompts/regen.py",
+      "name": "Prompt templates for the decomposed regen",
+      "docstring": "Prompt templates for the decomposed regen-loop.",
+      "functions": [],
+      "imports": [],
+      "line_count": 36,
+      "status": "dormant",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [],
+      "module_constants": {
+        "REGEN_PROMPT": "'## Regenerate {subsystem_name} (iteration {iteration}/{max_iterations})\\n\\nYou are regenerating a subsystem of a Python project. Your goal is to produce\\nsource files that pass the associated test suite.\\n\\n### Source files to produce:\\n{source_files}\\n\\n### Architecture Model (structural)\\n{model_context}\\n\\n### Constants (must be exact)\\n{constants}\\n\\n### Function Signatures\\n{signatures}\\n\\n### Test Contracts (assertions that MUST pass)\\n{test_contracts}\\n\\n### Dependency Context\\n{dependency_apis}\\n\\n{previous_feedback}'",
+        "FEEDBACK_HEADER": "'### Feedback from previous iteration ({prev_iteration})\\n\\nThe following tests failed. Fix these issues:\\n\\n{failure_analysis}\\n'"
+      },
+      "module_assignments": {}
+    }
+  ],
+  "interfaces": []
+}

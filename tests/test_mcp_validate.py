@@ -11,7 +11,7 @@ meta:
   project: "test-project"
 entities:
   capabilities:
-    - id: CAP-F1
+    - id: CAP-S1
       name: Core Processing
       status: ACTIVE
   components:
@@ -21,7 +21,7 @@ entities:
 relationships:
   - type: realizes
     from: COMP-1
-    to: CAP-F1
+    to: CAP-S1
 """
 
 ORPHAN_YAML = """\
@@ -30,13 +30,13 @@ meta:
   project: "test-project"
 entities:
   capabilities:
-    - id: CAP-F1
+    - id: CAP-S1
       name: Core Processing
       status: ACTIVE
 relationships:
   - type: realizes
     from: COMP-MISSING
-    to: CAP-F1
+    to: CAP-S1
 """
 
 MALFORMED_YAML = "{{not valid yaml"

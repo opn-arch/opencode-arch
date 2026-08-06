@@ -317,7 +317,7 @@ class TestExtractSectionData:
                     name="User Auth",
                     status=Status.ACTIVE,
                     priority=EntityPriority.HIGH,
-                    f_block="F1",
+                    source_block="S1",
                 ),
             ]
         )
@@ -327,7 +327,7 @@ class TestExtractSectionData:
         assert "CAP-1" in result
         assert "User Auth" in result
         assert "high" in result
-        assert "F1" in result
+        assert "S1" in result
 
     def test_extract_behaviors_format(self):
         """_extract_section_data('behaviors', ...) returns formatted behaviors."""

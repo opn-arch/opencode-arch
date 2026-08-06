@@ -16,12 +16,12 @@ from typing import Any, Optional
 
 from architecture_model.core.parser import load_model, save_model
 from architecture_model.core.merger import merge_manifest
-from architecture_model.core.slicer import slice_by_fblock, slice_for_artifact
+from architecture_model.core.slicer import slice_by_source_block, slice_for_artifact
 from architecture_model.core.validator import validate_model
 from architecture_model.core.types import ArchitectureModel
 from opencode_arch.context.formatter import (
     format_model_context,
-    format_fblock_context,
+    format_source_block_context,
     format_artifact_context,
 )
 
@@ -113,9 +113,9 @@ def get_artifact_context(
     return format_artifact_context(model, artifact_name, max_tokens=max_tokens)
 
 
-def get_fblock_context(
+def get_source_block_context(
     project_root: str | Path,
-    f_block: str,
+    source_block: str,
     max_tokens: int = 2000,
 ) -> str:
     """
@@ -123,14 +123,14 @@ def get_fblock_context(
 
     Args:
         project_root: Project root path.
-        f_block: F-block ID (e.g., "F3").
+        source_block: F-block ID (e.g., "S3").
         max_tokens: Token budget.
 
     Returns:
         Formatted F-block context string.
     """
     model = get_model(project_root)
-    return format_fblock_context(model, f_block, max_tokens=max_tokens, project_root=Path(project_root))
+    return format_source_block_context(model, source_block, max_tokens=max_tokens, project_root=Path(project_root))
 
 
 def get_model_summary(project_root: str | Path) -> dict[str, Any]:

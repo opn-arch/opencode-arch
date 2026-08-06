@@ -19,7 +19,7 @@ from architecture_model.core.types import (
     Status,
 )
 from opencode_arch.extract.from_code import (
-    _file_to_fblock,
+    _file_to_source_block,
     _file_to_layer,
     _slugify,
     extract_from_code,
@@ -66,14 +66,14 @@ def sample_project(tmp_path: Path) -> Path:
                 dirs:
                   - app/models
             functional_blocks:
-              F1:
+              S1:
                 name: User Management
                 dirs:
                   - app/api
                   - app/services
                 files: []
                 description_source: "Handles user authentication and profiles"
-              F2:
+              S2:
                 name: Data Models
                 dirs:
                   - app/models
@@ -202,22 +202,22 @@ class TestSlugify:
 
 
 # ---------------------------------------------------------------------------
-# Test: _file_to_fblock
+# Test: _file_to_source_block
 # ---------------------------------------------------------------------------
 
 
 class TestFileToFblock:
     def test_matches_directory(self, sample_config: ProjectConfig):
-        assert _file_to_fblock("app/api/routes.py", sample_config) == "F1"
-        assert _file_to_fblock("app/services/auth.py", sample_config) == "F1"
-        assert _file_to_fblock("app/models/user.py", sample_config) == "F2"
+        assert _file_to_source_block("app/api/routes.py", sample_config) == "S1"
+        assert _file_to_source_block("app/services/auth.py", sample_config) == "S1"
+        assert _file_to_source_block("app/models/user.py", sample_config) == "S2"
 
     def test_no_match(self, sample_config: ProjectConfig):
-        assert _file_to_fblock("tests/test_stuff.py", sample_config) is None
+        assert _file_to_source_block("tests/test_stuff.py", sample_config) is None
 
     def test_exact_dir_match(self, sample_config: ProjectConfig):
         # Should not match partial prefixes
-        assert _file_to_fblock("app/api_v2/routes.py", sample_config) is None
+        assert _file_to_source_block("app/api_v2/routes.py", sample_config) is None
 
 
 # ---------------------------------------------------------------------------
@@ -256,17 +256,17 @@ class TestExtractFromCode:
 
     # --- Capabilities ---
 
-    def test_capabilities_from_fblocks(self, model: ArchitectureModel):
+    def test_capabilities_from_source_blocks(self, model: ArchitectureModel):
         """One capability per F-block."""
         cap_ids = {c.id for c in model.entities.capabilities}
-        assert "CAP-F1" in cap_ids
-        assert "CAP-F2" in cap_ids
+        assert "CAP-S1" in cap_ids
+        assert "CAP-S2" in cap_ids
         assert len(model.entities.capabilities) == 2
 
     def test_capability_names(self, model: ArchitectureModel):
         caps = {c.id: c for c in model.entities.capabilities}
-        assert caps["CAP-F1"].name == "User Management"
-        assert caps["CAP-F2"].name == "Data Models"
+        assert caps["CAP-S1"].name == "User Management"
+        assert caps["CAP-S2"].name == "Data Models"
 
     # --- Actors ---
 
@@ -361,8 +361,8 @@ class TestExtractFromCode:
         realizes = [r for r in model.relationships if r.type == RelationType.REALIZES]
         assert len(realizes) > 0
 
-        # Route behavior in F1 should realize CAP-F1
-        f1_realizes = [r for r in realizes if r.to_id == "CAP-F1"]
+        # Route behavior in S1 should realize CAP-S1
+        f1_realizes = [r for r in realizes if r.to_id == "CAP-S1"]
         assert len(f1_realizes) > 0
 
     def test_layer_dependency_relationships(self, model: ArchitectureModel):
@@ -374,7 +374,7 @@ class TestExtractFromCode:
             and r.from_id.endswith("-layer")
             and r.to_id.endswith("-layer")
         ]
-        # F1 (web-layer) imports from F2 (data-layer) → web-layer depends-on data-layer
+        # S1 (web-layer) imports from S2 (data-layer) → web-layer depends-on data-layer
         assert len(layer_deps) >= 1
         dep_pairs = {(r.from_id, r.to_id) for r in layer_deps}
         assert ("web-layer", "data-layer") in dep_pairs
@@ -431,17 +431,17 @@ def test_interface_direction_importer_is_consumer(sample_project):
     """The importer should be consumer, importee should be provider."""
     model = extract_from_code(sample_project)
     # In sample_project: app/api imports from app/models (via app/services)
-    # F1 (api/services) is the consumer, F2 (models) is the provider
+    # S1 (api/services) is the consumer, S2 (models) is the provider
     internal_ifaces = [i for i in model.entities.interfaces if i.type == InterfaceType.INTERNAL]
     assert len(internal_ifaces) > 0
     for iface in internal_ifaces:
-        if "F1" in iface.id and "F2" in iface.id:
-            # target_block (importee=F2) should be provider
-            assert iface.provider == "CAP-F2", f"Expected provider=CAP-F2, got {iface.provider}"
-            assert iface.consumer == "CAP-F1", f"Expected consumer=CAP-F1, got {iface.consumer}"
+        if "S1" in iface.id and "S2" in iface.id:
+            # target_block (importee=S2) should be provider
+            assert iface.provider == "CAP-S2", f"Expected provider=CAP-S2, got {iface.provider}"
+            assert iface.consumer == "CAP-S1", f"Expected consumer=CAP-S1, got {iface.consumer}"
             break
     else:
-        pytest.fail("Expected an internal interface between F1 and F2")
+        pytest.fail("Expected an internal interface between S1 and S2")
 
 
 def test_layer_depends_on_from_imports_not_ordering(sample_project):
@@ -456,7 +456,7 @@ def test_layer_depends_on_from_imports_not_ordering(sample_project):
     dep_pairs = {(r.from_id, r.to_id) for r in layer_deps}
     # Should have at least one layer dependency (web-layer depends on data-layer via imports)
     assert len(layer_deps) > 0
-    # The actual import chain: F1 (in web-layer) imports from F2 (in data-layer)
+    # The actual import chain: S1 (in web-layer) imports from S2 (in data-layer)
     # So web-layer → data-layer should exist
     assert ("web-layer", "data-layer") in dep_pairs, (
         f"Expected web-layer → data-layer from imports, got: {dep_pairs}"

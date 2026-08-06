@@ -13,7 +13,7 @@ def main():
         len(sys.argv) == 2 and not sys.argv[1].startswith("-")
         and sys.argv[1] not in (
             "extract", "generate", "bench", "metrics", "report",
-            "regen-loop", "confidence", "calibrate", "export-data", "docs",
+            "regen-loop", "confidence", "calibrate", "export-data", "docs", "export",
         )
     ):
         from opencode_arch.cli.launch import run_launch
@@ -90,6 +90,13 @@ def main():
 
     # docs (with sub-subcommands: generate, list)
     docs_p = subparsers.add_parser("docs", help="Generate SE documentation")
+
+    # export
+    exp_p = subparsers.add_parser("export", help="Export flat files for mobile AI")
+    exp_p.add_argument("repo_path", help="Path to the target repository")
+    exp_p.add_argument("--output", "-o", default=None, help="Output path (dir or .zip)")
+    exp_p.add_argument("--format", choices=["dir", "zip"], default="dir", help="Output format (default: dir)")
+    exp_p.add_argument("--prefix", default="", help="File prefix override")
     docs_sub = docs_p.add_subparsers(dest="docs_command", required=True)
 
     # docs generate
@@ -202,6 +209,16 @@ def main():
             include_telemetry=args.include_telemetry,
         )
 
+    elif args.command == "export":
+        from opencode_arch.mcp.tools.export import export_repository
+        result = asyncio.run(export_repository(
+            repo_path=args.repo_path,
+            output_dir=args.output or "",
+            output_format=args.format,
+            prefix=args.prefix,
+        ))
+        _print_export_result(result)
+
     elif args.command == "docs":
         from opencode_arch.cli.docs import run_docs_generate, run_docs_list
         if args.docs_command == "generate":
@@ -275,6 +292,18 @@ def _print_validation_result(result):
             print(f"    ... and {len(result.issues) - 20} more")
     if not result.is_valid:
         sys.exit(1)
+
+
+def _print_export_result(result: dict):
+    if result.get("error"):
+        print(f"Export failed: {result['error']}")
+        sys.exit(1)
+    print(f"\nExport Complete")
+    print(f"  Output:  {result['output']}")
+    print(f"  Format:  {result['format']}")
+    print(f"  Files:   {result['file_count']}")
+    print(f"  Size:    {result['total_size_bytes']:,} bytes")
+    print(f"  Prefix:  {result['prefix']}")
 
 
 def _print_extract_result(result: dict):

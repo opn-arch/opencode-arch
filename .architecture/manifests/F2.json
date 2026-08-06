@@ -1,0 +1,1823 @@
+{
+  "generated_at": "2026-08-03T01:26:18.333976+00:00",
+  "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
+  "metrics": {
+    "py_files": 15,
+    "total_lines": 3183,
+    "functions": 21,
+    "classes": 5,
+    "constants": 4
+  },
+  "functional_blocks": {},
+  "modules": [
+    {
+      "file": "src/opencode_arch/cli/__init__.py",
+      "name": "CLI for opencode",
+      "docstring": "CLI for opencode-arch.",
+      "functions": [],
+      "imports": [],
+      "line_count": 1,
+      "status": "dormant",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/bench.py",
+      "name": "Bench command",
+      "docstring": "Bench command - benchmark extraction on multiple repos.",
+      "functions": [
+        {
+          "name": "run_bench",
+          "signature": "run_bench(repos: list[str], runner: RunnerBackend, budget: int, target_score: int) -> list[dict[str, Any]]",
+          "calls": [
+            "append",
+            "run_extract"
+          ],
+          "docstring": "Run extraction benchmark on multiple repositories."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "typing",
+        "opencode_arch.runner.base",
+        "opencode_arch.cli.extract"
+      ],
+      "line_count": 25,
+      "status": "dormant",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.runner.base",
+          "symbols": [
+            "RunnerBackend"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.extract",
+          "symbols": [
+            "run_extract"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/calibrate.py",
+      "name": "Calibration command",
+      "docstring": "Calibration command - spot-check confidence by attempting regeneration.",
+      "functions": [
+        {
+          "name": "select_calibration_targets",
+          "signature": "select_calibration_targets(model_or_components, n: int, min_confidence: float, count: int)",
+          "calls": [
+            "isinstance",
+            "sorted",
+            "len",
+            "shuffle",
+            "round",
+            "range",
+            "get"
+          ],
+          "docstring": "Select components for calibration.\n\nSupports two calling conventions:\n- Legacy: select_calibration_targets(model, n=3, min_confidence=0.7) with ArchitectureModel\n- New: select_calibration_targets(components, count=6) with list[dict]"
+        },
+        {
+          "name": "format_calibration_prompt",
+          "signature": "format_calibration_prompt(comp: Component) -> str",
+          "calls": [
+            "append",
+            "join"
+          ],
+          "docstring": "Format a prompt asking the agent to regenerate a component from its model spec."
+        },
+        {
+          "name": "compare_regeneration",
+          "signature": "compare_regeneration(original: 'str | Path', generated: str) -> dict",
+          "calls": [
+            "isinstance",
+            "_extract_names",
+            "read_text",
+            "len",
+            "max",
+            "sorted",
+            "parse",
+            "splitlines",
+            "walk",
+            "min",
+            "set"
+          ],
+          "docstring": "Compare original and generated source code by public API coverage.\n\noriginal can be a string of source code or a Path to a file."
+        },
+        {
+          "name": "format_regeneration_prompt",
+          "signature": "format_regeneration_prompt(component_context: dict) -> str",
+          "calls": [
+            "get",
+            "append",
+            "join"
+          ],
+          "docstring": "Format a prompt for regenerating a component from model data only."
+        },
+        {
+          "name": "compute_correlation",
+          "signature": "compute_correlation(data: list[dict]) -> float",
+          "calls": [
+            "len",
+            "sum",
+            "sqrt",
+            "zip"
+          ],
+          "docstring": "Pearson correlation between confidence and regen_quality fields."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "ast",
+        "math",
+        "random",
+        "dataclasses",
+        "pathlib",
+        "typing",
+        "architecture_model.core.types"
+      ],
+      "line_count": 208,
+      "status": "active",
+      "classes": [
+        {
+          "name": "CalibrationReport",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "ast",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "math",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "random",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.types",
+          "symbols": [
+            "ArchitectureModel",
+            "Component"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/confidence.py",
+      "name": "CLI confidence visualization command",
+      "docstring": "CLI confidence visualization command.",
+      "functions": [
+        {
+          "name": "run_confidence",
+          "signature": "run_confidence(repo_path: str) -> str",
+          "calls": [
+            "Path",
+            "append",
+            "sorted",
+            "join",
+            "exists",
+            "load_model",
+            "compute_model_confidence",
+            "aggregate_block_confidence",
+            "model_confidence_summary",
+            "keys"
+          ],
+          "docstring": "Run confidence analysis and return formatted output."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "pathlib",
+        "architecture_model.core.parser",
+        "architecture_model.core.confidence"
+      ],
+      "line_count": 66,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "load_model"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.confidence",
+          "symbols": [
+            "compute_model_confidence",
+            "aggregate_block_confidence",
+            "model_confidence_summary"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/docs.py",
+      "name": "SE Document generation orchestrator",
+      "docstring": "SE Document generation orchestrator.",
+      "functions": [
+        {
+          "name": "run_docs_generate",
+          "signature": "run_docs_generate(repo_path: Path, runner: RunnerBackend, output_dir: Path | None, artifact_filter: list[str] | None, model_path: Path | None) -> DocsResult",
+          "calls": [
+            "time",
+            "resolve",
+            "mkdir",
+            "DocsResult",
+            "Path",
+            "generate_manifest",
+            "select_artifacts",
+            "startswith",
+            "get",
+            "_build_generation_prompt",
+            "_write_artifact",
+            "append",
+            "_write_index",
+            "load_model",
+            "exists",
+            "upper",
+            "_build_capability_detail_prompt",
+            "get_template",
+            "assemble_artifact_context",
+            "str",
+            "format_capability_detail_context",
+            "run",
+            "replace",
+            "lower"
+          ],
+          "docstring": "Generate SE documentation for a project.\n\nFlow:\n1. Load model from project (or model_path override)\n2. Generate manifest via generate_manifest()\n3. Call select_artifacts(model, manifest) to determine what to generate\n4. If artifact_filter provided, intersect with selected artifacts\n5. For each artifact:\n   a. Get template from TEMPLATES[artifact_id]\n   b. Assemble context via assemble_artifact_context(template, model, manifest)\n   c. Build full prompt (context + generation instructions)\n   d. Call runner.run(prompt, str(repo_path))\n   e. Write result to output_dir/filename\n6. Generate index.md linking all artifacts\n7. Return DocsResult"
+        },
+        {
+          "name": "run_docs_list",
+          "signature": "run_docs_list(repo_path: Path, model_path: Path | None) -> list[dict[str, str]]",
+          "calls": [
+            "resolve",
+            "select_artifacts",
+            "load_model",
+            "generate_manifest",
+            "Path",
+            "str"
+          ],
+          "docstring": "List which artifacts would be generated for a project.\n\nReturns list of dicts: [{\"id\": ..., \"name\": ..., \"category\": ..., \"priority\": ...}]\nNo runner needed \u2014 just model analysis."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "time",
+        "dataclasses",
+        "datetime",
+        "pathlib",
+        "architecture_model",
+        "architecture_model.core.types",
+        "opencode_arch.artifacts",
+        "opencode_arch.runner.base"
+      ],
+      "line_count": 333,
+      "status": "active",
+      "classes": [
+        {
+          "name": "DocsResult",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "time",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "datetime",
+          "symbols": [
+            "datetime",
+            "timezone"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model",
+          "symbols": [
+            "load_model",
+            "generate_manifest"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.types",
+          "symbols": [
+            "ArchitectureModel"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.artifacts",
+          "symbols": [
+            "select_artifacts",
+            "assemble_artifact_context",
+            "TEMPLATES",
+            "get_template",
+            "ArtifactSpec",
+            "format_capability_detail_context",
+            "API_DETAIL_TEMPLATE"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.runner.base",
+          "symbols": [
+            "RunnerBackend",
+            "RunResult"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/docs_validator.py",
+      "name": "Validate generated SE documentation against model and manifest",
+      "docstring": "Validate generated SE documentation against model and manifest.",
+      "functions": [
+        {
+          "name": "validate_docs",
+          "signature": "validate_docs(docs_dir: Path, model: 'ArchitectureModel', manifest: dict | None) -> DocsValidationResult",
+          "calls": [
+            "Path",
+            "sorted",
+            "_get_manifest_files",
+            "_get_manifest_symbols",
+            "_get_model_entity_ids",
+            "DocsValidationResult",
+            "glob",
+            "read_text",
+            "_get_artifact_id_from_file",
+            "_extract_component_references",
+            "extend",
+            "any",
+            "_extract_file_references",
+            "_extract_code_references",
+            "len",
+            "append",
+            "ValidationIssue"
+          ],
+          "docstring": "Validate all markdown files in docs_dir against model and manifest.\n\nChecks:\n1. File paths mentioned in docs exist in manifest's file inventory\n2. Function/class names referenced exist in manifest's AST data\n3. Component IDs/names referenced match model's components\n4. Interface names referenced match model's interfaces\n\nAn artifact PASSES if it has no \"error\" severity issues."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "re",
+        "dataclasses",
+        "pathlib",
+        "typing",
+        "architecture_model.core.types",
+        "yaml"
+      ],
+      "line_count": 295,
+      "status": "active",
+      "classes": [
+        {
+          "name": "ValidationIssue",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        },
+        {
+          "name": "DocsValidationResult",
+          "bases": [],
+          "methods": [
+            "is_valid"
+          ],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "re",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass",
+            "field"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any",
+            "TYPE_CHECKING"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.types",
+          "symbols": [
+            "ArchitectureModel"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "yaml",
+          "symbols": [],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/export_data.py",
+      "name": "Export training corpus from",
+      "docstring": "Export training corpus from .architecture/ artifacts.",
+      "functions": [
+        {
+          "name": "run_export_data",
+          "signature": "run_export_data(...)"
+        }
+      ],
+      "imports": [
+        "__future__",
+        "json",
+        "sys",
+        "pathlib"
+      ],
+      "line_count": 133,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/extract.py",
+      "name": "Extract command",
+      "docstring": "Extract command - full architecture extraction loop.",
+      "functions": [
+        {
+          "name": "run_extract",
+          "signature": "run_extract(repo_path: str, runner: RunnerBackend, budget: int, focus: str, target_score: int) -> dict[str, Any]",
+          "calls": [
+            "Path",
+            "time",
+            "format",
+            "_extract_yaml_from_output",
+            "exists",
+            "run",
+            "store_extraction",
+            "get",
+            "str",
+            "resolve"
+          ],
+          "docstring": "Run the full extraction loop.\n\n1. Validates repo exists\n2. Calls runner with extraction prompt\n3. Parses YAML from output\n4. Validates and stores via tool APIs\n5. Returns metrics"
+        }
+      ],
+      "imports": [
+        "__future__",
+        "re",
+        "time",
+        "pathlib",
+        "typing",
+        "opencode_arch.runner.base",
+        "opencode_arch.cli.prompts",
+        "opencode_arch.mcp.tools.extract"
+      ],
+      "line_count": 93,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "re",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "time",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.runner.base",
+          "symbols": [
+            "RunnerBackend"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.prompts",
+          "symbols": [
+            "EXTRACT_PROMPT"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.mcp.tools.extract",
+          "symbols": [
+            "store_extraction"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/gap_analyzer.py",
+      "name": "Gap Analyzer",
+      "docstring": "Gap analyzer \u2014 maps test failure output to actionable feedback for the next iteration.",
+      "functions": [
+        {
+          "name": "analyze_gaps",
+          "signature": "analyze_gaps(test_output: str, model_context: str) -> str",
+          "calls": [
+            "set",
+            "splitlines",
+            "_extract_failed_tests",
+            "join",
+            "strip",
+            "append",
+            "_generic_feedback",
+            "search",
+            "format",
+            "add",
+            "groups"
+          ],
+          "docstring": "Parse test failure output and produce enrichment feedback.\n\nMaps common failure patterns to structured feedback for the next\niteration prompt. Returns a formatted string summarizing what needs\nfixing.\n\nArgs:\n    test_output: Raw pytest output (stdout + stderr).\n    model_context: Optional architecture model context for cross-referencing.\n\nReturns:\n    Formatted feedback string with identified gaps."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "re"
+      ],
+      "line_count": 107,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "re",
+          "symbols": [],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/generate.py",
+      "name": "Generate command",
+      "docstring": "Generate command - test-guided code generation loop.",
+      "functions": [
+        {
+          "name": "run_generate",
+          "signature": "run_generate(repo_path: str, runner: RunnerBackend, max_iter: int, test_command: str | None) -> dict[str, Any]",
+          "calls": [
+            "Path",
+            "time",
+            "range",
+            "exists",
+            "format",
+            "TelemetryStore",
+            "record",
+            "get",
+            "join",
+            "run",
+            "run_tests_on_generated_code",
+            "str",
+            "int",
+            "resolve"
+          ],
+          "docstring": "Run the test-guided code generation loop."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "time",
+        "pathlib",
+        "typing",
+        "opencode_arch.runner.base",
+        "opencode_arch.cli.prompts",
+        "opencode_arch.mcp.tools.generate",
+        "opencode_arch.telemetry.store"
+      ],
+      "line_count": 68,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "time",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.runner.base",
+          "symbols": [
+            "RunnerBackend"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.prompts",
+          "symbols": [
+            "GENERATE_PROMPT"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.mcp.tools.generate",
+          "symbols": [
+            "run_tests_on_generated_code"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.telemetry.store",
+          "symbols": [
+            "TelemetryStore"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/launch.py",
+      "name": "Interactive launch \u2014 architecture",
+      "docstring": "Interactive launch \u2014 architecture-aware development session.\n\nPre-flight: scan, slice, persist, update CONTEXT.md, then exec opencode.",
+      "functions": [
+        {
+          "name": "run_launch",
+          "signature": "run_launch(repo_path: str | None, skip_exec: bool) -> dict",
+          "calls": [
+            "resolve",
+            "time",
+            "_update_context_md",
+            "append",
+            "round",
+            "_status",
+            "which",
+            "chdir",
+            "execvp",
+            "is_dir",
+            "print",
+            "exit",
+            "str",
+            "generate_manifest",
+            "len",
+            "exists",
+            "Path",
+            "_warn",
+            "load_model",
+            "compute_adaptive_budget",
+            "format_model_context",
+            "compute_representativeness",
+            "save_project",
+            "create_components_from_manifest",
+            "ArchitectureModel",
+            "enrich_from_manifest",
+            "join",
+            "ModelMeta",
+            "Entities",
+            "getattr"
+          ],
+          "docstring": "Run pre-flight checks and launch interactive OpenCode session.\n\nArgs:\n    repo_path: Target repository (default: current directory)\n    skip_exec: If True, do pre-flight only without exec (for testing)\n\nReturns:\n    Pre-flight results dict (only if skip_exec=True)"
+        }
+      ],
+      "imports": [
+        "__future__",
+        "json",
+        "logging",
+        "os",
+        "shutil",
+        "sys",
+        "time",
+        "pathlib",
+        "architecture_model.manifest.generator",
+        "architecture_model.core.parser",
+        "architecture_model.integrations.llm_context",
+        "opencode_arch.mcp.tools.slice",
+        "architecture_model.core.representativeness",
+        "architecture_model.persistence.store",
+        "yaml",
+        "architecture_model.manifest.grouping",
+        "architecture_model.core.types",
+        "architecture_model.orchestration.auto_enrich"
+      ],
+      "line_count": 260,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "json",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "logging",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "os",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "shutil",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "sys",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "time",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.manifest.generator",
+          "symbols": [
+            "generate_manifest"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "load_model"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.integrations.llm_context",
+          "symbols": [
+            "format_model_context"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.mcp.tools.slice",
+          "symbols": [
+            "compute_adaptive_budget"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.representativeness",
+          "symbols": [
+            "compute_representativeness"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.persistence.store",
+          "symbols": [
+            "save_project"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "yaml",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.manifest.grouping",
+          "symbols": [
+            "create_components_from_manifest"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.types",
+          "symbols": [
+            "ArchitectureModel",
+            "Entities",
+            "ModelMeta"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.orchestration.auto_enrich",
+          "symbols": [
+            "enrich_from_manifest"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {
+        "CONTEXT_START": "'<!-- opencode-arch:start -->'",
+        "CONTEXT_END": "'<!-- opencode-arch:end -->'"
+      },
+      "module_assignments": {
+        "logger": "logging.getLogger(__name__)"
+      }
+    },
+    {
+      "file": "src/opencode_arch/cli/main.py",
+      "name": "CLI entry point for opencode",
+      "docstring": "CLI entry point for opencode-arch.",
+      "functions": [
+        {
+          "name": "main",
+          "signature": "main()",
+          "calls": [
+            "ArgumentParser",
+            "add_subparsers",
+            "add_parser",
+            "add_argument",
+            "parse_args",
+            "run_launch",
+            "OpencodeRunner",
+            "run",
+            "_print_extract_result",
+            "len",
+            "run_extract",
+            "_print_generate_result",
+            "startswith",
+            "run_generate",
+            "_print_bench_results",
+            "run_bench",
+            "show_metrics",
+            "show_report",
+            "_print_regen_result",
+            "run_regen_loop",
+            "run_confidence",
+            "print",
+            "load_model",
+            "compute_model_confidence",
+            "select_calibration_targets",
+            "Path",
+            "exists",
+            "exit",
+            "format_calibration_prompt",
+            "run_export_data",
+            "_print_docs_result",
+            "split",
+            "run_docs_generate",
+            "_print_docs_list",
+            "run_docs_list",
+            "validate_docs",
+            "_print_validation_result",
+            "generate_manifest"
+          ]
+        }
+      ],
+      "imports": [
+        "__future__",
+        "argparse",
+        "asyncio",
+        "sys",
+        "pathlib",
+        "opencode_arch.cli.docs",
+        "opencode_arch.cli.docs_validator",
+        "json",
+        "opencode_arch.cli.launch",
+        "opencode_arch.cli.extract",
+        "opencode_arch.runner.opencode",
+        "opencode_arch.cli.generate",
+        "opencode_arch.runner.opencode",
+        "opencode_arch.cli.bench",
+        "opencode_arch.runner.opencode",
+        "opencode_arch.cli.metrics",
+        "opencode_arch.cli.metrics",
+        "opencode_arch.cli.regen_loop",
+        "opencode_arch.runner.opencode",
+        "opencode_arch.cli.confidence",
+        "opencode_arch.cli.calibrate",
+        "architecture_model.core.parser",
+        "architecture_model.core.confidence",
+        "opencode_arch.cli.export_data",
+        "opencode_arch.cli.docs",
+        "opencode_arch.runner.opencode",
+        "opencode_arch.cli.docs_validator",
+        "architecture_model"
+      ],
+      "line_count": 360,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "argparse",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "asyncio",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "sys",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.docs",
+          "symbols": [
+            "DocsResult"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.docs_validator",
+          "symbols": [
+            "DocsValidationResult"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "json",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.launch",
+          "symbols": [
+            "run_launch"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.extract",
+          "symbols": [
+            "run_extract"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.runner.opencode",
+          "symbols": [
+            "OpencodeRunner"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.generate",
+          "symbols": [
+            "run_generate"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.runner.opencode",
+          "symbols": [
+            "OpencodeRunner"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.bench",
+          "symbols": [
+            "run_bench"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.runner.opencode",
+          "symbols": [
+            "OpencodeRunner"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.metrics",
+          "symbols": [
+            "show_metrics"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.metrics",
+          "symbols": [
+            "show_report"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.regen_loop",
+          "symbols": [
+            "run_regen_loop"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.runner.opencode",
+          "symbols": [
+            "OpencodeRunner"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.confidence",
+          "symbols": [
+            "run_confidence"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.calibrate",
+          "symbols": [
+            "select_calibration_targets",
+            "format_calibration_prompt"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "load_model"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.confidence",
+          "symbols": [
+            "compute_model_confidence"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.export_data",
+          "symbols": [
+            "run_export_data"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.docs",
+          "symbols": [
+            "run_docs_generate",
+            "run_docs_list"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.runner.opencode",
+          "symbols": [
+            "OpencodeRunner"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.docs_validator",
+          "symbols": [
+            "validate_docs",
+            "DocsValidationResult"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model",
+          "symbols": [
+            "load_model",
+            "generate_manifest"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/metrics.py",
+      "name": "Metrics and report commands",
+      "docstring": "Metrics and report commands - display recorded telemetry.",
+      "functions": [
+        {
+          "name": "show_metrics",
+          "signature": "show_metrics(tool: str | None, last: int, learning_curve: bool, drift: bool)",
+          "calls": [
+            "TelemetryStore",
+            "query",
+            "print",
+            "_show_learning_curve",
+            "_show_drift_flags",
+            "format_metrics_table",
+            "averages"
+          ],
+          "docstring": "Query and display metrics from the telemetry store."
+        },
+        {
+          "name": "show_report",
+          "signature": "show_report(repo: str | None, last: int)",
+          "calls": [
+            "TelemetryStore",
+            "get_report_cards",
+            "print",
+            "get_lessons",
+            "get",
+            "isinstance",
+            "loads",
+            "len",
+            "join",
+            "items"
+          ],
+          "docstring": "Display report cards from telemetry."
+        },
+        {
+          "name": "format_metrics_table",
+          "signature": "format_metrics_table(records: list[dict]) -> str",
+          "calls": [
+            "append",
+            "join",
+            "strftime",
+            "localtime",
+            "get"
+          ],
+          "docstring": "Format records as a readable table."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "json",
+        "time",
+        "opencode_arch.telemetry.store"
+      ],
+      "line_count": 186,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "json",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "time",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.telemetry.store",
+          "symbols": [
+            "TelemetryStore"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/prompts.py",
+      "name": "Prompt templates for agent invocation",
+      "docstring": "Prompt templates for agent invocation.",
+      "functions": [],
+      "imports": [],
+      "line_count": 20,
+      "status": "dormant",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [],
+      "module_constants": {
+        "EXTRACT_PROMPT": "'Extract the architecture of the repository at: {repo_path}\\n\\nFocus: {focus}\\nToken budget: {budget}\\nTarget validation score: {target_score}+\\n\\nUse the architect_scan, architect_slice, architect_validate, and architect_extract tools to complete the extraction. Output the final YAML model between ```yaml fences.\\n'",
+        "GENERATE_PROMPT": "'Generate code for the repository at: {repo_path}\\n\\nUse architect_scan and architect_slice to understand the architecture.\\nThen generate code that passes the test suite.\\nUse architect_generate to run tests and verify.\\nIterate on failures (max {max_iter} attempts).\\n'"
+      },
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/cli/regen_loop.py",
+      "name": "Regen",
+      "docstring": "Regen-loop orchestrator \u2014 iterative subsystem-decomposed code regeneration.",
+      "functions": [
+        {
+          "name": "run_subsystem_tests",
+          "signature": "run_subsystem_tests(test_files: list[Path], repo_path: Path) -> dict[str, Any]",
+          "calls": [
+            "_parse_pytest_summary",
+            "str",
+            "run",
+            "exists"
+          ],
+          "docstring": "Run pytest on specific test files and return structured results.\n\nArgs:\n    test_files: List of test file paths to run.\n    repo_path: Root path of the repository (used as cwd).\n\nReturns:\n    {\"passed\": int, \"failed\": int, \"total\": int, \"pass_rate\": float, \"output\": str}"
+        },
+        {
+          "name": "run_regen_loop",
+          "signature": "run_regen_loop(repo_path: Path, runner: RunnerBackend, max_iterations: int, target_pass_rate: float, subsystem_name: str | None, blind: bool) -> dict[str, Any]",
+          "calls": [
+            "time",
+            "resolve",
+            "test_affinity_decompose",
+            "_load_model_context",
+            "sum",
+            "len",
+            "exists",
+            "_record_outcome",
+            "extend",
+            "run_subsystem_tests",
+            "TelemetryStore",
+            "record_learning_curve",
+            "get_report_cards",
+            "generate_report_card",
+            "record_report_card",
+            "extract_lessons",
+            "detect_drift",
+            "Path",
+            "_process_subsystem",
+            "get",
+            "max",
+            "record_lesson",
+            "auto_fix_drift",
+            "values",
+            "dumps",
+            "record_drift_flag"
+          ],
+          "docstring": "Run the test-as-oracle decomposed regen loop.\n\nDecomposes the repo into subsystems by test affinity, then iteratively\nregenerates code per subsystem using the LLM, running tests after each\nattempt to measure convergence.\n\nArgs:\n    repo_path: Path to the target repository.\n    runner: RunnerBackend for LLM invocation.\n    max_iterations: Max iterations per subsystem (default 5).\n    target_pass_rate: Stop when this pass rate is achieved (default 0.5).\n    subsystem_name: If set, only process this subsystem.\n    blind: If True, agent works in temp dir without source file access.\n\nReturns:\n    Summary dict with per-subsystem results and overall metrics."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "shutil",
+        "subprocess",
+        "sys",
+        "tempfile",
+        "time",
+        "dataclasses",
+        "pathlib",
+        "typing",
+        "architecture_model.core.decomposer",
+        "architecture_model.manifest.test_analyzer",
+        "opencode_arch.cli.gap_analyzer",
+        "opencode_arch.prompts.regen",
+        "opencode_arch.runner.base",
+        "re",
+        "architecture_model.core.parser",
+        "architecture_model.core.parser",
+        "opencode_arch.telemetry.store",
+        "opencode_arch.learning.assessor",
+        "opencode_arch.telemetry.store",
+        "json",
+        "opencode_arch.learning.lessons",
+        "opencode_arch.telemetry.store",
+        "json",
+        "opencode_arch.learning.maintainer",
+        "opencode_arch.telemetry.store",
+        "opencode_arch.learning.adapter",
+        "architecture_model.core.parser",
+        "opencode_arch.context",
+        "architecture_model.core.parser",
+        "opencode_arch.telemetry.store",
+        "opencode_arch.learning.classifier"
+      ],
+      "line_count": 1028,
+      "status": "active",
+      "classes": [
+        {
+          "name": "PromptMetrics",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "shutil",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "subprocess",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "sys",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "tempfile",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "time",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.decomposer",
+          "symbols": [
+            "test_affinity_decompose"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.manifest.test_analyzer",
+          "symbols": [
+            "analyze_test_file"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.cli.gap_analyzer",
+          "symbols": [
+            "analyze_gaps"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.prompts.regen",
+          "symbols": [
+            "FEEDBACK_HEADER",
+            "REGEN_PROMPT"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.runner.base",
+          "symbols": [
+            "RunnerBackend"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "re",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "load_model"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "load_model"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.telemetry.store",
+          "symbols": [
+            "TelemetryStore"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.learning.assessor",
+          "symbols": [
+            "generate_report_card"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.telemetry.store",
+          "symbols": [
+            "TelemetryStore"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "json",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.learning.lessons",
+          "symbols": [
+            "extract_lessons"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.telemetry.store",
+          "symbols": [
+            "TelemetryStore"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "json",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.learning.maintainer",
+          "symbols": [
+            "detect_drift",
+            "auto_fix_drift"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.telemetry.store",
+          "symbols": [
+            "TelemetryStore"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.learning.adapter",
+          "symbols": [
+            "get_adaptations",
+            "apply_adaptations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "load_model"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.context",
+          "symbols": [
+            "format_model_context"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "load_model"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.telemetry.store",
+          "symbols": [
+            "TelemetryStore"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.learning.classifier",
+          "symbols": [
+            "classify_failures"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    }
+  ],
+  "interfaces": [
+    {
+      "source": "src/opencode_arch/cli/bench.py",
+      "target": "src/opencode_arch/cli/extract.py",
+      "import_path": "opencode_arch.cli.extract"
+    },
+    {
+      "source": "src/opencode_arch/cli/extract.py",
+      "target": "src/opencode_arch/cli/prompts.py",
+      "import_path": "opencode_arch.cli.prompts"
+    },
+    {
+      "source": "src/opencode_arch/cli/generate.py",
+      "target": "src/opencode_arch/cli/prompts.py",
+      "import_path": "opencode_arch.cli.prompts"
+    },
+    {
+      "source": "src/opencode_arch/cli/main.py",
+      "target": "src/opencode_arch/cli/docs.py",
+      "import_path": "opencode_arch.cli.docs"
+    },
+    {
+      "source": "src/opencode_arch/cli/main.py",
+      "target": "src/opencode_arch/cli/docs_validator.py",
+      "import_path": "opencode_arch.cli.docs_validator"
+    },
+    {
+      "source": "src/opencode_arch/cli/main.py",
+      "target": "src/opencode_arch/cli/launch.py",
+      "import_path": "opencode_arch.cli.launch"
+    },
+    {
+      "source": "src/opencode_arch/cli/main.py",
+      "target": "src/opencode_arch/cli/extract.py",
+      "import_path": "opencode_arch.cli.extract"
+    },
+    {
+      "source": "src/opencode_arch/cli/main.py",
+      "target": "src/opencode_arch/cli/generate.py",
+      "import_path": "opencode_arch.cli.generate"
+    },
+    {
+      "source": "src/opencode_arch/cli/main.py",
+      "target": "src/opencode_arch/cli/bench.py",
+      "import_path": "opencode_arch.cli.bench"
+    },
+    {
+      "source": "src/opencode_arch/cli/main.py",
+      "target": "src/opencode_arch/cli/metrics.py",
+      "import_path": "opencode_arch.cli.metrics"
+    },
+    {
+      "source": "src/opencode_arch/cli/main.py",
+      "target": "src/opencode_arch/cli/regen_loop.py",
+      "import_path": "opencode_arch.cli.regen_loop"
+    },
+    {
+      "source": "src/opencode_arch/cli/main.py",
+      "target": "src/opencode_arch/cli/confidence.py",
+      "import_path": "opencode_arch.cli.confidence"
+    },
+    {
+      "source": "src/opencode_arch/cli/main.py",
+      "target": "src/opencode_arch/cli/calibrate.py",
+      "import_path": "opencode_arch.cli.calibrate"
+    },
+    {
+      "source": "src/opencode_arch/cli/main.py",
+      "target": "src/opencode_arch/cli/export_data.py",
+      "import_path": "opencode_arch.cli.export_data"
+    },
+    {
+      "source": "src/opencode_arch/cli/regen_loop.py",
+      "target": "src/opencode_arch/cli/gap_analyzer.py",
+      "import_path": "opencode_arch.cli.gap_analyzer"
+    }
+  ]
+}

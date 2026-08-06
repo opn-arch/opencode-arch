@@ -26,7 +26,7 @@ from architecture_model.core.types import (
     Relationship,
     Status,
 )
-from architecture_model.core.slicer import slice_by_fblock, slice_for_artifact
+from architecture_model.core.slicer import slice_by_source_block, slice_for_artifact
 
 
 # ---------------------------------------------------------------------------
@@ -116,9 +116,9 @@ def format_model_context(
     return "\n".join(result_parts)
 
 
-def format_fblock_context(
+def format_source_block_context(
     model: ArchitectureModel,
-    f_block: str,
+    source_block: str,
     max_tokens: int = 2000,
     project_root: "Path | None" = None,
 ) -> str:
@@ -129,12 +129,12 @@ def format_fblock_context(
     If *project_root* is given, sub-models are auto-loaded for richer detail,
     and per-block manifests are consumed for function-level context.
     """
-    sliced = slice_by_fblock(model, f_block, project_root=project_root)
+    sliced = slice_by_source_block(model, source_block, project_root=project_root)
     base_context = format_model_context(sliced, max_tokens=max_tokens, detail_level="full")
 
     # Consume per-block manifest if available (reduces compression ratio)
     if project_root:
-        block_manifest = _load_block_manifest(project_root, f_block)
+        block_manifest = _load_block_manifest(project_root, source_block)
         if block_manifest:
             char_budget = max_tokens * 4
             remaining = char_budget - len(base_context)
@@ -294,7 +294,7 @@ def _format_capabilities(model: ArchitectureModel) -> str:
         return ""
     lines = ["\n## Capabilities (F-blocks)"]
     for cap in model.entities.capabilities:
-        lines.append(f"  {cap.id} ({cap.f_block}): {cap.name} [{cap.status.value}]")
+        lines.append(f"  {cap.id} ({cap.source_block}): {cap.name} [{cap.status.value}]")
     return "\n".join(lines)
 
 
@@ -381,7 +381,7 @@ def _format_components(model: ArchitectureModel) -> str:
     lines = [f"\n## Components ({len(model.entities.components)})"]
     for comp in model.entities.components:
         files = ", ".join(comp.files[:2]) if comp.files else ""
-        lines.append(f"  {comp.id}: {comp.name} (layer={comp.layer}, {comp.f_block}) [{files}]")
+        lines.append(f"  {comp.id}: {comp.name} (layer={comp.layer}, {comp.source_block}) [{files}]")
     return "\n".join(lines)
 
 
@@ -434,13 +434,13 @@ def _find_entity_name(model: ArchitectureModel, entity_id: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-def _load_block_manifest(project_root: "Path", f_block: str) -> dict | None:
+def _load_block_manifest(project_root: "Path", source_block: str) -> dict | None:
     """Load per-block manifest.json if it exists."""
     import json
     from pathlib import Path
 
     # Try common locations
-    for subdir in (f_block, f_block.lower(), f"block_{f_block}"):
+    for subdir in (source_block, source_block.lower(), f"block_{source_block}"):
         manifest_path = Path(project_root) / ".architecture-models" / subdir / "manifest.json"
         if manifest_path.exists():
             try:

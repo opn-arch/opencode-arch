@@ -16,26 +16,26 @@ entities:
     - id: COMP-1
       name: Scheduler
       status: ACTIVE
-      f_block: F1
+      source_block: S1
       contract: Stub
 relationships: []
 """)
-    sub_dir = tmp_path / ".architecture-models" / "F1"
+    sub_dir = tmp_path / ".architecture-models" / "S1"
     sub_dir.mkdir(parents=True)
     (sub_dir / ".architecture-model.yaml").write_text("""
 meta:
-  project: test/F1
+  project: test/S1
   schema_version: '1.3'
 entities:
   components:
     - id: COMP-1
       name: Scheduler
       status: ACTIVE
-      f_block: F1
+      source_block: S1
       contract: Rich sub-model detail
       pattern: service-layer
 relationships: []
 """)
-    result = await slice_context(str(tmp_path), focus="F1", budget=4000, detail="standard")
-    # Should contain sub-model data (project name from sub-model is "test/F1")
-    assert "test/F1" in result
+    result = await slice_context(str(tmp_path), focus="S1", budget=4000, detail="standard")
+    # Should contain sub-model data (project name from sub-model is "test/S1")
+    assert "test/S1" in result

@@ -65,7 +65,7 @@ async def slice_context(
 
     Args:
         repo_path: Absolute path to the repository root.
-        focus: Focus scope - "all", an F-block ID (e.g. "F1"), a layer name,
+        focus: Focus scope - "all", an source-block ID (e.g. "F1"), a layer name,
                or an artifact name (e.g. "icd", "requirements-analysis").
         budget: Maximum token budget (1 token ~ 4 chars).
         detail: Detail level - "minimal", "standard", or "full".
@@ -114,7 +114,7 @@ async def slice_context(
                     f"# Source: {source_size // 1024}KB compressed into {char_budget // 1024}KB context.\n"
                     f"# At >200x compression, regeneration pass rate drops to ~19%.\n"
                     f"# RECOMMENDATION: Use focused slicing (architect_slice with focus='F1', 'F2', etc.)\n"
-                    f"# to slice per-block. Available F-blocks can be found via architect_scan.\n\n"
+                    f"# to slice per-block. Available source-blocks can be found via architect_scan.\n\n"
                 )
                 result = warning + result
             elif ratio > COMPRESSION_WARN_THRESHOLD:
@@ -140,7 +140,7 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
     from architecture_model.core.parser import load_model
     from opencode_arch.context import (
         format_model_context,
-        format_fblock_context,
+        format_source_block_context,
         format_artifact_context,
     )
     from architecture_model.core.slicer import slice_by_layer
@@ -153,7 +153,7 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
     elif focus.startswith("F") and focus[1:].isdigit():
         # Complexity-proportional budget: complex blocks get more tokens
         block_budget = _compute_block_budget(model, focus, budget)
-        return format_fblock_context(model, f_block=focus, max_tokens=block_budget, project_root=project_root)
+        return format_source_block_context(model, source_block=focus, max_tokens=block_budget, project_root=project_root)
     elif focus in (
         "functional-architecture", "logical-architecture", "use-cases",
         "icd", "requirements-analysis", "operations-manual", "conops",
@@ -168,16 +168,16 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
             return format_model_context(model, max_tokens=budget, detail_level=detail)
 
 
-def _compute_block_budget(model: Any, f_block: str, total_budget: int) -> int:
+def _compute_block_budget(model: Any, source_block: str, total_budget: int) -> int:
     """Allocate budget proportionally to block complexity.
 
     Complex blocks (many signatures/files) get more tokens.
     Simple blocks get the minimum needed.
     Telemetry: <10 signatures reliably converge; complex blocks need 2-3x more context.
     """
-    components = [c for c in model.entities.components if getattr(c, 'f_block', '') == f_block]
+    components = [c for c in model.entities.components if getattr(c, 'source_block', '') == source_block]
     if not components:
-        # No f_block match — give full budget
+        # No source_block match — give full budget
         return total_budget
 
     # Complexity = total signatures + total files

@@ -1,0 +1,46 @@
+meta:
+  schema_version: '2.0'
+  project: opencode-arch/Telemetry
+  system: Telemetry
+  generated_at: '2026-07-08'
+  manifest_path: manifest.json
+  parent_model: ../../.architecture-model.yaml
+  refines_component: COMP-TELEMETRY
+entities:
+  capabilities:
+  - id: CAP-TELEMETRY
+    name: Telemetry & Metrics
+    status: ACTIVE
+    source_block: F7
+    requirements:
+    - Record tool invocations
+    - Track regen outcomes
+    - Store learning curve data
+  components:
+  - id: COMP-TELEMETRY
+    name: Telemetry Store
+    status: ACTIVE
+    layer: LAYER-TELEMETRY
+    source_block: F7
+    technology: SQLite
+    files:
+    - src/opencode_arch/telemetry/store.py
+    - src/opencode_arch/telemetry/recorder.py
+    responsibilities:
+    - Persist tool invocation metrics
+    - Store regen outcomes and learning data
+    - Provide query interface for metrics display
+    kind: data-store
+relationships:
+- type: depends-on
+  from: COMP-CLI
+  to: COMP-TELEMETRY
+  description: CLI records metrics after operations
+- type: depends-on
+  from: COMP-LEARNING
+  to: COMP-TELEMETRY
+  description: Learning stores lessons and patterns
+- type: realizes
+  from: COMP-TELEMETRY
+  to: CAP-TELEMETRY
+  description: Telemetry store realizes metrics tracking

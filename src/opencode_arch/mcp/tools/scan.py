@@ -4,7 +4,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from opencode_arch.mcp.quality import with_quality
 
+
+@with_quality
 async def scan_repository(repo_path: str) -> dict[str, Any]:
     """Scan a repository and generate its reality manifest.
 

@@ -8,7 +8,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from opencode_arch.mcp.quality import with_quality
 
+
+@with_quality
 async def ingest_source_graph(
     repo_path: str,
     source_graph_json: str,
@@ -24,7 +27,7 @@ async def ingest_source_graph(
     """
     try:
         from architecture_model.manifest.protocol import SourceGraph
-        from architecture_model.manifest.grouping import group_source_graph, auto_fblocks
+        from architecture_model.manifest.grouping import group_source_graph, auto_source_blocks
         from architecture_model.core.types import (
             ArchitectureModel, Component, Entities, ModelMeta,
         )
@@ -93,7 +96,7 @@ async def ingest_source_graph(
         enrich_from_source_graph(model, graph)
 
         # Generate F-block config
-        fblock_config = auto_fblocks(groups, threshold=3)
+        source_block_config = auto_source_blocks(groups, threshold=3)
 
         # Save the model
         model_path = project_root / ".architecture-model-extracted.yaml"
@@ -110,7 +113,7 @@ async def ingest_source_graph(
             "graph_path": str(graph_path),
             "components": len(components),
             "interfaces": n_ifaces,
-            "fblocks": len(fblock_config),
+            "source_blocks": len(source_block_config),
             "units": len(graph.units),
             "edges": len(graph.edges),
             "language": graph.language,

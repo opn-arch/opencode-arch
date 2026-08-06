@@ -45,12 +45,12 @@ async def test_full_extraction_flow():
             "      name: Views\n"
             "      status: ACTIVE\n"
             "  capabilities:\n"
-            "    - id: CAP-F1\n"
+            "    - id: CAP-S1\n"
             "      name: UserManagement\n"
             "      status: ACTIVE\n"
             "relationships:\n"
             "  - from: COMP-1\n"
-            "    to: CAP-F1\n"
+            "    to: CAP-S1\n"
             "    type: realizes\n"
         )
 

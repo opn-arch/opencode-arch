@@ -167,7 +167,7 @@ def _format_capabilities(model: ArchitectureModel) -> str:
 
     lines = []
     for cap in capabilities:
-        line = f"- {cap.id}: {cap.name} [priority={cap.priority.value}] f_block={cap.f_block}"
+        line = f"- {cap.id}: {cap.name} [priority={cap.priority.value}] source_block={cap.source_block}"
         lines.append(line)
     return "\n".join(lines)
 
@@ -307,7 +307,7 @@ def format_capability_detail_context(
     lines.append(f"ID: {cap.id}")
     lines.append(f"Name: {cap.name}")
     lines.append(f"Status: {cap.status.value}")
-    lines.append(f"F-Block: {cap.f_block}")
+    lines.append(f"F-Block: {cap.source_block}")
     lines.append(f"Priority: {cap.priority.value}")
     if cap.requirements:
         lines.append(f"Requirements: {'; '.join(cap.requirements)}")

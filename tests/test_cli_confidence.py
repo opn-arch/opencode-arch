@@ -16,16 +16,16 @@ entities:
       contract: Does X
       pattern: adapter
       files: [a.py]
-      f_block: F1
+      source_block: S1
     - id: C2
       name: EmptyComp
       status: ACTIVE
-      f_block: F1
+      source_block: S1
 relationships: []
 """
     (tmp_path / ".architecture-model.yaml").write_text(model_yaml)
     output = run_confidence(str(tmp_path))
-    assert "F1" in output
+    assert "S1" in output
     assert "FullComp" in output or "C1" in output
 
 

@@ -267,12 +267,12 @@ class TestShouldDecompose:
         )
         assert should_decompose(model) is True
 
-    def test_should_decompose_many_fblocks(self):
-        """6 components with 6 different f_block values → True."""
+    def test_should_decompose_many_source_blocks(self):
+        """6 components with 6 different source_block values → True."""
         components = []
         for i in range(6):
             c = _make_component(f"C{i}")
-            c.f_block = f"F{i}"
+            c.source_block = f"F{i}"
             components.append(c)
         model = _make_model(components=components)
         assert should_decompose(model) is True
@@ -292,13 +292,13 @@ class TestSubsystemInfo:
     def test_subsystem_info_creation(self):
         """Can create SubsystemInfo with expected fields."""
         info = SubsystemInfo(
-            id="F1",
+            id="S1",
             name="Core Engine",
             components=["C1", "C2", "C3"],
             file_count=12,
             test_count=5,
         )
-        assert info.id == "F1"
+        assert info.id == "S1"
         assert info.name == "Core Engine"
         assert info.components == ["C1", "C2", "C3"]
         assert info.file_count == 12
@@ -320,7 +320,7 @@ class TestSelectSubsystemArtifacts:
             components=[_make_component("C1"), _make_component("C2")]
         )
         subsystem = SubsystemInfo(
-            id="F1", name="Core", components=["C1", "C2"]
+            id="S1", name="Core", components=["C1", "C2"]
         )
         result = select_subsystem_artifacts(subsystem, model)
         selected_ids = [a.id for a in result]
@@ -335,7 +335,7 @@ class TestSelectSubsystemArtifacts:
             interfaces=[iface],
         )
         subsystem = SubsystemInfo(
-            id="F1", name="Core", components=["C1"]
+            id="S1", name="Core", components=["C1"]
         )
         result = select_subsystem_artifacts(subsystem, model)
         selected_ids = [a.id for a in result]
@@ -357,7 +357,7 @@ class TestSelectSubsystemArtifacts:
             "metrics": {"loc": 1000},
         }
         subsystem = SubsystemInfo(
-            id="F1", name="Core", components=["C1"], test_count=5
+            id="S1", name="Core", components=["C1"], test_count=5
         )
         result = select_subsystem_artifacts(subsystem, model, manifest)
         selected_ids = [a.id for a in result]
@@ -372,7 +372,7 @@ class TestSelectSubsystemArtifacts:
             interfaces=[_make_interface("I1")],
         )
         subsystem = SubsystemInfo(
-            id="F1", name="Empty", components=[]
+            id="S1", name="Empty", components=[]
         )
         result = select_subsystem_artifacts(subsystem, model)
         assert result == []

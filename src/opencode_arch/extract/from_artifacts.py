@@ -207,8 +207,8 @@ def _extract_capabilities(text: str) -> list[Capability]:
 
     # Parse from PlantUML class diagrams
     for match in _FBLOCK_RE.finditer(text):
-        fblock_id = match.group(1)  # e.g., "F1"
-        fblock_name = match.group(2).strip()  # e.g., "Ingest Source Data"
+        source_block_id = match.group(1)  # e.g., "S1"
+        source_block_name = match.group(2).strip()  # e.g., "Ingest Source Data"
 
         # Find status for this block (search region after match)
         region = text[match.start() : match.start() + 500]
@@ -220,14 +220,14 @@ def _extract_capabilities(text: str) -> list[Capability]:
             except ValueError:
                 pass
 
-        cap_id = f"CAP-{fblock_id}"
+        cap_id = f"CAP-{source_block_id}"
         capabilities.append(
             Capability(
                 id=cap_id,
-                name=fblock_name,
+                name=source_block_name,
                 status=status,
-                f_block=fblock_id,
-                description=f"Functional block {fblock_id}: {fblock_name}",
+                source_block=source_block_id,
+                description=f"Functional block {source_block_id}: {source_block_name}",
                 priority=Priority.HIGH,
             )
         )
@@ -274,7 +274,7 @@ def _extract_behaviors(text: str) -> list[Behavior]:
         reqs = row.get(
             "requirement_s", row.get("requirement_s_", row.get("requirements", ""))
         ).strip()
-        f_block = row.get("f_block", row.get("f-block", "")).strip()
+        source_block = row.get("source_block", row.get("f-block", "")).strip()
 
         if not uc_id:
             continue
@@ -294,13 +294,13 @@ def _extract_behaviors(text: str) -> list[Behavior]:
                 id=uc_id,
                 name=title,
                 status=status,
-                description=f"{title} (F-block: {f_block})",
+                description=f"{title} (F-block: {source_block})",
                 trigger=f"Actor: {actor_str}",
                 actor=actor_str,
                 frequency=frequency,
                 priority=priority,
                 postconditions=postconditions,
-                tags=[f_block] if f_block else [],
+                tags=[source_block] if source_block else [],
             )
         )
 
@@ -338,9 +338,9 @@ def _extract_interfaces(text: str) -> list[Interface]:
     for row in rows:
         ifc_id = row.get("interface_id", "").strip()
         type_str = row.get("type", "internal").strip().lower()
-        provider = row.get("provider_f_block", row.get("provider", "")).strip()
+        provider = row.get("provider_source_block", row.get("provider", "")).strip()
         consumer = row.get(
-            "consumer_f_block_s", row.get("consumer_f_block_s_", row.get("consumer", ""))
+            "consumer_source_block_s", row.get("consumer_source_block_s_", row.get("consumer", ""))
         ).strip()
         protocol = row.get("protocol", "").strip()
         status_str = row.get("status", "ACTIVE").strip()
@@ -527,8 +527,8 @@ def _extract_components(text: str) -> list[Component]:
             continue
 
         # Extract F-block from function name
-        fblock_match = re.match(r"(F\d+)", function)
-        f_block = fblock_match.group(1) if fblock_match else ""
+        source_block_match = re.match(r"(F\d+)", function)
+        source_block = source_block_match.group(1) if source_block_match else ""
 
         # Parse key components (backtick-delimited)
         comp_files = re.findall(r"`([^`]+)`", key_comp_str)
@@ -544,7 +544,7 @@ def _extract_components(text: str) -> list[Component]:
                     name=comp_file,
                     status=Status.ACTIVE,
                     layer=layer_str.split(",")[0].strip() if layer_str else "",
-                    f_block=f_block,
+                    source_block=source_block,
                     files=[comp_file],
                 )
             )
@@ -657,17 +657,17 @@ def _extract_capability_relationships(
     relationships: list[Relationship] = []
 
     # Map F-block tag to capability ID
-    fblock_to_cap = {cap.f_block: cap.id for cap in capabilities}
+    source_block_to_cap = {cap.source_block: cap.id for cap in capabilities}
 
     for beh in behaviors:
-        # Behaviors have f_block in tags
+        # Behaviors have source_block in tags
         for tag in beh.tags:
-            if tag in fblock_to_cap:
+            if tag in source_block_to_cap:
                 relationships.append(
                     Relationship(
                         type=RelationType.REALIZES,
                         from_id=beh.id,
-                        to_id=fblock_to_cap[tag],
+                        to_id=source_block_to_cap[tag],
                         description=f"{beh.name} realizes {tag}",
                     )
                 )
@@ -681,16 +681,16 @@ def _extract_component_capability_relationships(
 ) -> list[Relationship]:
     """Link components to capabilities (F-blocks) via realizes relationship."""
     relationships: list[Relationship] = []
-    fblock_to_cap = {cap.f_block: cap.id for cap in capabilities}
+    source_block_to_cap = {cap.source_block: cap.id for cap in capabilities}
 
     for comp in components:
-        if comp.f_block and comp.f_block in fblock_to_cap:
+        if comp.source_block and comp.source_block in source_block_to_cap:
             relationships.append(
                 Relationship(
                     type=RelationType.REALIZES,
                     from_id=comp.id,
-                    to_id=fblock_to_cap[comp.f_block],
-                    description=f"{comp.name} realizes {comp.f_block}",
+                    to_id=source_block_to_cap[comp.source_block],
+                    description=f"{comp.name} realizes {comp.source_block}",
                 )
             )
 
@@ -710,7 +710,7 @@ def _extract_interface_relationships(
 
     for iface in interfaces:
         if iface.provider:
-            provider_id = _resolve_fblock_ref(iface.provider)
+            provider_id = _resolve_source_block_ref(iface.provider)
             relationships.append(
                 Relationship(
                     type=RelationType.EXPOSES,
@@ -722,7 +722,7 @@ def _extract_interface_relationships(
         if iface.consumer:
             # Consumer may be comma-separated (multiple consumers)
             first_consumer = iface.consumer.split(",")[0].strip()
-            consumer_id = _resolve_fblock_ref(first_consumer)
+            consumer_id = _resolve_source_block_ref(first_consumer)
             relationships.append(
                 Relationship(
                     type=RelationType.CONSUMES,
@@ -768,7 +768,7 @@ def _slugify(text: str) -> str:
     return s
 
 
-def _resolve_fblock_ref(text: str) -> str:
+def _resolve_source_block_ref(text: str) -> str:
     """
     Resolve a text reference to an F-block into a CAP-Fx ID.
 
