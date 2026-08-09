@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-08-03T01:26:17",
+  "generated_at": "2026-08-06T21:26:18",
   "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
   "metrics": {
-    "total_python_files": 124
+    "total_python_files": 152
   },
   "functional_blocks": {
-    "F1": {
+    "S1": {
       "name": "Artifacts",
       "status": "active",
       "description_source": "Artifact selection and registry for model-driven SE document generation.",
       "sub_functions": [
         {
-          "id": "F1.1",
+          "id": "S1.1",
           "name": "Artifact selection and registry for model",
           "file": "src/opencode_arch/artifacts/__init__.py",
           "functions": [],
@@ -21,7 +21,7 @@
           "line_count": 48
         },
         {
-          "id": "F1.2",
+          "id": "S1.2",
           "name": "Context assembler for artifact generation",
           "file": "src/opencode_arch/artifacts/context.py",
           "functions": [
@@ -43,7 +43,7 @@
           "line_count": 451
         },
         {
-          "id": "F1.3",
+          "id": "S1.3",
           "name": "PlantUML diagram generation from architecture model data",
           "file": "src/opencode_arch/artifacts/diagrams.py",
           "functions": [
@@ -70,7 +70,7 @@
           "line_count": 451
         },
         {
-          "id": "F1.4",
+          "id": "S1.4",
           "name": "Model",
           "file": "src/opencode_arch/artifacts/selector.py",
           "functions": [
@@ -97,7 +97,7 @@
           "line_count": 331
         },
         {
-          "id": "F1.5",
+          "id": "S1.5",
           "name": "Artifact template definitions",
           "file": "src/opencode_arch/artifacts/templates.py",
           "functions": [
@@ -115,13 +115,13 @@
       ],
       "sub_blocks": []
     },
-    "F2": {
+    "S2": {
       "name": "Cli",
       "status": "active",
       "description_source": "CLI for opencode-arch.",
       "sub_functions": [
         {
-          "id": "F2.1",
+          "id": "S2.1",
           "name": "CLI for opencode",
           "file": "src/opencode_arch/cli/__init__.py",
           "functions": [],
@@ -131,7 +131,7 @@
           "line_count": 1
         },
         {
-          "id": "F2.2",
+          "id": "S2.2",
           "name": "Bench command",
           "file": "src/opencode_arch/cli/bench.py",
           "functions": [
@@ -149,7 +149,7 @@
           "line_count": 25
         },
         {
-          "id": "F2.3",
+          "id": "S2.3",
           "name": "Calibration command",
           "file": "src/opencode_arch/cli/calibrate.py",
           "functions": [
@@ -176,7 +176,7 @@
           "line_count": 208
         },
         {
-          "id": "F2.4",
+          "id": "S2.4",
           "name": "CLI confidence visualization command",
           "file": "src/opencode_arch/cli/confidence.py",
           "functions": [
@@ -192,7 +192,7 @@
           "line_count": 66
         },
         {
-          "id": "F2.5",
+          "id": "S2.5",
           "name": "SE Document generation orchestrator",
           "file": "src/opencode_arch/cli/docs.py",
           "functions": [
@@ -214,7 +214,7 @@
           "line_count": 333
         },
         {
-          "id": "F2.6",
+          "id": "S2.6",
           "name": "Validate generated SE documentation against model and manifest",
           "file": "src/opencode_arch/cli/docs_validator.py",
           "functions": [
@@ -232,7 +232,7 @@
           "line_count": 295
         },
         {
-          "id": "F2.7",
+          "id": "S2.7",
           "name": "Export training corpus from",
           "file": "src/opencode_arch/cli/export_data.py",
           "functions": [
@@ -246,7 +246,7 @@
           "line_count": 133
         },
         {
-          "id": "F2.8",
+          "id": "S2.8",
           "name": "Extract command",
           "file": "src/opencode_arch/cli/extract.py",
           "functions": [
@@ -264,7 +264,7 @@
           "line_count": 93
         },
         {
-          "id": "F2.9",
+          "id": "S2.9",
           "name": "Gap Analyzer",
           "file": "src/opencode_arch/cli/gap_analyzer.py",
           "functions": [
@@ -281,7 +281,7 @@
           "line_count": 107
         },
         {
-          "id": "F2.10",
+          "id": "S2.10",
           "name": "Generate command",
           "file": "src/opencode_arch/cli/generate.py",
           "functions": [
@@ -299,7 +299,7 @@
           "line_count": 68
         },
         {
-          "id": "F2.11",
+          "id": "S2.11",
           "name": "Interactive launch \u2014 architecture",
           "file": "src/opencode_arch/cli/launch.py",
           "functions": [
@@ -316,7 +316,7 @@
           "line_count": 260
         },
         {
-          "id": "F2.12",
+          "id": "S2.12",
           "name": "CLI entry point for opencode",
           "file": "src/opencode_arch/cli/main.py",
           "functions": [
@@ -325,10 +325,10 @@
           "inputs": [],
           "outputs": [],
           "status": "active",
-          "line_count": 360
+          "line_count": 389
         },
         {
-          "id": "F2.13",
+          "id": "S2.13",
           "name": "Metrics and report commands",
           "file": "src/opencode_arch/cli/metrics.py",
           "functions": [
@@ -351,7 +351,7 @@
           "line_count": 186
         },
         {
-          "id": "F2.14",
+          "id": "S2.14",
           "name": "Prompt templates for agent invocation",
           "file": "src/opencode_arch/cli/prompts.py",
           "functions": [],
@@ -361,7 +361,7 @@
           "line_count": 20
         },
         {
-          "id": "F2.15",
+          "id": "S2.15",
           "name": "Regen",
           "file": "src/opencode_arch/cli/regen_loop.py",
           "functions": [
@@ -384,13 +384,13 @@
       ],
       "sub_blocks": []
     },
-    "F3": {
+    "S3": {
       "name": "Context",
       "status": "active",
       "description_source": "Context compression and token brokering.",
       "sub_functions": [
         {
-          "id": "F3.1",
+          "id": "S3.1",
           "name": "Context compression and token brokering",
           "file": "src/opencode_arch/context/__init__.py",
           "functions": [],
@@ -400,12 +400,12 @@
           "line_count": 29
         },
         {
-          "id": "F3.2",
+          "id": "S3.2",
           "name": "Formatter",
           "file": "src/opencode_arch/context/formatter.py",
           "functions": [
             "format_model_context(model: ArchitectureModel, max_tokens: int, detail_level: str) -> str",
-            "format_fblock_context(model: ArchitectureModel, f_block: str, max_tokens: int, project_root: 'Path | None') -> str",
+            "format_source_block_context(model: ArchitectureModel, source_block: str, max_tokens: int, project_root: 'Path | None') -> str",
             "format_artifact_context(model: ArchitectureModel, artifact_name: str, max_tokens: int) -> str",
             "query_model(model: ArchitectureModel, question: str) -> str",
             "impact_analysis(model: ArchitectureModel, entity_id: str, depth: int) -> str"
@@ -415,7 +415,7 @@
             "max_tokens: int",
             "detail_level: str",
             "model: ArchitectureModel",
-            "f_block: str",
+            "source_block: str",
             "max_tokens: int"
           ],
           "outputs": [
@@ -425,13 +425,13 @@
           "line_count": 492
         },
         {
-          "id": "F3.3",
+          "id": "S3.3",
           "name": "Pipeline Bridge",
           "file": "src/opencode_arch/context/pipeline_bridge.py",
           "functions": [
             "get_model(project_root: str | Path, force_refresh: bool) -> ArchitectureModel",
             "get_artifact_context(project_root: str | Path, artifact_name: str, max_tokens: int) -> str",
-            "get_fblock_context(project_root: str | Path, f_block: str, max_tokens: int) -> str",
+            "get_source_block_context(project_root: str | Path, source_block: str, max_tokens: int) -> str",
             "get_model_summary(project_root: str | Path) -> dict[str, Any]",
             "enrich_manifest_slice(manifest_slice: str, project_root: str | Path, artifact_name: str, max_model_tokens: int) -> str"
           ],
@@ -454,13 +454,13 @@
       ],
       "sub_blocks": []
     },
-    "F4": {
+    "S4": {
       "name": "Extract",
       "status": "active",
       "description_source": "Extract architecture models from source code or Tier 1 artifacts.",
       "sub_functions": [
         {
-          "id": "F4.1",
+          "id": "S4.1",
           "name": "Extract architecture models from source code or Tier 1 artifacts",
           "file": "src/opencode_arch/extract/__init__.py",
           "functions": [],
@@ -470,7 +470,7 @@
           "line_count": 8
         },
         {
-          "id": "F4.2",
+          "id": "S4.2",
           "name": "Constraint Detector",
           "file": "src/opencode_arch/extract/constraint_detector.py",
           "functions": [
@@ -486,7 +486,7 @@
           "line_count": 398
         },
         {
-          "id": "F4.3",
+          "id": "S4.3",
           "name": "Extract Architecture Model from Tier 1 markdown artifacts",
           "file": "src/opencode_arch/extract/from_artifacts.py",
           "functions": [
@@ -505,7 +505,7 @@
           "line_count": 837
         },
         {
-          "id": "F4.4",
+          "id": "S4.4",
           "name": "Extract an ArchitectureModel directly from source code analysis",
           "file": "src/opencode_arch/extract/from_code.py",
           "functions": [
@@ -523,7 +523,7 @@
           "line_count": 646
         },
         {
-          "id": "F4.5",
+          "id": "S4.5",
           "name": "Route Detector",
           "file": "src/opencode_arch/extract/route_detector.py",
           "functions": [
@@ -540,7 +540,7 @@
           "line_count": 400
         },
         {
-          "id": "F4.6",
+          "id": "S4.6",
           "name": "Markdown table parser \u2014 extracts structured data from pipe",
           "file": "src/opencode_arch/extract/table_parser.py",
           "functions": [
@@ -569,13 +569,13 @@
       ],
       "sub_blocks": []
     },
-    "F5": {
+    "S5": {
       "name": "Learning",
       "status": "active",
       "description_source": "Learning loop: pattern classification, adaptation, assessment, and maintenance.",
       "sub_functions": [
         {
-          "id": "F5.1",
+          "id": "S5.1",
           "name": "Learning loop: pattern classification, adaptation, assessment, and maintenance",
           "file": "src/opencode_arch/learning/__init__.py",
           "functions": [],
@@ -585,7 +585,7 @@
           "line_count": 19
         },
         {
-          "id": "F5.2",
+          "id": "S5.2",
           "name": "Adaptive prompt optimization based on classified failure patterns",
           "file": "src/opencode_arch/learning/adapter.py",
           "functions": [
@@ -608,7 +608,7 @@
           "line_count": 157
         },
         {
-          "id": "F5.3",
+          "id": "S5.3",
           "name": "Report card generation and grading for regen loop runs",
           "file": "src/opencode_arch/learning/assessor.py",
           "functions": [
@@ -626,7 +626,7 @@
           "line_count": 170
         },
         {
-          "id": "F5.4",
+          "id": "S5.4",
           "name": "Dual",
           "file": "src/opencode_arch/learning/classifier.py",
           "functions": [
@@ -644,7 +644,7 @@
           "line_count": 144
         },
         {
-          "id": "F5.5",
+          "id": "S5.5",
           "name": "Lesson extraction and storage",
           "file": "src/opencode_arch/learning/lessons.py",
           "functions": [
@@ -662,7 +662,7 @@
           "line_count": 139
         },
         {
-          "id": "F5.6",
+          "id": "S5.6",
           "name": "Documentation drift detection and auto",
           "file": "src/opencode_arch/learning/maintainer.py",
           "functions": [
@@ -681,7 +681,7 @@
           "line_count": 281
         },
         {
-          "id": "F5.7",
+          "id": "S5.7",
           "name": "Failure pattern definitions and taxonomy",
           "file": "src/opencode_arch/learning/patterns.py",
           "functions": [],
@@ -693,13 +693,182 @@
       ],
       "sub_blocks": []
     },
-    "F6": {
+    "S6": {
+      "name": "Llm",
+      "status": "active",
+      "description_source": "auto-discovered from src/opencode_arch/llm/",
+      "sub_functions": [
+        {
+          "id": "S6.1",
+          "name": " Init  ",
+          "file": "src/opencode_arch/llm/__init__.py",
+          "functions": [],
+          "inputs": [],
+          "outputs": [],
+          "status": "dormant",
+          "line_count": 0
+        },
+        {
+          "id": "S6.2",
+          "name": "Cache",
+          "file": "src/opencode_arch/llm/cache.py",
+          "functions": [
+            "hash_content(content: str) -> str",
+            "cached_llm_call(runner, prompt: str, content_hash: str, prompt_template_hash: str, repo_path: str, cache: LLMCache | None) -> CachedResult"
+          ],
+          "inputs": [
+            "content: str",
+            "runner",
+            "prompt: str",
+            "content_hash: str"
+          ],
+          "outputs": [
+            "CachedResult",
+            "str"
+          ],
+          "status": "active",
+          "line_count": 88
+        },
+        {
+          "id": "S6.3",
+          "name": " Init  ",
+          "file": "src/opencode_arch/llm/prompts/__init__.py",
+          "functions": [],
+          "inputs": [],
+          "outputs": [],
+          "status": "dormant",
+          "line_count": 0
+        },
+        {
+          "id": "S6.4",
+          "name": "Prompt templates for LLM functional",
+          "file": "src/opencode_arch/llm/prompts/audit.py",
+          "functions": [],
+          "inputs": [],
+          "outputs": [],
+          "status": "active",
+          "line_count": 66
+        },
+        {
+          "id": "S6.5",
+          "name": "Prompt templates for function",
+          "file": "src/opencode_arch/llm/prompts/matching.py",
+          "functions": [],
+          "inputs": [],
+          "outputs": [],
+          "status": "dormant",
+          "line_count": 21
+        },
+        {
+          "id": "S6.6",
+          "name": "Prompt templates for requirement extraction",
+          "file": "src/opencode_arch/llm/prompts/requirements.py",
+          "functions": [],
+          "inputs": [],
+          "outputs": [],
+          "status": "dormant",
+          "line_count": 43
+        }
+      ],
+      "sub_blocks": [
+        {
+          "id": "S6.A",
+          "name": "Prompts",
+          "description": "",
+          "status": "active",
+          "sub_functions": [
+            {
+              "id": "S6.3",
+              "name": " Init  ",
+              "file": "src/opencode_arch/llm/prompts/__init__.py",
+              "functions": [],
+              "inputs": [],
+              "outputs": [],
+              "status": "dormant",
+              "line_count": 0
+            },
+            {
+              "id": "S6.4",
+              "name": "Prompt templates for LLM functional",
+              "file": "src/opencode_arch/llm/prompts/audit.py",
+              "functions": [],
+              "inputs": [],
+              "outputs": [],
+              "status": "active",
+              "line_count": 66
+            },
+            {
+              "id": "S6.5",
+              "name": "Prompt templates for function",
+              "file": "src/opencode_arch/llm/prompts/matching.py",
+              "functions": [],
+              "inputs": [],
+              "outputs": [],
+              "status": "dormant",
+              "line_count": 21
+            },
+            {
+              "id": "S6.6",
+              "name": "Prompt templates for requirement extraction",
+              "file": "src/opencode_arch/llm/prompts/requirements.py",
+              "functions": [],
+              "inputs": [],
+              "outputs": [],
+              "status": "dormant",
+              "line_count": 43
+            }
+          ],
+          "sub_blocks": []
+        },
+        {
+          "id": "S6.misc",
+          "name": "Ungrouped",
+          "description": "",
+          "status": "active",
+          "sub_functions": [
+            {
+              "id": "S6.1",
+              "name": " Init  ",
+              "file": "src/opencode_arch/llm/__init__.py",
+              "functions": [],
+              "inputs": [],
+              "outputs": [],
+              "status": "dormant",
+              "line_count": 0
+            },
+            {
+              "id": "S6.2",
+              "name": "Cache",
+              "file": "src/opencode_arch/llm/cache.py",
+              "functions": [
+                "hash_content(content: str) -> str",
+                "cached_llm_call(runner, prompt: str, content_hash: str, prompt_template_hash: str, repo_path: str, cache: LLMCache | None) -> CachedResult"
+              ],
+              "inputs": [
+                "content: str",
+                "runner",
+                "prompt: str",
+                "content_hash: str"
+              ],
+              "outputs": [
+                "CachedResult",
+                "str"
+              ],
+              "status": "active",
+              "line_count": 88
+            }
+          ],
+          "sub_blocks": []
+        }
+      ]
+    },
+    "S7": {
       "name": "Mcp",
       "status": "active",
       "description_source": "MCP server for architecture tools.",
       "sub_functions": [
         {
-          "id": "F6.1",
+          "id": "S7.1",
           "name": "MCP server for architecture tools",
           "file": "src/opencode_arch/mcp/__init__.py",
           "functions": [],
@@ -709,7 +878,7 @@
           "line_count": 1
         },
         {
-          "id": "F6.2",
+          "id": "S7.2",
           "name": "Allow running as: python",
           "file": "src/opencode_arch/mcp/__main__.py",
           "functions": [],
@@ -719,7 +888,7 @@
           "line_count": 8
         },
         {
-          "id": "F6.3",
+          "id": "S7.3",
           "name": "Quality metadata module for MCP tools",
           "file": "src/opencode_arch/mcp/quality.py",
           "functions": [
@@ -740,20 +909,20 @@
             "float"
           ],
           "status": "active",
-          "line_count": 121
+          "line_count": 140
         },
         {
-          "id": "F6.4",
+          "id": "S7.4",
           "name": "FastMCP server entry point for opencode",
           "file": "src/opencode_arch/mcp/server.py",
           "functions": [],
           "inputs": [],
           "outputs": [],
           "status": "active",
-          "line_count": 254
+          "line_count": 348
         },
         {
-          "id": "F6.5",
+          "id": "S7.5",
           "name": "MCP tool implementations",
           "file": "src/opencode_arch/mcp/tools/__init__.py",
           "functions": [],
@@ -763,7 +932,24 @@
           "line_count": 1
         },
         {
-          "id": "F6.6",
+          "id": "S7.6",
+          "name": "architect_author MCP tool \u2014 forward",
+          "file": "src/opencode_arch/mcp/tools/author.py",
+          "functions": [
+            "author_architecture(repo_path: str, requirements_text: str) -> dict[str, Any]"
+          ],
+          "inputs": [
+            "repo_path: str",
+            "requirements_text: str"
+          ],
+          "outputs": [
+            "dict[str, Any]"
+          ],
+          "status": "dormant",
+          "line_count": 44
+        },
+        {
+          "id": "S7.7",
           "name": "architect_check MCP tool \u2014 verify model representativeness against code reality",
           "file": "src/opencode_arch/mcp/tools/check.py",
           "functions": [
@@ -780,7 +966,7 @@
           "line_count": 162
         },
         {
-          "id": "F6.7",
+          "id": "S7.8",
           "name": "architect_correct MCP tool \u2014 store structured architecture corrections",
           "file": "src/opencode_arch/mcp/tools/correct.py",
           "functions": [
@@ -798,7 +984,7 @@
           "line_count": 74
         },
         {
-          "id": "F6.8",
+          "id": "S7.9",
           "name": "architect_decompose MCP tool \u2014 decompose model into sub",
           "file": "src/opencode_arch/mcp/tools/decompose.py",
           "functions": [
@@ -814,7 +1000,7 @@
           "line_count": 100
         },
         {
-          "id": "F6.9",
+          "id": "S7.10",
           "name": "architect_docs MCP tool \u2014 generate SE documentation from architecture model",
           "file": "src/opencode_arch/mcp/tools/docs.py",
           "functions": [
@@ -828,10 +1014,28 @@
             "dict[str, Any]"
           ],
           "status": "active",
-          "line_count": 183
+          "line_count": 213
         },
         {
-          "id": "F6.10",
+          "id": "S7.11",
+          "name": "architect_export MCP tool \u2014 export flat files for mobile AI consumption",
+          "file": "src/opencode_arch/mcp/tools/export.py",
+          "functions": [
+            "export_repository(repo_path: str, output_dir: str, output_format: str, prefix: str) -> dict[str, Any]"
+          ],
+          "inputs": [
+            "repo_path: str",
+            "output_dir: str",
+            "output_format: str"
+          ],
+          "outputs": [
+            "dict[str, Any]"
+          ],
+          "status": "active",
+          "line_count": 73
+        },
+        {
+          "id": "S7.12",
           "name": "architect_extract MCP tool \u2014 validate and store an architecture extraction",
           "file": "src/opencode_arch/mcp/tools/extract.py",
           "functions": [
@@ -846,10 +1050,10 @@
             "dict[str, Any]"
           ],
           "status": "active",
-          "line_count": 384
+          "line_count": 469
         },
         {
-          "id": "F6.11",
+          "id": "S7.13",
           "name": "Record user feedback for model improvement and training",
           "file": "src/opencode_arch/mcp/tools/feedback.py",
           "functions": [
@@ -867,7 +1071,24 @@
           "line_count": 65
         },
         {
-          "id": "F6.12",
+          "id": "S7.14",
+          "name": "architect_gate MCP tool \u2014 check development gate readiness",
+          "file": "src/opencode_arch/mcp/tools/gate.py",
+          "functions": [
+            "check_gate(repo_path: str, model_yaml: str) -> dict[str, Any]"
+          ],
+          "inputs": [
+            "repo_path: str",
+            "model_yaml: str"
+          ],
+          "outputs": [
+            "dict[str, Any]"
+          ],
+          "status": "active",
+          "line_count": 62
+        },
+        {
+          "id": "S7.15",
           "name": "architect_generate MCP tool \u2014 run tests on generated code",
           "file": "src/opencode_arch/mcp/tools/generate.py",
           "functions": [
@@ -884,7 +1105,7 @@
           "line_count": 107
         },
         {
-          "id": "F6.13",
+          "id": "S7.16",
           "name": "architect_group MCP tool \u2014 group repository modules into logical components",
           "file": "src/opencode_arch/mcp/tools/group.py",
           "functions": [
@@ -901,7 +1122,7 @@
           "line_count": 65
         },
         {
-          "id": "F6.14",
+          "id": "S7.17",
           "name": "architect_ingest tool \u2014 accept a SourceGraph JSON for any language",
           "file": "src/opencode_arch/mcp/tools/ingest.py",
           "functions": [
@@ -918,7 +1139,25 @@
           "line_count": 129
         },
         {
-          "id": "F6.15",
+          "id": "S7.18",
+          "name": "architect_llm_audit MCP tool \u2014 two",
+          "file": "src/opencode_arch/mcp/tools/llm_audit.py",
+          "functions": [
+            "run_llm_audit(repo_path: str, model_yaml: str, _runner, _cache: LLMCache | None) -> dict[str, Any]"
+          ],
+          "inputs": [
+            "repo_path: str",
+            "model_yaml: str",
+            "_runner"
+          ],
+          "outputs": [
+            "dict[str, Any]"
+          ],
+          "status": "active",
+          "line_count": 189
+        },
+        {
+          "id": "S7.19",
           "name": "Capture functional requirements against architecture components",
           "file": "src/opencode_arch/mcp/tools/require.py",
           "functions": [
@@ -936,7 +1175,7 @@
           "line_count": 77
         },
         {
-          "id": "F6.16",
+          "id": "S7.20",
           "name": "architect_scan MCP tool \u2014 generate reality manifest via AST scanning",
           "file": "src/opencode_arch/mcp/tools/scan.py",
           "functions": [
@@ -952,7 +1191,7 @@
           "line_count": 56
         },
         {
-          "id": "F6.17",
+          "id": "S7.21",
           "name": "architect_slice MCP tool \u2014 compress repository context for LLM consumption",
           "file": "src/opencode_arch/mcp/tools/slice.py",
           "functions": [
@@ -974,7 +1213,7 @@
           "line_count": 235
         },
         {
-          "id": "F6.18",
+          "id": "S7.22",
           "name": "architect_stats MCP tool \u2014 aggregate session and historical quality metrics",
           "file": "src/opencode_arch/mcp/tools/stats.py",
           "functions": [
@@ -991,7 +1230,25 @@
           "line_count": 68
         },
         {
-          "id": "F6.19",
+          "id": "S7.23",
+          "name": "architect_trace_requirements MCP tool \u2014 trace requirements to functions",
+          "file": "src/opencode_arch/mcp/tools/trace_requirements.py",
+          "functions": [
+            "trace_requirements(repo_path: str, model_yaml: str, requirements_doc: str, _runner, _cache) -> dict"
+          ],
+          "inputs": [
+            "repo_path: str",
+            "model_yaml: str",
+            "requirements_doc: str"
+          ],
+          "outputs": [
+            "dict"
+          ],
+          "status": "active",
+          "line_count": 96
+        },
+        {
+          "id": "S7.24",
           "name": "architect_validate MCP tool \u2014 validate architecture model quality",
           "file": "src/opencode_arch/mcp/tools/validate.py",
           "functions": [
@@ -1009,13 +1266,13 @@
       ],
       "sub_blocks": [
         {
-          "id": "F6.A",
+          "id": "S7.A",
           "name": "MCP tool implementations.",
           "description": "",
           "status": "active",
           "sub_functions": [
             {
-              "id": "F6.5",
+              "id": "S7.5",
               "name": "MCP tool implementations",
               "file": "src/opencode_arch/mcp/tools/__init__.py",
               "functions": [],
@@ -1025,7 +1282,24 @@
               "line_count": 1
             },
             {
-              "id": "F6.6",
+              "id": "S7.6",
+              "name": "architect_author MCP tool \u2014 forward",
+              "file": "src/opencode_arch/mcp/tools/author.py",
+              "functions": [
+                "author_architecture(repo_path: str, requirements_text: str) -> dict[str, Any]"
+              ],
+              "inputs": [
+                "repo_path: str",
+                "requirements_text: str"
+              ],
+              "outputs": [
+                "dict[str, Any]"
+              ],
+              "status": "dormant",
+              "line_count": 44
+            },
+            {
+              "id": "S7.7",
               "name": "architect_check MCP tool \u2014 verify model representativeness against code reality",
               "file": "src/opencode_arch/mcp/tools/check.py",
               "functions": [
@@ -1042,7 +1316,7 @@
               "line_count": 162
             },
             {
-              "id": "F6.7",
+              "id": "S7.8",
               "name": "architect_correct MCP tool \u2014 store structured architecture corrections",
               "file": "src/opencode_arch/mcp/tools/correct.py",
               "functions": [
@@ -1060,7 +1334,7 @@
               "line_count": 74
             },
             {
-              "id": "F6.8",
+              "id": "S7.9",
               "name": "architect_decompose MCP tool \u2014 decompose model into sub",
               "file": "src/opencode_arch/mcp/tools/decompose.py",
               "functions": [
@@ -1076,7 +1350,7 @@
               "line_count": 100
             },
             {
-              "id": "F6.9",
+              "id": "S7.10",
               "name": "architect_docs MCP tool \u2014 generate SE documentation from architecture model",
               "file": "src/opencode_arch/mcp/tools/docs.py",
               "functions": [
@@ -1090,10 +1364,28 @@
                 "dict[str, Any]"
               ],
               "status": "active",
-              "line_count": 183
+              "line_count": 213
             },
             {
-              "id": "F6.10",
+              "id": "S7.11",
+              "name": "architect_export MCP tool \u2014 export flat files for mobile AI consumption",
+              "file": "src/opencode_arch/mcp/tools/export.py",
+              "functions": [
+                "export_repository(repo_path: str, output_dir: str, output_format: str, prefix: str) -> dict[str, Any]"
+              ],
+              "inputs": [
+                "repo_path: str",
+                "output_dir: str",
+                "output_format: str"
+              ],
+              "outputs": [
+                "dict[str, Any]"
+              ],
+              "status": "active",
+              "line_count": 73
+            },
+            {
+              "id": "S7.12",
               "name": "architect_extract MCP tool \u2014 validate and store an architecture extraction",
               "file": "src/opencode_arch/mcp/tools/extract.py",
               "functions": [
@@ -1108,10 +1400,10 @@
                 "dict[str, Any]"
               ],
               "status": "active",
-              "line_count": 384
+              "line_count": 469
             },
             {
-              "id": "F6.11",
+              "id": "S7.13",
               "name": "Record user feedback for model improvement and training",
               "file": "src/opencode_arch/mcp/tools/feedback.py",
               "functions": [
@@ -1129,7 +1421,24 @@
               "line_count": 65
             },
             {
-              "id": "F6.12",
+              "id": "S7.14",
+              "name": "architect_gate MCP tool \u2014 check development gate readiness",
+              "file": "src/opencode_arch/mcp/tools/gate.py",
+              "functions": [
+                "check_gate(repo_path: str, model_yaml: str) -> dict[str, Any]"
+              ],
+              "inputs": [
+                "repo_path: str",
+                "model_yaml: str"
+              ],
+              "outputs": [
+                "dict[str, Any]"
+              ],
+              "status": "active",
+              "line_count": 62
+            },
+            {
+              "id": "S7.15",
               "name": "architect_generate MCP tool \u2014 run tests on generated code",
               "file": "src/opencode_arch/mcp/tools/generate.py",
               "functions": [
@@ -1146,7 +1455,7 @@
               "line_count": 107
             },
             {
-              "id": "F6.13",
+              "id": "S7.16",
               "name": "architect_group MCP tool \u2014 group repository modules into logical components",
               "file": "src/opencode_arch/mcp/tools/group.py",
               "functions": [
@@ -1163,7 +1472,7 @@
               "line_count": 65
             },
             {
-              "id": "F6.14",
+              "id": "S7.17",
               "name": "architect_ingest tool \u2014 accept a SourceGraph JSON for any language",
               "file": "src/opencode_arch/mcp/tools/ingest.py",
               "functions": [
@@ -1180,7 +1489,25 @@
               "line_count": 129
             },
             {
-              "id": "F6.15",
+              "id": "S7.18",
+              "name": "architect_llm_audit MCP tool \u2014 two",
+              "file": "src/opencode_arch/mcp/tools/llm_audit.py",
+              "functions": [
+                "run_llm_audit(repo_path: str, model_yaml: str, _runner, _cache: LLMCache | None) -> dict[str, Any]"
+              ],
+              "inputs": [
+                "repo_path: str",
+                "model_yaml: str",
+                "_runner"
+              ],
+              "outputs": [
+                "dict[str, Any]"
+              ],
+              "status": "active",
+              "line_count": 189
+            },
+            {
+              "id": "S7.19",
               "name": "Capture functional requirements against architecture components",
               "file": "src/opencode_arch/mcp/tools/require.py",
               "functions": [
@@ -1198,7 +1525,7 @@
               "line_count": 77
             },
             {
-              "id": "F6.16",
+              "id": "S7.20",
               "name": "architect_scan MCP tool \u2014 generate reality manifest via AST scanning",
               "file": "src/opencode_arch/mcp/tools/scan.py",
               "functions": [
@@ -1214,7 +1541,7 @@
               "line_count": 56
             },
             {
-              "id": "F6.17",
+              "id": "S7.21",
               "name": "architect_slice MCP tool \u2014 compress repository context for LLM consumption",
               "file": "src/opencode_arch/mcp/tools/slice.py",
               "functions": [
@@ -1236,7 +1563,7 @@
               "line_count": 235
             },
             {
-              "id": "F6.18",
+              "id": "S7.22",
               "name": "architect_stats MCP tool \u2014 aggregate session and historical quality metrics",
               "file": "src/opencode_arch/mcp/tools/stats.py",
               "functions": [
@@ -1253,7 +1580,25 @@
               "line_count": 68
             },
             {
-              "id": "F6.19",
+              "id": "S7.23",
+              "name": "architect_trace_requirements MCP tool \u2014 trace requirements to functions",
+              "file": "src/opencode_arch/mcp/tools/trace_requirements.py",
+              "functions": [
+                "trace_requirements(repo_path: str, model_yaml: str, requirements_doc: str, _runner, _cache) -> dict"
+              ],
+              "inputs": [
+                "repo_path: str",
+                "model_yaml: str",
+                "requirements_doc: str"
+              ],
+              "outputs": [
+                "dict"
+              ],
+              "status": "active",
+              "line_count": 96
+            },
+            {
+              "id": "S7.24",
               "name": "architect_validate MCP tool \u2014 validate architecture model quality",
               "file": "src/opencode_arch/mcp/tools/validate.py",
               "functions": [
@@ -1272,13 +1617,13 @@
           "sub_blocks": []
         },
         {
-          "id": "F6.misc",
+          "id": "S7.misc",
           "name": "Ungrouped",
           "description": "",
           "status": "active",
           "sub_functions": [
             {
-              "id": "F6.1",
+              "id": "S7.1",
               "name": "MCP server for architecture tools",
               "file": "src/opencode_arch/mcp/__init__.py",
               "functions": [],
@@ -1288,7 +1633,7 @@
               "line_count": 1
             },
             {
-              "id": "F6.2",
+              "id": "S7.2",
               "name": "Allow running as: python",
               "file": "src/opencode_arch/mcp/__main__.py",
               "functions": [],
@@ -1298,7 +1643,7 @@
               "line_count": 8
             },
             {
-              "id": "F6.3",
+              "id": "S7.3",
               "name": "Quality metadata module for MCP tools",
               "file": "src/opencode_arch/mcp/quality.py",
               "functions": [
@@ -1319,30 +1664,30 @@
                 "float"
               ],
               "status": "active",
-              "line_count": 121
+              "line_count": 140
             },
             {
-              "id": "F6.4",
+              "id": "S7.4",
               "name": "FastMCP server entry point for opencode",
               "file": "src/opencode_arch/mcp/server.py",
               "functions": [],
               "inputs": [],
               "outputs": [],
               "status": "active",
-              "line_count": 254
+              "line_count": 348
             }
           ],
           "sub_blocks": []
         }
       ]
     },
-    "F7": {
+    "S8": {
       "name": "Prompts",
       "status": "dormant",
       "description_source": "Prompt templates for regen-loop and related workflows.",
       "sub_functions": [
         {
-          "id": "F7.1",
+          "id": "S8.1",
           "name": "Prompt templates for regen",
           "file": "src/opencode_arch/prompts/__init__.py",
           "functions": [],
@@ -1352,7 +1697,7 @@
           "line_count": 1
         },
         {
-          "id": "F7.2",
+          "id": "S8.2",
           "name": "Prompt templates for the decomposed regen",
           "file": "src/opencode_arch/prompts/regen.py",
           "functions": [],
@@ -1364,13 +1709,101 @@
       ],
       "sub_blocks": []
     },
-    "F8": {
+    "S9": {
+      "name": "Requirements",
+      "status": "active",
+      "description_source": "auto-discovered from src/opencode_arch/requirements/",
+      "sub_functions": [
+        {
+          "id": "S9.1",
+          "name": " Init  ",
+          "file": "src/opencode_arch/requirements/__init__.py",
+          "functions": [],
+          "inputs": [],
+          "outputs": [],
+          "status": "dormant",
+          "line_count": 0
+        },
+        {
+          "id": "S9.2",
+          "name": "Llm Extractor",
+          "file": "src/opencode_arch/requirements/llm_extractor.py",
+          "functions": [
+            "extract_requirements_llm(doc_path: Path, runner, cache: LLMCache | None, repo_path: str) -> list[ExtractedRequirement]"
+          ],
+          "inputs": [
+            "doc_path: Path",
+            "runner",
+            "cache: LLMCache | None"
+          ],
+          "outputs": [
+            "list[ExtractedRequirement]"
+          ],
+          "status": "active",
+          "line_count": 78
+        },
+        {
+          "id": "S9.3",
+          "name": "Function",
+          "file": "src/opencode_arch/requirements/matcher.py",
+          "functions": [
+            "match_functions_to_requirements(requirements: list[ExtractedRequirement], model_yaml: str, runner, cache: LLMCache | None, repo_path: str) -> list[RequirementMatch]"
+          ],
+          "inputs": [
+            "requirements: list[ExtractedRequirement]",
+            "model_yaml: str",
+            "runner"
+          ],
+          "outputs": [
+            "list[RequirementMatch]"
+          ],
+          "status": "active",
+          "line_count": 114
+        },
+        {
+          "id": "S9.4",
+          "name": "Parser",
+          "file": "src/opencode_arch/requirements/parser.py",
+          "functions": [
+            "parse_requirements_doc(doc_path: Path) -> list[ExtractedRequirement]"
+          ],
+          "inputs": [
+            "doc_path: Path"
+          ],
+          "outputs": [
+            "list[ExtractedRequirement]"
+          ],
+          "status": "active",
+          "line_count": 63
+        },
+        {
+          "id": "S9.5",
+          "name": "Retroactive requirement derivation from existing architecture models",
+          "file": "src/opencode_arch/requirements/retroactive.py",
+          "functions": [
+            "derive_requirements_retroactive(model_yaml: str, runner, cache: LLMCache | None, repo_path: str) -> list[ExtractedRequirement]"
+          ],
+          "inputs": [
+            "model_yaml: str",
+            "runner",
+            "cache: LLMCache | None"
+          ],
+          "outputs": [
+            "list[ExtractedRequirement]"
+          ],
+          "status": "active",
+          "line_count": 73
+        }
+      ],
+      "sub_blocks": []
+    },
+    "S10": {
       "name": "Runner",
       "status": "active",
       "description_source": "Runner backends for agent invocation.",
       "sub_functions": [
         {
-          "id": "F8.1",
+          "id": "S10.1",
           "name": "Runner backends for agent invocation",
           "file": "src/opencode_arch/runner/__init__.py",
           "functions": [],
@@ -1380,7 +1813,7 @@
           "line_count": 5
         },
         {
-          "id": "F8.2",
+          "id": "S10.2",
           "name": "Runner protocol and result types",
           "file": "src/opencode_arch/runner/base.py",
           "functions": [],
@@ -1390,7 +1823,7 @@
           "line_count": 21
         },
         {
-          "id": "F8.3",
+          "id": "S10.3",
           "name": "OpenCode subprocess runner backend",
           "file": "src/opencode_arch/runner/opencode.py",
           "functions": [],
@@ -1402,13 +1835,13 @@
       ],
       "sub_blocks": []
     },
-    "F9": {
+    "S11": {
       "name": "Telemetry",
       "status": "active",
       "description_source": "Telemetry: records tool usage and outcomes for optimization.",
       "sub_functions": [
         {
-          "id": "F9.1",
+          "id": "S11.1",
           "name": "Telemetry: records tool usage and outcomes for optimization",
           "file": "src/opencode_arch/telemetry/__init__.py",
           "functions": [],
@@ -1418,7 +1851,7 @@
           "line_count": 6
         },
         {
-          "id": "F9.2",
+          "id": "S11.2",
           "name": "Drain metrics from architecture",
           "file": "src/opencode_arch/telemetry/collector.py",
           "functions": [
@@ -1436,7 +1869,7 @@
           "line_count": 40
         },
         {
-          "id": "F9.3",
+          "id": "S11.3",
           "name": "Async recorder for tool invocations",
           "file": "src/opencode_arch/telemetry/recorder.py",
           "functions": [
@@ -1452,7 +1885,7 @@
           "line_count": 12
         },
         {
-          "id": "F9.4",
+          "id": "S11.4",
           "name": "SQLite",
           "file": "src/opencode_arch/telemetry/store.py",
           "functions": [],
@@ -1790,7 +2223,7 @@
             "len",
             "get"
           ],
-          "docstring": "Determine if system is complex enough to warrant per-subsystem docs.\n\nHeuristic: returns True if ANY of:\n- More than 5 functional blocks (distinct f_block values on components)\n- More than 50 source files in manifest\n- More than 20 components"
+          "docstring": "Determine if system is complex enough to warrant per-subsystem docs.\n\nHeuristic: returns True if ANY of:\n- More than 5 functional blocks (distinct source_block values on components)\n- More than 50 source files in manifest\n- More than 20 components"
         },
         {
           "name": "select_subsystem_artifacts",
@@ -3014,6 +3447,8 @@
             "exit",
             "format_calibration_prompt",
             "run_export_data",
+            "_print_export_result",
+            "export_repository",
             "_print_docs_result",
             "split",
             "run_docs_generate",
@@ -3050,12 +3485,13 @@
         "architecture_model.core.parser",
         "architecture_model.core.confidence",
         "opencode_arch.cli.export_data",
+        "opencode_arch.mcp.tools.export",
         "opencode_arch.cli.docs",
         "opencode_arch.runner.opencode",
         "opencode_arch.cli.docs_validator",
         "architecture_model"
       ],
-      "line_count": 360,
+      "line_count": 389,
       "status": "active",
       "classes": [],
       "exports": [],
@@ -3219,6 +3655,13 @@
           "module": "opencode_arch.cli.export_data",
           "symbols": [
             "run_export_data"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.mcp.tools.export",
+          "symbols": [
+            "export_repository"
           ],
           "is_relative": false
         },
@@ -3694,13 +4137,13 @@
       "classes": [],
       "exports": [
         "format_model_context",
-        "format_fblock_context",
+        "format_source_block_context",
         "format_artifact_context",
         "query_model",
         "impact_analysis",
         "get_model",
         "get_artifact_context",
-        "get_fblock_context",
+        "get_source_block_context",
         "get_model_summary",
         "enrich_manifest_slice"
       ],
@@ -3710,7 +4153,7 @@
           "module": "opencode_arch.context.formatter",
           "symbols": [
             "format_model_context",
-            "format_fblock_context",
+            "format_source_block_context",
             "format_artifact_context",
             "query_model",
             "impact_analysis"
@@ -3722,7 +4165,7 @@
           "symbols": [
             "get_model",
             "get_artifact_context",
-            "get_fblock_context",
+            "get_source_block_context",
             "get_model_summary",
             "enrich_manifest_slice"
           ],
@@ -3760,10 +4203,10 @@
           "docstring": "Format the full model as compact LLM context.\n\nArgs:\n    model: Architecture model to format.\n    max_tokens: Approximate token budget (1 token ~ 4 chars).\n    detail_level: \"minimal\", \"standard\", or \"full\".\n\nReturns:\n    Formatted text suitable for LLM system prompt injection."
         },
         {
-          "name": "format_fblock_context",
-          "signature": "format_fblock_context(model: ArchitectureModel, f_block: str, max_tokens: int, project_root: 'Path | None') -> str",
+          "name": "format_source_block_context",
+          "signature": "format_source_block_context(model: ArchitectureModel, source_block: str, max_tokens: int, project_root: 'Path | None') -> str",
           "calls": [
-            "slice_by_fblock",
+            "slice_by_source_block",
             "format_model_context",
             "_load_block_manifest",
             "len",
@@ -3861,7 +4304,7 @@
         {
           "module": "architecture_model.core.slicer",
           "symbols": [
-            "slice_by_fblock",
+            "slice_by_source_block",
             "slice_for_artifact"
           ],
           "is_relative": false
@@ -3921,14 +4364,14 @@
           "docstring": "Get model-based context for artifact generation/regeneration.\n\nThis REPLACES the raw manifest slice with structured architectural context.\nThe returned string is injected into the LLM system prompt alongside the\nmanifest metrics (which are kept for ground-truth file counts).\n\nArgs:\n    project_root: Project root path.\n    artifact_name: Which artifact needs context.\n    max_tokens: Token budget for the context block.\n\nReturns:\n    Formatted model context string for LLM prompt injection."
         },
         {
-          "name": "get_fblock_context",
-          "signature": "get_fblock_context(project_root: str | Path, f_block: str, max_tokens: int) -> str",
+          "name": "get_source_block_context",
+          "signature": "get_source_block_context(project_root: str | Path, source_block: str, max_tokens: int) -> str",
           "calls": [
             "get_model",
-            "format_fblock_context",
+            "format_source_block_context",
             "Path"
           ],
-          "docstring": "Get model-based context for a single F-block (for section regeneration).\n\nArgs:\n    project_root: Project root path.\n    f_block: F-block ID (e.g., \"F3\").\n    max_tokens: Token budget.\n\nReturns:\n    Formatted F-block context string."
+          "docstring": "Get model-based context for a single F-block (for section regeneration).\n\nArgs:\n    project_root: Project root path.\n    source_block: F-block ID (e.g., \"S3\").\n    max_tokens: Token budget.\n\nReturns:\n    Formatted F-block context string."
         },
         {
           "name": "get_model_summary",
@@ -4008,7 +4451,7 @@
         {
           "module": "architecture_model.core.slicer",
           "symbols": [
-            "slice_by_fblock",
+            "slice_by_source_block",
             "slice_for_artifact"
           ],
           "is_relative": false
@@ -4031,7 +4474,7 @@
           "module": "opencode_arch.context.formatter",
           "symbols": [
             "format_model_context",
-            "format_fblock_context",
+            "format_source_block_context",
             "format_artifact_context"
           ],
           "is_relative": false
@@ -5246,6 +5689,200 @@
       "module_assignments": {}
     },
     {
+      "file": "src/opencode_arch/llm/__init__.py",
+      "name": " Init  ",
+      "docstring": null,
+      "functions": [],
+      "imports": [],
+      "line_count": 0,
+      "status": "dormant",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/llm/cache.py",
+      "name": "Cache",
+      "docstring": null,
+      "functions": [
+        {
+          "name": "hash_content",
+          "signature": "hash_content(content: str) -> str",
+          "calls": [
+            "hexdigest",
+            "sha256",
+            "encode"
+          ]
+        },
+        {
+          "name": "cached_llm_call",
+          "signature": "cached_llm_call(runner, prompt: str, content_hash: str, prompt_template_hash: str, repo_path: str, cache: LLMCache | None) -> CachedResult",
+          "calls": [
+            "CachedResult",
+            "get",
+            "run",
+            "put",
+            "strftime",
+            "gmtime"
+          ],
+          "docstring": "Call LLM via runner, with caching."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "hashlib",
+        "json",
+        "time",
+        "dataclasses",
+        "pathlib"
+      ],
+      "line_count": 88,
+      "status": "active",
+      "classes": [
+        {
+          "name": "CachedResult",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        },
+        {
+          "name": "LLMCache",
+          "bases": [],
+          "methods": [
+            "__init__",
+            "get",
+            "put",
+            "clear"
+          ],
+          "is_abstract": false,
+          "decorators": [],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "hashlib",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "json",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "time",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/llm/prompts/__init__.py",
+      "name": " Init  ",
+      "docstring": null,
+      "functions": [],
+      "imports": [],
+      "line_count": 0,
+      "status": "dormant",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/llm/prompts/audit.py",
+      "name": "Prompt templates for LLM functional",
+      "docstring": "Prompt templates for LLM functional-decomposition audit.",
+      "functions": [],
+      "imports": [],
+      "line_count": 66,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [],
+      "module_constants": {
+        "AUDIT_STAGE1_VERSION": "'v1'",
+        "AUDIT_STAGE1_TEMPLATE": "'You are analyzing a codebase to identify its functional subsystems.\\n\\n## Source Code Structure\\n{source_summary}\\n\\n## Project Context\\n{context_md}\\n\\nBased ONLY on the code structure, imports, and documentation above, identify the distinct functional subsystems (groups of files that work together to accomplish a specific purpose).\\n\\nFor each subsystem, provide:\\n1. A short descriptive name\\n2. Which files belong to it\\n3. A one-sentence rationale explaining why these files form a coherent unit\\n\\nReturn your analysis as JSON:\\n```json\\n{{\\n  \"blocks\": [\\n    {{\"id\": \"LLM-A\", \"name\": \"...\", \"files\": [\"...\"], \"rationale\": \"...\"}}\\n  ]\\n}}\\n```\\n'",
+        "AUDIT_STAGE2_VERSION": "'v1'",
+        "AUDIT_STAGE2_TEMPLATE": "'You previously identified these functional subsystems:\\n\\n{llm_decomposition}\\n\\nThe automated tool produced this decomposition with these quality metrics:\\n\\n{tool_decomposition}\\n\\nModularity (Newman\\'s Q): {modularity}\\nPer-block conductance: {conductance}\\n\\nCompare your grouping with the tool\\'s. For each pair:\\n- If they substantially agree (>70% file overlap), mark as \"agree\"\\n- If they disagree, explain WHY with specific evidence (naming conventions, documented boundaries, import patterns)\\n\\nReturn as JSON:\\n```json\\n{{\\n  \"agreement_rate\": 0.71,\\n  \"matched_pairs\": [\\n    {{\"tool_source_block\": \"S1\", \"llm_block\": \"LLM-A\", \"overlap\": 0.9, \"verdict\": \"agree\"}}\\n  ],\\n  \"disagreements\": [\\n    {{\\n      \"tool_source_block\": \"S3\",\\n      \"llm_block\": \"LLM-C\",\\n      \"overlap\": 0.4,\\n      \"llm_rationale\": \"...\",\\n      \"cites_doc\": \"README.md#L42\",\\n      \"recommendation\": \"flag_for_review\"\\n    }}\\n  ]\\n}}\\n```\\n'"
+      },
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/llm/prompts/matching.py",
+      "name": "Prompt templates for function",
+      "docstring": "Prompt templates for function-requirement matching.",
+      "functions": [],
+      "imports": [],
+      "line_count": 21,
+      "status": "dormant",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [],
+      "module_constants": {
+        "MATCHING_TEMPLATE": "'Match the following functions to the requirements they satisfy.\\nFor each match, provide the function ID, requirement ID, a confidence score (0.0-1.0),\\nand evidence explaining the match.\\n\\nRequirements:\\n{requirements_text}\\n\\nFunctions (from architecture model):\\n{functions_text}\\n\\nReturn a JSON object with a \"matches\" key containing an array of objects,\\neach with \"function_id\", \"requirement_id\", \"confidence\", and \"evidence\" fields.\\n\\nReturn ONLY valid JSON. Example:\\n{{\"matches\": [{{\"function_id\": \"COMP-1\", \"requirement_id\": \"REQ-001\", \"confidence\": 0.85, \"evidence\": \"Component handles user authentication\"}}]}}\\n'",
+        "MATCHING_VERSION": "'req-match-v1'"
+      },
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/llm/prompts/requirements.py",
+      "name": "Prompt templates for requirement extraction",
+      "docstring": "Prompt templates for requirement extraction.",
+      "functions": [],
+      "imports": [],
+      "line_count": 43,
+      "status": "dormant",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [],
+      "module_constants": {
+        "REQUIREMENTS_EXTRACT_TEMPLATE": "'Analyze the following document and identify all distinct requirements.\\nReturn a JSON object with a \"requirements\" key containing an array of objects,\\neach with \"id\", \"text\", and \"anchor\" fields.\\n\\n- \"id\": Use any existing REQ-NNN ID found in the text, or assign one as REQ-001, REQ-002, etc.\\n- \"text\": The requirement statement (concise, imperative).\\n- \"anchor\": The line reference or section where it appears (e.g., \"L5\", \"Section 2\").\\n\\nDocument content:\\n---\\n{doc_content}\\n---\\n\\nReturn ONLY valid JSON. Example:\\n{{\"requirements\": [{{\"id\": \"REQ-001\", \"text\": \"System shall support login\", \"anchor\": \"L3\"}}]}}\\n'",
+        "REQUIREMENTS_EXTRACT_VERSION": "'req-extract-v1'",
+        "REQUIREMENTS_RETROACTIVE_TEMPLATE": "'Given the following architecture model, derive requirements that the system must satisfy.\\nLook at capabilities, behaviors, interfaces, and component responsibilities.\\nReturn a JSON object with a \"requirements\" key containing an array of objects,\\neach with \"id\", \"text\", and \"source\" fields.\\n\\n- \"id\": Assign as REQ-001, REQ-002, etc.\\n- \"text\": The derived requirement (concise, imperative, testable).\\n- \"source\": Which model element (capability/behavior/interface) this derives from.\\n\\nArchitecture model:\\n---\\n{model_yaml}\\n---\\n\\nReturn ONLY valid JSON. Example:\\n{{\"requirements\": [{{\"id\": \"REQ-001\", \"text\": \"System shall validate input\", \"source\": \"CAP-F1\"}}]}}\\n'",
+        "REQUIREMENTS_RETROACTIVE_VERSION": "'req-retro-v1'"
+      },
+      "module_assignments": {}
+    },
+    {
       "file": "src/opencode_arch/mcp/__init__.py",
       "name": "MCP server for architecture tools",
       "docstring": "MCP server for architecture tools.",
@@ -5320,7 +5957,10 @@
             "isinstance",
             "func",
             "get",
-            "items"
+            "items",
+            "check_fn",
+            "append",
+            "setdefault"
           ],
           "docstring": "Decorator that appends _quality metadata to dict results."
         }
@@ -5331,7 +5971,7 @@
         "contextvars",
         "typing"
       ],
-      "line_count": 121,
+      "line_count": 140,
       "status": "active",
       "classes": [
         {
@@ -5398,9 +6038,14 @@
         "opencode_arch.mcp.tools.stats",
         "opencode_arch.mcp.tools.correct",
         "opencode_arch.mcp.tools.docs",
-        "opencode_arch.mcp.tools.decompose"
+        "opencode_arch.mcp.tools.decompose",
+        "opencode_arch.mcp.tools.export",
+        "opencode_arch.mcp.tools.llm_audit",
+        "opencode_arch.mcp.tools.trace_requirements",
+        "opencode_arch.mcp.tools.author",
+        "opencode_arch.mcp.tools.gate"
       ],
-      "line_count": 254,
+      "line_count": 348,
       "status": "active",
       "classes": [],
       "exports": [],
@@ -5517,6 +6162,41 @@
             "decompose_repository"
           ],
           "is_relative": false
+        },
+        {
+          "module": "opencode_arch.mcp.tools.export",
+          "symbols": [
+            "export_repository"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.mcp.tools.llm_audit",
+          "symbols": [
+            "run_llm_audit"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.mcp.tools.trace_requirements",
+          "symbols": [
+            "trace_requirements"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.mcp.tools.author",
+          "symbols": [
+            "author_architecture"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.mcp.tools.gate",
+          "symbols": [
+            "check_gate"
+          ],
+          "is_relative": false
         }
       ],
       "module_constants": {},
@@ -5534,6 +6214,78 @@
       "exports": [],
       "decorated_functions": [],
       "imports_detailed": [],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/author.py",
+      "name": "architect_author MCP tool \u2014 forward",
+      "docstring": "architect_author MCP tool \u2014 forward-author architecture from requirements.",
+      "functions": [
+        {
+          "name": "author_architecture",
+          "signature": "author_architecture(repo_path: str, requirements_text: str) -> dict[str, Any]",
+          "calls": [
+            "Path",
+            "exists",
+            "parse_requirements_doc",
+            "hasattr",
+            "save_model",
+            "str",
+            "len"
+          ],
+          "docstring": "Parse requirements text and produce a concept-phase architecture model.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    requirements_text: Free-form or structured requirements document text.\n\nReturns:\n    Dict with model_path, entity counts, and lifecycle_phase."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "pathlib",
+        "typing",
+        "architecture_model.authoring.parser",
+        "architecture_model.core.parser"
+      ],
+      "line_count": 44,
+      "status": "dormant",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.authoring.parser",
+          "symbols": [
+            "parse_requirements_doc"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "save_model"
+          ],
+          "is_relative": false
+        }
+      ],
       "module_constants": {},
       "module_assignments": {}
     },
@@ -5559,7 +6311,7 @@
             "drain_and_store",
             "round"
           ],
-          "docstring": "Check how well an architecture model represents the actual codebase.\n\nSupports three modes:\n- Hierarchical (config): uses pre-existing fblock_dict from config\n- Hierarchical (auto): generates F-blocks from module grouping when no config exists\n- Flat: fallback when neither hierarchical path is available\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    model_yaml: The architecture model YAML to evaluate.\n\nReturns:\n    Dict with scores, details, and suggested improvements."
+          "docstring": "Check how well an architecture model represents the actual codebase.\n\nSupports three modes:\n- Hierarchical (config): uses pre-existing source_block_dict from config\n- Hierarchical (auto): generates F-blocks from module grouping when no config exists\n- Flat: fallback when neither hierarchical path is available\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    model_yaml: The architecture model YAML to evaluate.\n\nReturns:\n    Dict with scores, details, and suggested improvements."
         }
       ],
       "imports": [
@@ -5687,7 +6439,7 @@
           "module": "architecture_model.manifest.grouping",
           "symbols": [
             "group_modules",
-            "auto_fblocks"
+            "auto_source_blocks"
           ],
           "is_relative": false
         },
@@ -5950,6 +6702,10 @@
             "generate_dependency_matrix",
             "generate_health_report",
             "generate_manifest",
+            "generate_system_design",
+            "generate_integration_flows",
+            "generate_all_diagrams",
+            "extend",
             "generate_index",
             "relative_to",
             "split",
@@ -5986,11 +6742,14 @@
         "architecture_model.manifest.call_graph",
         "architecture_model.orchestration.behavior_flows",
         "architecture_model.docs.behavior_spec",
+        "architecture_model.docs.system_design",
+        "architecture_model.docs.integration_flows",
+        "architecture_model.docs.diagrams",
         "architecture_model.docs.drift",
         "architecture_model.docs.index",
         "architecture_model.core.parser"
       ],
-      "line_count": 183,
+      "line_count": 213,
       "status": "active",
       "classes": [],
       "exports": [],
@@ -6109,6 +6868,27 @@
           "is_relative": false
         },
         {
+          "module": "architecture_model.docs.system_design",
+          "symbols": [
+            "generate_system_design"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.docs.integration_flows",
+          "symbols": [
+            "generate_integration_flows"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.docs.diagrams",
+          "symbols": [
+            "generate_all_diagrams"
+          ],
+          "is_relative": false
+        },
+        {
           "module": "architecture_model.docs.drift",
           "symbols": [
             "generate_drift_report"
@@ -6134,6 +6914,98 @@
       "module_assignments": {}
     },
     {
+      "file": "src/opencode_arch/mcp/tools/export.py",
+      "name": "architect_export MCP tool \u2014 export flat files for mobile AI consumption",
+      "docstring": "architect_export MCP tool \u2014 export flat files for mobile AI consumption.",
+      "functions": [
+        {
+          "name": "export_repository",
+          "signature": "export_repository(repo_path: str, output_dir: str, output_format: str, prefix: str) -> dict[str, Any]",
+          "calls": [
+            "Path",
+            "exists",
+            "build_flat_export",
+            "mkdir",
+            "items",
+            "list",
+            "len",
+            "str",
+            "ZipFile",
+            "write_text",
+            "keys",
+            "writestr"
+          ],
+          "docstring": "Export repository architecture as flat files for mobile AI.\n\nBuilds a set of flat files (model, sub-models, docs, manifests, specs,\ndiagrams, skills, reference docs) suitable for use in token-limited\nAI environments.\n\nArgs:\n    repo_path: Absolute path to the repository.\n    output_dir: Where to write output. Default: {repo_path}/.architecture-export/\n    output_format: \"dir\" (flat directory) or \"zip\" (single zip file).\n    prefix: File prefix override. Default: auto-derived from repo name.\n\nReturns:\n    Dict with file list, sizes, and output location."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "zipfile",
+        "pathlib",
+        "typing",
+        "opencode_arch.mcp.quality",
+        "architecture_model.export.flatfiles"
+      ],
+      "line_count": 73,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [
+        {
+          "name": "export_repository",
+          "decorators": [
+            "with_quality"
+          ],
+          "is_method": false,
+          "class_name": null
+        }
+      ],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "zipfile",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.mcp.quality",
+          "symbols": [
+            "with_quality"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.export.flatfiles",
+          "symbols": [
+            "build_flat_export"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
       "file": "src/opencode_arch/mcp/tools/extract.py",
       "name": "architect_extract MCP tool \u2014 validate and store an architecture extraction",
       "docstring": "architect_extract MCP tool \u2014 validate and store an architecture extraction.",
@@ -6151,15 +7023,23 @@
             "isinstance",
             "getattr",
             "str",
+            "exists",
             "save_model",
+            "_get_telemetry_store",
             "TelemetryStore",
             "record",
             "drain_and_store",
             "generate_manifest",
             "save_project",
+            "generate_all_diagrams",
+            "len",
             "decompose_model",
             "generate_recursive_manifests",
             "create_components_from_manifest",
+            "mkdir",
+            "replace",
+            "copy2",
+            "sorted",
             "write_text",
             "compute_representativeness",
             "generate_docs",
@@ -6167,61 +7047,77 @@
             "write_sub_models",
             "list",
             "get_config",
-            "mkdir",
             "items",
             "_gen",
+            "manifest_to_source_graph",
+            "extract_component_interfaces",
             "build_call_graph",
             "build_file_to_comp",
             "classify_behaviors",
             "generate_behavior_index",
+            "glob",
+            "unlink",
             "any",
             "keys",
             "_gen_manifest",
             "create_behaviors_from_manifest",
+            "_gen_iface",
             "summarize_crud_group",
-            "len",
+            "compact_for_storage",
             "_save_beh",
+            "isoformat",
             "dumps",
             "extend",
             "_save",
             "_load",
-            "exists",
+            "_save_iface",
             "build_behavior_manifest",
             "build_behavior_sub_model",
             "generate_behavior_spec",
-            "append",
+            "next",
             "to_dict",
             "loads",
             "_M",
-            "_Beh",
+            "_AM",
+            "now",
             "values",
             "read_text",
+            "append",
+            "_save_compact",
             "_FI",
             "_MI",
             "type",
             "_MR",
-            "startswith"
+            "dump",
+            "_MM",
+            "_E",
+            "dump_model"
           ],
-          "docstring": "Validate and store an architecture model extraction.\n\nCalled AFTER the agent has produced a YAML architecture model.\nValidates the model, writes it to .architecture-model.yaml,\nand records telemetry.\n\nArgs:\n    repo_path: Path to the repository root (where to save the model).\n    model_yaml: The YAML architecture model produced by the agent.\n    context_tokens: How many tokens of context the agent used (for telemetry).\n\nReturns:\n    Dict with: stored (bool), score (int), issues (list), telemetry_recorded (bool)."
+          "docstring": "Validate and store an architecture model extraction.\n\nCalled AFTER the agent has produced a YAML architecture model.\nValidates the model, writes it to .architecture-model.yaml,\nand records telemetry.\n\nArgs:\n    repo_path: Path to the repository root (where to save the model).\n    model_yaml: The YAML architecture model produced by the agent.\n    context_tokens: How many tokens of context the agent used (for telemetry).\n\nReturns:\n    Dict with: stored (bool), score (int), issues (list), telemetry_recorded (bool),\n    pipeline (dict), warnings (list)."
         }
       ],
       "imports": [
         "__future__",
+        "shutil",
+        "datetime",
         "pathlib",
         "typing",
         "yaml",
         "opencode_arch.mcp.quality",
+        "opencode_arch.telemetry.store",
         "architecture_model.core.parser",
         "architecture_model.core.validator",
         "architecture_model.core.parser",
-        "opencode_arch.telemetry.store",
         "opencode_arch.telemetry.collector",
         "architecture_model.manifest.generator",
         "architecture_model.persistence.store",
         "opencode_arch.mcp.tools.docs",
+        "architecture_model.docs.diagrams",
         "json",
         "architecture_model.orchestration.decompose",
         "architecture_model.manifest.recursive",
+        "architecture_model.orchestration.auto_enrich",
+        "architecture_model.core.parser",
         "architecture_model.orchestration.auto_enrich",
         "architecture_model.core.parser",
         "architecture_model.manifest.call_graph",
@@ -6234,13 +7130,18 @@
         "architecture_model.config.loader",
         "architecture_model.manifest.generator",
         "architecture_model.manifest.generator",
-        "architecture_model.core.types",
+        "architecture_model.manifest.generator",
+        "architecture_model.orchestration.compaction",
+        "architecture_model.core.parser",
         "architecture_model.core.parser",
         "json",
         "architecture_model.manifest.types",
-        "architecture_model.manifest.types"
+        "architecture_model.manifest.types",
+        "architecture_model.core.types",
+        "architecture_model.core.parser",
+        "yaml"
       ],
-      "line_count": 384,
+      "line_count": 469,
       "status": "active",
       "classes": [],
       "exports": [],
@@ -6259,6 +7160,18 @@
           "module": "__future__",
           "symbols": [
             "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "shutil",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "datetime",
+          "symbols": [
+            "datetime"
           ],
           "is_relative": false
         },
@@ -6289,6 +7202,13 @@
           "is_relative": false
         },
         {
+          "module": "opencode_arch.telemetry.store",
+          "symbols": [
+            "TelemetryStore"
+          ],
+          "is_relative": false
+        },
+        {
           "module": "architecture_model.core.parser",
           "symbols": [
             "_parse_raw"
@@ -6306,13 +7226,6 @@
           "module": "architecture_model.core.parser",
           "symbols": [
             "save_model"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "opencode_arch.telemetry.store",
-          "symbols": [
-            "TelemetryStore"
           ],
           "is_relative": false
         },
@@ -6345,6 +7258,13 @@
           "is_relative": false
         },
         {
+          "module": "architecture_model.docs.diagrams",
+          "symbols": [
+            "generate_all_diagrams"
+          ],
+          "is_relative": false
+        },
+        {
           "module": "json",
           "symbols": [],
           "is_relative": false
@@ -6368,6 +7288,21 @@
           "module": "architecture_model.orchestration.auto_enrich",
           "symbols": [
             "create_behaviors_from_manifest"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "save_model"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.orchestration.auto_enrich",
+          "symbols": [
+            "extract_component_interfaces",
+            "manifest_to_source_graph"
           ],
           "is_relative": false
         },
@@ -6457,10 +7392,23 @@
           "is_relative": false
         },
         {
-          "module": "architecture_model.core.types",
+          "module": "architecture_model.manifest.generator",
           "symbols": [
-            "Behavior",
-            "Status"
+            "generate_manifest"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.orchestration.compaction",
+          "symbols": [
+            "compact_for_storage"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "save_model"
           ],
           "is_relative": false
         },
@@ -6491,6 +7439,27 @@
             "FunctionInfo",
             "ModuleStatus"
           ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.types",
+          "symbols": [
+            "ArchitectureModel",
+            "Entities",
+            "ModelMeta"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "dump_model"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "yaml",
+          "symbols": [],
           "is_relative": false
         }
       ],
@@ -6566,6 +7535,109 @@
           "module": "typing",
           "symbols": [
             "Any"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/gate.py",
+      "name": "architect_gate MCP tool \u2014 check development gate readiness",
+      "docstring": "architect_gate MCP tool \u2014 check development gate readiness.",
+      "functions": [
+        {
+          "name": "check_gate",
+          "signature": "check_gate(repo_path: str, model_yaml: str) -> dict[str, Any]",
+          "calls": [
+            "Path",
+            "exists",
+            "generate_manifest",
+            "hasattr",
+            "check_development_gate",
+            "safe_load",
+            "_parse_raw",
+            "load_model"
+          ],
+          "docstring": "Check development gate for an architecture model against code reality.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    model_yaml: Optional YAML string. If empty, reads .architecture-model.yaml.\n\nReturns:\n    Dict with lifecycle_phase, sub-scores, phase_requirements_met, and issues."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "pathlib",
+        "typing",
+        "architecture_model.authoring.gate",
+        "architecture_model.core.parser",
+        "architecture_model.manifest.generator",
+        "yaml",
+        "architecture_model.core.parser",
+        "architecture_model.core.parser"
+      ],
+      "line_count": 62,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.authoring.gate",
+          "symbols": [
+            "check_development_gate"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "load_model"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.manifest.generator",
+          "symbols": [
+            "generate_manifest"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "yaml",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "ArchitectureModel"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "_parse_raw"
           ],
           "is_relative": false
         }
@@ -6787,7 +7859,7 @@
             "ArchitectureModel",
             "extract_component_interfaces",
             "enrich_from_source_graph",
-            "auto_fblocks",
+            "auto_source_blocks",
             "save_model",
             "mkdir",
             "write_text",
@@ -6871,7 +7943,7 @@
           "module": "architecture_model.manifest.grouping",
           "symbols": [
             "group_source_graph",
-            "auto_fblocks"
+            "auto_source_blocks"
           ],
           "is_relative": false
         },
@@ -6911,6 +7983,144 @@
           "module": "architecture_model.orchestration.auto_enrich",
           "symbols": [
             "enrich_from_source_graph"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/llm_audit.py",
+      "name": "architect_llm_audit MCP tool \u2014 two",
+      "docstring": "architect_llm_audit MCP tool \u2014 two-stage LLM functional-decomposition audit.",
+      "functions": [
+        {
+          "name": "run_llm_audit",
+          "signature": "run_llm_audit(repo_path: str, model_yaml: str, _runner, _cache: LLMCache | None) -> dict[str, Any]",
+          "calls": [
+            "Path",
+            "_build_source_summary",
+            "_read_context",
+            "hash_content",
+            "format",
+            "_extract_json",
+            "mkdir",
+            "write_text",
+            "exists",
+            "OpencodeRunner",
+            "cached_llm_call",
+            "_get_tool_decomposition",
+            "dumps",
+            "read_text",
+            "parse_model"
+          ],
+          "docstring": "Run two-stage LLM functional-decomposition audit."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "json",
+        "re",
+        "pathlib",
+        "typing",
+        "opencode_arch.llm.cache",
+        "opencode_arch.llm.prompts.audit",
+        "opencode_arch.mcp.quality",
+        "architecture_model.core.source_block_quality",
+        "opencode_arch.runner.opencode",
+        "architecture_model.core.parser"
+      ],
+      "line_count": 189,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [
+        {
+          "name": "run_llm_audit",
+          "decorators": [
+            "with_quality"
+          ],
+          "is_method": false,
+          "class_name": null
+        }
+      ],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "json",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "re",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.llm.cache",
+          "symbols": [
+            "LLMCache",
+            "cached_llm_call",
+            "hash_content"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.llm.prompts.audit",
+          "symbols": [
+            "AUDIT_STAGE1_TEMPLATE",
+            "AUDIT_STAGE1_VERSION",
+            "AUDIT_STAGE2_TEMPLATE",
+            "AUDIT_STAGE2_VERSION"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.mcp.quality",
+          "symbols": [
+            "with_quality"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.source_block_quality",
+          "symbols": [
+            "compute_source_block_quality"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.runner.opencode",
+          "symbols": [
+            "OpencodeRunner"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "parse_model"
           ],
           "is_relative": false
         }
@@ -7125,7 +8335,7 @@
             "len",
             "getattr"
           ],
-          "docstring": "Generate an optimized context slice from a repository.\n\nThis is the core token-arbitrage function. It compresses a full repository\ninto a dense, structured context string within the token budget.\n\nIf an .architecture-model.yaml exists, uses the model + slicer + formatter.\nOtherwise, falls back to manifest-based context.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    focus: Focus scope - \"all\", an F-block ID (e.g. \"F1\"), a layer name,\n           or an artifact name (e.g. \"icd\", \"requirements-analysis\").\n    budget: Maximum token budget (1 token ~ 4 chars).\n    detail: Detail level - \"minimal\", \"standard\", or \"full\".\n\nReturns:\n    Formatted context string within budget, or error message."
+          "docstring": "Generate an optimized context slice from a repository.\n\nThis is the core token-arbitrage function. It compresses a full repository\ninto a dense, structured context string within the token budget.\n\nIf an .architecture-model.yaml exists, uses the model + slicer + formatter.\nOtherwise, falls back to manifest-based context.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    focus: Focus scope - \"all\", an source-block ID (e.g. \"F1\"), a layer name,\n           or an artifact name (e.g. \"icd\", \"requirements-analysis\").\n    budget: Maximum token budget (1 token ~ 4 chars).\n    detail: Detail level - \"minimal\", \"standard\", or \"full\".\n\nReturns:\n    Formatted context string within budget, or error message."
         }
       ],
       "imports": [
@@ -7185,7 +8395,7 @@
           "module": "opencode_arch.context",
           "symbols": [
             "format_model_context",
-            "format_fblock_context",
+            "format_source_block_context",
             "format_artifact_context"
           ],
           "is_relative": false
@@ -7319,6 +8529,132 @@
       "module_assignments": {}
     },
     {
+      "file": "src/opencode_arch/mcp/tools/trace_requirements.py",
+      "name": "architect_trace_requirements MCP tool \u2014 trace requirements to functions",
+      "docstring": "architect_trace_requirements MCP tool \u2014 trace requirements to functions.",
+      "functions": [
+        {
+          "name": "trace_requirements",
+          "signature": "trace_requirements(repo_path: str, model_yaml: str, requirements_doc: str, _runner, _cache) -> dict",
+          "calls": [
+            "Path",
+            "mkdir",
+            "write_text",
+            "exists",
+            "OpencodeRunner",
+            "parse_requirements_doc",
+            "len",
+            "dumps",
+            "read_text",
+            "is_absolute",
+            "derive_requirements_retroactive",
+            "match_functions_to_requirements",
+            "asdict",
+            "extract_requirements_llm"
+          ],
+          "docstring": "Trace requirements to functions.\n\nIf requirements_doc provided: parse structurally, fall back to LLM for freeform.\nIf no requirements_doc: use retroactive derivation from model.\nThen match functions to requirements.\nOutput: .architecture-models/requirements-trace.json"
+        }
+      ],
+      "imports": [
+        "__future__",
+        "json",
+        "dataclasses",
+        "pathlib",
+        "opencode_arch.mcp.quality",
+        "opencode_arch.requirements.parser",
+        "opencode_arch.requirements.llm_extractor",
+        "opencode_arch.requirements.retroactive",
+        "opencode_arch.requirements.matcher",
+        "opencode_arch.runner.opencode"
+      ],
+      "line_count": 96,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [
+        {
+          "name": "trace_requirements",
+          "decorators": [
+            "with_quality"
+          ],
+          "is_method": false,
+          "class_name": null
+        }
+      ],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "json",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "asdict"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.mcp.quality",
+          "symbols": [
+            "with_quality"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.requirements.parser",
+          "symbols": [
+            "parse_requirements_doc"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.requirements.llm_extractor",
+          "symbols": [
+            "extract_requirements_llm"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.requirements.retroactive",
+          "symbols": [
+            "derive_requirements_retroactive"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.requirements.matcher",
+          "symbols": [
+            "match_functions_to_requirements"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.runner.opencode",
+          "symbols": [
+            "OpencodeRunner"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
       "file": "src/opencode_arch/mcp/tools/validate.py",
       "name": "architect_validate MCP tool \u2014 validate architecture model quality",
       "docstring": "architect_validate MCP tool \u2014 validate architecture model quality.",
@@ -7425,6 +8761,392 @@
         "REGEN_PROMPT": "'## Regenerate {subsystem_name} (iteration {iteration}/{max_iterations})\\n\\nYou are regenerating a subsystem of a Python project. Your goal is to produce\\nsource files that pass the associated test suite.\\n\\n### Source files to produce:\\n{source_files}\\n\\n### Architecture Model (structural)\\n{model_context}\\n\\n### Constants (must be exact)\\n{constants}\\n\\n### Function Signatures\\n{signatures}\\n\\n### Test Contracts (assertions that MUST pass)\\n{test_contracts}\\n\\n### Dependency Context\\n{dependency_apis}\\n\\n{previous_feedback}'",
         "FEEDBACK_HEADER": "'### Feedback from previous iteration ({prev_iteration})\\n\\nThe following tests failed. Fix these issues:\\n\\n{failure_analysis}\\n'"
       },
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/requirements/__init__.py",
+      "name": " Init  ",
+      "docstring": null,
+      "functions": [],
+      "imports": [],
+      "line_count": 0,
+      "status": "dormant",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/requirements/llm_extractor.py",
+      "name": "Llm Extractor",
+      "docstring": "LLM-assisted requirement extraction from freeform documents.",
+      "functions": [
+        {
+          "name": "extract_requirements_llm",
+          "signature": "extract_requirements_llm(doc_path: Path, runner, cache: LLMCache | None, repo_path: str) -> list[ExtractedRequirement]",
+          "calls": [
+            "read_text",
+            "format",
+            "_extract_json",
+            "get",
+            "hexdigest",
+            "cached_llm_call",
+            "append",
+            "hash_content",
+            "isinstance",
+            "ExtractedRequirement",
+            "sha256",
+            "encode",
+            "str"
+          ],
+          "docstring": "Use LLM to segment freeform prose into requirements."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "json",
+        "re",
+        "hashlib",
+        "pathlib",
+        "opencode_arch.llm.cache",
+        "opencode_arch.llm.prompts.requirements",
+        "opencode_arch.requirements.parser"
+      ],
+      "line_count": 78,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "json",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "re",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "hashlib",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.llm.cache",
+          "symbols": [
+            "LLMCache",
+            "cached_llm_call",
+            "hash_content"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.llm.prompts.requirements",
+          "symbols": [
+            "REQUIREMENTS_EXTRACT_TEMPLATE",
+            "REQUIREMENTS_EXTRACT_VERSION"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.requirements.parser",
+          "symbols": [
+            "ExtractedRequirement"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/requirements/matcher.py",
+      "name": "Function",
+      "docstring": "Function-Requirement matching using LLM.",
+      "functions": [
+        {
+          "name": "match_functions_to_requirements",
+          "signature": "match_functions_to_requirements(requirements: list[ExtractedRequirement], model_yaml: str, runner, cache: LLMCache | None, repo_path: str) -> list[RequirementMatch]",
+          "calls": [
+            "join",
+            "_extract_functions_from_model",
+            "format",
+            "hash_content",
+            "_extract_json",
+            "get",
+            "cached_llm_call",
+            "append",
+            "isinstance",
+            "RequirementMatch",
+            "float"
+          ],
+          "docstring": "Match functions to requirements using LLM with body_hints as evidence."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "json",
+        "re",
+        "dataclasses",
+        "yaml",
+        "opencode_arch.llm.cache",
+        "opencode_arch.llm.prompts.matching",
+        "opencode_arch.requirements.parser"
+      ],
+      "line_count": 114,
+      "status": "active",
+      "classes": [
+        {
+          "name": "RequirementMatch",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "json",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "re",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "yaml",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.llm.cache",
+          "symbols": [
+            "LLMCache",
+            "cached_llm_call",
+            "hash_content"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.llm.prompts.matching",
+          "symbols": [
+            "MATCHING_TEMPLATE",
+            "MATCHING_VERSION"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.requirements.parser",
+          "symbols": [
+            "ExtractedRequirement"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/requirements/parser.py",
+      "name": "Parser",
+      "docstring": null,
+      "functions": [
+        {
+          "name": "parse_requirements_doc",
+          "signature": "parse_requirements_doc(doc_path: Path) -> list[ExtractedRequirement]",
+          "calls": [
+            "read_text",
+            "finditer",
+            "hexdigest",
+            "append",
+            "group",
+            "strip",
+            "count",
+            "ExtractedRequirement",
+            "sha256",
+            "encode",
+            "str",
+            "start"
+          ],
+          "docstring": "Parse structured requirements from a document.\n\nRecognizes:\n- REQ-NNN: text (ID-prefixed lines)\n- ### Requirement: text (heading-based)\n- - [ ] / - [x] checkbox items with REQ- prefix"
+        }
+      ],
+      "imports": [
+        "__future__",
+        "re",
+        "hashlib",
+        "dataclasses",
+        "pathlib"
+      ],
+      "line_count": 63,
+      "status": "active",
+      "classes": [
+        {
+          "name": "ExtractedRequirement",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "re",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "hashlib",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/requirements/retroactive.py",
+      "name": "Retroactive requirement derivation from existing architecture models",
+      "docstring": "Retroactive requirement derivation from existing architecture models.",
+      "functions": [
+        {
+          "name": "derive_requirements_retroactive",
+          "signature": "derive_requirements_retroactive(model_yaml: str, runner, cache: LLMCache | None, repo_path: str) -> list[ExtractedRequirement]",
+          "calls": [
+            "format",
+            "_extract_json",
+            "get",
+            "cached_llm_call",
+            "append",
+            "hash_content",
+            "isinstance",
+            "ExtractedRequirement"
+          ],
+          "docstring": "Derive requirements from existing model artifacts when no requirements doc exists."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "json",
+        "re",
+        "opencode_arch.llm.cache",
+        "opencode_arch.llm.prompts.requirements",
+        "opencode_arch.requirements.parser"
+      ],
+      "line_count": 73,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "json",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "re",
+          "symbols": [],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.llm.cache",
+          "symbols": [
+            "LLMCache",
+            "cached_llm_call",
+            "hash_content"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.llm.prompts.requirements",
+          "symbols": [
+            "REQUIREMENTS_RETROACTIVE_TEMPLATE",
+            "REQUIREMENTS_RETROACTIVE_VERSION"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.requirements.parser",
+          "symbols": [
+            "ExtractedRequirement"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
       "module_assignments": {}
     },
     {
@@ -7984,6 +9706,11 @@
       "import_path": "opencode_arch.cli.export_data"
     },
     {
+      "source": "src/opencode_arch/cli/main.py",
+      "target": "src/opencode_arch/mcp/tools/export.py",
+      "import_path": "opencode_arch.mcp.tools.export"
+    },
+    {
       "source": "src/opencode_arch/cli/metrics.py",
       "target": "src/opencode_arch/telemetry/store.py",
       "import_path": "opencode_arch.telemetry.store"
@@ -8194,6 +9921,31 @@
       "import_path": "opencode_arch.mcp.tools.decompose"
     },
     {
+      "source": "src/opencode_arch/mcp/server.py",
+      "target": "src/opencode_arch/mcp/tools/export.py",
+      "import_path": "opencode_arch.mcp.tools.export"
+    },
+    {
+      "source": "src/opencode_arch/mcp/server.py",
+      "target": "src/opencode_arch/mcp/tools/llm_audit.py",
+      "import_path": "opencode_arch.mcp.tools.llm_audit"
+    },
+    {
+      "source": "src/opencode_arch/mcp/server.py",
+      "target": "src/opencode_arch/mcp/tools/trace_requirements.py",
+      "import_path": "opencode_arch.mcp.tools.trace_requirements"
+    },
+    {
+      "source": "src/opencode_arch/mcp/server.py",
+      "target": "src/opencode_arch/mcp/tools/author.py",
+      "import_path": "opencode_arch.mcp.tools.author"
+    },
+    {
+      "source": "src/opencode_arch/mcp/server.py",
+      "target": "src/opencode_arch/mcp/tools/gate.py",
+      "import_path": "opencode_arch.mcp.tools.gate"
+    },
+    {
       "source": "src/opencode_arch/mcp/tools/check.py",
       "target": "src/opencode_arch/mcp/quality.py",
       "import_path": "opencode_arch.mcp.quality"
@@ -8210,6 +9962,11 @@
     },
     {
       "source": "src/opencode_arch/mcp/tools/docs.py",
+      "target": "src/opencode_arch/mcp/quality.py",
+      "import_path": "opencode_arch.mcp.quality"
+    },
+    {
+      "source": "src/opencode_arch/mcp/tools/export.py",
       "target": "src/opencode_arch/mcp/quality.py",
       "import_path": "opencode_arch.mcp.quality"
     },
@@ -8259,6 +10016,26 @@
       "import_path": "opencode_arch.mcp.quality"
     },
     {
+      "source": "src/opencode_arch/mcp/tools/llm_audit.py",
+      "target": "src/opencode_arch/llm/cache.py",
+      "import_path": "opencode_arch.llm.cache"
+    },
+    {
+      "source": "src/opencode_arch/mcp/tools/llm_audit.py",
+      "target": "src/opencode_arch/llm/prompts/audit.py",
+      "import_path": "opencode_arch.llm.prompts.audit"
+    },
+    {
+      "source": "src/opencode_arch/mcp/tools/llm_audit.py",
+      "target": "src/opencode_arch/mcp/quality.py",
+      "import_path": "opencode_arch.mcp.quality"
+    },
+    {
+      "source": "src/opencode_arch/mcp/tools/llm_audit.py",
+      "target": "src/opencode_arch/runner/opencode.py",
+      "import_path": "opencode_arch.runner.opencode"
+    },
+    {
       "source": "src/opencode_arch/mcp/tools/scan.py",
       "target": "src/opencode_arch/mcp/quality.py",
       "import_path": "opencode_arch.mcp.quality"
@@ -8289,9 +10066,84 @@
       "import_path": "opencode_arch.telemetry.store"
     },
     {
+      "source": "src/opencode_arch/mcp/tools/trace_requirements.py",
+      "target": "src/opencode_arch/mcp/quality.py",
+      "import_path": "opencode_arch.mcp.quality"
+    },
+    {
+      "source": "src/opencode_arch/mcp/tools/trace_requirements.py",
+      "target": "src/opencode_arch/requirements/parser.py",
+      "import_path": "opencode_arch.requirements.parser"
+    },
+    {
+      "source": "src/opencode_arch/mcp/tools/trace_requirements.py",
+      "target": "src/opencode_arch/requirements/llm_extractor.py",
+      "import_path": "opencode_arch.requirements.llm_extractor"
+    },
+    {
+      "source": "src/opencode_arch/mcp/tools/trace_requirements.py",
+      "target": "src/opencode_arch/requirements/retroactive.py",
+      "import_path": "opencode_arch.requirements.retroactive"
+    },
+    {
+      "source": "src/opencode_arch/mcp/tools/trace_requirements.py",
+      "target": "src/opencode_arch/requirements/matcher.py",
+      "import_path": "opencode_arch.requirements.matcher"
+    },
+    {
+      "source": "src/opencode_arch/mcp/tools/trace_requirements.py",
+      "target": "src/opencode_arch/runner/opencode.py",
+      "import_path": "opencode_arch.runner.opencode"
+    },
+    {
       "source": "src/opencode_arch/mcp/tools/validate.py",
       "target": "src/opencode_arch/telemetry/collector.py",
       "import_path": "opencode_arch.telemetry.collector"
+    },
+    {
+      "source": "src/opencode_arch/requirements/llm_extractor.py",
+      "target": "src/opencode_arch/llm/cache.py",
+      "import_path": "opencode_arch.llm.cache"
+    },
+    {
+      "source": "src/opencode_arch/requirements/llm_extractor.py",
+      "target": "src/opencode_arch/llm/prompts/requirements.py",
+      "import_path": "opencode_arch.llm.prompts.requirements"
+    },
+    {
+      "source": "src/opencode_arch/requirements/llm_extractor.py",
+      "target": "src/opencode_arch/requirements/parser.py",
+      "import_path": "opencode_arch.requirements.parser"
+    },
+    {
+      "source": "src/opencode_arch/requirements/matcher.py",
+      "target": "src/opencode_arch/llm/cache.py",
+      "import_path": "opencode_arch.llm.cache"
+    },
+    {
+      "source": "src/opencode_arch/requirements/matcher.py",
+      "target": "src/opencode_arch/llm/prompts/matching.py",
+      "import_path": "opencode_arch.llm.prompts.matching"
+    },
+    {
+      "source": "src/opencode_arch/requirements/matcher.py",
+      "target": "src/opencode_arch/requirements/parser.py",
+      "import_path": "opencode_arch.requirements.parser"
+    },
+    {
+      "source": "src/opencode_arch/requirements/retroactive.py",
+      "target": "src/opencode_arch/llm/cache.py",
+      "import_path": "opencode_arch.llm.cache"
+    },
+    {
+      "source": "src/opencode_arch/requirements/retroactive.py",
+      "target": "src/opencode_arch/llm/prompts/requirements.py",
+      "import_path": "opencode_arch.llm.prompts.requirements"
+    },
+    {
+      "source": "src/opencode_arch/requirements/retroactive.py",
+      "target": "src/opencode_arch/requirements/parser.py",
+      "import_path": "opencode_arch.requirements.parser"
     },
     {
       "source": "src/opencode_arch/runner/__init__.py",

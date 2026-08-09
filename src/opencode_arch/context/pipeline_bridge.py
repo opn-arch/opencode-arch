@@ -78,7 +78,7 @@ def get_model(
         return load_model(model_path)
 
     # Re-extract
-    from opencode_arch.extract.from_artifacts import extract_from_artifacts
+    from architecture_model.extract.from_artifacts import extract_from_artifacts
 
     model = extract_from_artifacts(artifact_dir)
 

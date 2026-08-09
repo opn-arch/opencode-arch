@@ -41,7 +41,7 @@ async def generate_docs(repo_path: str, formats: str = "all") -> dict[str, Any]:
         # Determine which docs to generate
         requested = {f.strip() for f in formats.split(",")} if formats != "all" else {
             "component_spec", "icd", "dependency_matrix", "health", "drift", "behaviors",
-            "system_design", "integration_flows", "index"
+            "system_design", "integration_flows", "diagrams", "index"
         }
 
         output_dir = path / "docs" / "architecture"
@@ -156,6 +156,15 @@ async def generate_docs(repo_path: str, formats: str = "all") -> dict[str, Any]:
                 generated.append(str(out.relative_to(path)))
             except Exception as e:
                 errors.append(f"integration_flows: {e}")
+
+        if "diagrams" in requested or "all" in requested:
+            try:
+                from architecture_model.docs.diagrams import generate_all_diagrams
+                diag_dir = output_dir / "diagrams"
+                diagram_paths = generate_all_diagrams(model, diag_dir)
+                generated.extend(str(p.relative_to(path)) for p in diagram_paths)
+            except Exception as e:
+                errors.append(f"diagrams: {e}")
 
         if "drift" in requested or "all" in requested:
             try:

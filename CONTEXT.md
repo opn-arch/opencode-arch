@@ -287,3 +287,29 @@ class MyRunner:
 - MCP server import is wrapped in try/except — tools work without mcp package
 - Integration tests simulate the agent's role (produce YAML, then store/validate)
 - CLI tests mock the runner (don't actually call `opencode run`)
+
+<!-- opencode-arch:start -->
+# Architecture (auto-managed by opencode-arch)
+
+**Model:** 6 components | 16 relationships
+**Score:** 58.3% (FC=40% RA=80% BC=13% BV=100%)
+**Codebase:** 80 modules | 125 import edges
+
+## Component Map
+
+## Architecture: 6 components
+- **CLI Commands** (COMP-CLI): src/opencode_arch/cli/main.py, src/opencode_arch/cli/extract.py, src/opencode_arch/cli/generate.py
+- **MCP Server** (COMP-MCP): src/opencode_arch/mcp/__main__.py, src/opencode_arch/mcp/server.py, src/opencode_arch/mcp/tools/scan.py
+- **OpenCode Runner** (COMP-RUNNER): src/opencode_arch/runner/base.py, src/opencode_arch/runner/opencode.py
+- **Learning Loop** (COMP-LEARNING): src/opencode_arch/learning/classifier.py, src/opencode_arch/learning/adapter.py, src/opencode_arch/learning/assessor.py
+- **Telemetry Store** (COMP-TELEMETRY): src/opencode_arch/telemetry/store.py, src/opencode_arch/telemetry/recorder.py
+- **Prompt Templates** (COMP-PROMPTS): src/opencode_arch/prompts/regen.py, src/opencode_arch/prompts/extract.py
+
+## Development Guidelines
+
+- Use `architect_slice` for focused context on specific components
+- Use `architect_check` after significant changes to verify model accuracy
+- Use `architect_require` to capture functional requirements from discussion
+- Use `architect_feedback` to record corrections or rate tool quality
+- Components are auto-grouped by import affinity — respect boundaries
+<!-- opencode-arch:end -->

@@ -201,6 +201,16 @@ async def store_extraction(
         except Exception as e:
             pipeline["docs"] = {"status": "error", "error": str(e)}
 
+        # Auto-generate diagrams
+        try:
+            from architecture_model.docs.diagrams import generate_all_diagrams
+            diag_dir = path / "docs" / "architecture" / "diagrams"
+            diagram_paths = generate_all_diagrams(model, diag_dir)
+            result["diagrams_generated"] = len(diagram_paths)
+            pipeline["diagrams"] = {"status": "ok"}
+        except Exception as e:
+            pipeline["diagrams"] = {"status": "error", "error": str(e)}
+
         # Auto-decompose into sub-models + recursive manifests
         try:
             import json as _json
@@ -414,39 +424,36 @@ async def store_extraction(
                 }
                 pipeline["behavior_flows"] = {"status": "ok"}
 
-                # Reduce noise: keep only cross-component + CRUD summaries in top-level model
+                # Compact model: offload leaf behaviors to sub-models
                 try:
-                    from architecture_model.core.types import Behavior as _Beh, Status as _St
+                    from architecture_model.orchestration.compaction import compact_for_storage
+                    from architecture_model.core.parser import save_model as _save_compact
 
-                    # Cross-component behaviors stay as-is
-                    kept_behaviors = [beh for beh, _ in classification.cross_component]
-
-                    # Create one summary behavior per CRUD group
-                    for comp_id, behs in classification.crud_groups.items():
-                        summary = summarize_crud_group(comp_id, behs)
-                        kept_behaviors.append(_Beh(
-                            id=f"BEH-CRUD-{comp_id}",
-                            name=f"CRUD: {summary.summary}",
-                            status=_St.ACTIVE,
-                            trigger=f"{summary.count} endpoints",
-                            steps=[b.name for b in behs[:5]],  # sample up to 5
-                        ))
-
-                    # Replace behaviors in model and re-save
                     original_count = len(model.entities.behaviors)
-                    model.entities.behaviors = kept_behaviors
-                    # Filter relationships: keep realizes edges only for kept behavior IDs
-                    kept_ids = {b.id for b in kept_behaviors}
-                    model.relationships = [
-                        r for r in model.relationships
-                        if not (hasattr(r, 'type') and str(getattr(r.type, 'value', r.type)) == 'realizes'
-                                and r.to_id.startswith('BEH-') and r.to_id not in kept_ids)
-                    ]
+                    model, offloaded = compact_for_storage(model)
+
+                    # Write per-component sub-models with full behaviors
+                    for comp_id, comp_behaviors in offloaded.items():
+                        comp_dir = path / ".architecture-models" / comp_id
+                        comp_dir.mkdir(parents=True, exist_ok=True)
+                        comp = next((c for c in model.entities.components if c.id == comp_id), None)
+                        if comp:
+                            from architecture_model.core.types import ArchitectureModel as _AM, Entities as _E, ModelMeta as _MM
+                            sub = _AM(
+                                meta=_MM(project=f"{path.name}/{comp.name}", schema_version="1.3"),
+                                entities=_E(components=[comp], behaviors=comp_behaviors),
+                                relationships=[r for r in model.relationships if r.from_id == comp_id or r.to_id in {b.id for b in comp_behaviors}],
+                            )
+                            try:
+                                _save_compact(sub, comp_dir / ".architecture-model.yaml")
+                            except Exception:
+                                pass
+
                     _save_beh(model, output_path)
-                    result["behaviors_reduced"] = f"{original_count} -> {len(kept_behaviors)}"
-                    pipeline["behavior_noise_reduction"] = {"status": "ok"}
+                    result["behaviors_reduced"] = f"{original_count} -> {len(model.entities.behaviors)}"
+                    pipeline["compaction"] = {"status": "ok"}
                 except Exception as e:
-                    pipeline["behavior_noise_reduction"] = {"status": "error", "error": str(e)}
+                    pipeline["compaction"] = {"status": "error", "error": str(e)}
             else:
                 pipeline["behavior_flows"] = {"status": "ok", "detail": "no behaviors to classify"}
         except Exception as e:
