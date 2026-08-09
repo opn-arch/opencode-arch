@@ -133,12 +133,17 @@ def _requirement_met(req: str, model: ArchitectureModel, manifest: dict | None) 
     elif req == "manifest.tests":
         if manifest is None:
             return False
-        tests = manifest.get("test_files") or manifest.get("tests")
+        tests = getattr(manifest, "test_files", None) or getattr(manifest, "tests", None)
+        if tests is None and hasattr(manifest, "get"):
+            tests = manifest.get("test_files") or manifest.get("tests")
         return bool(tests)
     elif req == "manifest.metrics":
         if manifest is None:
             return False
-        return bool(manifest.get("metrics"))
+        metrics = getattr(manifest, "metrics", None)
+        if metrics is None and hasattr(manifest, "get"):
+            metrics = manifest.get("metrics")
+        return bool(metrics)
     else:
         return False
 
@@ -215,11 +220,17 @@ def should_decompose(model: ArchitectureModel, manifest: dict | None = None) -> 
     # Check file count from manifest
     if manifest is not None:
         # Try metrics.total_files first
-        total_files = manifest.get("metrics", {}).get("total_files", 0)
-        if total_files > 50:
-            return True
+        metrics = getattr(manifest, "metrics", None)
+        if metrics is None and hasattr(manifest, "get"):
+            metrics = manifest.get("metrics", {})
+        if metrics:
+            total_files = metrics.get("total_files", 0) if isinstance(metrics, dict) else getattr(metrics, "total_files", 0)
+            if total_files > 50:
+                return True
         # Fall back to counting modules list
-        modules = manifest.get("modules")
+        modules = getattr(manifest, "modules", None)
+        if modules is None and hasattr(manifest, "get"):
+            modules = manifest.get("modules")
         if modules and len(modules) > 50:
             return True
 

@@ -48,8 +48,8 @@ async def scan_repository(repo_path: str) -> dict[str, Any]:
         except Exception:
             pass
 
-        result = manifest
-        if suggested and isinstance(result, dict):
+        result = manifest.to_dict()
+        if suggested:
             result["suggested_components"] = suggested
         return result
     except Exception as e:

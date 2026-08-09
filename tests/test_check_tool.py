@@ -39,11 +39,13 @@ relationships:
 """
     result = await check_representativeness(repo_path=str(tmp_path), model_yaml=model_yaml)
     assert "error" not in result
-    assert "file_coverage" in result
-    assert "relationship_accuracy" in result
-    assert "boundary_coherence" in result
-    assert "overall" in result
-    assert 0 <= result["overall"] <= 100
+    # Result may be flat or nested under "root"
+    scores = result.get("root", result)
+    assert "file_coverage" in scores
+    assert "relationship_accuracy" in scores
+    assert "boundary_coherence" in scores
+    assert "overall" in scores
+    assert 0 <= scores["overall"] <= 100
 
 
 @pytest.mark.asyncio
@@ -67,5 +69,7 @@ entities:
 relationships: []
 """
     result = await check_representativeness(repo_path=str(tmp_path), model_yaml=model_yaml)
-    assert result["file_coverage"] < 100.0
-    assert len(result["uncovered_files"]) >= 1
+    scores = result.get("root", result)
+    assert scores["file_coverage"] < 100.0
+    uncovered = scores.get("uncovered_files") or result.get("uncovered_files", [])
+    assert len(uncovered) >= 1

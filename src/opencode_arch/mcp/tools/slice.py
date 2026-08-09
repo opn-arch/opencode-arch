@@ -150,7 +150,12 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
 
     if focus == "all":
         return format_model_context(model, max_tokens=budget, detail_level=detail)
-    elif focus.startswith("F") and focus[1:].isdigit():
+    elif (focus.startswith("F") or focus.startswith("S")) and focus[1:].isdigit():
+        # Check for sub-model first
+        sub_model_path = project_root / ".architecture-models" / focus / ".architecture-model.yaml"
+        if sub_model_path.exists():
+            sub_model = load_model(sub_model_path)
+            return format_model_context(sub_model, max_tokens=budget, detail_level=detail)
         # Complexity-proportional budget: complex blocks get more tokens
         block_budget = _compute_block_budget(model, focus, budget)
         return format_source_block_context(model, source_block=focus, max_tokens=block_budget, project_root=project_root)
@@ -212,21 +217,22 @@ def _slice_from_manifest(project_root: Path, focus: str, budget: int) -> str:
     except Exception:
         pass
 
-    manifest_yaml = yaml.dump(manifest, default_flow_style=False, sort_keys=False)
+    manifest_dict = manifest.to_dict() if hasattr(manifest, 'to_dict') else manifest
+    manifest_yaml = yaml.dump(manifest_dict, default_flow_style=False, sort_keys=False)
 
     char_budget = budget * 4
     if len(manifest_yaml) > char_budget:
         summary: dict[str, Any] = {
-            "project_root": manifest.get("project_root"),
-            "metrics": manifest.get("metrics", {}),
-            "module_count": len(manifest.get("modules", [])),
+            "project_root": manifest_dict.get("project_root"),
+            "metrics": manifest_dict.get("metrics", {}),
+            "module_count": len(manifest_dict.get("modules", [])),
         }
         if groups_info:
             summary["suggested_components"] = groups_info
         else:
             summary["functional_blocks"] = {
                 k: {"file_count": len(v.get("sub_functions", []))}
-                for k, v in manifest.get("functional_blocks", {}).items()
+                for k, v in manifest_dict.get("functional_blocks", {}).items()
             }
         if focus != "all":
             summary["focus"] = focus

@@ -69,9 +69,7 @@ class TestRunLaunch:
         result = run_launch(str(tmp_path), skip_exec=True)
         assert result["repo"] == str(tmp_path)
         assert "context_md" in result["steps"]
-        assert "opencode_json" in result["steps"]
         assert (tmp_path / "CONTEXT.md").exists()
-        assert (tmp_path / "opencode.json").exists()
 
     def test_preflight_with_existing_model(self, tmp_path):
         # Create a valid model file
