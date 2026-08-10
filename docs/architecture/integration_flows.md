@@ -2,39 +2,95 @@
 
 ```mermaid
 flowchart TD
-  COMP-CLI[CLI Commands] -->|depends-on| COMP-RUNNER[OpenCode Runner]
-  COMP-CLI[CLI Commands] -->|depends-on| COMP-TELEMETRY[Telemetry Store]
-  COMP-CLI[CLI Commands] -->|depends-on| COMP-LEARNING[Learning Loop]
-  COMP-CLI[CLI Commands] -->|depends-on| COMP-PROMPTS[Prompt Templates]
-  COMP-LEARNING[Learning Loop] -->|depends-on| COMP-TELEMETRY[Telemetry Store]
+  COMP-MCP[MCP Server] -->|depends-on| COMP-CONTEXT[Context]
+  COMP-MCP[MCP Server] -->|depends-on| COMP-ARTIFACTS[Artifacts]
+  COMP-MCP[MCP Server] -->|depends-on| COMP-REGEN[Regen]
+  COMP-MCP[MCP Server] -->|depends-on| COMP-TELEMETRY[Telemetry]
+  COMP-MCP[MCP Server] -->|depends-on| COMP-REQUIREMENTS[Requirements]
+  COMP-CLI[CLI] -->|depends-on| COMP-CONTEXT[Context]
+  COMP-CLI[CLI] -->|depends-on| COMP-LEARNING[Learning]
+  COMP-CLI[CLI] -->|depends-on| COMP-LLM[LLM]
+  COMP-CLI[CLI] -->|depends-on| COMP-ARTIFACTS[Artifacts]
+  COMP-CONTEXT[Context] -->|depends-on| COMP-LLM[LLM]
+  COMP-REGEN[Regen] -->|depends-on| COMP-LLM[LLM]
+  COMP-AGENT[Agent] -->|depends-on| COMP-LLM[LLM]
+  COMP-MCP[MCP Server] -->|depends-on| COMP-LLM[LLM]
 ```
 
-## CLI Commands → OpenCode Runner (depends-on)
-CLI uses runner to invoke LLM
+## MCP Server → Context (depends-on)
+—
 
-**Source:** COMP-CLI (CLI Commands)
-**Target:** COMP-RUNNER (OpenCode Runner)
+**Source:** COMP-MCP (MCP Server)
+**Target:** COMP-CONTEXT (Context)
 
-## CLI Commands → Telemetry Store (depends-on)
-CLI records metrics after operations
+## MCP Server → Artifacts (depends-on)
+—
 
-**Source:** COMP-CLI (CLI Commands)
-**Target:** COMP-TELEMETRY (Telemetry Store)
+**Source:** COMP-MCP (MCP Server)
+**Target:** COMP-ARTIFACTS (Artifacts)
 
-## CLI Commands → Learning Loop (depends-on)
-Regen-loop uses learning for adaptation
+## MCP Server → Regen (depends-on)
+—
 
-**Source:** COMP-CLI (CLI Commands)
-**Target:** COMP-LEARNING (Learning Loop)
+**Source:** COMP-MCP (MCP Server)
+**Target:** COMP-REGEN (Regen)
 
-## CLI Commands → Prompt Templates (depends-on)
-CLI uses prompt templates
+## MCP Server → Telemetry (depends-on)
+—
 
-**Source:** COMP-CLI (CLI Commands)
-**Target:** COMP-PROMPTS (Prompt Templates)
+**Source:** COMP-MCP (MCP Server)
+**Target:** COMP-TELEMETRY (Telemetry)
 
-## Learning Loop → Telemetry Store (depends-on)
-Learning stores lessons and patterns
+## MCP Server → Requirements (depends-on)
+—
 
-**Source:** COMP-LEARNING (Learning Loop)
-**Target:** COMP-TELEMETRY (Telemetry Store)
+**Source:** COMP-MCP (MCP Server)
+**Target:** COMP-REQUIREMENTS (Requirements)
+
+## CLI → Context (depends-on)
+—
+
+**Source:** COMP-CLI (CLI)
+**Target:** COMP-CONTEXT (Context)
+
+## CLI → Learning (depends-on)
+—
+
+**Source:** COMP-CLI (CLI)
+**Target:** COMP-LEARNING (Learning)
+
+## CLI → LLM (depends-on)
+—
+
+**Source:** COMP-CLI (CLI)
+**Target:** COMP-LLM (LLM)
+
+## CLI → Artifacts (depends-on)
+—
+
+**Source:** COMP-CLI (CLI)
+**Target:** COMP-ARTIFACTS (Artifacts)
+
+## Context → LLM (depends-on)
+—
+
+**Source:** COMP-CONTEXT (Context)
+**Target:** COMP-LLM (LLM)
+
+## Regen → LLM (depends-on)
+—
+
+**Source:** COMP-REGEN (Regen)
+**Target:** COMP-LLM (LLM)
+
+## Agent → LLM (depends-on)
+—
+
+**Source:** COMP-AGENT (Agent)
+**Target:** COMP-LLM (LLM)
+
+## MCP Server → LLM (depends-on)
+—
+
+**Source:** COMP-MCP (MCP Server)
+**Target:** COMP-LLM (LLM)

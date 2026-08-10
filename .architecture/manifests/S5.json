@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-08-10T21:48:11.668861+00:00",
+  "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
+  "metrics": {
+    "py_files": 1,
+    "total_lines": 12,
+    "functions": 0,
+    "classes": 0,
+    "constants": 0
+  },
+  "functional_blocks": {},
+  "modules": [
+    {
+      "file": "src/opencode_arch/extract/__init__.py",
+      "name": "Extract architecture models from source code or Tier 1 artifacts",
+      "docstring": "Extract architecture models from source code or Tier 1 artifacts.\n\nNote: route_detector, constraint_detector, from_artifacts, and table_parser\nhave been moved to architecture-model-standard (architecture_model.extract.*).\nThis package re-exports from there for backward compatibility.",
+      "functions": [],
+      "imports": [
+        "architecture_model.extract.from_code",
+        "architecture_model.extract.from_artifacts"
+      ],
+      "line_count": 12,
+      "status": "dormant",
+      "classes": [],
+      "exports": [
+        "extract_from_code",
+        "extract_from_artifacts"
+      ],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "architecture_model.extract.from_code",
+          "symbols": [
+            "extract_from_code"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.extract.from_artifacts",
+          "symbols": [
+            "extract_from_artifacts"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    }
+  ],
+  "interfaces": []
+}

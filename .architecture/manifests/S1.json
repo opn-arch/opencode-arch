@@ -1,0 +1,139 @@
+{
+  "generated_at": "2026-08-10T21:48:11.583891+00:00",
+  "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
+  "metrics": {
+    "py_files": 2,
+    "total_lines": 121,
+    "functions": 0,
+    "classes": 2,
+    "constants": 0
+  },
+  "functional_blocks": {},
+  "modules": [
+    {
+      "file": "src/opencode_arch/agent/__init__.py",
+      "name": "Agent layer for uncertainty resolution",
+      "docstring": "Agent layer for uncertainty resolution.",
+      "functions": [],
+      "imports": [
+        "resolution"
+      ],
+      "line_count": 4,
+      "status": "dormant",
+      "classes": [],
+      "exports": [
+        "UncertaintyResolver"
+      ],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "resolution",
+          "symbols": [
+            "UncertaintyResolver"
+          ],
+          "is_relative": true
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/agent/resolution.py",
+      "name": "Uncertainty resolution \u2014 dispatches pipeline uncertainties to LLM/search/user",
+      "docstring": "Uncertainty resolution \u2014 dispatches pipeline uncertainties to LLM/search/user.\n\nThis is the MCP layer's responsibility: when the deterministic pipeline\nproduces uncertainties, this resolver attempts to resolve them using\nthe tools available to the agent (LLM analysis, codebase search, user queries).",
+      "functions": [],
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "typing",
+        "architecture_model.pipeline.protocol",
+        "architecture_model.pipeline.learning",
+        "time"
+      ],
+      "line_count": 117,
+      "status": "active",
+      "classes": [
+        {
+          "name": "ResolutionStrategy",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        },
+        {
+          "name": "UncertaintyResolver",
+          "bases": [],
+          "methods": [
+            "__init__",
+            "register_handler",
+            "resolve",
+            "resolve_all",
+            "unresolvable_categories"
+          ],
+          "is_abstract": false,
+          "decorators": [],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any",
+            "Callable"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.pipeline.protocol",
+          "symbols": [
+            "Evidence",
+            "Uncertainty"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.pipeline.learning",
+          "symbols": [
+            "LearningStore",
+            "ResolutionOutcome"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "time",
+          "symbols": [],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    }
+  ],
+  "interfaces": [
+    {
+      "source": "src/opencode_arch/agent/__init__.py",
+      "target": "src/opencode_arch/agent/resolution.py",
+      "import_path": "resolution"
+    }
+  ]
+}

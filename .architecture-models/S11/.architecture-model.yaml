@@ -1,0 +1,46 @@
+meta:
+  schema_version: '2.0'
+  project: opencode-arch/Requirements
+  system: Requirements
+  generated_at: '2026-08-10T21:48:10.025896+00:00'
+  manifest_path: manifest.json
+  parent_model: ../../.architecture-model.yaml
+  refines_component: COMP-REQUIREMENTS
+entities:
+  capabilities:
+  - id: CAP-REQUIREMENTS
+    name: Requirements Tracing
+    status: ACTIVE
+    description: Capture, match, and trace requirements to architecture components
+  components:
+  - id: COMP-REQUIREMENTS
+    name: Requirements
+    status: ACTIVE
+    description: Requirement capture, matching, storage
+    layer: LYR-DOMAIN
+    files:
+    - src/opencode_arch/requirements/__init__.py
+    - src/opencode_arch/requirements/matcher.py
+    - src/opencode_arch/requirements/store.py
+    kind: library
+    signatures:
+    - name: match_functions_to_requirements
+      params:
+      - 'requirements: list[ExtractedRequirement]'
+      - 'model_yaml: str'
+      - runner
+      - 'cache: LLMCache | None'
+      - 'repo_path: str'
+      returns: list[RequirementMatch]
+      body_hint: 'if not requirements: ...; reqs_text = ''\n''.join((f''- {r.id}: {r.text}'' for r in requirements)); funcs_text
+        = _extract_functions_from_model(model_yaml); prompt = MATCHING_TEMPLATE.format(requirements_text=reqs_text, fun...;
+        combined_hash = hash_content(reqs_text + funcs_text); result = await cached_llm_call(runner, prompt, combined_hash,
+        hash...; parsed = _extract_json(result.output); matches_raw = parsed.get(''matches'', []); results: list[RequirementMatch]
+        = []; for m in matches_raw: ...; return results'
+relationships:
+- type: realizes
+  from: COMP-REQUIREMENTS
+  to: CAP-REQUIREMENTS
+- type: depends-on
+  from: COMP-MCP
+  to: COMP-REQUIREMENTS

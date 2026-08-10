@@ -6,7 +6,7 @@
 
 | Metric | Value |
 |--------|-------|
-| Source tokens | ~194,481 |
-| Model tokens | ~4,865 |
-| Compression | 40.0x |
-| Tokens saved | ~189,616 |
+| Source tokens | ~179,555 |
+| Model tokens | ~2,863 |
+| Compression | 62.7x |
+| Tokens saved | ~176,692 |

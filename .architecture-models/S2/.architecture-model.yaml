@@ -1,0 +1,199 @@
+meta:
+  schema_version: '2.0'
+  project: opencode-arch/Artifacts
+  system: Artifacts
+  generated_at: '2026-08-10T21:48:10.025896+00:00'
+  manifest_path: manifest.json
+  parent_model: ../../.architecture-model.yaml
+  refines_component: COMP-ARTIFACTS
+entities:
+  capabilities:
+  - id: CAP-ARTIFACTS
+    name: Artifact Generation
+    status: ACTIVE
+    description: Model-driven SE document generation with templates and selectors
+  components:
+  - id: COMP-ARTIFACTS
+    name: Artifacts
+    status: ACTIVE
+    description: Artifact selection, context assembly, diagram generation, templates
+    layer: LYR-DOMAIN
+    files:
+    - src/opencode_arch/artifacts/__init__.py
+    - src/opencode_arch/artifacts/context.py
+    - src/opencode_arch/artifacts/diagrams.py
+    - src/opencode_arch/artifacts/selector.py
+    - src/opencode_arch/artifacts/templates.py
+    kind: library
+    constants:
+    - name: API_DETAIL_TEMPLATE
+      value: 'ArtifactTemplate(artifact_id=''api-detail'', filename=''api-detail-{cap_id}.md'', system_prompt=''You are a
+        senior systems engineer writing detailed API documentation for a single capability within a software architecture.
+        Write precise, implementation-grounded documentation. Include exact function signatures, parameters, return types,
+        algorithm steps, and behavioral sequences. Use tables and code blocks. Do NOT hallucinate — only document what is
+        present in the provided data.'', sections=[TemplateSection(heading=''## Overview'', source=''capability_detail'',
+        instructions="Create a summary table with: ID, F-Block, Priority, Status, Realized by (component + source path), Constraints,
+        Actor. Then one sentence describing the capability''s purpose."), TemplateSection(heading=''## Primary API'', source=''capability_detail'',
+        instructions=''For each public function in the realizing component, document: full signature, parameters (with types
+        and defaults), return type, algorithm steps (numbered), and example usage. Use the function signatures, body_hints,
+        and constants from the provided data.''), TemplateSection(heading=''## Supporting Functions'', source=''capability_detail'',
+        instructions=''Document internal/helper functions. Show how they support the primary API. Include signatures and brief
+        descriptions.''), TemplateSection(heading=''## Behavioral View'', source=''capability_detail'', instructions=''For
+        each related behavior, document: trigger, preconditions, step sequence (as numbered list and ASCII sequence diagram),
+        postconditions, and exit codes/error handling.''), TemplateSection(heading=''## Relationship Graph'', source=''capability_detail'',
+        instructions="Show the capability''s relationship neighborhood as an ASCII diagram. Include: realizes, depends-on,
+        exposes, constrained-by."), TemplateSection(heading=''## Data Contracts'', source=''capability_detail'', instructions=''Document
+        input/output data formats for interfaces. Include return type fields as tables. Reference test contracts as behavioral
+        expectations.'')])'
+    signatures:
+    - name: assemble_artifact_context
+      params:
+      - 'template: ArtifactTemplate'
+      - 'model: ArchitectureModel'
+      - 'manifest: dict | None'
+      - 'max_tokens: int'
+      returns: str
+      body_hint: 'max_chars = max_tokens * 4; header = f''SYSTEM: {template.system_prompt}\n''; sections: list[str] = [];
+        for section in template.sections: ...; full_output = header + ''''.join(sections); if len(full_output) <= max_chars:
+        ...; remaining = max_chars - len(header); truncated_sections: list[str] = []; for section in template.sections: ...;
+        return header + ''''.join(truncated_sections)'
+    - name: format_capability_detail_context
+      params:
+      - 'cap_id: str'
+      - 'model: ArchitectureModel'
+      - 'manifest: dict | None'
+      returns: str
+      body_hint: 'from architecture_model.core.types import RelationType; cap = None; for c in model.entities.capabilities:
+        ...; if cap is None: ...; lines: list[str] = []; lines.append(''## Capability''); lines.append(f''ID: {cap.id}'');
+        lines.append(f''Name: {cap.name}''); lines.append(f''Status: {cap.status.value}''); lines.append(f''F-Block: {cap.source_block}'');
+        lines.append(f''Priority: {cap.priority.value}''); if cap.requirements: ...; realizing_comp_ids: list[str] = []; for
+        rel in model.relationships: ...; realizing_comps = [comp for comp in model.entities.components if comp.id in...; if
+        realizing_comps: ...; behavior_ids: set[str] = set(); for rel in model.relationships: ...; behaviors = [b for b in
+        model.entities.behaviors if b.id in behavior_...; if behaviors: ...; interface_ids: set[str] = set(); for rel in model.relationships:
+        ...; interfaces = [iface for iface in model.entities.interfaces if iface.id...; if interfaces: ...; constraint_ids:
+        set[str] = set(); for rel in model.relationships: ...; constraints = [c for c in model.entities.constraints if c.id
+        in constra...; if constraints: ...; dep_lines: list[str] = []; all_related_ids = set(realizing_comp_ids) | interface_ids
+        | behavior_ids | ...; for rel in model.relationships: ...; if dep_lines: ...; if manifest and realizing_comps: ...;
+        return ''\n''.join(lines)'
+    - name: generate_component_diagram
+      params:
+      - 'model: ArchitectureModel'
+      returns: str
+      body_hint: 'lines: list[str] = []; lines.append(''@startuml''); lines.append(''!include <C4/C4_Component>''); lines.append('''');
+        lines.append(f''title Component Diagram - {model.meta.project}''); lines.append(''''); for actor in model.entities.actors:
+        ...; if model.entities.actors: ...; layer_ids = {layer.id for layer in model.entities.layers}; layer_map: dict[str,
+        list] = {layer.id: [] for layer in m...; unlayered: list = []; for comp in model.entities.components: ...; for layer
+        in model.entities.layers: ...; for comp in unlayered: ...; if unlayered: ...; allowed_types = {RelationType.DEPENDS_ON,
+        RelationType.EXPOSES, RelationT...; rels_rendered = False; for rel in model.relationships: ...; if rels_rendered:
+        ...; lines.append(''@enduml''); return ''\n''.join(lines)'
+    - name: generate_dependency_diagram
+      params:
+      - 'model: ArchitectureModel'
+      returns: str
+      body_hint: 'lines: list[str] = []; lines.append(''@startuml''); lines.append(f''title Dependency Graph - {model.meta.project}'');
+        lines.append(''''); allowed_types = {RelationType.DEPENDS_ON, RelationType.EXPOSES, RelationT...; relevant_rels =
+        [r for r in model.relationships if r.type in allowed_types]; connected_ids: set[str] = set(); for rel in relevant_rels:
+        ...; if not connected_ids: ...; name_lookup: dict[str, str] = {}; for comp in model.entities.components: ...; for
+        iface in model.entities.interfaces: ...; for entity_id in sorted(connected_ids): ...; lines.append(''''); for rel
+        in relevant_rels: ...; lines.append(''''); lines.append(''@enduml''); return ''\n''.join(lines)'
+    - name: generate_sequence_diagram
+      params:
+      - 'behavior: Behavior'
+      - 'model: ArchitectureModel'
+      returns: str
+      body_hint: 'if not behavior.steps: ...; lines: list[str] = []; lines.append(''@startuml''); lines.append(f''title {behavior.name}'');
+        lines.append(''''); actor_name: str | None = None; actor_alias: str | None = None; if behavior.actor: ...; lines.append(f''participant
+        "System" as System''); lines.append(''''); source = actor_alias if actor_alias else ''System''; for (i, step) in enumerate(behavior.steps):
+        ...; lines.append(''''); lines.append(''@enduml''); return ''\n''.join(lines)'
+    - name: generate_nav_diagram
+      params:
+      - 'model: ArchitectureModel'
+      returns: str
+      body_hint: 'lines: list[str] = []; lines.append(''@startuml''); lines.append(f''title Architecture Navigation - {model.meta.project}'');
+        lines.append(''left to right direction''); lines.append(''''); rendered_ids: set[str] = set(); if model.entities.actors:
+        ...; if model.entities.capabilities: ...; if model.entities.behaviors: ...; layer_ids = {layer.id for layer in model.entities.layers};
+        layer_map: dict[str, list] = {layer.id: [] for layer in m...; unlayered: list = []; for comp in model.entities.components:
+        ...; for layer in model.entities.layers: ...; for comp in unlayered: ...; if model.entities.components or model.entities.layers:
+        ...; if model.entities.interfaces: ...; if model.entities.constraints: ...; for rel in model.relationships: ...; lines.append('''');
+        lines.append(''@enduml''); return ''\n''.join(lines)'
+    - name: generate_focused_diagram
+      params:
+      - 'model: ArchitectureModel'
+      - 'entity_id: str'
+      - 'depth: int'
+      returns: str
+      body_hint: 'entity_info: dict[str, tuple[str, str]] = {}; for act in model.entities.actors: ...; for cap in model.entities.capabilities:
+        ...; for beh in model.entities.behaviors: ...; for comp in model.entities.components: ...; for iface in model.entities.interfaces:
+        ...; for con in model.entities.constraints: ...; for layer in model.entities.layers: ...; if entity_id not in entity_info:
+        ...; adjacency: dict[str, set[str]] = {}; for eid in entity_info: ...; for rel in model.relationships: ...; visited:
+        dict[str, int] = {entity_id: 0}; queue: list[tuple[str, int]] = [(entity_id, 0)]; while queue: ...; if len(visited)
+        <= 1 and (not adjacency.get(entity_id)): ...; focus_name = entity_info[entity_id][1]; lines: list[str] = []; lines.append(''@startuml'');
+        lines.append(f''title Focus: {entity_id} ({focus_name}) - depth {depth}''); lines.append(''''); for (eid, d) in sorted(visited.items(),
+        key=lambda x: x[1]): ...; lines.append(''''); for rel in model.relationships: ...; lines.append(''''); lines.append(''@enduml'');
+        return ''\n''.join(lines)'
+    - name: generate_all_diagrams
+      params:
+      - 'model: ArchitectureModel'
+      returns: dict[str, str]
+      body_hint: 'result: dict[str, str] = {}; if len(model.entities.components) >= 2: ...; allowed_types = {RelationType.DEPENDS_ON,
+        RelationType.EXPOSES, RelationT...; has_dep_rels = any((r.type in allowed_types for r in model.relationships)); if
+        has_dep_rels: ...; total_entities = len(model.entities.actors) + len(model.entities.capabilit...; if total_entities
+        >= 2: ...; for behavior in model.entities.behaviors: ...; return result'
+    - name: select_artifacts
+      params:
+      - 'model: ArchitectureModel'
+      - 'manifest: dict | None'
+      - 'include_capability_details: bool'
+      returns: list[ArtifactSpec]
+      body_hint: "selected: list[ArtifactSpec] = []; for spec in ARTIFACT_REGISTRY:\n    if all((_requirement_met(req, model,\
+        \ manifest) for req in spec.requires)):\n        selected.append(spec); if include_capability_details:\n    selected.extend(select_capability_detail_artifacts(model));\
+        \ selected.sort(key=lambda s: (s.priority, s.id)); return selected"
+    - name: get_artifact_spec
+      params:
+      - 'artifact_id: str'
+      returns: ArtifactSpec | None
+      body_hint: "for spec in ARTIFACT_REGISTRY:\n    if spec.id == artifact_id:\n        return spec; return None"
+    - name: should_decompose
+      params:
+      - 'model: ArchitectureModel'
+      - 'manifest: dict | None'
+      returns: bool
+      body_hint: "if len(model.entities.components) > 20:\n    return True; source_blocks = {c.source_block for c in model.entities.components\
+        \ if c.source_block}; if len(source_blocks) > 5:\n    return True; if manifest is not None:\n    metrics = getattr(manifest,\
+        \ 'metrics', None)\n    if metrics is None and hasattr(manifest, 'get'):\n        metrics = manifest.get('metrics',\
+        \ {})\n    if metrics:\n        total_files = metrics.get('total_files', 0) if isinstance(metrics, dict) else getattr(metrics,\
+        \ 'total_files', 0)\n        if total_files > 50:\n            return True\n    modules = getattr(manifest, 'modules',\
+        \ None)\n    if modules is None and hasattr(manifest, 'get'):\n        modules = manifest.get('modules')\n    if modules\
+        \ and len(modules) > 50:\n        return True; return False"
+    - name: select_subsystem_artifacts
+      params:
+      - 'subsystem: SubsystemInfo'
+      - 'model: ArchitectureModel'
+      - 'manifest: dict | None'
+      returns: list[ArtifactSpec]
+      body_hint: "if not subsystem.components:\n    return []; selected: list[ArtifactSpec] = []; for spec in ARTIFACT_REGISTRY:\n\
+        \    if spec.id not in SUBSYSTEM_ARTIFACTS:\n        continue\n    if all((_subsystem_requirement_met(req, subsystem,\
+        \ model, manifest) for req in spec.requires)):\n        selected.append(spec); selected.sort(key=lambda s: (s.priority,\
+        \ s.id)); return selected"
+    - name: select_capability_detail_artifacts
+      params:
+      - 'model: ArchitectureModel'
+      returns: list[ArtifactSpec]
+      body_hint: 'from architecture_model.core.types import RelationType; realized_caps: set[str] = set(); for rel in model.relationships:
+        ...; cap_ids = {c.id for c in model.entities.capabilities}; realized_caps = realized_caps & cap_ids; specs: list[ArtifactSpec]
+        = []; for cap in model.entities.capabilities: ...; specs.sort(key=lambda s: s.id); return specs'
+    - name: get_template
+      params:
+      - 'artifact_id: str'
+      returns: ArtifactTemplate | None
+      body_hint: "if artifact_id.startswith('api-detail-'):\n    return API_DETAIL_TEMPLATE; return TEMPLATES.get(artifact_id)"
+relationships:
+- type: realizes
+  from: COMP-ARTIFACTS
+  to: CAP-ARTIFACTS
+- type: depends-on
+  from: COMP-MCP
+  to: COMP-ARTIFACTS
+- type: depends-on
+  from: COMP-CLI
+  to: COMP-ARTIFACTS

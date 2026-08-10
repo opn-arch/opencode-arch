@@ -3,47 +3,63 @@
 ## Architecture Overview
 
 —
-Schema version: 1.4
+Schema version: 2.0
 
 ## Component Inventory
 
 | ID | Name | Status | Files | Behaviors |
 |----|------|--------|-------|-----------|
-| COMP-CLI | CLI Commands | Status.ACTIVE | 9 | 4 |
-| COMP-MCP | MCP Server | Status.ACTIVE | 7 | 1 |
-| COMP-RUNNER | OpenCode Runner | Status.ACTIVE | 2 | 0 |
-| COMP-LEARNING | Learning Loop | Status.ACTIVE | 6 | 1 |
-| COMP-TELEMETRY | Telemetry Store | Status.ACTIVE | 2 | 1 |
-| COMP-PROMPTS | Prompt Templates | Status.ACTIVE | 2 | 0 |
+| COMP-MCP | MCP Server | Status.ACTIVE | 25 | 1 |
+| COMP-CONTEXT | Context | Status.ACTIVE | 3 | 1 |
+| COMP-ARTIFACTS | Artifacts | Status.ACTIVE | 5 | 1 |
+| COMP-LEARNING | Learning | Status.ACTIVE | 7 | 1 |
+| COMP-REGEN | Regen | Status.ACTIVE | 3 | 1 |
+| COMP-CLI | CLI | Status.ACTIVE | 15 | 2 |
+| COMP-REQUIREMENTS | Requirements | Status.ACTIVE | 3 | 1 |
+| COMP-AGENT | Agent | Status.ACTIVE | 2 | 1 |
+| COMP-LLM | LLM | Status.ACTIVE | 6 | 0 |
+| COMP-TELEMETRY | Telemetry | Status.ACTIVE | 3 | 0 |
 
 ## Layer Structure
 
-- **CLI Layer** (LAYER-CLI)
-- **MCP Server Layer** (LAYER-MCP)
-- **Learning Layer** (LAYER-LEARNING)
-- **Runner Layer** (LAYER-RUNNER)
-- **Telemetry Layer** (LAYER-TELEMETRY)
+- **MCP Layer** (LYR-MCP)
+- **CLI Layer** (LYR-CLI)
+- **Domain Layer** (LYR-DOMAIN)
+- **Infrastructure Layer** (LYR-INFRA)
 
 ## Key Behaviors
 
-- **CRUD: 4 CRUD endpoints (1 AGENT, 3 CLI)** (BEH-CRUD-_unknown)
+- **Full Extraction Flow** (BEH-EXTRACT)
+- **Regen Loop Execution** (BEH-REGEN)
+- **Spot Check Flow** (BEH-SPOT)
 
 ## Relationship Summary
 
 | Type | Count |
 |------|-------|
-| constrained-by | 3 |
-| consumes | 1 |
-| depends-on | 5 |
-| realizes | 7 |
+| constrained-by | 4 |
+| consumes | 4 |
+| contains | 10 |
+| depends-on | 13 |
+| exposes | 2 |
+| realizes | 9 |
+| traces-to | 3 |
 
 ## Architecture Diagram
 
 ```mermaid
 graph TD
-  COMP-CLI[CLI Commands] --> COMP-RUNNER[OpenCode Runner]
-  COMP-CLI[CLI Commands] --> COMP-TELEMETRY[Telemetry Store]
-  COMP-CLI[CLI Commands] --> COMP-LEARNING[Learning Loop]
-  COMP-CLI[CLI Commands] --> COMP-PROMPTS[Prompt Templates]
-  COMP-LEARNING[Learning Loop] --> COMP-TELEMETRY[Telemetry Store]
+  COMP-MCP[MCP Server] --> COMP-CONTEXT[Context]
+  COMP-MCP[MCP Server] --> COMP-ARTIFACTS[Artifacts]
+  COMP-MCP[MCP Server] --> COMP-REGEN[Regen]
+  COMP-MCP[MCP Server] --> COMP-TELEMETRY[Telemetry]
+  COMP-MCP[MCP Server] --> COMP-REQUIREMENTS[Requirements]
+  COMP-CLI[CLI] --> COMP-CONTEXT[Context]
+  COMP-CLI[CLI] --> COMP-LEARNING[Learning]
+  COMP-CLI[CLI] --> COMP-LLM[LLM]
+  COMP-CLI[CLI] --> COMP-ARTIFACTS[Artifacts]
+  COMP-CONTEXT[Context] --> COMP-LLM[LLM]
+  COMP-REGEN[Regen] --> COMP-LLM[LLM]
+  COMP-AGENT[Agent] --> COMP-LLM[LLM]
+  COMP-MCP[MCP Server] --> COMP-LLM[LLM]
 ```

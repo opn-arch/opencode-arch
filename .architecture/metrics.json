@@ -1,21 +1,5 @@
 {
-  "generated_at": "2026-08-10T14:48:34.933815+00:00",
-  "representativeness": {
-    "file_coverage": 100.0,
-    "relationship_accuracy": 100.0,
-    "boundary_coherence": 28.192304531821357,
-    "behavioral_coverage": 100.0,
-    "overall": 82.04807613295534,
-    "uncovered_files": [],
-    "unverified_relationships": [],
-    "low_coherence_components": [
-      "Tools",
-      "Artifacts",
-      "Requirements",
-      "Resolution"
-    ],
-    "uncaptured_behaviors": []
-  },
+  "generated_at": "2026-08-10T21:48:10.518232+00:00",
   "manifest_metrics": {
     "total_python_files": 154
   }

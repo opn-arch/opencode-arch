@@ -1,0 +1,161 @@
+meta:
+  schema_version: '2.0'
+  project: opencode-arch/Learning
+  system: Learning
+  generated_at: '2026-08-10T21:48:10.025896+00:00'
+  manifest_path: manifest.json
+  parent_model: ../../.architecture-model.yaml
+  refines_component: COMP-LEARNING
+entities:
+  capabilities:
+  - id: CAP-LEARNING
+    name: Learning Loop
+    status: ACTIVE
+    description: Pattern classification, adaptive prompting, report cards, lessons
+  components:
+  - id: COMP-LEARNING
+    name: Learning
+    status: ACTIVE
+    description: Pattern classifier, adaptive prompting, report cards, lessons, drift maintenance
+    layer: LYR-DOMAIN
+    files:
+    - src/opencode_arch/learning/__init__.py
+    - src/opencode_arch/learning/adapter.py
+    - src/opencode_arch/learning/assessor.py
+    - src/opencode_arch/learning/classifier.py
+    - src/opencode_arch/learning/lessons.py
+    - src/opencode_arch/learning/maintainer.py
+    - src/opencode_arch/learning/patterns.py
+    kind: library
+    constants:
+    - name: PatternType.CROSS_DEP
+      value: cross_dep
+    - name: PatternType.MISSING_IMPL
+      value: missing_impl
+    - name: PatternType.WRONG_CONSTANT
+      value: wrong_constant
+    - name: PatternType.API_MISMATCH
+      value: api_mismatch
+    - name: PatternType.COMPLEX_BEHAVIOR
+      value: complex_behavior
+    - name: PatternType.TEST_INFRA
+      value: test_infra
+    - name: PatternType.UNKNOWN
+      value: unknown
+    - name: Strategy.EXPAND_DEP_CONTEXT
+      value: expand_dep_context
+    - name: Strategy.INCLUDE_SOURCE_EXCERPT
+      value: include_source_excerpt
+    - name: Strategy.PRIORITIZE_CONSTANTS
+      value: prioritize_constants
+    - name: Strategy.FIX_SIGNATURES
+      value: fix_signatures
+    - name: Strategy.INCREASE_CONTRACT_CAP
+      value: increase_contract_cap
+    - name: Strategy.COPY_TEST_INFRA
+      value: copy_test_infra
+    - name: Strategy.NO_ACTION
+      value: no_action
+    signatures:
+    - name: get_adaptations
+      params:
+      - 'subsystem_name: str'
+      - 'dependency_count: int'
+      - 'signature_count: int'
+      - 'contract_count: int'
+      - 'body_hint_coverage: float'
+      - 'historical_patterns: list[dict[str, Any]] | None'
+      returns: list[PromptAdaptation]
+      body_hint: 'adaptations: list[PromptAdaptation] = []; if dependency_count >= 3: ...; if contract_count < 10: ...; if
+        body_hint_coverage < 0.5 and signature_count > 5: ...; if historical_patterns: ...; return adaptations'
+    - name: apply_adaptations
+      params:
+      - 'adaptations: list[PromptAdaptation]'
+      - 'contract_cap: int'
+      - 'include_dep_body_hints: bool'
+      returns: dict[str, Any]
+      body_hint: "result: dict[str, Any] = {'contract_cap': contract_cap, 'include_dep_body_hints': include_dep_body_hints,\
+        \ 'extra_context': '', 'source_excerpts': [], 'adaptations_applied': []}; for adaptation in adaptations:\n    result['adaptations_applied'].append(f'{adaptation.strategy.value}:\
+        \ {adaptation.reason}')\n    if adaptation.strategy == Strategy.EXPAND_DEP_CONTEXT:\n        result['include_dep_body_hints']\
+        \ = True\n    elif adaptation.strategy == Strategy.INCREASE_CONTRACT_CAP:\n        new_cap = adaptation.params.get('new_cap',\
+        \ 100)\n        result['contract_cap'] = max(result['contract_cap'], new_cap)\n    elif adaptation.strategy == Strategy.INCLUDE_SOURCE_EXCERPT:\n\
+        \        functions = adaptation.params.get('functions', [])\n        result['source_excerpts'].extend(functions)\n\
+        \    elif adaptation.strategy == Strategy.PRIORITIZE_CONSTANTS:\n        result['extra_context'] += '\\n# NOTE: Constants\
+        \ are critical for this subsystem — use exact values.\\n'\n    elif adaptation.strategy == Strategy.FIX_SIGNATURES:\n\
+        \        symbols = adaptation.params.get('symbols', [])\n        if symbols:\n            result['extra_context']\
+        \ += f\"\\n# IMPORTANT: Match exact signatures for: {', '.join(symbols)}\\n\"; return result"
+    - name: generate_report_card
+      params:
+      - 'repo: str'
+      - 'mode: str'
+      - 'subsystem_results: dict[str, dict[str, Any]]'
+      - 'previous_fidelity: float | None'
+      - 'previous_compression: float | None'
+      returns: ReportCard
+      body_hint: 'total = len(subsystem_results); converged = sum((1 for r in subsystem_results.values() if r.get(''conv...;
+        fidelity = converged / total if total > 0 else 0.0; compressions = []; times = []; for r in subsystem_results.values():
+        ...; avg_compression = sum(compressions) / len(compressions) if compressions els...; avg_time = sum(times) / len(times)
+        if times else 0.0; failure_patterns: dict[str, int] = {}; novel = 0; for r in subsystem_results.values(): ...; grade
+        = _compute_grade(fidelity, avg_compression, novel); fidelity_trend = _compute_trend(fidelity, previous_fidelity);
+        compression_trend = _compute_trend(avg_compression, previous_compression); actions = _compute_improvement_actions(fidelity,
+        avg_compression, f...; return ReportCard(repo=repo, mode=mode, fidelity=fidelity, compression_ratio=avg_compression,
+        time_per_subsystem=avg_time, total_subsystems=total, converged_subsystems=converged, fidelity_trend=fidelity_trend,
+        compression_trend=compression_trend, failure_patterns=failure_patterns, novel_patterns=novel, grade=grade, improvement_actions=actions)'
+    - name: classify_failures
+      params:
+      - 'test_output: str'
+      - 'pass_rate: float'
+      - 'total_tests: int'
+      - 'failed_tests: int'
+      returns: list[FailureClassification]
+      body_hint: 'raw_results = _classify_raw(test_output); structured_results = _classify_structured(test_output, pass_rate,
+        total_tests,...; raw_patterns = {c.pattern for c in raw_results}; merged = list(raw_results); for sc in structured_results:
+        ...; merged.sort(key=lambda c: c.confidence, reverse=True); return merged'
+    - name: extract_lessons
+      params:
+      - 'repo: str'
+      - 'mode: str'
+      - 'subsystem_results: dict[str, dict[str, Any]]'
+      returns: list[Lesson]
+      body_hint: 'lessons: list[Lesson] = []; converged_features: list[dict] = []; failed_features: list[dict] = []; for (name,
+        result) in subsystem_results.items(): ...; if converged_features and failed_features: ...; if converged_features and
+        failed_features: ...; simple_converged = [name for name, r in subsystem_results.items() if r.get(''...; if len(simple_converged)
+        >= 3: ...; all_patterns: dict[str, int] = {}; for r in subsystem_results.values(): ...; if all_patterns: ...; return
+        lessons'
+    - name: detect_drift
+      params:
+      - 'project_root: Path'
+      returns: list[DriftFlag]
+      body_hint: "checks = [_check_test_count, _check_version_sync, _check_schema_version, _check_python_version]; flags:\
+        \ list[DriftFlag] = []; for check in checks:\n    try:\n        flag = check(project_root)\n        if flag:\n   \
+        \         flags.append(flag)\n    except Exception:\n        pass; return flags"
+    - name: auto_fix_drift
+      params:
+      - 'flags: list[DriftFlag]'
+      - 'project_root: Path'
+      returns: list[DriftFlag]
+      body_hint: "fixed: list[DriftFlag] = []; for flag in flags:\n    if not flag.auto_fixable:\n        continue\n    file_path\
+        \ = project_root / flag.file\n    if not file_path.exists():\n        continue\n    try:\n        content = file_path.read_text(encoding='utf-8')\n\
+        \        new_content = content\n        if 'test count' in flag.issue.lower() or 'tests' in flag.issue.lower():\n\
+        \            match = re.search('(\\\\d+)\\\\s+tests?\\\\s+pass', flag.issue)\n            new_match = re.search('actual\
+        \ is (\\\\d+)', flag.issue)\n            if match and new_match:\n                old_count = match.group(1)\n   \
+        \             new_count = new_match.group(1)\n                new_content = re.sub(f'{old_count}(\\\\s+tests?\\\\\
+        s+pass)', f'{new_count}\\\\1', content)\n        elif '__version__' in flag.issue:\n            match = re.search(\"\
+        to '([^']+)'\", flag.suggested_fix)\n            if match:\n                target_version = match.group(1)\n    \
+        \            new_content = re.sub('__version__\\\\s*=\\\\s*[\"\\\\\\'][^\"\\\\\\']+[\"\\\\\\']', f'__version__ = \"\
+        {target_version}\"', content)\n        elif 'Python' in flag.issue:\n            match = re.search('Python ([\\\\\
+        d.]+)\\\\+.*Python ([\\\\d.]+)\\\\+', flag.suggested_fix)\n            if match:\n                old_ver = match.group(1)\n\
+        \                new_ver = match.group(2)\n                new_content = content.replace(f'Python {old_ver}+', f'Python\
+        \ {new_ver}+')\n            else:\n                old_match = re.search('says Python ([\\\\d.]+)', flag.issue)\n\
+        \                new_match_ver = re.search('requires >=([\\\\d.]+)', flag.issue)\n                if old_match and\
+        \ new_match_ver:\n                    old_ver = old_match.group(1)\n                    new_ver = new_match_ver.group(1)\n\
+        \                    new_content = content.replace(f'Python {old_ver}+', f'Python {new_ver}+')\n        if new_content\
+        \ != content:\n            file_path.write_text(new_content, encoding='utf-8')\n            flag.fixed = True\n  \
+        \          fixed.append(flag)\n    except (OSError, UnicodeDecodeError):\n        pass; return fixed"
+relationships:
+- type: realizes
+  from: COMP-LEARNING
+  to: CAP-LEARNING
+- type: depends-on
+  from: COMP-CLI
+  to: COMP-LEARNING

@@ -1,7 +1,7 @@
 # opencode-arch — Architecture Documentation
 
-**Schema Version:** 1.4
-**Components:** 6
+**Schema Version:** 2.0
+**Components:** 10
 **Avg Confidence:** 0%
 
 ---

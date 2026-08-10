@@ -1,0 +1,63 @@
+meta:
+  schema_version: '2.0'
+  project: opencode-arch/Agent
+  system: Agent
+  generated_at: '2026-08-10T21:48:10.025896+00:00'
+  manifest_path: manifest.json
+  parent_model: ../../.architecture-model.yaml
+  refines_component: COMP-AGENT
+entities:
+  capabilities:
+  - id: CAP-RESOLUTION
+    name: Uncertainty Resolution
+    status: ACTIVE
+    description: Dispatch pipeline uncertainties to LLM/search/user for resolution
+  components:
+  - id: COMP-AGENT
+    name: Agent
+    status: ACTIVE
+    description: Uncertainty resolution — dispatches to LLM/search/user
+    layer: LYR-INFRA
+    files:
+    - src/opencode_arch/agent/__init__.py
+    - src/opencode_arch/agent/resolution.py
+    kind: library
+    signatures:
+    - name: UncertaintyResolver.__init__
+      params:
+      - 'learning_store: LearningStore | None'
+      - 'strategies: dict[str, list[str]] | None'
+      - 'handlers: dict[str, Callable] | None'
+      body_hint: 'self._learning = learning_store; self._strategies = strategies or DEFAULT_STRATEGIES; self._handlers: dict[str,
+        Callable] = handlers or {}'
+    - name: UncertaintyResolver.register_handler
+      params:
+      - 'method: str'
+      - 'handler: Callable'
+      returns: None
+      body_hint: self._handlers[method] = handler
+    - name: UncertaintyResolver.resolve
+      params:
+      - 'uncertainty: Uncertainty'
+      returns: ResolutionOutcome | None
+      body_hint: 'import time; start = time.time(); attempts = 0; if self._learning: ...; methods = self._strategies.get(uncertainty.category,
+        [''ask_user'']); for method in methods: ...; return None'
+    - name: UncertaintyResolver.resolve_all
+      params:
+      - 'uncertainties: list[Uncertainty]'
+      returns: list[ResolutionOutcome]
+      body_hint: "results = []; for u in uncertainties:\n    outcome = self.resolve(u)\n    if outcome:\n        results.append(outcome);\
+        \ return results"
+    - name: UncertaintyResolver.unresolvable_categories
+      returns: set[str]
+      decorators:
+      - property
+      body_hint: "all_methods = set(); for methods in self._strategies.values():\n    all_methods.update(methods); return\
+        \ all_methods - set(self._handlers.keys())"
+relationships:
+- type: realizes
+  from: COMP-AGENT
+  to: CAP-RESOLUTION
+- type: depends-on
+  from: COMP-AGENT
+  to: COMP-LLM
