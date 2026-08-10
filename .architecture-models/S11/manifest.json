@@ -1,0 +1,428 @@
+{
+  "block_id": "S11",
+  "block_name": "Requirements",
+  "parent_model": ".architecture-model.yaml",
+  "component_id": "COMP-REQUIREMENTS",
+  "manifest": {
+    "generated_at": "2026-08-10T14:48:33.634446+00:00",
+    "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
+    "metrics": {
+      "py_files": 5,
+      "total_lines": 328,
+      "functions": 4,
+      "classes": 2,
+      "constants": 0
+    },
+    "functional_blocks": {},
+    "modules": [
+      {
+        "file": "src/opencode_arch/requirements/__init__.py",
+        "name": " Init  ",
+        "docstring": null,
+        "functions": [],
+        "imports": [],
+        "line_count": 0,
+        "status": "dormant",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/requirements/llm_extractor.py",
+        "name": "Llm Extractor",
+        "docstring": "LLM-assisted requirement extraction from freeform documents.",
+        "functions": [
+          {
+            "name": "extract_requirements_llm",
+            "signature": "extract_requirements_llm(doc_path: Path, runner, cache: LLMCache | None, repo_path: str) -> list[ExtractedRequirement]",
+            "calls": [
+              "read_text",
+              "format",
+              "_extract_json",
+              "get",
+              "hexdigest",
+              "cached_llm_call",
+              "append",
+              "hash_content",
+              "isinstance",
+              "ExtractedRequirement",
+              "sha256",
+              "encode",
+              "str"
+            ],
+            "docstring": "Use LLM to segment freeform prose into requirements."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "json",
+          "re",
+          "hashlib",
+          "pathlib",
+          "opencode_arch.llm.cache",
+          "opencode_arch.llm.prompts.requirements",
+          "opencode_arch.requirements.parser"
+        ],
+        "line_count": 78,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "re",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "hashlib",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.llm.cache",
+            "symbols": [
+              "LLMCache",
+              "cached_llm_call",
+              "hash_content"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.llm.prompts.requirements",
+            "symbols": [
+              "REQUIREMENTS_EXTRACT_TEMPLATE",
+              "REQUIREMENTS_EXTRACT_VERSION"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.requirements.parser",
+            "symbols": [
+              "ExtractedRequirement"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/requirements/matcher.py",
+        "name": "Function",
+        "docstring": "Function-Requirement matching using LLM.",
+        "functions": [
+          {
+            "name": "match_functions_to_requirements",
+            "signature": "match_functions_to_requirements(requirements: list[ExtractedRequirement], model_yaml: str, runner, cache: LLMCache | None, repo_path: str) -> list[RequirementMatch]",
+            "calls": [
+              "join",
+              "_extract_functions_from_model",
+              "format",
+              "hash_content",
+              "_extract_json",
+              "get",
+              "cached_llm_call",
+              "append",
+              "isinstance",
+              "RequirementMatch",
+              "float"
+            ],
+            "docstring": "Match functions to requirements using LLM with body_hints as evidence."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "json",
+          "re",
+          "dataclasses",
+          "yaml",
+          "opencode_arch.llm.cache",
+          "opencode_arch.llm.prompts.matching",
+          "opencode_arch.requirements.parser"
+        ],
+        "line_count": 114,
+        "status": "active",
+        "classes": [
+          {
+            "name": "RequirementMatch",
+            "bases": [],
+            "methods": [],
+            "is_abstract": false,
+            "decorators": [
+              "dataclass"
+            ],
+            "attributes": {}
+          }
+        ],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "re",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "dataclasses",
+            "symbols": [
+              "dataclass"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "yaml",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.llm.cache",
+            "symbols": [
+              "LLMCache",
+              "cached_llm_call",
+              "hash_content"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.llm.prompts.matching",
+            "symbols": [
+              "MATCHING_TEMPLATE",
+              "MATCHING_VERSION"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.requirements.parser",
+            "symbols": [
+              "ExtractedRequirement"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/requirements/parser.py",
+        "name": "Parser",
+        "docstring": null,
+        "functions": [
+          {
+            "name": "parse_requirements_doc",
+            "signature": "parse_requirements_doc(doc_path: Path) -> list[ExtractedRequirement]",
+            "calls": [
+              "read_text",
+              "finditer",
+              "hexdigest",
+              "append",
+              "group",
+              "strip",
+              "count",
+              "ExtractedRequirement",
+              "sha256",
+              "encode",
+              "str",
+              "start"
+            ],
+            "docstring": "Parse structured requirements from a document.\n\nRecognizes:\n- REQ-NNN: text (ID-prefixed lines)\n- ### Requirement: text (heading-based)\n- - [ ] / - [x] checkbox items with REQ- prefix"
+          }
+        ],
+        "imports": [
+          "__future__",
+          "re",
+          "hashlib",
+          "dataclasses",
+          "pathlib"
+        ],
+        "line_count": 63,
+        "status": "active",
+        "classes": [
+          {
+            "name": "ExtractedRequirement",
+            "bases": [],
+            "methods": [],
+            "is_abstract": false,
+            "decorators": [
+              "dataclass"
+            ],
+            "attributes": {}
+          }
+        ],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "re",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "hashlib",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "dataclasses",
+            "symbols": [
+              "dataclass"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/requirements/retroactive.py",
+        "name": "Retroactive requirement derivation from existing architecture models",
+        "docstring": "Retroactive requirement derivation from existing architecture models.",
+        "functions": [
+          {
+            "name": "derive_requirements_retroactive",
+            "signature": "derive_requirements_retroactive(model_yaml: str, runner, cache: LLMCache | None, repo_path: str) -> list[ExtractedRequirement]",
+            "calls": [
+              "format",
+              "_extract_json",
+              "get",
+              "cached_llm_call",
+              "append",
+              "hash_content",
+              "isinstance",
+              "ExtractedRequirement"
+            ],
+            "docstring": "Derive requirements from existing model artifacts when no requirements doc exists."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "json",
+          "re",
+          "opencode_arch.llm.cache",
+          "opencode_arch.llm.prompts.requirements",
+          "opencode_arch.requirements.parser"
+        ],
+        "line_count": 73,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "re",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.llm.cache",
+            "symbols": [
+              "LLMCache",
+              "cached_llm_call",
+              "hash_content"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.llm.prompts.requirements",
+            "symbols": [
+              "REQUIREMENTS_RETROACTIVE_TEMPLATE",
+              "REQUIREMENTS_RETROACTIVE_VERSION"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.requirements.parser",
+            "symbols": [
+              "ExtractedRequirement"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      }
+    ],
+    "interfaces": [
+      {
+        "source": "src/opencode_arch/requirements/llm_extractor.py",
+        "target": "src/opencode_arch/requirements/parser.py",
+        "import_path": "opencode_arch.requirements.parser"
+      },
+      {
+        "source": "src/opencode_arch/requirements/matcher.py",
+        "target": "src/opencode_arch/requirements/parser.py",
+        "import_path": "opencode_arch.requirements.parser"
+      },
+      {
+        "source": "src/opencode_arch/requirements/retroactive.py",
+        "target": "src/opencode_arch/requirements/parser.py",
+        "import_path": "opencode_arch.requirements.parser"
+      }
+    ]
+  },
+  "children": {},
+  "block_dependencies": [
+    "S7"
+  ],
+  "intra_chains": []
+}

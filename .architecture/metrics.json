@@ -1,63 +1,22 @@
 {
-  "generated_at": "2026-08-06T21:26:18.432805+00:00",
+  "generated_at": "2026-08-10T14:48:34.933815+00:00",
   "representativeness": {
-    "file_coverage": 40.0,
-    "relationship_accuracy": 80.0,
-    "boundary_coherence": 13.371671901083666,
+    "file_coverage": 100.0,
+    "relationship_accuracy": 100.0,
+    "boundary_coherence": 28.192304531821357,
     "behavioral_coverage": 100.0,
-    "overall": 58.342917975270915,
-    "uncovered_files": [
-      "src/opencode_arch/artifacts/context.py",
-      "src/opencode_arch/artifacts/diagrams.py",
-      "src/opencode_arch/artifacts/selector.py",
-      "src/opencode_arch/artifacts/templates.py",
-      "src/opencode_arch/cli/calibrate.py",
-      "src/opencode_arch/cli/confidence.py",
-      "src/opencode_arch/cli/export_data.py",
-      "src/opencode_arch/cli/launch.py",
-      "src/opencode_arch/context/formatter.py",
-      "src/opencode_arch/context/pipeline_bridge.py",
-      "src/opencode_arch/extract/constraint_detector.py",
-      "src/opencode_arch/extract/from_artifacts.py",
-      "src/opencode_arch/extract/from_code.py",
-      "src/opencode_arch/extract/route_detector.py",
-      "src/opencode_arch/extract/table_parser.py",
-      "src/opencode_arch/llm/cache.py",
-      "src/opencode_arch/mcp/quality.py",
-      "src/opencode_arch/mcp/tools/author.py",
-      "src/opencode_arch/mcp/tools/check.py",
-      "src/opencode_arch/mcp/tools/correct.py",
-      "src/opencode_arch/mcp/tools/decompose.py",
-      "src/opencode_arch/mcp/tools/docs.py",
-      "src/opencode_arch/mcp/tools/export.py",
-      "src/opencode_arch/mcp/tools/feedback.py",
-      "src/opencode_arch/mcp/tools/gate.py",
-      "src/opencode_arch/mcp/tools/group.py",
-      "src/opencode_arch/mcp/tools/ingest.py",
-      "src/opencode_arch/mcp/tools/llm_audit.py",
-      "src/opencode_arch/mcp/tools/require.py",
-      "src/opencode_arch/mcp/tools/stats.py",
-      "src/opencode_arch/mcp/tools/trace_requirements.py",
-      "src/opencode_arch/requirements/llm_extractor.py",
-      "src/opencode_arch/requirements/matcher.py",
-      "src/opencode_arch/requirements/parser.py",
-      "src/opencode_arch/requirements/retroactive.py",
-      "src/opencode_arch/telemetry/collector.py"
-    ],
-    "unverified_relationships": [
-      "COMP-LEARNING \u2192 COMP-TELEMETRY"
-    ],
+    "overall": 82.04807613295534,
+    "uncovered_files": [],
+    "unverified_relationships": [],
     "low_coherence_components": [
-      "CLI Commands",
-      "MCP Server",
-      "OpenCode Runner",
-      "Learning Loop",
-      "Telemetry Store",
-      "Prompt Templates"
+      "Tools",
+      "Artifacts",
+      "Requirements",
+      "Resolution"
     ],
     "uncaptured_behaviors": []
   },
   "manifest_metrics": {
-    "total_python_files": 152
+    "total_python_files": 154
   }
 }

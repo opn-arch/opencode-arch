@@ -1,17 +1,45 @@
 {
-  "generated_at": "2026-08-06T21:26:18",
+  "generated_at": "2026-08-10T14:48:34",
   "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
   "metrics": {
-    "total_python_files": 152
+    "total_python_files": 154
   },
   "functional_blocks": {
     "S1": {
+      "name": "Agent",
+      "status": "active",
+      "description_source": "Agent layer for uncertainty resolution.",
+      "sub_functions": [
+        {
+          "id": "S1.1",
+          "name": "Agent layer for uncertainty resolution",
+          "file": "src/opencode_arch/agent/__init__.py",
+          "functions": [],
+          "inputs": [],
+          "outputs": [],
+          "status": "dormant",
+          "line_count": 4
+        },
+        {
+          "id": "S1.2",
+          "name": "Uncertainty resolution \u2014 dispatches pipeline uncertainties to LLM/search/user",
+          "file": "src/opencode_arch/agent/resolution.py",
+          "functions": [],
+          "inputs": [],
+          "outputs": [],
+          "status": "active",
+          "line_count": 117
+        }
+      ],
+      "sub_blocks": []
+    },
+    "S2": {
       "name": "Artifacts",
       "status": "active",
       "description_source": "Artifact selection and registry for model-driven SE document generation.",
       "sub_functions": [
         {
-          "id": "S1.1",
+          "id": "S2.1",
           "name": "Artifact selection and registry for model",
           "file": "src/opencode_arch/artifacts/__init__.py",
           "functions": [],
@@ -21,7 +49,7 @@
           "line_count": 48
         },
         {
-          "id": "S1.2",
+          "id": "S2.2",
           "name": "Context assembler for artifact generation",
           "file": "src/opencode_arch/artifacts/context.py",
           "functions": [
@@ -43,7 +71,7 @@
           "line_count": 451
         },
         {
-          "id": "S1.3",
+          "id": "S2.3",
           "name": "PlantUML diagram generation from architecture model data",
           "file": "src/opencode_arch/artifacts/diagrams.py",
           "functions": [
@@ -70,7 +98,7 @@
           "line_count": 451
         },
         {
-          "id": "S1.4",
+          "id": "S2.4",
           "name": "Model",
           "file": "src/opencode_arch/artifacts/selector.py",
           "functions": [
@@ -94,10 +122,10 @@
             "list[ArtifactSpec]"
           ],
           "status": "active",
-          "line_count": 331
+          "line_count": 342
         },
         {
-          "id": "S1.5",
+          "id": "S2.5",
           "name": "Artifact template definitions",
           "file": "src/opencode_arch/artifacts/templates.py",
           "functions": [
@@ -115,13 +143,13 @@
       ],
       "sub_blocks": []
     },
-    "S2": {
+    "S3": {
       "name": "Cli",
       "status": "active",
       "description_source": "CLI for opencode-arch.",
       "sub_functions": [
         {
-          "id": "S2.1",
+          "id": "S3.1",
           "name": "CLI for opencode",
           "file": "src/opencode_arch/cli/__init__.py",
           "functions": [],
@@ -131,7 +159,7 @@
           "line_count": 1
         },
         {
-          "id": "S2.2",
+          "id": "S3.2",
           "name": "Bench command",
           "file": "src/opencode_arch/cli/bench.py",
           "functions": [
@@ -149,7 +177,7 @@
           "line_count": 25
         },
         {
-          "id": "S2.3",
+          "id": "S3.3",
           "name": "Calibration command",
           "file": "src/opencode_arch/cli/calibrate.py",
           "functions": [
@@ -176,7 +204,7 @@
           "line_count": 208
         },
         {
-          "id": "S2.4",
+          "id": "S3.4",
           "name": "CLI confidence visualization command",
           "file": "src/opencode_arch/cli/confidence.py",
           "functions": [
@@ -192,7 +220,7 @@
           "line_count": 66
         },
         {
-          "id": "S2.5",
+          "id": "S3.5",
           "name": "SE Document generation orchestrator",
           "file": "src/opencode_arch/cli/docs.py",
           "functions": [
@@ -214,7 +242,7 @@
           "line_count": 333
         },
         {
-          "id": "S2.6",
+          "id": "S3.6",
           "name": "Validate generated SE documentation against model and manifest",
           "file": "src/opencode_arch/cli/docs_validator.py",
           "functions": [
@@ -232,7 +260,7 @@
           "line_count": 295
         },
         {
-          "id": "S2.7",
+          "id": "S3.7",
           "name": "Export training corpus from",
           "file": "src/opencode_arch/cli/export_data.py",
           "functions": [
@@ -246,7 +274,7 @@
           "line_count": 133
         },
         {
-          "id": "S2.8",
+          "id": "S3.8",
           "name": "Extract command",
           "file": "src/opencode_arch/cli/extract.py",
           "functions": [
@@ -264,7 +292,7 @@
           "line_count": 93
         },
         {
-          "id": "S2.9",
+          "id": "S3.9",
           "name": "Gap Analyzer",
           "file": "src/opencode_arch/cli/gap_analyzer.py",
           "functions": [
@@ -281,7 +309,7 @@
           "line_count": 107
         },
         {
-          "id": "S2.10",
+          "id": "S3.10",
           "name": "Generate command",
           "file": "src/opencode_arch/cli/generate.py",
           "functions": [
@@ -299,7 +327,7 @@
           "line_count": 68
         },
         {
-          "id": "S2.11",
+          "id": "S3.11",
           "name": "Interactive launch \u2014 architecture",
           "file": "src/opencode_arch/cli/launch.py",
           "functions": [
@@ -316,7 +344,7 @@
           "line_count": 260
         },
         {
-          "id": "S2.12",
+          "id": "S3.12",
           "name": "CLI entry point for opencode",
           "file": "src/opencode_arch/cli/main.py",
           "functions": [
@@ -328,7 +356,7 @@
           "line_count": 389
         },
         {
-          "id": "S2.13",
+          "id": "S3.13",
           "name": "Metrics and report commands",
           "file": "src/opencode_arch/cli/metrics.py",
           "functions": [
@@ -351,7 +379,7 @@
           "line_count": 186
         },
         {
-          "id": "S2.14",
+          "id": "S3.14",
           "name": "Prompt templates for agent invocation",
           "file": "src/opencode_arch/cli/prompts.py",
           "functions": [],
@@ -361,7 +389,7 @@
           "line_count": 20
         },
         {
-          "id": "S2.15",
+          "id": "S3.15",
           "name": "Regen",
           "file": "src/opencode_arch/cli/regen_loop.py",
           "functions": [
@@ -384,13 +412,13 @@
       ],
       "sub_blocks": []
     },
-    "S3": {
+    "S4": {
       "name": "Context",
       "status": "active",
       "description_source": "Context compression and token brokering.",
       "sub_functions": [
         {
-          "id": "S3.1",
+          "id": "S4.1",
           "name": "Context compression and token brokering",
           "file": "src/opencode_arch/context/__init__.py",
           "functions": [],
@@ -400,7 +428,7 @@
           "line_count": 29
         },
         {
-          "id": "S3.2",
+          "id": "S4.2",
           "name": "Formatter",
           "file": "src/opencode_arch/context/formatter.py",
           "functions": [
@@ -425,7 +453,7 @@
           "line_count": 492
         },
         {
-          "id": "S3.3",
+          "id": "S4.3",
           "name": "Pipeline Bridge",
           "file": "src/opencode_arch/context/pipeline_bridge.py",
           "functions": [
@@ -454,128 +482,31 @@
       ],
       "sub_blocks": []
     },
-    "S4": {
+    "S5": {
       "name": "Extract",
-      "status": "active",
+      "status": "dormant",
       "description_source": "Extract architecture models from source code or Tier 1 artifacts.",
       "sub_functions": [
         {
-          "id": "S4.1",
+          "id": "S5.1",
           "name": "Extract architecture models from source code or Tier 1 artifacts",
           "file": "src/opencode_arch/extract/__init__.py",
           "functions": [],
           "inputs": [],
           "outputs": [],
           "status": "dormant",
-          "line_count": 8
-        },
-        {
-          "id": "S4.2",
-          "name": "Constraint Detector",
-          "file": "src/opencode_arch/extract/constraint_detector.py",
-          "functions": [
-            "detect_constraints(project_root: Path) -> list[Constraint]"
-          ],
-          "inputs": [
-            "project_root: Path"
-          ],
-          "outputs": [
-            "list[Constraint]"
-          ],
-          "status": "active",
-          "line_count": 398
-        },
-        {
-          "id": "S4.3",
-          "name": "Extract Architecture Model from Tier 1 markdown artifacts",
-          "file": "src/opencode_arch/extract/from_artifacts.py",
-          "functions": [
-            "extract_from_artifacts(artifact_dir: str | Path, project: str, system: str) -> ArchitectureModel",
-            "main()"
-          ],
-          "inputs": [
-            "artifact_dir: str | Path",
-            "project: str",
-            "system: str"
-          ],
-          "outputs": [
-            "ArchitectureModel"
-          ],
-          "status": "active",
-          "line_count": 837
-        },
-        {
-          "id": "S4.4",
-          "name": "Extract an ArchitectureModel directly from source code analysis",
-          "file": "src/opencode_arch/extract/from_code.py",
-          "functions": [
-            "extract_from_code(project_root: str | Path, config: ProjectConfig | None, manifest: dict | None) -> ArchitectureModel"
-          ],
-          "inputs": [
-            "project_root: str | Path",
-            "config: ProjectConfig | None",
-            "manifest: dict | None"
-          ],
-          "outputs": [
-            "ArchitectureModel"
-          ],
-          "status": "active",
-          "line_count": 646
-        },
-        {
-          "id": "S4.5",
-          "name": "Route Detector",
-          "file": "src/opencode_arch/extract/route_detector.py",
-          "functions": [
-            "detect_routes(project_root: Path, web_layer_dirs: list[str] | None) -> list[RouteInfo]"
-          ],
-          "inputs": [
-            "project_root: Path",
-            "web_layer_dirs: list[str] | None"
-          ],
-          "outputs": [
-            "list[RouteInfo]"
-          ],
-          "status": "active",
-          "line_count": 400
-        },
-        {
-          "id": "S4.6",
-          "name": "Markdown table parser \u2014 extracts structured data from pipe",
-          "file": "src/opencode_arch/extract/table_parser.py",
-          "functions": [
-            "parse_tables(markdown: str) -> list[list[dict[str, str]]]",
-            "find_table_after_heading(markdown: str, heading_pattern: str) -> list[dict[str, str]]",
-            "extract_sections(markdown: str, level: int) -> dict[str, str]",
-            "extract_list_items(text: str) -> list[str]"
-          ],
-          "inputs": [
-            "markdown: str",
-            "markdown: str",
-            "heading_pattern: str",
-            "markdown: str",
-            "level: int",
-            "text: str"
-          ],
-          "outputs": [
-            "dict[str, str]",
-            "list[dict[str, str]]",
-            "list[list[dict[str, str]]]",
-            "list[str]"
-          ],
-          "status": "active",
-          "line_count": 177
+          "line_count": 12
         }
       ],
       "sub_blocks": []
     },
-    "S5": {
+    "S6": {
       "name": "Learning",
       "status": "active",
       "description_source": "Learning loop: pattern classification, adaptation, assessment, and maintenance.",
       "sub_functions": [
         {
-          "id": "S5.1",
+          "id": "S6.1",
           "name": "Learning loop: pattern classification, adaptation, assessment, and maintenance",
           "file": "src/opencode_arch/learning/__init__.py",
           "functions": [],
@@ -585,7 +516,7 @@
           "line_count": 19
         },
         {
-          "id": "S5.2",
+          "id": "S6.2",
           "name": "Adaptive prompt optimization based on classified failure patterns",
           "file": "src/opencode_arch/learning/adapter.py",
           "functions": [
@@ -608,7 +539,7 @@
           "line_count": 157
         },
         {
-          "id": "S5.3",
+          "id": "S6.3",
           "name": "Report card generation and grading for regen loop runs",
           "file": "src/opencode_arch/learning/assessor.py",
           "functions": [
@@ -626,7 +557,7 @@
           "line_count": 170
         },
         {
-          "id": "S5.4",
+          "id": "S6.4",
           "name": "Dual",
           "file": "src/opencode_arch/learning/classifier.py",
           "functions": [
@@ -644,7 +575,7 @@
           "line_count": 144
         },
         {
-          "id": "S5.5",
+          "id": "S6.5",
           "name": "Lesson extraction and storage",
           "file": "src/opencode_arch/learning/lessons.py",
           "functions": [
@@ -662,7 +593,7 @@
           "line_count": 139
         },
         {
-          "id": "S5.6",
+          "id": "S6.6",
           "name": "Documentation drift detection and auto",
           "file": "src/opencode_arch/learning/maintainer.py",
           "functions": [
@@ -681,7 +612,7 @@
           "line_count": 281
         },
         {
-          "id": "S5.7",
+          "id": "S6.7",
           "name": "Failure pattern definitions and taxonomy",
           "file": "src/opencode_arch/learning/patterns.py",
           "functions": [],
@@ -693,13 +624,13 @@
       ],
       "sub_blocks": []
     },
-    "S6": {
+    "S7": {
       "name": "Llm",
       "status": "active",
       "description_source": "auto-discovered from src/opencode_arch/llm/",
       "sub_functions": [
         {
-          "id": "S6.1",
+          "id": "S7.1",
           "name": " Init  ",
           "file": "src/opencode_arch/llm/__init__.py",
           "functions": [],
@@ -709,7 +640,7 @@
           "line_count": 0
         },
         {
-          "id": "S6.2",
+          "id": "S7.2",
           "name": "Cache",
           "file": "src/opencode_arch/llm/cache.py",
           "functions": [
@@ -730,7 +661,7 @@
           "line_count": 88
         },
         {
-          "id": "S6.3",
+          "id": "S7.3",
           "name": " Init  ",
           "file": "src/opencode_arch/llm/prompts/__init__.py",
           "functions": [],
@@ -740,7 +671,7 @@
           "line_count": 0
         },
         {
-          "id": "S6.4",
+          "id": "S7.4",
           "name": "Prompt templates for LLM functional",
           "file": "src/opencode_arch/llm/prompts/audit.py",
           "functions": [],
@@ -750,7 +681,7 @@
           "line_count": 66
         },
         {
-          "id": "S6.5",
+          "id": "S7.5",
           "name": "Prompt templates for function",
           "file": "src/opencode_arch/llm/prompts/matching.py",
           "functions": [],
@@ -760,7 +691,7 @@
           "line_count": 21
         },
         {
-          "id": "S6.6",
+          "id": "S7.6",
           "name": "Prompt templates for requirement extraction",
           "file": "src/opencode_arch/llm/prompts/requirements.py",
           "functions": [],
@@ -772,13 +703,13 @@
       ],
       "sub_blocks": [
         {
-          "id": "S6.A",
+          "id": "S7.A",
           "name": "Prompts",
           "description": "",
           "status": "active",
           "sub_functions": [
             {
-              "id": "S6.3",
+              "id": "S7.3",
               "name": " Init  ",
               "file": "src/opencode_arch/llm/prompts/__init__.py",
               "functions": [],
@@ -788,7 +719,7 @@
               "line_count": 0
             },
             {
-              "id": "S6.4",
+              "id": "S7.4",
               "name": "Prompt templates for LLM functional",
               "file": "src/opencode_arch/llm/prompts/audit.py",
               "functions": [],
@@ -798,7 +729,7 @@
               "line_count": 66
             },
             {
-              "id": "S6.5",
+              "id": "S7.5",
               "name": "Prompt templates for function",
               "file": "src/opencode_arch/llm/prompts/matching.py",
               "functions": [],
@@ -808,7 +739,7 @@
               "line_count": 21
             },
             {
-              "id": "S6.6",
+              "id": "S7.6",
               "name": "Prompt templates for requirement extraction",
               "file": "src/opencode_arch/llm/prompts/requirements.py",
               "functions": [],
@@ -821,13 +752,13 @@
           "sub_blocks": []
         },
         {
-          "id": "S6.misc",
+          "id": "S7.misc",
           "name": "Ungrouped",
           "description": "",
           "status": "active",
           "sub_functions": [
             {
-              "id": "S6.1",
+              "id": "S7.1",
               "name": " Init  ",
               "file": "src/opencode_arch/llm/__init__.py",
               "functions": [],
@@ -837,7 +768,7 @@
               "line_count": 0
             },
             {
-              "id": "S6.2",
+              "id": "S7.2",
               "name": "Cache",
               "file": "src/opencode_arch/llm/cache.py",
               "functions": [
@@ -862,13 +793,13 @@
         }
       ]
     },
-    "S7": {
+    "S8": {
       "name": "Mcp",
       "status": "active",
       "description_source": "MCP server for architecture tools.",
       "sub_functions": [
         {
-          "id": "S7.1",
+          "id": "S8.1",
           "name": "MCP server for architecture tools",
           "file": "src/opencode_arch/mcp/__init__.py",
           "functions": [],
@@ -878,7 +809,7 @@
           "line_count": 1
         },
         {
-          "id": "S7.2",
+          "id": "S8.2",
           "name": "Allow running as: python",
           "file": "src/opencode_arch/mcp/__main__.py",
           "functions": [],
@@ -888,7 +819,7 @@
           "line_count": 8
         },
         {
-          "id": "S7.3",
+          "id": "S8.3",
           "name": "Quality metadata module for MCP tools",
           "file": "src/opencode_arch/mcp/quality.py",
           "functions": [
@@ -912,7 +843,7 @@
           "line_count": 140
         },
         {
-          "id": "S7.4",
+          "id": "S8.4",
           "name": "FastMCP server entry point for opencode",
           "file": "src/opencode_arch/mcp/server.py",
           "functions": [],
@@ -922,7 +853,7 @@
           "line_count": 348
         },
         {
-          "id": "S7.5",
+          "id": "S8.5",
           "name": "MCP tool implementations",
           "file": "src/opencode_arch/mcp/tools/__init__.py",
           "functions": [],
@@ -932,7 +863,7 @@
           "line_count": 1
         },
         {
-          "id": "S7.6",
+          "id": "S8.6",
           "name": "architect_author MCP tool \u2014 forward",
           "file": "src/opencode_arch/mcp/tools/author.py",
           "functions": [
@@ -949,7 +880,7 @@
           "line_count": 44
         },
         {
-          "id": "S7.7",
+          "id": "S8.7",
           "name": "architect_check MCP tool \u2014 verify model representativeness against code reality",
           "file": "src/opencode_arch/mcp/tools/check.py",
           "functions": [
@@ -966,7 +897,7 @@
           "line_count": 162
         },
         {
-          "id": "S7.8",
+          "id": "S8.8",
           "name": "architect_correct MCP tool \u2014 store structured architecture corrections",
           "file": "src/opencode_arch/mcp/tools/correct.py",
           "functions": [
@@ -984,7 +915,7 @@
           "line_count": 74
         },
         {
-          "id": "S7.9",
+          "id": "S8.9",
           "name": "architect_decompose MCP tool \u2014 decompose model into sub",
           "file": "src/opencode_arch/mcp/tools/decompose.py",
           "functions": [
@@ -1000,7 +931,7 @@
           "line_count": 100
         },
         {
-          "id": "S7.10",
+          "id": "S8.10",
           "name": "architect_docs MCP tool \u2014 generate SE documentation from architecture model",
           "file": "src/opencode_arch/mcp/tools/docs.py",
           "functions": [
@@ -1017,7 +948,7 @@
           "line_count": 213
         },
         {
-          "id": "S7.11",
+          "id": "S8.11",
           "name": "architect_export MCP tool \u2014 export flat files for mobile AI consumption",
           "file": "src/opencode_arch/mcp/tools/export.py",
           "functions": [
@@ -1035,7 +966,7 @@
           "line_count": 73
         },
         {
-          "id": "S7.12",
+          "id": "S8.12",
           "name": "architect_extract MCP tool \u2014 validate and store an architecture extraction",
           "file": "src/opencode_arch/mcp/tools/extract.py",
           "functions": [
@@ -1053,7 +984,7 @@
           "line_count": 469
         },
         {
-          "id": "S7.13",
+          "id": "S8.13",
           "name": "Record user feedback for model improvement and training",
           "file": "src/opencode_arch/mcp/tools/feedback.py",
           "functions": [
@@ -1071,7 +1002,7 @@
           "line_count": 65
         },
         {
-          "id": "S7.14",
+          "id": "S8.14",
           "name": "architect_gate MCP tool \u2014 check development gate readiness",
           "file": "src/opencode_arch/mcp/tools/gate.py",
           "functions": [
@@ -1088,7 +1019,7 @@
           "line_count": 62
         },
         {
-          "id": "S7.15",
+          "id": "S8.15",
           "name": "architect_generate MCP tool \u2014 run tests on generated code",
           "file": "src/opencode_arch/mcp/tools/generate.py",
           "functions": [
@@ -1105,7 +1036,7 @@
           "line_count": 107
         },
         {
-          "id": "S7.16",
+          "id": "S8.16",
           "name": "architect_group MCP tool \u2014 group repository modules into logical components",
           "file": "src/opencode_arch/mcp/tools/group.py",
           "functions": [
@@ -1122,7 +1053,7 @@
           "line_count": 65
         },
         {
-          "id": "S7.17",
+          "id": "S8.17",
           "name": "architect_ingest tool \u2014 accept a SourceGraph JSON for any language",
           "file": "src/opencode_arch/mcp/tools/ingest.py",
           "functions": [
@@ -1139,7 +1070,7 @@
           "line_count": 129
         },
         {
-          "id": "S7.18",
+          "id": "S8.18",
           "name": "architect_llm_audit MCP tool \u2014 two",
           "file": "src/opencode_arch/mcp/tools/llm_audit.py",
           "functions": [
@@ -1157,7 +1088,28 @@
           "line_count": 189
         },
         {
-          "id": "S7.19",
+          "id": "S8.19",
+          "name": "MCP tools for regen readiness scoring and spot",
+          "file": "src/opencode_arch/mcp/tools/regen_score.py",
+          "functions": [
+            "regen_score(repo_path: str, component_id: str) -> dict",
+            "spot_check(repo_path: str, component_id: str, subsystem_id: str) -> dict"
+          ],
+          "inputs": [
+            "repo_path: str",
+            "component_id: str",
+            "repo_path: str",
+            "component_id: str",
+            "subsystem_id: str"
+          ],
+          "outputs": [
+            "dict"
+          ],
+          "status": "active",
+          "line_count": 116
+        },
+        {
+          "id": "S8.20",
           "name": "Capture functional requirements against architecture components",
           "file": "src/opencode_arch/mcp/tools/require.py",
           "functions": [
@@ -1175,7 +1127,7 @@
           "line_count": 77
         },
         {
-          "id": "S7.20",
+          "id": "S8.21",
           "name": "architect_scan MCP tool \u2014 generate reality manifest via AST scanning",
           "file": "src/opencode_arch/mcp/tools/scan.py",
           "functions": [
@@ -1191,7 +1143,7 @@
           "line_count": 56
         },
         {
-          "id": "S7.21",
+          "id": "S8.22",
           "name": "architect_slice MCP tool \u2014 compress repository context for LLM consumption",
           "file": "src/opencode_arch/mcp/tools/slice.py",
           "functions": [
@@ -1210,10 +1162,10 @@
             "str"
           ],
           "status": "active",
-          "line_count": 235
+          "line_count": 241
         },
         {
-          "id": "S7.22",
+          "id": "S8.23",
           "name": "architect_stats MCP tool \u2014 aggregate session and historical quality metrics",
           "file": "src/opencode_arch/mcp/tools/stats.py",
           "functions": [
@@ -1230,7 +1182,7 @@
           "line_count": 68
         },
         {
-          "id": "S7.23",
+          "id": "S8.24",
           "name": "architect_trace_requirements MCP tool \u2014 trace requirements to functions",
           "file": "src/opencode_arch/mcp/tools/trace_requirements.py",
           "functions": [
@@ -1248,7 +1200,7 @@
           "line_count": 96
         },
         {
-          "id": "S7.24",
+          "id": "S8.25",
           "name": "architect_validate MCP tool \u2014 validate architecture model quality",
           "file": "src/opencode_arch/mcp/tools/validate.py",
           "functions": [
@@ -1266,13 +1218,13 @@
       ],
       "sub_blocks": [
         {
-          "id": "S7.A",
+          "id": "S8.A",
           "name": "MCP tool implementations.",
           "description": "",
           "status": "active",
           "sub_functions": [
             {
-              "id": "S7.5",
+              "id": "S8.5",
               "name": "MCP tool implementations",
               "file": "src/opencode_arch/mcp/tools/__init__.py",
               "functions": [],
@@ -1282,7 +1234,7 @@
               "line_count": 1
             },
             {
-              "id": "S7.6",
+              "id": "S8.6",
               "name": "architect_author MCP tool \u2014 forward",
               "file": "src/opencode_arch/mcp/tools/author.py",
               "functions": [
@@ -1299,7 +1251,7 @@
               "line_count": 44
             },
             {
-              "id": "S7.7",
+              "id": "S8.7",
               "name": "architect_check MCP tool \u2014 verify model representativeness against code reality",
               "file": "src/opencode_arch/mcp/tools/check.py",
               "functions": [
@@ -1316,7 +1268,7 @@
               "line_count": 162
             },
             {
-              "id": "S7.8",
+              "id": "S8.8",
               "name": "architect_correct MCP tool \u2014 store structured architecture corrections",
               "file": "src/opencode_arch/mcp/tools/correct.py",
               "functions": [
@@ -1334,7 +1286,7 @@
               "line_count": 74
             },
             {
-              "id": "S7.9",
+              "id": "S8.9",
               "name": "architect_decompose MCP tool \u2014 decompose model into sub",
               "file": "src/opencode_arch/mcp/tools/decompose.py",
               "functions": [
@@ -1350,7 +1302,7 @@
               "line_count": 100
             },
             {
-              "id": "S7.10",
+              "id": "S8.10",
               "name": "architect_docs MCP tool \u2014 generate SE documentation from architecture model",
               "file": "src/opencode_arch/mcp/tools/docs.py",
               "functions": [
@@ -1367,7 +1319,7 @@
               "line_count": 213
             },
             {
-              "id": "S7.11",
+              "id": "S8.11",
               "name": "architect_export MCP tool \u2014 export flat files for mobile AI consumption",
               "file": "src/opencode_arch/mcp/tools/export.py",
               "functions": [
@@ -1385,7 +1337,7 @@
               "line_count": 73
             },
             {
-              "id": "S7.12",
+              "id": "S8.12",
               "name": "architect_extract MCP tool \u2014 validate and store an architecture extraction",
               "file": "src/opencode_arch/mcp/tools/extract.py",
               "functions": [
@@ -1403,7 +1355,7 @@
               "line_count": 469
             },
             {
-              "id": "S7.13",
+              "id": "S8.13",
               "name": "Record user feedback for model improvement and training",
               "file": "src/opencode_arch/mcp/tools/feedback.py",
               "functions": [
@@ -1421,7 +1373,7 @@
               "line_count": 65
             },
             {
-              "id": "S7.14",
+              "id": "S8.14",
               "name": "architect_gate MCP tool \u2014 check development gate readiness",
               "file": "src/opencode_arch/mcp/tools/gate.py",
               "functions": [
@@ -1438,7 +1390,7 @@
               "line_count": 62
             },
             {
-              "id": "S7.15",
+              "id": "S8.15",
               "name": "architect_generate MCP tool \u2014 run tests on generated code",
               "file": "src/opencode_arch/mcp/tools/generate.py",
               "functions": [
@@ -1455,7 +1407,7 @@
               "line_count": 107
             },
             {
-              "id": "S7.16",
+              "id": "S8.16",
               "name": "architect_group MCP tool \u2014 group repository modules into logical components",
               "file": "src/opencode_arch/mcp/tools/group.py",
               "functions": [
@@ -1472,7 +1424,7 @@
               "line_count": 65
             },
             {
-              "id": "S7.17",
+              "id": "S8.17",
               "name": "architect_ingest tool \u2014 accept a SourceGraph JSON for any language",
               "file": "src/opencode_arch/mcp/tools/ingest.py",
               "functions": [
@@ -1489,7 +1441,7 @@
               "line_count": 129
             },
             {
-              "id": "S7.18",
+              "id": "S8.18",
               "name": "architect_llm_audit MCP tool \u2014 two",
               "file": "src/opencode_arch/mcp/tools/llm_audit.py",
               "functions": [
@@ -1507,7 +1459,28 @@
               "line_count": 189
             },
             {
-              "id": "S7.19",
+              "id": "S8.19",
+              "name": "MCP tools for regen readiness scoring and spot",
+              "file": "src/opencode_arch/mcp/tools/regen_score.py",
+              "functions": [
+                "regen_score(repo_path: str, component_id: str) -> dict",
+                "spot_check(repo_path: str, component_id: str, subsystem_id: str) -> dict"
+              ],
+              "inputs": [
+                "repo_path: str",
+                "component_id: str",
+                "repo_path: str",
+                "component_id: str",
+                "subsystem_id: str"
+              ],
+              "outputs": [
+                "dict"
+              ],
+              "status": "active",
+              "line_count": 116
+            },
+            {
+              "id": "S8.20",
               "name": "Capture functional requirements against architecture components",
               "file": "src/opencode_arch/mcp/tools/require.py",
               "functions": [
@@ -1525,7 +1498,7 @@
               "line_count": 77
             },
             {
-              "id": "S7.20",
+              "id": "S8.21",
               "name": "architect_scan MCP tool \u2014 generate reality manifest via AST scanning",
               "file": "src/opencode_arch/mcp/tools/scan.py",
               "functions": [
@@ -1541,7 +1514,7 @@
               "line_count": 56
             },
             {
-              "id": "S7.21",
+              "id": "S8.22",
               "name": "architect_slice MCP tool \u2014 compress repository context for LLM consumption",
               "file": "src/opencode_arch/mcp/tools/slice.py",
               "functions": [
@@ -1560,10 +1533,10 @@
                 "str"
               ],
               "status": "active",
-              "line_count": 235
+              "line_count": 241
             },
             {
-              "id": "S7.22",
+              "id": "S8.23",
               "name": "architect_stats MCP tool \u2014 aggregate session and historical quality metrics",
               "file": "src/opencode_arch/mcp/tools/stats.py",
               "functions": [
@@ -1580,7 +1553,7 @@
               "line_count": 68
             },
             {
-              "id": "S7.23",
+              "id": "S8.24",
               "name": "architect_trace_requirements MCP tool \u2014 trace requirements to functions",
               "file": "src/opencode_arch/mcp/tools/trace_requirements.py",
               "functions": [
@@ -1598,7 +1571,7 @@
               "line_count": 96
             },
             {
-              "id": "S7.24",
+              "id": "S8.25",
               "name": "architect_validate MCP tool \u2014 validate architecture model quality",
               "file": "src/opencode_arch/mcp/tools/validate.py",
               "functions": [
@@ -1617,13 +1590,13 @@
           "sub_blocks": []
         },
         {
-          "id": "S7.misc",
+          "id": "S8.misc",
           "name": "Ungrouped",
           "description": "",
           "status": "active",
           "sub_functions": [
             {
-              "id": "S7.1",
+              "id": "S8.1",
               "name": "MCP server for architecture tools",
               "file": "src/opencode_arch/mcp/__init__.py",
               "functions": [],
@@ -1633,7 +1606,7 @@
               "line_count": 1
             },
             {
-              "id": "S7.2",
+              "id": "S8.2",
               "name": "Allow running as: python",
               "file": "src/opencode_arch/mcp/__main__.py",
               "functions": [],
@@ -1643,7 +1616,7 @@
               "line_count": 8
             },
             {
-              "id": "S7.3",
+              "id": "S8.3",
               "name": "Quality metadata module for MCP tools",
               "file": "src/opencode_arch/mcp/quality.py",
               "functions": [
@@ -1667,7 +1640,7 @@
               "line_count": 140
             },
             {
-              "id": "S7.4",
+              "id": "S8.4",
               "name": "FastMCP server entry point for opencode",
               "file": "src/opencode_arch/mcp/server.py",
               "functions": [],
@@ -1681,13 +1654,13 @@
         }
       ]
     },
-    "S8": {
+    "S9": {
       "name": "Prompts",
       "status": "dormant",
       "description_source": "Prompt templates for regen-loop and related workflows.",
       "sub_functions": [
         {
-          "id": "S8.1",
+          "id": "S9.1",
           "name": "Prompt templates for regen",
           "file": "src/opencode_arch/prompts/__init__.py",
           "functions": [],
@@ -1697,7 +1670,7 @@
           "line_count": 1
         },
         {
-          "id": "S8.2",
+          "id": "S9.2",
           "name": "Prompt templates for the decomposed regen",
           "file": "src/opencode_arch/prompts/regen.py",
           "functions": [],
@@ -1709,13 +1682,74 @@
       ],
       "sub_blocks": []
     },
-    "S9": {
+    "S10": {
+      "name": "Regen",
+      "status": "active",
+      "description_source": "Regeneration probe and self-healing modules.",
+      "sub_functions": [
+        {
+          "id": "S10.1",
+          "name": "Regeneration probe and self",
+          "file": "src/opencode_arch/regen/__init__.py",
+          "functions": [],
+          "inputs": [],
+          "outputs": [],
+          "status": "dormant",
+          "line_count": 1
+        },
+        {
+          "id": "S10.2",
+          "name": "Self",
+          "file": "src/opencode_arch/regen/self_heal.py",
+          "functions": [
+            "classify_failure(diagnostics: list[SpotCheckDiagnostic]) -> list[HealAction]",
+            "self_heal(result: SpotCheckResult, repo_path: Path, learning_store: Any) -> list[HealAction]"
+          ],
+          "inputs": [
+            "diagnostics: list[SpotCheckDiagnostic]",
+            "result: SpotCheckResult",
+            "repo_path: Path",
+            "learning_store: Any"
+          ],
+          "outputs": [
+            "list[HealAction]"
+          ],
+          "status": "active",
+          "line_count": 78
+        },
+        {
+          "id": "S10.3",
+          "name": "Spot",
+          "file": "src/opencode_arch/regen/spot_check.py",
+          "functions": [
+            "select_target(repo_path: Path, component_id: str | None, subsystem_id: str | None) -> SpotCheckTarget",
+            "run_spot_check(target: SpotCheckTarget, repo_path: Path, max_iterations: int, llm_backend: Any) -> SpotCheckResult"
+          ],
+          "inputs": [
+            "repo_path: Path",
+            "component_id: str | None",
+            "subsystem_id: str | None",
+            "target: SpotCheckTarget",
+            "repo_path: Path",
+            "max_iterations: int"
+          ],
+          "outputs": [
+            "SpotCheckResult",
+            "SpotCheckTarget"
+          ],
+          "status": "active",
+          "line_count": 317
+        }
+      ],
+      "sub_blocks": []
+    },
+    "S11": {
       "name": "Requirements",
       "status": "active",
       "description_source": "auto-discovered from src/opencode_arch/requirements/",
       "sub_functions": [
         {
-          "id": "S9.1",
+          "id": "S11.1",
           "name": " Init  ",
           "file": "src/opencode_arch/requirements/__init__.py",
           "functions": [],
@@ -1725,7 +1759,7 @@
           "line_count": 0
         },
         {
-          "id": "S9.2",
+          "id": "S11.2",
           "name": "Llm Extractor",
           "file": "src/opencode_arch/requirements/llm_extractor.py",
           "functions": [
@@ -1743,7 +1777,7 @@
           "line_count": 78
         },
         {
-          "id": "S9.3",
+          "id": "S11.3",
           "name": "Function",
           "file": "src/opencode_arch/requirements/matcher.py",
           "functions": [
@@ -1761,7 +1795,7 @@
           "line_count": 114
         },
         {
-          "id": "S9.4",
+          "id": "S11.4",
           "name": "Parser",
           "file": "src/opencode_arch/requirements/parser.py",
           "functions": [
@@ -1777,7 +1811,7 @@
           "line_count": 63
         },
         {
-          "id": "S9.5",
+          "id": "S11.5",
           "name": "Retroactive requirement derivation from existing architecture models",
           "file": "src/opencode_arch/requirements/retroactive.py",
           "functions": [
@@ -1797,13 +1831,13 @@
       ],
       "sub_blocks": []
     },
-    "S10": {
+    "S12": {
       "name": "Runner",
       "status": "active",
       "description_source": "Runner backends for agent invocation.",
       "sub_functions": [
         {
-          "id": "S10.1",
+          "id": "S12.1",
           "name": "Runner backends for agent invocation",
           "file": "src/opencode_arch/runner/__init__.py",
           "functions": [],
@@ -1813,7 +1847,7 @@
           "line_count": 5
         },
         {
-          "id": "S10.2",
+          "id": "S12.2",
           "name": "Runner protocol and result types",
           "file": "src/opencode_arch/runner/base.py",
           "functions": [],
@@ -1823,7 +1857,7 @@
           "line_count": 21
         },
         {
-          "id": "S10.3",
+          "id": "S12.3",
           "name": "OpenCode subprocess runner backend",
           "file": "src/opencode_arch/runner/opencode.py",
           "functions": [],
@@ -1835,13 +1869,13 @@
       ],
       "sub_blocks": []
     },
-    "S11": {
+    "S13": {
       "name": "Telemetry",
       "status": "active",
       "description_source": "Telemetry: records tool usage and outcomes for optimization.",
       "sub_functions": [
         {
-          "id": "S11.1",
+          "id": "S13.1",
           "name": "Telemetry: records tool usage and outcomes for optimization",
           "file": "src/opencode_arch/telemetry/__init__.py",
           "functions": [],
@@ -1851,7 +1885,7 @@
           "line_count": 6
         },
         {
-          "id": "S11.2",
+          "id": "S13.2",
           "name": "Drain metrics from architecture",
           "file": "src/opencode_arch/telemetry/collector.py",
           "functions": [
@@ -1869,7 +1903,7 @@
           "line_count": 40
         },
         {
-          "id": "S11.3",
+          "id": "S13.3",
           "name": "Async recorder for tool invocations",
           "file": "src/opencode_arch/telemetry/recorder.py",
           "functions": [
@@ -1885,7 +1919,7 @@
           "line_count": 12
         },
         {
-          "id": "S11.4",
+          "id": "S13.4",
           "name": "SQLite",
           "file": "src/opencode_arch/telemetry/store.py",
           "functions": [],
@@ -1899,6 +1933,124 @@
     }
   },
   "modules": [
+    {
+      "file": "src/opencode_arch/agent/__init__.py",
+      "name": "Agent layer for uncertainty resolution",
+      "docstring": "Agent layer for uncertainty resolution.",
+      "functions": [],
+      "imports": [
+        "resolution"
+      ],
+      "line_count": 4,
+      "status": "dormant",
+      "classes": [],
+      "exports": [
+        "UncertaintyResolver"
+      ],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "resolution",
+          "symbols": [
+            "UncertaintyResolver"
+          ],
+          "is_relative": true
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/agent/resolution.py",
+      "name": "Uncertainty resolution \u2014 dispatches pipeline uncertainties to LLM/search/user",
+      "docstring": "Uncertainty resolution \u2014 dispatches pipeline uncertainties to LLM/search/user.\n\nThis is the MCP layer's responsibility: when the deterministic pipeline\nproduces uncertainties, this resolver attempts to resolve them using\nthe tools available to the agent (LLM analysis, codebase search, user queries).",
+      "functions": [],
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "typing",
+        "architecture_model.pipeline.protocol",
+        "architecture_model.pipeline.learning",
+        "time"
+      ],
+      "line_count": 117,
+      "status": "active",
+      "classes": [
+        {
+          "name": "ResolutionStrategy",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        },
+        {
+          "name": "UncertaintyResolver",
+          "bases": [],
+          "methods": [
+            "__init__",
+            "register_handler",
+            "resolve",
+            "resolve_all",
+            "unresolvable_categories"
+          ],
+          "is_abstract": false,
+          "decorators": [],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any",
+            "Callable"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.pipeline.protocol",
+          "symbols": [
+            "Evidence",
+            "Uncertainty"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.pipeline.learning",
+          "symbols": [
+            "LearningStore",
+            "ResolutionOutcome"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "time",
+          "symbols": [],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
     {
       "file": "src/opencode_arch/artifacts/__init__.py",
       "name": "Artifact selection and registry for model",
@@ -2221,7 +2373,10 @@
           "signature": "should_decompose(model: ArchitectureModel, manifest: dict | None) -> bool",
           "calls": [
             "len",
-            "get"
+            "getattr",
+            "hasattr",
+            "get",
+            "isinstance"
           ],
           "docstring": "Determine if system is complex enough to warrant per-subsystem docs.\n\nHeuristic: returns True if ANY of:\n- More than 5 functional blocks (distinct source_block values on components)\n- More than 50 source files in manifest\n- More than 20 components"
         },
@@ -2256,7 +2411,7 @@
         "architecture_model.core.types",
         "architecture_model.core.types"
       ],
-      "line_count": 331,
+      "line_count": 342,
       "status": "active",
       "classes": [
         {
@@ -4402,7 +4557,7 @@
         "architecture_model.core.validator",
         "architecture_model.core.types",
         "opencode_arch.context.formatter",
-        "opencode_arch.extract.from_artifacts",
+        "architecture_model.extract.from_artifacts",
         "architecture_model.config.loader"
       ],
       "line_count": 201,
@@ -4480,7 +4635,7 @@
           "is_relative": false
         },
         {
-          "module": "opencode_arch.extract.from_artifacts",
+          "module": "architecture_model.extract.from_artifacts",
           "symbols": [
             "extract_from_artifacts"
           ],
@@ -4500,13 +4655,13 @@
     {
       "file": "src/opencode_arch/extract/__init__.py",
       "name": "Extract architecture models from source code or Tier 1 artifacts",
-      "docstring": "Extract architecture models from source code or Tier 1 artifacts.",
+      "docstring": "Extract architecture models from source code or Tier 1 artifacts.\n\nNote: route_detector, constraint_detector, from_artifacts, and table_parser\nhave been moved to architecture-model-standard (architecture_model.extract.*).\nThis package re-exports from there for backward compatibility.",
       "functions": [],
       "imports": [
-        "from_code",
-        "from_artifacts"
+        "architecture_model.extract.from_code",
+        "architecture_model.extract.from_artifacts"
       ],
-      "line_count": 8,
+      "line_count": 12,
       "status": "dormant",
       "classes": [],
       "exports": [
@@ -4516,575 +4671,16 @@
       "decorated_functions": [],
       "imports_detailed": [
         {
-          "module": "from_code",
+          "module": "architecture_model.extract.from_code",
           "symbols": [
             "extract_from_code"
           ],
-          "is_relative": true
+          "is_relative": false
         },
         {
-          "module": "from_artifacts",
+          "module": "architecture_model.extract.from_artifacts",
           "symbols": [
             "extract_from_artifacts"
-          ],
-          "is_relative": true
-        }
-      ],
-      "module_constants": {},
-      "module_assignments": {}
-    },
-    {
-      "file": "src/opencode_arch/extract/constraint_detector.py",
-      "name": "Constraint Detector",
-      "docstring": "Parse project configuration files to derive technical and organizational constraints.\n\nScans pyproject.toml, Dockerfile, .env templates, CI config, and setup.cfg to\nautomatically detect constraints such as Python version requirements, framework\nchoices, runtime images, exposed ports, and CI/CD platform.",
-      "functions": [
-        {
-          "name": "detect_constraints",
-          "signature": "detect_constraints(project_root: Path) -> list[Constraint]",
-          "calls": [
-            "_parse_pyproject",
-            "_parse_dockerfile",
-            "_parse_env_template",
-            "_parse_ci_config",
-            "_parse_setup_cfg"
-          ],
-          "docstring": "Scan project configuration files for derivable constraints.\n\nArgs:\n    project_root: Root directory of the project.\n\nReturns:\n    List of Constraint entities derived from config files."
-        }
-      ],
-      "imports": [
-        "__future__",
-        "re",
-        "tomllib",
-        "pathlib",
-        "architecture_model.core.types"
-      ],
-      "line_count": 398,
-      "status": "active",
-      "classes": [],
-      "exports": [],
-      "decorated_functions": [],
-      "imports_detailed": [
-        {
-          "module": "__future__",
-          "symbols": [
-            "annotations"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "re",
-          "symbols": [],
-          "is_relative": false
-        },
-        {
-          "module": "tomllib",
-          "symbols": [],
-          "is_relative": false
-        },
-        {
-          "module": "pathlib",
-          "symbols": [
-            "Path"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "architecture_model.core.types",
-          "symbols": [
-            "Constraint",
-            "ConstraintType",
-            "Status"
-          ],
-          "is_relative": false
-        }
-      ],
-      "module_constants": {},
-      "module_assignments": {}
-    },
-    {
-      "file": "src/opencode_arch/extract/from_artifacts.py",
-      "name": "Extract Architecture Model from Tier 1 markdown artifacts",
-      "docstring": "Extract Architecture Model from Tier 1 markdown artifacts.\n\nParses the 5 Tier 1 artifacts:\n  - functional-architecture.md \u2192 capabilities (F-blocks), actor hints\n  - use-cases.md \u2192 actors, behaviors (UCs), relationships\n  - logical-architecture.md \u2192 layers, components\n  - requirements-analysis.md \u2192 constraints\n  - icd.md \u2192 interfaces\n\nProduces an ArchitectureModel instance (and optionally writes YAML).",
-      "functions": [
-        {
-          "name": "extract_from_artifacts",
-          "signature": "extract_from_artifacts(artifact_dir: str | Path, project: str, system: str) -> ArchitectureModel",
-          "calls": [
-            "Path",
-            "_extract_actors",
-            "_extract_capabilities",
-            "_extract_behaviors",
-            "_extract_interfaces",
-            "_extract_constraints",
-            "_extract_layers",
-            "_extract_components",
-            "extend",
-            "_extract_interface_relationships",
-            "set",
-            "update",
-            "ModelMeta",
-            "ArchitectureModel",
-            "exists",
-            "_extract_uc_relationships",
-            "_extract_layer_relationships",
-            "_extract_capability_relationships",
-            "_extract_component_capability_relationships",
-            "_guess_project",
-            "read_text",
-            "append",
-            "add",
-            "items",
-            "isoformat",
-            "Entities",
-            "now"
-          ],
-          "docstring": "Extract a complete architecture model from Tier 1 artifact markdown files.\n\nArgs:\n    artifact_dir: Directory containing the stage2 artifact markdown files.\n    project: Project name (used in meta).\n    system: System identifier.\n\nReturns:\n    Populated ArchitectureModel."
-        },
-        {
-          "name": "main",
-          "signature": "main()",
-          "calls": [
-            "ArgumentParser",
-            "add_argument",
-            "parse_args",
-            "Path",
-            "print",
-            "extract_from_artifacts",
-            "save_model",
-            "len"
-          ],
-          "docstring": "CLI: extract architecture model from artifacts."
-        }
-      ],
-      "imports": [
-        "__future__",
-        "re",
-        "datetime",
-        "pathlib",
-        "typing",
-        "architecture_model.core.types",
-        "architecture_model.core.parser",
-        "table_parser",
-        "argparse"
-      ],
-      "line_count": 837,
-      "status": "active",
-      "classes": [],
-      "exports": [],
-      "decorated_functions": [],
-      "imports_detailed": [
-        {
-          "module": "__future__",
-          "symbols": [
-            "annotations"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "re",
-          "symbols": [],
-          "is_relative": false
-        },
-        {
-          "module": "datetime",
-          "symbols": [
-            "datetime",
-            "timezone"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "pathlib",
-          "symbols": [
-            "Path"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "typing",
-          "symbols": [
-            "Optional"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "architecture_model.core.types",
-          "symbols": [
-            "Actor",
-            "ActorType",
-            "ArchitectureModel",
-            "Behavior",
-            "Capability",
-            "Component",
-            "Constraint",
-            "ConstraintType",
-            "Entities",
-            "Interface",
-            "InterfaceType",
-            "Layer",
-            "ModelMeta",
-            "Priority",
-            "Relationship",
-            "RelationType",
-            "Status",
-            "Strength"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "architecture_model.core.parser",
-          "symbols": [
-            "save_model"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "table_parser",
-          "symbols": [
-            "extract_sections",
-            "find_table_after_heading",
-            "parse_tables"
-          ],
-          "is_relative": true
-        },
-        {
-          "module": "argparse",
-          "symbols": [],
-          "is_relative": false
-        }
-      ],
-      "module_constants": {},
-      "module_assignments": {}
-    },
-    {
-      "file": "src/opencode_arch/extract/from_code.py",
-      "name": "Extract an ArchitectureModel directly from source code analysis",
-      "docstring": "Extract an ArchitectureModel directly from source code analysis.\n\nThis is the \"backward pass\" \u2014 code \u2192 model \u2014 bypassing the stage2 markdown\nartifact requirement. Derives entities and relationships from AST analysis,\nimport graphs, and project configuration files.",
-      "functions": [
-        {
-          "name": "extract_from_code",
-          "signature": "extract_from_code(project_root: str | Path, config: ProjectConfig | None, manifest: dict | None) -> ArchitectureModel",
-          "calls": [
-            "resolve",
-            "_derive_capabilities",
-            "detect_routes",
-            "_derive_actors",
-            "_derive_route_behaviors",
-            "_detect_service_behaviors",
-            "_derive_components",
-            "_derive_interfaces",
-            "_derive_layers",
-            "detect_constraints",
-            "Entities",
-            "_derive_relationships",
-            "ModelMeta",
-            "ArchitectureModel",
-            "get_config",
-            "generate_manifest",
-            "_get_web_layer_dirs",
-            "Path",
-            "strftime",
-            "now"
-          ],
-          "docstring": "Extract an architecture model directly from source code analysis.\n\nThis bypasses the stage2 markdown artifact requirement by deriving\nentities and relationships from AST analysis, import graphs, and\nproject configuration files.\n\nArgs:\n    project_root: Root directory of the project to analyze.\n    config: Optional pre-loaded ProjectConfig. If None, auto-discovered.\n    manifest: Optional pre-generated manifest dict. If None, generated fresh.\n\nReturns:\n    Complete ArchitectureModel derived from code analysis."
-        }
-      ],
-      "imports": [
-        "__future__",
-        "ast",
-        "re",
-        "datetime",
-        "pathlib",
-        "typing",
-        "architecture_model.config.loader",
-        "architecture_model.config.schema",
-        "architecture_model.core.types",
-        "constraint_detector",
-        "route_detector",
-        "architecture_model.manifest"
-      ],
-      "line_count": 646,
-      "status": "active",
-      "classes": [],
-      "exports": [],
-      "decorated_functions": [],
-      "imports_detailed": [
-        {
-          "module": "__future__",
-          "symbols": [
-            "annotations"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "ast",
-          "symbols": [],
-          "is_relative": false
-        },
-        {
-          "module": "re",
-          "symbols": [],
-          "is_relative": false
-        },
-        {
-          "module": "datetime",
-          "symbols": [
-            "datetime",
-            "timezone"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "pathlib",
-          "symbols": [
-            "Path"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "typing",
-          "symbols": [
-            "Any"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "architecture_model.config.loader",
-          "symbols": [
-            "get_config"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "architecture_model.config.schema",
-          "symbols": [
-            "ProjectConfig"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "architecture_model.core.types",
-          "symbols": [
-            "Actor",
-            "ActorType",
-            "ArchitectureModel",
-            "Behavior",
-            "Capability",
-            "Component",
-            "Constraint",
-            "ConstraintType",
-            "Entities",
-            "Interface",
-            "InterfaceType",
-            "Layer",
-            "ModelMeta",
-            "Priority",
-            "Relationship",
-            "RelationType",
-            "Status",
-            "Strength"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "constraint_detector",
-          "symbols": [
-            "detect_constraints"
-          ],
-          "is_relative": true
-        },
-        {
-          "module": "route_detector",
-          "symbols": [
-            "RouteInfo",
-            "detect_routes"
-          ],
-          "is_relative": true
-        },
-        {
-          "module": "architecture_model.manifest",
-          "symbols": [
-            "generate_manifest"
-          ],
-          "is_relative": false
-        }
-      ],
-      "module_constants": {},
-      "module_assignments": {}
-    },
-    {
-      "file": "src/opencode_arch/extract/route_detector.py",
-      "name": "Route Detector",
-      "docstring": "AST-based route handler detection for Python web frameworks.\n\nScans Python source files and extracts decorated route handlers for\nFastAPI, Flask, and Django projects.",
-      "functions": [
-        {
-          "name": "detect_routes",
-          "signature": "detect_routes(project_root: Path, web_layer_dirs: list[str] | None) -> list[RouteInfo]",
-          "calls": [
-            "Path",
-            "_collect_python_files",
-            "_parse_file",
-            "str",
-            "extend",
-            "relative_to",
-            "_extract_fastapi_routes",
-            "_extract_flask_routes",
-            "_extract_django_routes"
-          ],
-          "docstring": "Scan Python files for route handler declarations.\n\nArgs:\n    project_root: Root directory of the project.\n    web_layer_dirs: Optional list of directories to restrict scanning\n                   (e.g., [\"app/api\"]). If None, scans all .py files.\n\nReturns:\n    List of RouteInfo for each detected route handler."
-        }
-      ],
-      "imports": [
-        "__future__",
-        "ast",
-        "sys",
-        "dataclasses",
-        "pathlib"
-      ],
-      "line_count": 400,
-      "status": "active",
-      "classes": [
-        {
-          "name": "RouteInfo",
-          "bases": [],
-          "methods": [],
-          "is_abstract": false,
-          "decorators": [
-            "dataclass"
-          ],
-          "attributes": {}
-        }
-      ],
-      "exports": [],
-      "decorated_functions": [],
-      "imports_detailed": [
-        {
-          "module": "__future__",
-          "symbols": [
-            "annotations"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "ast",
-          "symbols": [],
-          "is_relative": false
-        },
-        {
-          "module": "sys",
-          "symbols": [],
-          "is_relative": false
-        },
-        {
-          "module": "dataclasses",
-          "symbols": [
-            "dataclass"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "pathlib",
-          "symbols": [
-            "Path"
-          ],
-          "is_relative": false
-        }
-      ],
-      "module_constants": {},
-      "module_assignments": {}
-    },
-    {
-      "file": "src/opencode_arch/extract/table_parser.py",
-      "name": "Markdown table parser \u2014 extracts structured data from pipe",
-      "docstring": "Markdown table parser \u2014 extracts structured data from pipe-delimited tables.\n\nUsed by the artifact extractors to pull entity data from Tier 1 markdown docs.",
-      "functions": [
-        {
-          "name": "parse_tables",
-          "signature": "parse_tables(markdown: str) -> list[list[dict[str, str]]]",
-          "calls": [
-            "split",
-            "len",
-            "strip",
-            "match",
-            "_parse_row",
-            "append",
-            "enumerate",
-            "_normalize_header"
-          ],
-          "docstring": "Parse all markdown tables in the text.\n\nReturns a list of tables, where each table is a list of row-dicts\nkeyed by normalized header names."
-        },
-        {
-          "name": "find_table_after_heading",
-          "signature": "find_table_after_heading(markdown: str, heading_pattern: str) -> list[dict[str, str]]",
-          "calls": [
-            "split",
-            "compile",
-            "len",
-            "strip",
-            "startswith",
-            "sub",
-            "search",
-            "match",
-            "_parse_row",
-            "enumerate",
-            "append",
-            "_normalize_header"
-          ],
-          "docstring": "Find the first table that appears after a heading matching the pattern.\n\nArgs:\n    markdown: Full markdown text\n    heading_pattern: Regex pattern to match against heading text (case-insensitive)\n\nReturns:\n    List of row dicts, or empty list if no matching table found."
-        },
-        {
-          "name": "extract_sections",
-          "signature": "extract_sections(markdown: str, level: int) -> dict[str, str]",
-          "calls": [
-            "split",
-            "strip",
-            "startswith",
-            "sub",
-            "append",
-            "join"
-          ],
-          "docstring": "Split markdown into sections by heading level.\n\nReturns dict mapping heading text -> section content (including sub-headings)."
-        },
-        {
-          "name": "extract_list_items",
-          "signature": "extract_list_items(text: str) -> list[str]",
-          "calls": [
-            "split",
-            "strip",
-            "match",
-            "append",
-            "group"
-          ],
-          "docstring": "Extract bullet/numbered list items from text."
-        }
-      ],
-      "imports": [
-        "__future__",
-        "re",
-        "typing"
-      ],
-      "line_count": 177,
-      "status": "active",
-      "classes": [],
-      "exports": [],
-      "decorated_functions": [],
-      "imports_detailed": [
-        {
-          "module": "__future__",
-          "symbols": [
-            "annotations"
-          ],
-          "is_relative": false
-        },
-        {
-          "module": "re",
-          "symbols": [],
-          "is_relative": false
-        },
-        {
-          "module": "typing",
-          "symbols": [
-            "Any"
           ],
           "is_relative": false
         }
@@ -8129,6 +7725,100 @@
       "module_assignments": {}
     },
     {
+      "file": "src/opencode_arch/mcp/tools/regen_score.py",
+      "name": "MCP tools for regen readiness scoring and spot",
+      "docstring": "MCP tools for regen readiness scoring and spot-checking.",
+      "functions": [
+        {
+          "name": "regen_score",
+          "signature": "regen_score(repo_path: str, component_id: str) -> dict",
+          "calls": [
+            "Path",
+            "load_model",
+            "compute_regen_readiness",
+            "exists",
+            "next",
+            "compute_component_readiness",
+            "_grade"
+          ],
+          "docstring": "Compute regen readiness score for a repository or specific component.\n\nReturns overall score, grade, per-component breakdown, and blockers."
+        },
+        {
+          "name": "spot_check",
+          "signature": "spot_check(repo_path: str, component_id: str, subsystem_id: str) -> dict",
+          "calls": [
+            "Path",
+            "select_target",
+            "run_spot_check",
+            "classify_failure",
+            "len"
+          ],
+          "docstring": "Run a spot-check regeneration probe on a component or subsystem.\n\nRegenerates code via LLM, compares against source, reports diagnostics.\nOn failure, classifies patterns and suggests healing actions."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "pathlib",
+        "architecture_model.core.parser",
+        "architecture_model.core.regen_readiness",
+        "opencode_arch.regen.spot_check",
+        "opencode_arch.regen.self_heal"
+      ],
+      "line_count": 116,
+      "status": "active",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "load_model"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.regen_readiness",
+          "symbols": [
+            "compute_regen_readiness",
+            "compute_component_readiness"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.regen.spot_check",
+          "symbols": [
+            "select_target",
+            "run_spot_check"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "opencode_arch.regen.self_heal",
+          "symbols": [
+            "classify_failure"
+          ],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
       "file": "src/opencode_arch/mcp/tools/require.py",
       "name": "Capture functional requirements against architecture components",
       "docstring": "Capture functional requirements against architecture components.",
@@ -8219,9 +7909,9 @@
             "Path",
             "exists",
             "generate_manifest",
+            "to_dict",
             "group_modules",
             "drain_and_store",
-            "isinstance",
             "len"
           ],
           "docstring": "Scan a repository and generate its reality manifest.\n\nPerforms AST analysis on all source files to produce a ground-truth\ninventory of modules, functions, classes, imports, and metrics.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n\nReturns:\n    Manifest dict with keys: generated_at, project_root, metrics,\n    functional_blocks, modules, interfaces.\n    Returns {\"error\": \"...\"} on failure."
@@ -8352,7 +8042,7 @@
         "architecture_model.core.parser",
         "architecture_model.manifest.generator"
       ],
-      "line_count": 235,
+      "line_count": 241,
       "status": "active",
       "classes": [],
       "exports": [],
@@ -8761,6 +8451,248 @@
         "REGEN_PROMPT": "'## Regenerate {subsystem_name} (iteration {iteration}/{max_iterations})\\n\\nYou are regenerating a subsystem of a Python project. Your goal is to produce\\nsource files that pass the associated test suite.\\n\\n### Source files to produce:\\n{source_files}\\n\\n### Architecture Model (structural)\\n{model_context}\\n\\n### Constants (must be exact)\\n{constants}\\n\\n### Function Signatures\\n{signatures}\\n\\n### Test Contracts (assertions that MUST pass)\\n{test_contracts}\\n\\n### Dependency Context\\n{dependency_apis}\\n\\n{previous_feedback}'",
         "FEEDBACK_HEADER": "'### Feedback from previous iteration ({prev_iteration})\\n\\nThe following tests failed. Fix these issues:\\n\\n{failure_analysis}\\n'"
       },
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/regen/__init__.py",
+      "name": "Regeneration probe and self",
+      "docstring": "Regeneration probe and self-healing modules.",
+      "functions": [],
+      "imports": [],
+      "line_count": 1,
+      "status": "dormant",
+      "classes": [],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/regen/self_heal.py",
+      "name": "Self",
+      "docstring": "Self-healing loop for spot-check failures.\n\nWhen a spot-check fails, classifies the failure pattern, applies adaptive fixes\nto the model context, and retries. Feeds outcomes into the learning store.",
+      "functions": [
+        {
+          "name": "classify_failure",
+          "signature": "classify_failure(diagnostics: list[SpotCheckDiagnostic]) -> list[HealAction]",
+          "calls": [
+            "append",
+            "HealAction"
+          ],
+          "docstring": "Classify failure diagnostics into actionable heal actions."
+        },
+        {
+          "name": "self_heal",
+          "signature": "self_heal(result: SpotCheckResult, repo_path: Path, learning_store: Any) -> list[HealAction]",
+          "calls": [
+            "classify_failure",
+            "add_resolution_outcome"
+          ],
+          "docstring": "Analyze a failed spot-check and produce healing actions.\n\nRecords outcomes in learning store for cross-session improvement."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "pathlib",
+        "typing",
+        "spot_check"
+      ],
+      "line_count": 78,
+      "status": "active",
+      "classes": [
+        {
+          "name": "HealAction",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "spot_check",
+          "symbols": [
+            "SpotCheckDiagnostic",
+            "SpotCheckResult"
+          ],
+          "is_relative": true
+        }
+      ],
+      "module_constants": {},
+      "module_assignments": {}
+    },
+    {
+      "file": "src/opencode_arch/regen/spot_check.py",
+      "name": "Spot",
+      "docstring": "Spot-check regeneration probe.\n\nRegenerates a targeted component/subsystem via LLM, compares against source,\nand reports diagnostic results. Feeds failures into learning loop.",
+      "functions": [
+        {
+          "name": "select_target",
+          "signature": "select_target(repo_path: Path, component_id: str | None, subsystem_id: str | None) -> SpotCheckTarget",
+          "calls": [
+            "load_model",
+            "compute_regen_readiness",
+            "max",
+            "next",
+            "SpotCheckTarget",
+            "exists",
+            "ValueError",
+            "_format_component_context",
+            "extend",
+            "_format_subsystem_context",
+            "len"
+          ],
+          "docstring": "Select and prepare a spot-check target.\n\nIf component_id specified, use that.\nIf subsystem_id specified, load that subsystem's model.\nIf neither, pick the easiest (highest static score, smallest).",
+          "raises": [
+            "ValueError"
+          ]
+        },
+        {
+          "name": "run_spot_check",
+          "signature": "run_spot_check(target: SpotCheckTarget, repo_path: Path, max_iterations: int, llm_backend: Any) -> SpotCheckResult",
+          "calls": [
+            "SpotCheckResult",
+            "range",
+            "_build_regen_prompt",
+            "_parse_generated_code",
+            "_compare_against_source",
+            "llm_backend",
+            "SpotCheckDiagnostic"
+          ],
+          "docstring": "Run the spot-check: regen target via LLM, diff against source, iterate on failure.\n\nIf llm_backend is None, returns a dry-run result showing what WOULD be checked."
+        }
+      ],
+      "imports": [
+        "__future__",
+        "dataclasses",
+        "pathlib",
+        "typing",
+        "architecture_model.core.parser",
+        "architecture_model.core.regen_readiness",
+        "ast"
+      ],
+      "line_count": 317,
+      "status": "active",
+      "classes": [
+        {
+          "name": "SpotCheckTarget",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        },
+        {
+          "name": "SpotCheckDiagnostic",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        },
+        {
+          "name": "SpotCheckResult",
+          "bases": [],
+          "methods": [],
+          "is_abstract": false,
+          "decorators": [
+            "dataclass"
+          ],
+          "attributes": {}
+        }
+      ],
+      "exports": [],
+      "decorated_functions": [],
+      "imports_detailed": [
+        {
+          "module": "__future__",
+          "symbols": [
+            "annotations"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "dataclasses",
+          "symbols": [
+            "dataclass",
+            "field"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "pathlib",
+          "symbols": [
+            "Path"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "typing",
+          "symbols": [
+            "Any"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.parser",
+          "symbols": [
+            "load_model"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.core.regen_readiness",
+          "symbols": [
+            "compute_regen_readiness"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "ast",
+          "symbols": [],
+          "is_relative": false
+        }
+      ],
+      "module_constants": {},
       "module_assignments": {}
     },
     {
@@ -9556,6 +9488,11 @@
   ],
   "interfaces": [
     {
+      "source": "src/opencode_arch/agent/__init__.py",
+      "target": "src/opencode_arch/agent/resolution.py",
+      "import_path": "resolution"
+    },
+    {
       "source": "src/opencode_arch/artifacts/__init__.py",
       "target": "src/opencode_arch/artifacts/selector.py",
       "import_path": "opencode_arch.artifacts.selector"
@@ -9779,36 +9716,6 @@
       "source": "src/opencode_arch/context/pipeline_bridge.py",
       "target": "src/opencode_arch/context/formatter.py",
       "import_path": "opencode_arch.context.formatter"
-    },
-    {
-      "source": "src/opencode_arch/context/pipeline_bridge.py",
-      "target": "src/opencode_arch/extract/from_artifacts.py",
-      "import_path": "opencode_arch.extract.from_artifacts"
-    },
-    {
-      "source": "src/opencode_arch/extract/__init__.py",
-      "target": "src/opencode_arch/extract/from_code.py",
-      "import_path": "from_code"
-    },
-    {
-      "source": "src/opencode_arch/extract/__init__.py",
-      "target": "src/opencode_arch/extract/from_artifacts.py",
-      "import_path": "from_artifacts"
-    },
-    {
-      "source": "src/opencode_arch/extract/from_artifacts.py",
-      "target": "src/opencode_arch/extract/table_parser.py",
-      "import_path": "table_parser"
-    },
-    {
-      "source": "src/opencode_arch/extract/from_code.py",
-      "target": "src/opencode_arch/extract/constraint_detector.py",
-      "import_path": "constraint_detector"
-    },
-    {
-      "source": "src/opencode_arch/extract/from_code.py",
-      "target": "src/opencode_arch/extract/route_detector.py",
-      "import_path": "route_detector"
     },
     {
       "source": "src/opencode_arch/learning/__init__.py",
@@ -10036,6 +9943,16 @@
       "import_path": "opencode_arch.runner.opencode"
     },
     {
+      "source": "src/opencode_arch/mcp/tools/regen_score.py",
+      "target": "src/opencode_arch/regen/spot_check.py",
+      "import_path": "opencode_arch.regen.spot_check"
+    },
+    {
+      "source": "src/opencode_arch/mcp/tools/regen_score.py",
+      "target": "src/opencode_arch/regen/self_heal.py",
+      "import_path": "opencode_arch.regen.self_heal"
+    },
+    {
       "source": "src/opencode_arch/mcp/tools/scan.py",
       "target": "src/opencode_arch/mcp/quality.py",
       "import_path": "opencode_arch.mcp.quality"
@@ -10099,6 +10016,11 @@
       "source": "src/opencode_arch/mcp/tools/validate.py",
       "target": "src/opencode_arch/telemetry/collector.py",
       "import_path": "opencode_arch.telemetry.collector"
+    },
+    {
+      "source": "src/opencode_arch/regen/self_heal.py",
+      "target": "src/opencode_arch/regen/spot_check.py",
+      "import_path": "spot_check"
     },
     {
       "source": "src/opencode_arch/requirements/llm_extractor.py",
