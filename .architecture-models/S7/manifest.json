@@ -1,0 +1,218 @@
+{
+  "block_id": "S7",
+  "block_name": "Llm",
+  "parent_model": ".architecture-model.yaml",
+  "component_id": "COMP-LLM",
+  "manifest": {
+    "generated_at": "2026-08-10T22:17:26.537946+00:00",
+    "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
+    "metrics": {
+      "py_files": 6,
+      "total_lines": 218,
+      "functions": 2,
+      "classes": 2,
+      "constants": 10
+    },
+    "functional_blocks": {},
+    "modules": [
+      {
+        "file": "src/opencode_arch/llm/__init__.py",
+        "name": " Init  ",
+        "docstring": null,
+        "functions": [],
+        "imports": [],
+        "line_count": 0,
+        "status": "dormant",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/llm/cache.py",
+        "name": "Cache",
+        "docstring": null,
+        "functions": [
+          {
+            "name": "hash_content",
+            "signature": "hash_content(content: str) -> str",
+            "calls": [
+              "hexdigest",
+              "sha256",
+              "encode"
+            ]
+          },
+          {
+            "name": "cached_llm_call",
+            "signature": "cached_llm_call(runner, prompt: str, content_hash: str, prompt_template_hash: str, repo_path: str, cache: LLMCache | None) -> CachedResult",
+            "calls": [
+              "CachedResult",
+              "get",
+              "run",
+              "put",
+              "strftime",
+              "gmtime"
+            ],
+            "docstring": "Call LLM via runner, with caching."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "hashlib",
+          "json",
+          "time",
+          "dataclasses",
+          "pathlib"
+        ],
+        "line_count": 88,
+        "status": "active",
+        "classes": [
+          {
+            "name": "CachedResult",
+            "bases": [],
+            "methods": [],
+            "is_abstract": false,
+            "decorators": [
+              "dataclass"
+            ],
+            "attributes": {}
+          },
+          {
+            "name": "LLMCache",
+            "bases": [],
+            "methods": [
+              "__init__",
+              "get",
+              "put",
+              "clear"
+            ],
+            "is_abstract": false,
+            "decorators": [],
+            "attributes": {}
+          }
+        ],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "hashlib",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "time",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "dataclasses",
+            "symbols": [
+              "dataclass"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/llm/prompts/__init__.py",
+        "name": " Init  ",
+        "docstring": null,
+        "functions": [],
+        "imports": [],
+        "line_count": 0,
+        "status": "dormant",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/llm/prompts/audit.py",
+        "name": "Prompt templates for LLM functional",
+        "docstring": "Prompt templates for LLM functional-decomposition audit.",
+        "functions": [],
+        "imports": [],
+        "line_count": 66,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [],
+        "module_constants": {
+          "AUDIT_STAGE1_VERSION": "'v1'",
+          "AUDIT_STAGE1_TEMPLATE": "'You are analyzing a codebase to identify its functional subsystems.\\n\\n## Source Code Structure\\n{source_summary}\\n\\n## Project Context\\n{context_md}\\n\\nBased ONLY on the code structure, imports, and documentation above, identify the distinct functional subsystems (groups of files that work together to accomplish a specific purpose).\\n\\nFor each subsystem, provide:\\n1. A short descriptive name\\n2. Which files belong to it\\n3. A one-sentence rationale explaining why these files form a coherent unit\\n\\nReturn your analysis as JSON:\\n```json\\n{{\\n  \"blocks\": [\\n    {{\"id\": \"LLM-A\", \"name\": \"...\", \"files\": [\"...\"], \"rationale\": \"...\"}}\\n  ]\\n}}\\n```\\n'",
+          "AUDIT_STAGE2_VERSION": "'v1'",
+          "AUDIT_STAGE2_TEMPLATE": "'You previously identified these functional subsystems:\\n\\n{llm_decomposition}\\n\\nThe automated tool produced this decomposition with these quality metrics:\\n\\n{tool_decomposition}\\n\\nModularity (Newman\\'s Q): {modularity}\\nPer-block conductance: {conductance}\\n\\nCompare your grouping with the tool\\'s. For each pair:\\n- If they substantially agree (>70% file overlap), mark as \"agree\"\\n- If they disagree, explain WHY with specific evidence (naming conventions, documented boundaries, import patterns)\\n\\nReturn as JSON:\\n```json\\n{{\\n  \"agreement_rate\": 0.71,\\n  \"matched_pairs\": [\\n    {{\"tool_source_block\": \"S1\", \"llm_block\": \"LLM-A\", \"overlap\": 0.9, \"verdict\": \"agree\"}}\\n  ],\\n  \"disagreements\": [\\n    {{\\n      \"tool_source_block\": \"S3\",\\n      \"llm_block\": \"LLM-C\",\\n      \"overlap\": 0.4,\\n      \"llm_rationale\": \"...\",\\n      \"cites_doc\": \"README.md#L42\",\\n      \"recommendation\": \"flag_for_review\"\\n    }}\\n  ]\\n}}\\n```\\n'"
+        },
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/llm/prompts/matching.py",
+        "name": "Prompt templates for function",
+        "docstring": "Prompt templates for function-requirement matching.",
+        "functions": [],
+        "imports": [],
+        "line_count": 21,
+        "status": "dormant",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [],
+        "module_constants": {
+          "MATCHING_TEMPLATE": "'Match the following functions to the requirements they satisfy.\\nFor each match, provide the function ID, requirement ID, a confidence score (0.0-1.0),\\nand evidence explaining the match.\\n\\nRequirements:\\n{requirements_text}\\n\\nFunctions (from architecture model):\\n{functions_text}\\n\\nReturn a JSON object with a \"matches\" key containing an array of objects,\\neach with \"function_id\", \"requirement_id\", \"confidence\", and \"evidence\" fields.\\n\\nReturn ONLY valid JSON. Example:\\n{{\"matches\": [{{\"function_id\": \"COMP-1\", \"requirement_id\": \"REQ-001\", \"confidence\": 0.85, \"evidence\": \"Component handles user authentication\"}}]}}\\n'",
+          "MATCHING_VERSION": "'req-match-v1'"
+        },
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/llm/prompts/requirements.py",
+        "name": "Prompt templates for requirement extraction",
+        "docstring": "Prompt templates for requirement extraction.",
+        "functions": [],
+        "imports": [],
+        "line_count": 43,
+        "status": "dormant",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [],
+        "module_constants": {
+          "REQUIREMENTS_EXTRACT_TEMPLATE": "'Analyze the following document and identify all distinct requirements.\\nReturn a JSON object with a \"requirements\" key containing an array of objects,\\neach with \"id\", \"text\", and \"anchor\" fields.\\n\\n- \"id\": Use any existing REQ-NNN ID found in the text, or assign one as REQ-001, REQ-002, etc.\\n- \"text\": The requirement statement (concise, imperative).\\n- \"anchor\": The line reference or section where it appears (e.g., \"L5\", \"Section 2\").\\n\\nDocument content:\\n---\\n{doc_content}\\n---\\n\\nReturn ONLY valid JSON. Example:\\n{{\"requirements\": [{{\"id\": \"REQ-001\", \"text\": \"System shall support login\", \"anchor\": \"L3\"}}]}}\\n'",
+          "REQUIREMENTS_EXTRACT_VERSION": "'req-extract-v1'",
+          "REQUIREMENTS_RETROACTIVE_TEMPLATE": "'Given the following architecture model, derive requirements that the system must satisfy.\\nLook at capabilities, behaviors, interfaces, and component responsibilities.\\nReturn a JSON object with a \"requirements\" key containing an array of objects,\\neach with \"id\", \"text\", and \"source\" fields.\\n\\n- \"id\": Assign as REQ-001, REQ-002, etc.\\n- \"text\": The derived requirement (concise, imperative, testable).\\n- \"source\": Which model element (capability/behavior/interface) this derives from.\\n\\nArchitecture model:\\n---\\n{model_yaml}\\n---\\n\\nReturn ONLY valid JSON. Example:\\n{{\"requirements\": [{{\"id\": \"REQ-001\", \"text\": \"System shall validate input\", \"source\": \"CAP-F1\"}}]}}\\n'",
+          "REQUIREMENTS_RETROACTIVE_VERSION": "'req-retro-v1'"
+        },
+        "module_assignments": {}
+      }
+    ],
+    "interfaces": []
+  },
+  "children": {},
+  "block_dependencies": [],
+  "intra_chains": []
+}

@@ -1,0 +1,2679 @@
+{
+  "block_id": "S1",
+  "block_name": "Tools",
+  "parent_model": ".architecture-model.yaml",
+  "component_id": "COMP-TOOLS",
+  "manifest": {
+    "generated_at": "2026-08-10T22:17:27.232342+00:00",
+    "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
+    "metrics": {
+      "py_files": 21,
+      "total_lines": 2511,
+      "functions": 22,
+      "classes": 0,
+      "constants": 2
+    },
+    "functional_blocks": {},
+    "modules": [
+      {
+        "file": "src/opencode_arch/mcp/tools/__init__.py",
+        "name": "MCP tool implementations",
+        "docstring": "MCP tool implementations.",
+        "functions": [],
+        "imports": [],
+        "line_count": 1,
+        "status": "dormant",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/author.py",
+        "name": "architect_author MCP tool \u2014 forward",
+        "docstring": "architect_author MCP tool \u2014 forward-author architecture from requirements.",
+        "functions": [
+          {
+            "name": "author_architecture",
+            "signature": "author_architecture(repo_path: str, requirements_text: str) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "exists",
+              "parse_requirements_doc",
+              "hasattr",
+              "save_model",
+              "str",
+              "len"
+            ],
+            "docstring": "Parse requirements text and produce a concept-phase architecture model.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    requirements_text: Free-form or structured requirements document text.\n\nReturns:\n    Dict with model_path, entity counts, and lifecycle_phase."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "pathlib",
+          "typing",
+          "architecture_model.authoring.parser",
+          "architecture_model.core.parser"
+        ],
+        "line_count": 44,
+        "status": "dormant",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.authoring.parser",
+            "symbols": [
+              "parse_requirements_doc"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "save_model"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/check.py",
+        "name": "architect_check MCP tool \u2014 verify model representativeness against code reality",
+        "docstring": "architect_check MCP tool \u2014 verify model representativeness against code reality.",
+        "functions": [
+          {
+            "name": "check_representativeness",
+            "signature": "check_representativeness(repo_path: str, model_yaml: str) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "exists",
+              "_try_hierarchical",
+              "NamedTemporaryFile",
+              "write",
+              "load_model",
+              "unlink",
+              "_try_auto_hierarchical",
+              "generate_manifest",
+              "_compute",
+              "drain_and_store",
+              "round"
+            ],
+            "docstring": "Check how well an architecture model represents the actual codebase.\n\nSupports three modes:\n- Hierarchical (config): uses pre-existing source_block_dict from config\n- Hierarchical (auto): generates F-blocks from module grouping when no config exists\n- Flat: fallback when neither hierarchical path is available\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    model_yaml: The architecture model YAML to evaluate.\n\nReturns:\n    Dict with scores, details, and suggested improvements."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "tempfile",
+          "pathlib",
+          "typing",
+          "yaml",
+          "opencode_arch.mcp.quality",
+          "architecture_model.manifest.generator",
+          "architecture_model.core.parser",
+          "architecture_model.core.representativeness",
+          "architecture_model.manifest.recursive",
+          "architecture_model.core.representativeness",
+          "architecture_model.config.loader",
+          "architecture_model.manifest.generator",
+          "architecture_model.manifest.grouping",
+          "architecture_model.manifest.recursive",
+          "architecture_model.core.representativeness",
+          "opencode_arch.telemetry.collector"
+        ],
+        "line_count": 162,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [
+          {
+            "name": "check_representativeness",
+            "decorators": [
+              "with_quality"
+            ],
+            "is_method": false,
+            "class_name": null
+          }
+        ],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "tempfile",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "yaml",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.quality",
+            "symbols": [
+              "with_quality"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "load_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.representativeness",
+            "symbols": [
+              "compute_representativeness"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.recursive",
+            "symbols": [
+              "generate_recursive_manifests"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.representativeness",
+            "symbols": [
+              "compute_hierarchical_representativeness"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.config.loader",
+            "symbols": [
+              "get_config"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.grouping",
+            "symbols": [
+              "group_modules",
+              "auto_source_blocks"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.recursive",
+            "symbols": [
+              "generate_recursive_manifests"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.representativeness",
+            "symbols": [
+              "compute_hierarchical_representativeness"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.telemetry.collector",
+            "symbols": [
+              "drain_and_store"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/correct.py",
+        "name": "architect_correct MCP tool \u2014 store structured architecture corrections",
+        "docstring": "architect_correct MCP tool \u2014 store structured architecture corrections.",
+        "functions": [
+          {
+            "name": "store_correction",
+            "signature": "store_correction(repo_path: str, correction_type: str, target: str, reason: str, suggestion: dict | None) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "exists",
+              "_store",
+              "mkdir",
+              "get",
+              "isoformat",
+              "append",
+              "write_text",
+              "len",
+              "dump",
+              "sorted",
+              "safe_load",
+              "now",
+              "read_text"
+            ],
+            "docstring": "Store a structured correction for the architecture model.\n\nCorrections are consumed on next pipeline run to improve the model.\n\nArgs:\n    repo_path: Absolute path to the repository.\n    correction_type: One of: split_component, merge_components, add_component,\n        remove_component, add_relationship, remove_relationship, rename, reclassify.\n    target: Entity ID being corrected (e.g., \"COMP-3\").\n    reason: Why this correction is needed.\n    suggestion: Optional structured suggestion (format depends on type)."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "pathlib",
+          "typing",
+          "architecture_model.core.corrections",
+          "yaml",
+          "datetime"
+        ],
+        "line_count": 74,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.corrections",
+            "symbols": [
+              "store_correction"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "yaml",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "datetime",
+            "symbols": [
+              "datetime",
+              "timezone"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/decompose.py",
+        "name": "architect_decompose MCP tool \u2014 decompose model into sub",
+        "docstring": "architect_decompose MCP tool \u2014 decompose model into sub-models and recursive manifests.",
+        "functions": [
+          {
+            "name": "decompose_repository",
+            "signature": "decompose_repository(repo_path: str) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "exists",
+              "decompose_model",
+              "generate_recursive_manifests",
+              "write_sub_models",
+              "list",
+              "str",
+              "get_config",
+              "mkdir",
+              "items",
+              "keys",
+              "relative_to",
+              "generate_manifest",
+              "write_text",
+              "len",
+              "dumps",
+              "to_dict",
+              "hasattr"
+            ],
+            "docstring": "Decompose architecture model into per-block sub-models and recursive manifests.\n\nReads .architecture-model.yaml, traces relationships per F-block,\nwrites sub-models to .architecture-models/ and per-block manifests\nto .architecture/manifests/.\n\nArgs:\n    repo_path: Absolute path to the repository.\n\nReturns:\n    Dict with sub_models, recursive_manifests, and paths."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "json",
+          "pathlib",
+          "typing",
+          "opencode_arch.mcp.quality",
+          "architecture_model.orchestration.decompose",
+          "architecture_model.manifest.recursive",
+          "architecture_model.config.loader",
+          "architecture_model.manifest.generator"
+        ],
+        "line_count": 100,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [
+          {
+            "name": "decompose_repository",
+            "decorators": [
+              "with_quality"
+            ],
+            "is_method": false,
+            "class_name": null
+          }
+        ],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.quality",
+            "symbols": [
+              "with_quality"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.orchestration.decompose",
+            "symbols": [
+              "decompose_model",
+              "write_sub_models"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.recursive",
+            "symbols": [
+              "generate_recursive_manifests"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.config.loader",
+            "symbols": [
+              "get_config"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/docs.py",
+        "name": "architect_docs MCP tool \u2014 generate SE documentation from architecture model",
+        "docstring": "architect_docs MCP tool \u2014 generate SE documentation from architecture model.",
+        "functions": [
+          {
+            "name": "generate_docs",
+            "signature": "generate_docs(repo_path: str, formats: str, manifest: Any) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "exists",
+              "safe_load",
+              "_parse_raw",
+              "mkdir",
+              "read_text",
+              "str",
+              "len",
+              "strip",
+              "get",
+              "getattr",
+              "write_text",
+              "append",
+              "generate_icd",
+              "generate_dependency_matrix",
+              "generate_health_report",
+              "generate_manifest",
+              "generate_system_design",
+              "generate_integration_flows",
+              "generate_all_diagrams",
+              "extend",
+              "generate_index",
+              "relative_to",
+              "split",
+              "hasattr",
+              "to_dict",
+              "join",
+              "build_call_graph",
+              "build_file_to_comp",
+              "classify_behaviors",
+              "generate_behavior_index",
+              "sorted",
+              "generate_drift_report",
+              "generate_component_spec",
+              "summarize_crud_group",
+              "glob",
+              "_load",
+              "build_behavior_manifest",
+              "generate_behavior_spec",
+              "items"
+            ],
+            "docstring": "Generate standard SE documentation from an architecture model.\n\nProduces component specs, ICDs, dependency matrix, health report,\nand index from .architecture-model.yaml.\n\nArgs:\n    repo_path: Absolute path to the repository.\n    formats: Comma-separated list of doc types to generate.\n        Options: all, component_spec, icd, dependency_matrix, health, drift, index.\n        Default: \"all\".\n\nReturns:\n    Dict with generated file paths and any errors."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "pathlib",
+          "typing",
+          "opencode_arch.mcp.quality",
+          "architecture_model.core.parser",
+          "yaml",
+          "architecture_model.docs.component_spec",
+          "architecture_model.docs.icd",
+          "architecture_model.docs.dependency_matrix",
+          "architecture_model.docs.health",
+          "architecture_model.manifest.generator",
+          "architecture_model.manifest.call_graph",
+          "architecture_model.orchestration.behavior_flows",
+          "architecture_model.docs.behavior_spec",
+          "architecture_model.docs.system_design",
+          "architecture_model.docs.integration_flows",
+          "architecture_model.docs.diagrams",
+          "architecture_model.docs.drift",
+          "architecture_model.docs.index",
+          "architecture_model.core.parser"
+        ],
+        "line_count": 237,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [
+          {
+            "name": "generate_docs",
+            "decorators": [
+              "with_quality"
+            ],
+            "is_method": false,
+            "class_name": null
+          }
+        ],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.quality",
+            "symbols": [
+              "with_quality"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "_parse_raw"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "yaml",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.docs.component_spec",
+            "symbols": [
+              "generate_component_spec"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.docs.icd",
+            "symbols": [
+              "generate_icd"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.docs.dependency_matrix",
+            "symbols": [
+              "generate_dependency_matrix"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.docs.health",
+            "symbols": [
+              "generate_health_report"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.call_graph",
+            "symbols": [
+              "build_call_graph",
+              "trace_flow",
+              "map_flow_to_components"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.orchestration.behavior_flows",
+            "symbols": [
+              "classify_behaviors",
+              "summarize_crud_group",
+              "build_behavior_manifest",
+              "build_behavior_sub_model",
+              "build_file_to_comp"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.docs.behavior_spec",
+            "symbols": [
+              "generate_behavior_spec",
+              "generate_behavior_index"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.docs.system_design",
+            "symbols": [
+              "generate_system_design"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.docs.integration_flows",
+            "symbols": [
+              "generate_integration_flows"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.docs.diagrams",
+            "symbols": [
+              "generate_all_diagrams"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.docs.drift",
+            "symbols": [
+              "generate_drift_report"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.docs.index",
+            "symbols": [
+              "generate_index"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "load_model"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/export.py",
+        "name": "architect_export MCP tool \u2014 export flat files for mobile AI consumption",
+        "docstring": "architect_export MCP tool \u2014 export flat files for mobile AI consumption.",
+        "functions": [
+          {
+            "name": "export_repository",
+            "signature": "export_repository(repo_path: str, output_dir: str, output_format: str, prefix: str) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "exists",
+              "build_flat_export",
+              "mkdir",
+              "items",
+              "list",
+              "len",
+              "str",
+              "ZipFile",
+              "write_text",
+              "keys",
+              "writestr"
+            ],
+            "docstring": "Export repository architecture as flat files for mobile AI.\n\nBuilds a set of flat files (model, sub-models, docs, manifests, specs,\ndiagrams, skills, reference docs) suitable for use in token-limited\nAI environments.\n\nArgs:\n    repo_path: Absolute path to the repository.\n    output_dir: Where to write output. Default: {repo_path}/.architecture-export/\n    output_format: \"dir\" (flat directory) or \"zip\" (single zip file).\n    prefix: File prefix override. Default: auto-derived from repo name.\n\nReturns:\n    Dict with file list, sizes, and output location."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "zipfile",
+          "pathlib",
+          "typing",
+          "opencode_arch.mcp.quality",
+          "architecture_model.export.flatfiles"
+        ],
+        "line_count": 73,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [
+          {
+            "name": "export_repository",
+            "decorators": [
+              "with_quality"
+            ],
+            "is_method": false,
+            "class_name": null
+          }
+        ],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "zipfile",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.quality",
+            "symbols": [
+              "with_quality"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.export.flatfiles",
+            "symbols": [
+              "build_flat_export"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/extract.py",
+        "name": "architect_extract MCP tool \u2014 validate and store an architecture extraction",
+        "docstring": "architect_extract MCP tool \u2014 validate and store an architecture extraction.",
+        "functions": [
+          {
+            "name": "store_extraction",
+            "signature": "store_extraction(repo_path: str, model_yaml: str, context_tokens: int) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "safe_load",
+              "_parse_raw",
+              "bool",
+              "validate_model",
+              "hasattr",
+              "isinstance",
+              "getattr",
+              "str",
+              "exists",
+              "save_model",
+              "_get_telemetry_store",
+              "TelemetryStore",
+              "record",
+              "drain_and_store",
+              "generate_manifest",
+              "save_project",
+              "_gen_early",
+              "generate_all_diagrams",
+              "len",
+              "decompose_model",
+              "generate_recursive_manifests",
+              "create_components_from_manifest",
+              "mkdir",
+              "replace",
+              "copy2",
+              "sorted",
+              "write_text",
+              "compute_representativeness",
+              "generate_docs",
+              "get",
+              "write_sub_models",
+              "list",
+              "get_config",
+              "items",
+              "manifest_to_source_graph",
+              "extract_component_interfaces",
+              "build_call_graph",
+              "build_file_to_comp",
+              "classify_behaviors",
+              "generate_behavior_index",
+              "glob",
+              "unlink",
+              "any",
+              "to_dict",
+              "dumps",
+              "relative_to",
+              "keys",
+              "_gen_manifest",
+              "_gen",
+              "create_behaviors_from_manifest",
+              "_gen_iface",
+              "summarize_crud_group",
+              "compact_for_storage",
+              "_save_beh",
+              "isoformat",
+              "extend",
+              "_save",
+              "_load",
+              "_save_iface",
+              "build_behavior_manifest",
+              "build_behavior_sub_model",
+              "generate_behavior_spec",
+              "next",
+              "loads",
+              "_M",
+              "_AM",
+              "now",
+              "values",
+              "read_text",
+              "append",
+              "_save_compact",
+              "_FI",
+              "_MI",
+              "type",
+              "_MR",
+              "dump",
+              "_MM",
+              "_E",
+              "dump_model"
+            ],
+            "docstring": "Validate and store an architecture model extraction.\n\nCalled AFTER the agent has produced a YAML architecture model.\nValidates the model, writes it to .architecture-model.yaml,\nand records telemetry.\n\nArgs:\n    repo_path: Path to the repository root (where to save the model).\n    model_yaml: The YAML architecture model produced by the agent.\n    context_tokens: How many tokens of context the agent used (for telemetry).\n\nReturns:\n    Dict with: stored (bool), score (int), issues (list), telemetry_recorded (bool),\n    pipeline (dict), warnings (list)."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "shutil",
+          "datetime",
+          "pathlib",
+          "typing",
+          "yaml",
+          "opencode_arch.mcp.quality",
+          "opencode_arch.telemetry.store",
+          "architecture_model.core.parser",
+          "architecture_model.core.validator",
+          "architecture_model.core.parser",
+          "opencode_arch.telemetry.collector",
+          "architecture_model.manifest.generator",
+          "architecture_model.persistence.store",
+          "architecture_model.manifest.generator",
+          "opencode_arch.mcp.tools.docs",
+          "architecture_model.docs.diagrams",
+          "json",
+          "architecture_model.orchestration.decompose",
+          "architecture_model.manifest.recursive",
+          "architecture_model.orchestration.auto_enrich",
+          "architecture_model.core.parser",
+          "architecture_model.orchestration.auto_enrich",
+          "architecture_model.core.parser",
+          "architecture_model.manifest.call_graph",
+          "architecture_model.orchestration.behavior_flows",
+          "architecture_model.docs.behavior_spec",
+          "architecture_model.core.parser",
+          "architecture_model.manifest.generator",
+          "architecture_model.manifest.grouping",
+          "architecture_model.core.representativeness",
+          "json",
+          "architecture_model.config.loader",
+          "architecture_model.manifest.generator",
+          "architecture_model.manifest.generator",
+          "architecture_model.manifest.generator",
+          "architecture_model.orchestration.compaction",
+          "architecture_model.core.parser",
+          "architecture_model.core.parser",
+          "json",
+          "architecture_model.manifest.types",
+          "architecture_model.manifest.types",
+          "architecture_model.core.types",
+          "architecture_model.core.parser",
+          "yaml"
+        ],
+        "line_count": 490,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [
+          {
+            "name": "store_extraction",
+            "decorators": [
+              "with_quality"
+            ],
+            "is_method": false,
+            "class_name": null
+          }
+        ],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "shutil",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "datetime",
+            "symbols": [
+              "datetime"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "yaml",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.quality",
+            "symbols": [
+              "with_quality"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.telemetry.store",
+            "symbols": [
+              "TelemetryStore"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "_parse_raw"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.validator",
+            "symbols": [
+              "validate_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "save_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.telemetry.collector",
+            "symbols": [
+              "drain_and_store"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.persistence.store",
+            "symbols": [
+              "save_project"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.tools.docs",
+            "symbols": [
+              "generate_docs"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.docs.diagrams",
+            "symbols": [
+              "generate_all_diagrams"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.orchestration.decompose",
+            "symbols": [
+              "decompose_model",
+              "write_sub_models"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.recursive",
+            "symbols": [
+              "generate_recursive_manifests"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.orchestration.auto_enrich",
+            "symbols": [
+              "create_behaviors_from_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "save_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.orchestration.auto_enrich",
+            "symbols": [
+              "extract_component_interfaces",
+              "manifest_to_source_graph"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "save_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.call_graph",
+            "symbols": [
+              "build_call_graph",
+              "trace_flow",
+              "map_flow_to_components"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.orchestration.behavior_flows",
+            "symbols": [
+              "classify_behaviors",
+              "summarize_crud_group",
+              "build_behavior_manifest",
+              "build_behavior_sub_model",
+              "build_file_to_comp",
+              "BehaviorClassification"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.docs.behavior_spec",
+            "symbols": [
+              "generate_behavior_spec",
+              "generate_behavior_index"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "save_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.grouping",
+            "symbols": [
+              "create_components_from_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.representativeness",
+            "symbols": [
+              "compute_representativeness"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.config.loader",
+            "symbols": [
+              "get_config"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.orchestration.compaction",
+            "symbols": [
+              "compact_for_storage"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "save_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "load_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.types",
+            "symbols": [
+              "Manifest",
+              "MetricsResult"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.types",
+            "symbols": [
+              "ModuleInfo",
+              "FunctionInfo",
+              "ModuleStatus"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.types",
+            "symbols": [
+              "ArchitectureModel",
+              "Entities",
+              "ModelMeta"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "dump_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "yaml",
+            "symbols": [],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/feedback.py",
+        "name": "Record user feedback for model improvement and training",
+        "docstring": "Record user feedback for model improvement and training.",
+        "functions": [
+          {
+            "name": "record_feedback",
+            "signature": "record_feedback(repo_path: str, feedback_type: str, content: str, context: dict | None, rating: int | None, correction: dict | None) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "mkdir",
+              "exists",
+              "sum",
+              "isoformat",
+              "open",
+              "write",
+              "now",
+              "dumps",
+              "splitlines",
+              "strip",
+              "read_text"
+            ],
+            "docstring": "Record user feedback to .architecture/feedback.jsonl.\n\nArgs:\n    repo_path: Repository root path\n    feedback_type: \"correction\" | \"rating\" | \"tool_feedback\" | \"training\"\n    content: The feedback content (human-readable)\n    context: Optional context dict (tool name, prompt, response, etc.)\n    rating: Optional 1-5 quality rating\n    correction: Optional structured correction {entity_id, field, old, new}\n\nReturns:\n    {recorded, feedback_id, total_feedback}"
+          }
+        ],
+        "imports": [
+          "__future__",
+          "json",
+          "datetime",
+          "pathlib",
+          "typing"
+        ],
+        "line_count": 65,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "datetime",
+            "symbols": [
+              "datetime",
+              "timezone"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/gate.py",
+        "name": "architect_gate MCP tool \u2014 check development gate readiness",
+        "docstring": "architect_gate MCP tool \u2014 check development gate readiness.",
+        "functions": [
+          {
+            "name": "check_gate",
+            "signature": "check_gate(repo_path: str, model_yaml: str) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "exists",
+              "generate_manifest",
+              "hasattr",
+              "check_development_gate",
+              "safe_load",
+              "_parse_raw",
+              "load_model"
+            ],
+            "docstring": "Check development gate for an architecture model against code reality.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    model_yaml: Optional YAML string. If empty, reads .architecture-model.yaml.\n\nReturns:\n    Dict with lifecycle_phase, sub-scores, phase_requirements_met, and issues."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "pathlib",
+          "typing",
+          "architecture_model.authoring.gate",
+          "architecture_model.core.parser",
+          "architecture_model.manifest.generator",
+          "yaml",
+          "architecture_model.core.parser",
+          "architecture_model.core.parser"
+        ],
+        "line_count": 62,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.authoring.gate",
+            "symbols": [
+              "check_development_gate"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "load_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "yaml",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "ArchitectureModel"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "_parse_raw"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/generate.py",
+        "name": "architect_generate MCP tool \u2014 run tests on generated code",
+        "docstring": "architect_generate MCP tool \u2014 run tests on generated code.",
+        "functions": [
+          {
+            "name": "run_tests_on_generated_code",
+            "signature": "run_tests_on_generated_code(repo_path: str, test_command: str | None) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "exists",
+              "run",
+              "_parse_pytest_output",
+              "split",
+              "drain_and_store",
+              "str"
+            ],
+            "docstring": "Run the repository's test suite against generated code.\n\nThis is the quality gate for code generation. The agent generates code,\nthen calls this tool to verify it passes the original tests.\n\nArgs:\n    repo_path: Path to the repository with generated code + tests.\n    test_command: Custom test command. Defaults to pytest.\n\nReturns:\n    Dict with: passed (bool), pass_rate (float), total_tests (int),\n    passed_tests (int), failures (list of failure descriptions)."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "json",
+          "subprocess",
+          "sys",
+          "pathlib",
+          "typing",
+          "opencode_arch.mcp.quality",
+          "opencode_arch.telemetry.collector"
+        ],
+        "line_count": 107,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [
+          {
+            "name": "run_tests_on_generated_code",
+            "decorators": [
+              "with_quality"
+            ],
+            "is_method": false,
+            "class_name": null
+          }
+        ],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "subprocess",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "sys",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.quality",
+            "symbols": [
+              "with_quality"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.telemetry.collector",
+            "symbols": [
+              "drain_and_store"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/group.py",
+        "name": "architect_group MCP tool \u2014 group repository modules into logical components",
+        "docstring": "architect_group MCP tool \u2014 group repository modules into logical components.",
+        "functions": [
+          {
+            "name": "group_repository",
+            "signature": "group_repository(repo_path: str, target_groups: int) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "exists",
+              "generate_manifest",
+              "group_modules",
+              "append",
+              "drain_and_store",
+              "len"
+            ],
+            "docstring": "Group repository modules into logical architecture components.\n\nUses multi-signal affinity (subdirectory, name-prefix, imports) to\ncluster source files into coherent component groups. This provides\nsuggested component boundaries for architecture extraction.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    target_groups: Desired number of groups. 0 = auto-calculate.\n\nReturns:\n    Dict with keys: groups, total_modules, total_groups, filtered_trivial.\n    Each group has: name, files, file_count, locked.\n    Returns {\"error\": \"...\"} on failure."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "pathlib",
+          "typing",
+          "opencode_arch.mcp.quality",
+          "architecture_model.manifest.generator",
+          "architecture_model.manifest.grouping",
+          "opencode_arch.telemetry.collector"
+        ],
+        "line_count": 65,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [
+          {
+            "name": "group_repository",
+            "decorators": [
+              "with_quality"
+            ],
+            "is_method": false,
+            "class_name": null
+          }
+        ],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.quality",
+            "symbols": [
+              "with_quality"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.grouping",
+            "symbols": [
+              "group_modules"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.telemetry.collector",
+            "symbols": [
+              "drain_and_store"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/ingest.py",
+        "name": "architect_ingest tool \u2014 accept a SourceGraph JSON for any language",
+        "docstring": "architect_ingest tool \u2014 accept a SourceGraph JSON for any language.\n\nAllows agents or external tools to submit dependency/export data for\nnon-Python repos. Stores the graph and runs grouping + interface extraction.",
+        "functions": [
+          {
+            "name": "ingest_source_graph",
+            "signature": "ingest_source_graph(repo_path: str, source_graph_json: str) -> dict",
+            "calls": [
+              "Path",
+              "loads",
+              "from_json",
+              "group_source_graph",
+              "enumerate",
+              "set",
+              "ArchitectureModel",
+              "extract_component_interfaces",
+              "enrich_from_source_graph",
+              "auto_source_blocks",
+              "save_model",
+              "mkdir",
+              "write_text",
+              "append",
+              "get",
+              "dumps",
+              "str",
+              "len",
+              "Component",
+              "ModelMeta",
+              "Entities",
+              "to_json",
+              "add",
+              "Relationship"
+            ],
+            "docstring": "Ingest a SourceGraph JSON and generate architecture components.\n\nArgs:\n    repo_path: Absolute path to the repository.\n    source_graph_json: JSON string with SourceGraph data.\n\nReturns:\n    Dict with components, interfaces, and group info."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "json",
+          "pathlib",
+          "opencode_arch.mcp.quality",
+          "architecture_model.manifest.protocol",
+          "architecture_model.manifest.grouping",
+          "architecture_model.core.types",
+          "architecture_model.orchestration.auto_enrich",
+          "architecture_model.core.parser",
+          "architecture_model.core.types",
+          "architecture_model.orchestration.auto_enrich"
+        ],
+        "line_count": 129,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [
+          {
+            "name": "ingest_source_graph",
+            "decorators": [
+              "with_quality"
+            ],
+            "is_method": false,
+            "class_name": null
+          }
+        ],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.quality",
+            "symbols": [
+              "with_quality"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.protocol",
+            "symbols": [
+              "SourceGraph"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.grouping",
+            "symbols": [
+              "group_source_graph",
+              "auto_source_blocks"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.types",
+            "symbols": [
+              "ArchitectureModel",
+              "Component",
+              "Entities",
+              "ModelMeta"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.orchestration.auto_enrich",
+            "symbols": [
+              "extract_component_interfaces"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "save_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.types",
+            "symbols": [
+              "Relationship",
+              "RelationType"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.orchestration.auto_enrich",
+            "symbols": [
+              "enrich_from_source_graph"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/llm_audit.py",
+        "name": "architect_llm_audit MCP tool \u2014 two",
+        "docstring": "architect_llm_audit MCP tool \u2014 two-stage LLM functional-decomposition audit.",
+        "functions": [
+          {
+            "name": "run_llm_audit",
+            "signature": "run_llm_audit(repo_path: str, model_yaml: str, _runner, _cache: LLMCache | None) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "_build_source_summary",
+              "_read_context",
+              "hash_content",
+              "format",
+              "_extract_json",
+              "mkdir",
+              "write_text",
+              "exists",
+              "OpencodeRunner",
+              "cached_llm_call",
+              "_get_tool_decomposition",
+              "dumps",
+              "read_text",
+              "parse_model"
+            ],
+            "docstring": "Run two-stage LLM functional-decomposition audit."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "json",
+          "re",
+          "pathlib",
+          "typing",
+          "opencode_arch.llm.cache",
+          "opencode_arch.llm.prompts.audit",
+          "opencode_arch.mcp.quality",
+          "architecture_model.core.source_block_quality",
+          "opencode_arch.runner.opencode",
+          "architecture_model.core.parser"
+        ],
+        "line_count": 189,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [
+          {
+            "name": "run_llm_audit",
+            "decorators": [
+              "with_quality"
+            ],
+            "is_method": false,
+            "class_name": null
+          }
+        ],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "re",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.llm.cache",
+            "symbols": [
+              "LLMCache",
+              "cached_llm_call",
+              "hash_content"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.llm.prompts.audit",
+            "symbols": [
+              "AUDIT_STAGE1_TEMPLATE",
+              "AUDIT_STAGE1_VERSION",
+              "AUDIT_STAGE2_TEMPLATE",
+              "AUDIT_STAGE2_VERSION"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.quality",
+            "symbols": [
+              "with_quality"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.source_block_quality",
+            "symbols": [
+              "compute_source_block_quality"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.runner.opencode",
+            "symbols": [
+              "OpencodeRunner"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "parse_model"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/regen_score.py",
+        "name": "MCP tools for regen readiness scoring and spot",
+        "docstring": "MCP tools for regen readiness scoring and spot-checking.",
+        "functions": [
+          {
+            "name": "regen_score",
+            "signature": "regen_score(repo_path: str, component_id: str) -> dict",
+            "calls": [
+              "Path",
+              "load_model",
+              "compute_regen_readiness",
+              "exists",
+              "next",
+              "compute_component_readiness",
+              "_grade"
+            ],
+            "docstring": "Compute regen readiness score for a repository or specific component.\n\nReturns overall score, grade, per-component breakdown, and blockers."
+          },
+          {
+            "name": "spot_check",
+            "signature": "spot_check(repo_path: str, component_id: str, subsystem_id: str) -> dict",
+            "calls": [
+              "Path",
+              "select_target",
+              "run_spot_check",
+              "classify_failure",
+              "len"
+            ],
+            "docstring": "Run a spot-check regeneration probe on a component or subsystem.\n\nRegenerates code via LLM, compares against source, reports diagnostics.\nOn failure, classifies patterns and suggests healing actions."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "pathlib",
+          "architecture_model.core.parser",
+          "architecture_model.core.regen_readiness",
+          "opencode_arch.regen.spot_check",
+          "opencode_arch.regen.self_heal"
+        ],
+        "line_count": 116,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "load_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.regen_readiness",
+            "symbols": [
+              "compute_regen_readiness",
+              "compute_component_readiness"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.regen.spot_check",
+            "symbols": [
+              "select_target",
+              "run_spot_check"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.regen.self_heal",
+            "symbols": [
+              "classify_failure"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/require.py",
+        "name": "Capture functional requirements against architecture components",
+        "docstring": "Capture functional requirements against architecture components.",
+        "functions": [
+          {
+            "name": "capture_requirement",
+            "signature": "capture_requirement(repo_path: str, requirement: str, component_id: str | None, priority: str, context: str) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "mkdir",
+              "exists",
+              "get",
+              "append",
+              "write_text",
+              "startswith",
+              "isoformat",
+              "dump",
+              "len",
+              "safe_load",
+              "read_text",
+              "max",
+              "now",
+              "int"
+            ],
+            "docstring": "Store a functional requirement linked to a component.\n\nArgs:\n    repo_path: Repository root path\n    requirement: The requirement text\n    component_id: Component ID (e.g., \"COMP-3\"). If None, stored as unlinked.\n    priority: must | should | could (MoSCoW)\n    context: Additional context from conversation\n\nReturns:\n    {stored, requirement_id, component, total_requirements}"
+          }
+        ],
+        "imports": [
+          "__future__",
+          "yaml",
+          "datetime",
+          "pathlib",
+          "typing"
+        ],
+        "line_count": 77,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "yaml",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "datetime",
+            "symbols": [
+              "datetime",
+              "timezone"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/scan.py",
+        "name": "architect_scan MCP tool \u2014 generate reality manifest via AST scanning",
+        "docstring": "architect_scan MCP tool \u2014 generate reality manifest via AST scanning.",
+        "functions": [
+          {
+            "name": "scan_repository",
+            "signature": "scan_repository(repo_path: str) -> dict[str, Any]",
+            "calls": [
+              "Path",
+              "exists",
+              "generate_manifest",
+              "to_dict",
+              "group_modules",
+              "drain_and_store",
+              "len"
+            ],
+            "docstring": "Scan a repository and generate its reality manifest.\n\nPerforms AST analysis on all source files to produce a ground-truth\ninventory of modules, functions, classes, imports, and metrics.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n\nReturns:\n    Manifest dict with keys: generated_at, project_root, metrics,\n    functional_blocks, modules, interfaces.\n    Returns {\"error\": \"...\"} on failure."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "pathlib",
+          "typing",
+          "opencode_arch.mcp.quality",
+          "architecture_model.manifest.generator",
+          "architecture_model.manifest.grouping",
+          "opencode_arch.telemetry.collector"
+        ],
+        "line_count": 56,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [
+          {
+            "name": "scan_repository",
+            "decorators": [
+              "with_quality"
+            ],
+            "is_method": false,
+            "class_name": null
+          }
+        ],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.quality",
+            "symbols": [
+              "with_quality"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.grouping",
+            "symbols": [
+              "group_modules"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.telemetry.collector",
+            "symbols": [
+              "drain_and_store"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/slice.py",
+        "name": "architect_slice MCP tool \u2014 compress repository context for LLM consumption",
+        "docstring": "architect_slice MCP tool \u2014 compress repository context for LLM consumption.",
+        "functions": [
+          {
+            "name": "compute_adaptive_budget",
+            "signature": "compute_adaptive_budget(module_count: int, base: int) -> int",
+            "calls": [
+              "min"
+            ],
+            "docstring": "Scale token budget with repository size.\n\nSmall repos (<=20 modules): base budget (4000 tokens)\nMedium repos: +200 tokens per 10 modules over 20\nLarge repos: capped at 16000 tokens\n\nExamples:\n    20 modules \u2192 4000 tokens\n    50 modules \u2192 4600 tokens  \n    100 modules \u2192 5600 tokens\n    161 modules \u2192 6800 tokens\n    500 modules \u2192 16000 tokens (capped)"
+          },
+          {
+            "name": "slice_context",
+            "signature": "slice_context(repo_path: str, focus: str, budget: int, detail: str) -> str",
+            "calls": [
+              "Path",
+              "exists",
+              "_estimate_source_size",
+              "_slice_from_model",
+              "_slice_from_manifest",
+              "drain_and_store",
+              "load_model",
+              "sum",
+              "compute_adaptive_budget",
+              "generate_manifest",
+              "min",
+              "len",
+              "getattr"
+            ],
+            "docstring": "Generate an optimized context slice from a repository.\n\nThis is the core token-arbitrage function. It compresses a full repository\ninto a dense, structured context string within the token budget.\n\nIf an .architecture-model.yaml exists, uses the model + slicer + formatter.\nOtherwise, falls back to manifest-based context.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    focus: Focus scope - \"all\", an source-block ID (e.g. \"F1\"), a layer name,\n           or an artifact name (e.g. \"icd\", \"requirements-analysis\").\n    budget: Maximum token budget (1 token ~ 4 chars).\n    detail: Detail level - \"minimal\", \"standard\", or \"full\".\n\nReturns:\n    Formatted context string within budget, or error message."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "pathlib",
+          "typing",
+          "yaml",
+          "architecture_model.core.parser",
+          "opencode_arch.context",
+          "architecture_model.core.slicer",
+          "architecture_model.manifest.generator",
+          "architecture_model.manifest.grouping",
+          "opencode_arch.telemetry.collector",
+          "architecture_model.core.parser",
+          "architecture_model.manifest.generator"
+        ],
+        "line_count": 241,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "yaml",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "load_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.context",
+            "symbols": [
+              "format_model_context",
+              "format_source_block_context",
+              "format_artifact_context"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.slicer",
+            "symbols": [
+              "slice_by_layer"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.grouping",
+            "symbols": [
+              "group_modules"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.telemetry.collector",
+            "symbols": [
+              "drain_and_store"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "load_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.manifest.generator",
+            "symbols": [
+              "generate_manifest"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {
+          "COMPRESSION_WARN_THRESHOLD": "50",
+          "COMPRESSION_CRITICAL_THRESHOLD": "200"
+        },
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/stats.py",
+        "name": "architect_stats MCP tool \u2014 aggregate session and historical quality metrics",
+        "docstring": "architect_stats MCP tool \u2014 aggregate session and historical quality metrics.",
+        "functions": [
+          {
+            "name": "get_stats",
+            "signature": "get_stats(repo_path: str, tool_filter: str) -> dict[str, Any]",
+            "calls": [
+              "get",
+              "instance",
+              "summary",
+              "TelemetryStore",
+              "connect",
+              "fetchall",
+              "close",
+              "isinstance",
+              "any",
+              "append",
+              "join",
+              "execute",
+              "round",
+              "str",
+              "lower",
+              "split"
+            ],
+            "docstring": "Aggregate quality and performance metrics.\n\nReturns session stats, historical telemetry summary, and actionable suggestions.\n\nArgs:\n    repo_path: Optional - filter stats to specific repo.\n    tool_filter: Optional - filter to specific tool name."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "typing",
+          "opencode_arch.mcp.quality",
+          "opencode_arch.telemetry.store",
+          "sqlite3"
+        ],
+        "line_count": 68,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.quality",
+            "symbols": [
+              "SessionAccumulator"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.telemetry.store",
+            "symbols": [
+              "TelemetryStore"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "sqlite3",
+            "symbols": [],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/trace_requirements.py",
+        "name": "architect_trace_requirements MCP tool \u2014 trace requirements to functions",
+        "docstring": "architect_trace_requirements MCP tool \u2014 trace requirements to functions.",
+        "functions": [
+          {
+            "name": "trace_requirements",
+            "signature": "trace_requirements(repo_path: str, model_yaml: str, requirements_doc: str, _runner, _cache) -> dict",
+            "calls": [
+              "Path",
+              "mkdir",
+              "write_text",
+              "exists",
+              "OpencodeRunner",
+              "parse_requirements_doc",
+              "len",
+              "dumps",
+              "read_text",
+              "is_absolute",
+              "derive_requirements_retroactive",
+              "match_functions_to_requirements",
+              "asdict",
+              "extract_requirements_llm"
+            ],
+            "docstring": "Trace requirements to functions.\n\nIf requirements_doc provided: parse structurally, fall back to LLM for freeform.\nIf no requirements_doc: use retroactive derivation from model.\nThen match functions to requirements.\nOutput: .architecture-models/requirements-trace.json"
+          }
+        ],
+        "imports": [
+          "__future__",
+          "json",
+          "dataclasses",
+          "pathlib",
+          "opencode_arch.mcp.quality",
+          "opencode_arch.requirements.parser",
+          "opencode_arch.requirements.llm_extractor",
+          "opencode_arch.requirements.retroactive",
+          "opencode_arch.requirements.matcher",
+          "opencode_arch.runner.opencode"
+        ],
+        "line_count": 96,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [
+          {
+            "name": "trace_requirements",
+            "decorators": [
+              "with_quality"
+            ],
+            "is_method": false,
+            "class_name": null
+          }
+        ],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "json",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "dataclasses",
+            "symbols": [
+              "asdict"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.mcp.quality",
+            "symbols": [
+              "with_quality"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.requirements.parser",
+            "symbols": [
+              "parse_requirements_doc"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.requirements.llm_extractor",
+            "symbols": [
+              "extract_requirements_llm"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.requirements.retroactive",
+            "symbols": [
+              "derive_requirements_retroactive"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.requirements.matcher",
+            "symbols": [
+              "match_functions_to_requirements"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.runner.opencode",
+            "symbols": [
+              "OpencodeRunner"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/mcp/tools/validate.py",
+        "name": "architect_validate MCP tool \u2014 validate architecture model quality",
+        "docstring": "architect_validate MCP tool \u2014 validate architecture model quality.",
+        "functions": [
+          {
+            "name": "validate_architecture",
+            "signature": "validate_architecture(model_yaml: str) -> dict[str, Any]",
+            "calls": [
+              "safe_load",
+              "_parse_raw",
+              "validate_model",
+              "drain_and_store",
+              "str"
+            ],
+            "docstring": "Validate an architecture model for structural correctness.\n\nArgs:\n    model_yaml: The YAML architecture model string to validate.\n\nReturns:\n    Dict with: score (0-100), issues (list), entity_count, relationship_count, is_valid."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "typing",
+          "yaml",
+          "architecture_model.core.parser",
+          "architecture_model.core.validator",
+          "opencode_arch.telemetry.collector"
+        ],
+        "line_count": 59,
+        "status": "active",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "yaml",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "_parse_raw"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.validator",
+            "symbols": [
+              "validate_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.telemetry.collector",
+            "symbols": [
+              "drain_and_store"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      }
+    ],
+    "interfaces": [
+      {
+        "source": "src/opencode_arch/mcp/tools/extract.py",
+        "target": "src/opencode_arch/mcp/tools/docs.py",
+        "import_path": "opencode_arch.mcp.tools.docs"
+      }
+    ]
+  },
+  "children": {},
+  "block_dependencies": [
+    "S10",
+    "S11",
+    "S12",
+    "S13",
+    "S4",
+    "S7",
+    "S8"
+  ],
+  "intra_chains": []
+}

@@ -1,0 +1,199 @@
+{
+  "block_id": "S12",
+  "block_name": "Runner",
+  "parent_model": ".architecture-model.yaml",
+  "component_id": "COMP-RUNNER",
+  "manifest": {
+    "generated_at": "2026-08-10T22:17:26.607007+00:00",
+    "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
+    "metrics": {
+      "py_files": 3,
+      "total_lines": 92,
+      "functions": 0,
+      "classes": 3,
+      "constants": 0
+    },
+    "functional_blocks": {},
+    "modules": [
+      {
+        "file": "src/opencode_arch/runner/__init__.py",
+        "name": "Runner backends for agent invocation",
+        "docstring": "Runner backends for agent invocation.",
+        "functions": [],
+        "imports": [
+          "opencode_arch.runner.base",
+          "opencode_arch.runner.opencode"
+        ],
+        "line_count": 5,
+        "status": "dormant",
+        "classes": [],
+        "exports": [
+          "RunResult",
+          "RunnerBackend",
+          "OpencodeRunner"
+        ],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "opencode_arch.runner.base",
+            "symbols": [
+              "RunResult",
+              "RunnerBackend"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.runner.opencode",
+            "symbols": [
+              "OpencodeRunner"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/runner/base.py",
+        "name": "Runner protocol and result types",
+        "docstring": "Runner protocol and result types.",
+        "functions": [],
+        "imports": [
+          "__future__",
+          "dataclasses",
+          "typing"
+        ],
+        "line_count": 21,
+        "status": "dormant",
+        "classes": [
+          {
+            "name": "RunResult",
+            "bases": [],
+            "methods": [],
+            "is_abstract": false,
+            "decorators": [
+              "dataclass"
+            ],
+            "attributes": {}
+          },
+          {
+            "name": "RunnerBackend",
+            "bases": [
+              "Protocol"
+            ],
+            "methods": [
+              "run"
+            ],
+            "is_abstract": true,
+            "decorators": [],
+            "attributes": {}
+          }
+        ],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "dataclasses",
+            "symbols": [
+              "dataclass"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Protocol"
+            ],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/runner/opencode.py",
+        "name": "OpenCode subprocess runner backend",
+        "docstring": "OpenCode subprocess runner backend.",
+        "functions": [],
+        "imports": [
+          "__future__",
+          "subprocess",
+          "opencode_arch.runner.base",
+          "re"
+        ],
+        "line_count": 66,
+        "status": "active",
+        "classes": [
+          {
+            "name": "OpencodeRunner",
+            "bases": [],
+            "methods": [
+              "__init__",
+              "run"
+            ],
+            "is_abstract": false,
+            "decorators": [],
+            "attributes": {}
+          }
+        ],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "subprocess",
+            "symbols": [],
+            "is_relative": false
+          },
+          {
+            "module": "opencode_arch.runner.base",
+            "symbols": [
+              "RunResult"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "re",
+            "symbols": [],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      }
+    ],
+    "interfaces": [
+      {
+        "source": "src/opencode_arch/runner/__init__.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "import_path": "opencode_arch.runner.base"
+      },
+      {
+        "source": "src/opencode_arch/runner/__init__.py",
+        "target": "src/opencode_arch/runner/opencode.py",
+        "import_path": "opencode_arch.runner.opencode"
+      },
+      {
+        "source": "src/opencode_arch/runner/opencode.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "import_path": "opencode_arch.runner.base"
+      }
+    ]
+  },
+  "children": {},
+  "block_dependencies": [],
+  "intra_chains": []
+}

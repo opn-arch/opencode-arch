@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-10T21:48:10",
+  "generated_at": "2026-08-10T22:17:27",
   "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
   "metrics": {
     "total_python_files": 154
@@ -935,17 +935,18 @@
           "name": "architect_docs MCP tool \u2014 generate SE documentation from architecture model",
           "file": "src/opencode_arch/mcp/tools/docs.py",
           "functions": [
-            "generate_docs(repo_path: str, formats: str) -> dict[str, Any]"
+            "generate_docs(repo_path: str, formats: str, manifest: Any) -> dict[str, Any]"
           ],
           "inputs": [
             "repo_path: str",
-            "formats: str"
+            "formats: str",
+            "manifest: Any"
           ],
           "outputs": [
             "dict[str, Any]"
           ],
           "status": "active",
-          "line_count": 213
+          "line_count": 237
         },
         {
           "id": "S8.11",
@@ -981,7 +982,7 @@
             "dict[str, Any]"
           ],
           "status": "active",
-          "line_count": 469
+          "line_count": 490
         },
         {
           "id": "S8.13",
@@ -1306,17 +1307,18 @@
               "name": "architect_docs MCP tool \u2014 generate SE documentation from architecture model",
               "file": "src/opencode_arch/mcp/tools/docs.py",
               "functions": [
-                "generate_docs(repo_path: str, formats: str) -> dict[str, Any]"
+                "generate_docs(repo_path: str, formats: str, manifest: Any) -> dict[str, Any]"
               ],
               "inputs": [
                 "repo_path: str",
-                "formats: str"
+                "formats: str",
+                "manifest: Any"
               ],
               "outputs": [
                 "dict[str, Any]"
               ],
               "status": "active",
-              "line_count": 213
+              "line_count": 237
             },
             {
               "id": "S8.11",
@@ -1352,7 +1354,7 @@
                 "dict[str, Any]"
               ],
               "status": "active",
-              "line_count": 469
+              "line_count": 490
             },
             {
               "id": "S8.13",
@@ -6280,7 +6282,7 @@
       "functions": [
         {
           "name": "generate_docs",
-          "signature": "generate_docs(repo_path: str, formats: str) -> dict[str, Any]",
+          "signature": "generate_docs(repo_path: str, formats: str, manifest: Any) -> dict[str, Any]",
           "calls": [
             "Path",
             "exists",
@@ -6291,6 +6293,7 @@
             "str",
             "len",
             "strip",
+            "get",
             "getattr",
             "write_text",
             "append",
@@ -6305,6 +6308,8 @@
             "generate_index",
             "relative_to",
             "split",
+            "hasattr",
+            "to_dict",
             "join",
             "build_call_graph",
             "build_file_to_comp",
@@ -6345,7 +6350,7 @@
         "architecture_model.docs.index",
         "architecture_model.core.parser"
       ],
-      "line_count": 213,
+      "line_count": 237,
       "status": "active",
       "classes": [],
       "exports": [],
@@ -6627,6 +6632,7 @@
             "drain_and_store",
             "generate_manifest",
             "save_project",
+            "_gen_early",
             "generate_all_diagrams",
             "len",
             "decompose_model",
@@ -6644,7 +6650,6 @@
             "list",
             "get_config",
             "items",
-            "_gen",
             "manifest_to_source_graph",
             "extract_component_interfaces",
             "build_call_graph",
@@ -6654,15 +6659,18 @@
             "glob",
             "unlink",
             "any",
+            "to_dict",
+            "dumps",
+            "relative_to",
             "keys",
             "_gen_manifest",
+            "_gen",
             "create_behaviors_from_manifest",
             "_gen_iface",
             "summarize_crud_group",
             "compact_for_storage",
             "_save_beh",
             "isoformat",
-            "dumps",
             "extend",
             "_save",
             "_load",
@@ -6671,7 +6679,6 @@
             "build_behavior_sub_model",
             "generate_behavior_spec",
             "next",
-            "to_dict",
             "loads",
             "_M",
             "_AM",
@@ -6707,6 +6714,7 @@
         "opencode_arch.telemetry.collector",
         "architecture_model.manifest.generator",
         "architecture_model.persistence.store",
+        "architecture_model.manifest.generator",
         "opencode_arch.mcp.tools.docs",
         "architecture_model.docs.diagrams",
         "json",
@@ -6723,6 +6731,7 @@
         "architecture_model.manifest.generator",
         "architecture_model.manifest.grouping",
         "architecture_model.core.representativeness",
+        "json",
         "architecture_model.config.loader",
         "architecture_model.manifest.generator",
         "architecture_model.manifest.generator",
@@ -6737,7 +6746,7 @@
         "architecture_model.core.parser",
         "yaml"
       ],
-      "line_count": 469,
+      "line_count": 490,
       "status": "active",
       "classes": [],
       "exports": [],
@@ -6843,6 +6852,13 @@
           "module": "architecture_model.persistence.store",
           "symbols": [
             "save_project"
+          ],
+          "is_relative": false
+        },
+        {
+          "module": "architecture_model.manifest.generator",
+          "symbols": [
+            "generate_manifest"
           ],
           "is_relative": false
         },
@@ -6964,6 +6980,11 @@
           "symbols": [
             "compute_representativeness"
           ],
+          "is_relative": false
+        },
+        {
+          "module": "json",
+          "symbols": [],
           "is_relative": false
         },
         {

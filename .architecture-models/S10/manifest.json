@@ -1,0 +1,272 @@
+{
+  "block_id": "S10",
+  "block_name": "Regen",
+  "parent_model": ".architecture-model.yaml",
+  "component_id": "COMP-REGEN",
+  "manifest": {
+    "generated_at": "2026-08-10T22:17:26.597924+00:00",
+    "project_root": "/Users/baigm2/Documents/Projects/opencode-arch",
+    "metrics": {
+      "py_files": 3,
+      "total_lines": 396,
+      "functions": 4,
+      "classes": 4,
+      "constants": 0
+    },
+    "functional_blocks": {},
+    "modules": [
+      {
+        "file": "src/opencode_arch/regen/__init__.py",
+        "name": "Regeneration probe and self",
+        "docstring": "Regeneration probe and self-healing modules.",
+        "functions": [],
+        "imports": [],
+        "line_count": 1,
+        "status": "dormant",
+        "classes": [],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/regen/self_heal.py",
+        "name": "Self",
+        "docstring": "Self-healing loop for spot-check failures.\n\nWhen a spot-check fails, classifies the failure pattern, applies adaptive fixes\nto the model context, and retries. Feeds outcomes into the learning store.",
+        "functions": [
+          {
+            "name": "classify_failure",
+            "signature": "classify_failure(diagnostics: list[SpotCheckDiagnostic]) -> list[HealAction]",
+            "calls": [
+              "append",
+              "HealAction"
+            ],
+            "docstring": "Classify failure diagnostics into actionable heal actions."
+          },
+          {
+            "name": "self_heal",
+            "signature": "self_heal(result: SpotCheckResult, repo_path: Path, learning_store: Any) -> list[HealAction]",
+            "calls": [
+              "classify_failure",
+              "add_resolution_outcome"
+            ],
+            "docstring": "Analyze a failed spot-check and produce healing actions.\n\nRecords outcomes in learning store for cross-session improvement."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "dataclasses",
+          "pathlib",
+          "typing",
+          "spot_check"
+        ],
+        "line_count": 78,
+        "status": "active",
+        "classes": [
+          {
+            "name": "HealAction",
+            "bases": [],
+            "methods": [],
+            "is_abstract": false,
+            "decorators": [
+              "dataclass"
+            ],
+            "attributes": {}
+          }
+        ],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "dataclasses",
+            "symbols": [
+              "dataclass"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "spot_check",
+            "symbols": [
+              "SpotCheckDiagnostic",
+              "SpotCheckResult"
+            ],
+            "is_relative": true
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      },
+      {
+        "file": "src/opencode_arch/regen/spot_check.py",
+        "name": "Spot",
+        "docstring": "Spot-check regeneration probe.\n\nRegenerates a targeted component/subsystem via LLM, compares against source,\nand reports diagnostic results. Feeds failures into learning loop.",
+        "functions": [
+          {
+            "name": "select_target",
+            "signature": "select_target(repo_path: Path, component_id: str | None, subsystem_id: str | None) -> SpotCheckTarget",
+            "calls": [
+              "load_model",
+              "compute_regen_readiness",
+              "max",
+              "next",
+              "SpotCheckTarget",
+              "exists",
+              "ValueError",
+              "_format_component_context",
+              "extend",
+              "_format_subsystem_context",
+              "len"
+            ],
+            "docstring": "Select and prepare a spot-check target.\n\nIf component_id specified, use that.\nIf subsystem_id specified, load that subsystem's model.\nIf neither, pick the easiest (highest static score, smallest).",
+            "raises": [
+              "ValueError"
+            ]
+          },
+          {
+            "name": "run_spot_check",
+            "signature": "run_spot_check(target: SpotCheckTarget, repo_path: Path, max_iterations: int, llm_backend: Any) -> SpotCheckResult",
+            "calls": [
+              "SpotCheckResult",
+              "range",
+              "_build_regen_prompt",
+              "_parse_generated_code",
+              "_compare_against_source",
+              "llm_backend",
+              "SpotCheckDiagnostic"
+            ],
+            "docstring": "Run the spot-check: regen target via LLM, diff against source, iterate on failure.\n\nIf llm_backend is None, returns a dry-run result showing what WOULD be checked."
+          }
+        ],
+        "imports": [
+          "__future__",
+          "dataclasses",
+          "pathlib",
+          "typing",
+          "architecture_model.core.parser",
+          "architecture_model.core.regen_readiness",
+          "ast"
+        ],
+        "line_count": 317,
+        "status": "active",
+        "classes": [
+          {
+            "name": "SpotCheckTarget",
+            "bases": [],
+            "methods": [],
+            "is_abstract": false,
+            "decorators": [
+              "dataclass"
+            ],
+            "attributes": {}
+          },
+          {
+            "name": "SpotCheckDiagnostic",
+            "bases": [],
+            "methods": [],
+            "is_abstract": false,
+            "decorators": [
+              "dataclass"
+            ],
+            "attributes": {}
+          },
+          {
+            "name": "SpotCheckResult",
+            "bases": [],
+            "methods": [],
+            "is_abstract": false,
+            "decorators": [
+              "dataclass"
+            ],
+            "attributes": {}
+          }
+        ],
+        "exports": [],
+        "decorated_functions": [],
+        "imports_detailed": [
+          {
+            "module": "__future__",
+            "symbols": [
+              "annotations"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "dataclasses",
+            "symbols": [
+              "dataclass",
+              "field"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "pathlib",
+            "symbols": [
+              "Path"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "typing",
+            "symbols": [
+              "Any"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.parser",
+            "symbols": [
+              "load_model"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "architecture_model.core.regen_readiness",
+            "symbols": [
+              "compute_regen_readiness"
+            ],
+            "is_relative": false
+          },
+          {
+            "module": "ast",
+            "symbols": [],
+            "is_relative": false
+          }
+        ],
+        "module_constants": {},
+        "module_assignments": {}
+      }
+    ],
+    "interfaces": [
+      {
+        "source": "src/opencode_arch/regen/self_heal.py",
+        "target": "src/opencode_arch/regen/spot_check.py",
+        "import_path": "spot_check"
+      }
+    ]
+  },
+  "children": {},
+  "block_dependencies": [],
+  "intra_chains": []
+}
