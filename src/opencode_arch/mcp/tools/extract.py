@@ -191,15 +191,36 @@ async def store_extraction(
                 "Docs will be empty. Re-extract with components under entities.components."
             )
 
+        # Generate manifest early so docs and later stages can use it
+        _manifest = None
+        try:
+            from architecture_model.manifest.generator import generate_manifest as _gen_early
+            _manifest = _gen_early(path)
+        except Exception:
+            pass
+
         # Auto-generate SE docs
         try:
             from opencode_arch.mcp.tools.docs import generate_docs
-            docs_result = await generate_docs(repo_path=repo_path)
+            docs_result = await generate_docs(repo_path=repo_path, manifest=_manifest)
             if isinstance(docs_result, dict) and docs_result.get("generated"):
                 result["docs_generated"] = docs_result["generated"]
             pipeline["docs"] = {"status": "ok"}
         except Exception as e:
             pipeline["docs"] = {"status": "error", "error": str(e)}
+
+        # Write top-level manifest.json
+        if _manifest is not None:
+            try:
+                import json as _json_manifest
+                models_dir = path / ".architecture-models"
+                models_dir.mkdir(parents=True, exist_ok=True)
+                manifest_path = models_dir / "manifest.json"
+                manifest_data = _manifest.to_dict() if hasattr(_manifest, 'to_dict') else _manifest
+                manifest_path.write_text(_json_manifest.dumps(manifest_data, indent=2))
+                result["manifest_path"] = str(manifest_path.relative_to(path))
+            except Exception:
+                pass  # best-effort
 
         # Auto-generate diagrams
         try:
@@ -253,13 +274,13 @@ async def store_extraction(
             from architecture_model.orchestration.auto_enrich import create_behaviors_from_manifest
             from architecture_model.core.parser import save_model as _save
 
-            # Top-level behaviors (need manifest — reuse if available)
-            _manifest = None
-            try:
-                from architecture_model.manifest.generator import generate_manifest as _gen
-                _manifest = _gen(path)
-            except Exception:
-                pass
+            # Top-level behaviors (reuse manifest generated earlier)
+            if _manifest is None:
+                try:
+                    from architecture_model.manifest.generator import generate_manifest as _gen
+                    _manifest = _gen(path)
+                except Exception:
+                    pass
 
             if _manifest and hasattr(model.entities, 'components') and model.entities.components:
                 existing_behaviors = getattr(model.entities, 'behaviors', None) or []

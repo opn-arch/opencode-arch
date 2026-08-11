@@ -8,7 +8,7 @@ from opencode_arch.mcp.quality import with_quality
 
 
 @with_quality
-async def generate_docs(repo_path: str, formats: str = "all") -> dict[str, Any]:
+async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = None) -> dict[str, Any]:
     """Generate standard SE documentation from an architecture model.
 
     Produces component specs, ICDs, dependency matrix, health report,
@@ -49,6 +49,30 @@ async def generate_docs(repo_path: str, formats: str = "all") -> dict[str, Any]:
 
         generated = []
         errors = []
+
+        # Hydrate file_stats from manifest so component specs show Functions/Classes
+        if manifest is not None:
+            try:
+                _mdata = manifest.to_dict() if hasattr(manifest, 'to_dict') else manifest
+                _mod_lookup: dict[str, dict] = {}
+                for m in _mdata.get("modules", []):
+                    _mod_lookup[m.get("file", "")] = m
+                for comp in getattr(model.entities, 'components', []) or []:
+                    if not comp.files:
+                        continue
+                    if comp.extensions is None:
+                        comp.extensions = {}
+                    fs: dict[str, dict] = comp.extensions.get("file_stats", {})
+                    for f in comp.files:
+                        if f not in fs or fs[f].get("functions") in (None, "—"):
+                            mod = _mod_lookup.get(f, {})
+                            fs[f] = {
+                                "functions": len(mod.get("functions", [])),
+                                "classes": len(mod.get("classes", [])),
+                            }
+                    comp.extensions["file_stats"] = fs
+            except Exception:
+                pass  # best-effort hydration
 
         if "component_spec" in requested or "all" in requested:
             try:
