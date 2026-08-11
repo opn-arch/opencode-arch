@@ -341,25 +341,47 @@ try:
         repo_path: str,
         stage: str = "",
         recursive: bool = True,
+        resolutions: str = "",
+        clear_cache: bool = False,
     ) -> str:
-        """Run the 10-stage extraction pipeline.
+        """Run the 10-stage extraction pipeline (stage-by-stage or all at once).
 
-        Runs observe → infer → allocate → relate → specify → contract →
-        validate → decompose → synthesize → emit.
+        Call this tool repeatedly, one stage at a time, to enable LLM enrichment
+        between stages. Each call persists results to disk cache — subsequent
+        calls resume from where the previous call left off.
 
-        The synthesize stage runs scoped sub-pipelines for each detected system,
-        producing per-system models with pipeline reports and lessons.
-
-        The emit stage writes the System-of-Systems artifact structure to
-        .architecture-models/.
+        Stages (in dependency order):
+            observe → infer → allocate → relate → specify → contract →
+            validate → decompose → synthesize → emit
 
         Args:
             repo_path: Absolute path to the repository.
             stage: Run to specific stage (empty = all 10 stages).
+                One of: observe, infer, allocate, relate, specify, contract,
+                validate, decompose, synthesize, emit.
             recursive: Enable scoped sub-pipeline runs per system.
+            resolutions: JSON string of resolved uncertainties from previous stage.
+                Format: [{"category": "...", "resolution": "...", "confidence": 0.9,
+                "source": "llm_analysis", "for_stage": "...", "model": "...",
+                "total_tokens": 0, "files_sent": [...]}]
+            clear_cache: If true, discard cached stage results and re-run from scratch.
+
+        Returns:
+            JSON with: stages_completed, current_stage, from_cache, stages (scores),
+            uncertainties_to_resolve, pipeline_report, lessons, artifacts_dir,
+            llm_calls, total_llm_tokens.
         """
         import json
-        result = await run_pipeline(repo_path, stage=stage, recursive=recursive)
+        parsed_resolutions = None
+        if resolutions:
+            try:
+                parsed_resolutions = json.loads(resolutions)
+            except json.JSONDecodeError:
+                return json.dumps({"error": f"Invalid resolutions JSON: {resolutions[:100]}"})
+        result = await run_pipeline(
+            repo_path, stage=stage, recursive=recursive,
+            resolutions=parsed_resolutions, clear_cache=clear_cache,
+        )
         return json.dumps(result, indent=2, default=str)
 
 except ImportError:

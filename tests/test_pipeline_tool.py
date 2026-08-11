@@ -80,3 +80,58 @@ async def test_llm_calls_list(sample_repo):
     assert "error" not in result, f"Pipeline error: {result.get('error')}"
     assert isinstance(result["llm_calls"], list)
     assert isinstance(result["total_llm_tokens"], int)
+
+
+@pytest.mark.asyncio
+async def test_cache_persistence(sample_repo):
+    """Running observe, then infer uses cache for observe."""
+    r1 = await run_pipeline(str(sample_repo), stage="observe")
+    assert "error" not in r1, f"Pipeline error: {r1.get('error')}"
+
+    r2 = await run_pipeline(str(sample_repo), stage="infer")
+    assert "error" not in r2, f"Pipeline error: {r2.get('error')}"
+    assert "observe" in r2["from_cache"]
+    assert r2["stages"]["observe"]["from_cache"] is True
+    assert r2["stages"]["infer"]["from_cache"] is False
+
+
+@pytest.mark.asyncio
+async def test_clear_cache(sample_repo):
+    """clear_cache=True forces re-run."""
+    r1 = await run_pipeline(str(sample_repo), stage="observe")
+    assert "error" not in r1
+
+    r2 = await run_pipeline(str(sample_repo), stage="observe", clear_cache=True)
+    assert "error" not in r2
+    assert r2["from_cache"] == []
+
+
+@pytest.mark.asyncio
+async def test_resolutions_applied(sample_repo):
+    """Resolutions are converted to evidence and LLM call records."""
+    resolutions = [
+        {
+            "category": "naming",
+            "resolution": "Use 'DataProcessor' as capability name",
+            "confidence": 0.9,
+            "source": "llm_analysis",
+            "for_stage": "infer",
+            "model": "claude-sonnet-4",
+            "total_tokens": 500,
+        }
+    ]
+    result = await run_pipeline(
+        str(sample_repo), stage="infer", resolutions=resolutions
+    )
+    assert "error" not in result, f"Pipeline error: {result.get('error')}"
+    assert result["total_llm_tokens"] >= 500
+    assert any(c["purpose"].startswith("resolve uncertainty") for c in result["llm_calls"])
+
+
+@pytest.mark.asyncio
+async def test_uncertainties_to_resolve(sample_repo):
+    """Result includes uncertainties_to_resolve from target stage."""
+    result = await run_pipeline(str(sample_repo), stage="infer")
+    assert "error" not in result, f"Pipeline error: {result.get('error')}"
+    assert "uncertainties_to_resolve" in result
+    assert isinstance(result["uncertainties_to_resolve"], list)
