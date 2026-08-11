@@ -32,6 +32,7 @@ try:
     from opencode_arch.mcp.tools.trace_requirements import trace_requirements
     from opencode_arch.mcp.tools.author import author_architecture
     from opencode_arch.mcp.tools.gate import check_gate
+    from opencode_arch.mcp.tools.pipeline import run_pipeline
 
     @mcp.tool()
     async def architect_scan(repo_path: str) -> dict:
@@ -334,6 +335,32 @@ try:
             model_yaml: Optional model YAML. If empty, reads .architecture-model.yaml.
         """
         return await check_gate(repo_path=repo_path, model_yaml=model_yaml)
+
+    @mcp.tool()
+    async def architect_pipeline(
+        repo_path: str,
+        stage: str = "",
+        recursive: bool = True,
+    ) -> str:
+        """Run the 10-stage extraction pipeline.
+
+        Runs observe → infer → allocate → relate → specify → contract →
+        validate → decompose → synthesize → emit.
+
+        The synthesize stage runs scoped sub-pipelines for each detected system,
+        producing per-system models with pipeline reports and lessons.
+
+        The emit stage writes the System-of-Systems artifact structure to
+        .architecture-models/.
+
+        Args:
+            repo_path: Absolute path to the repository.
+            stage: Run to specific stage (empty = all 10 stages).
+            recursive: Enable scoped sub-pipeline runs per system.
+        """
+        import json
+        result = await run_pipeline(repo_path, stage=stage, recursive=recursive)
+        return json.dumps(result, indent=2, default=str)
 
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
