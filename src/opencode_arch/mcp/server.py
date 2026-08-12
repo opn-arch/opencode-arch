@@ -343,6 +343,7 @@ try:
         recursive: bool = True,
         resolutions: str = "",
         clear_cache: bool = False,
+        scope: str = "",
     ) -> str:
         """Run the 10-stage extraction pipeline (stage-by-stage or all at once).
 
@@ -365,6 +366,8 @@ try:
                 "source": "llm_analysis", "for_stage": "...", "model": "...",
                 "total_tokens": 0, "files_sent": [...]}]
             clear_cache: If true, discard cached stage results and re-run from scratch.
+            scope: System ID/name/slug to run a scoped sub-pipeline on (after decompose).
+                When set, only runs observe→validate for that system's files.
 
         Returns:
             JSON with: stages_completed, current_stage, from_cache, stages (scores),
@@ -381,6 +384,7 @@ try:
         result = await run_pipeline(
             repo_path, stage=stage, recursive=recursive,
             resolutions=parsed_resolutions, clear_cache=clear_cache,
+            scope=scope,
         )
         return json.dumps(result, indent=2, default=str)
 

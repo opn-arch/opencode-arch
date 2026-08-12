@@ -3,14 +3,23 @@
 Supports stage-by-stage execution with file-based cache persistence.
 The MCP orchestrator calls this tool once per stage, reviews uncertainties,
 resolves them via LLM, and passes resolutions on the next call.
+
+For subsystem enrichment, use the `scope` parameter after decompose to run
+scoped pipelines on individual detected systems.
 """
 from __future__ import annotations
 
+import re
 import time
 from pathlib import Path
 from typing import Any
 
 from opencode_arch.mcp.quality import with_quality
+
+
+def _slugify(name: str) -> str:
+    """Convert name to filesystem-safe slug."""
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
 @with_quality
@@ -20,13 +29,22 @@ async def run_pipeline(
     recursive: bool = True,
     resolutions: list[dict[str, Any]] | None = None,
     clear_cache: bool = False,
+    scope: str = "",
 ) -> dict[str, Any]:
     """Run the 10-stage extraction pipeline (stage-by-stage or all at once).
 
+    Call this tool repeatedly, one stage at a time, to enable LLM enrichment
+    between stages. Each call persists results to disk cache — subsequent
+    calls resume from where the previous call left off.
+
+    Stages (in dependency order):
+        observe → infer → allocate → relate → specify → contract →
+        validate → decompose → synthesize → emit
+
     Args:
-        repo_path: Path to the repository root.
-        stage: Run to specific stage (empty = all). One of:
-            observe, infer, allocate, relate, specify, contract,
+        repo_path: Absolute path to the repository.
+        stage: Run to specific stage (empty = all 10 stages).
+            One of: observe, infer, allocate, relate, specify, contract,
             validate, decompose, synthesize, emit.
         recursive: If True, synthesize stage runs scoped sub-pipelines
             for each detected system.
@@ -34,17 +52,21 @@ async def run_pipeline(
             Each dict: {category, resolution, confidence, source}.
             These are converted to Evidence and applied before running.
         clear_cache: If True, clear cached results before running.
+        scope: System ID to run a scoped sub-pipeline on (e.g., "SYS-1").
+            Requires decompose to have been run first (top-level cache).
+            Uses per-system cache at .architecture/pipeline-cache/<system-slug>/.
 
     Returns:
-        dict with stages_completed, current_stage, uncertainties_to_resolve,
-        pipeline_report, lessons, artifacts_dir, llm_calls.
+        dict with stages_completed, current_stage, from_cache, stages (scores),
+        uncertainties_to_resolve, pipeline_report, lessons, artifacts_dir,
+        llm_calls, total_llm_tokens.
+        When scope is used, also returns: scope, system_name, system_files.
     """
     root = Path(repo_path).resolve()
     if not root.exists():
         return {"error": f"Repository path does not exist: {repo_path}"}
 
     output_dir = root / ".architecture-models"
-    cache_dir = root / ".architecture" / "pipeline-cache"
     learning_path = root / ".architecture" / "learning"
 
     try:
@@ -70,28 +92,74 @@ async def run_pipeline(
         from architecture_model.pipeline.synthesize import SynthesizeStage
         from architecture_model.pipeline.emit import EmitStage
 
+        # Determine cache directory (scoped or top-level)
+        top_cache_dir = root / ".architecture" / "pipeline-cache"
+
+        if scope:
+            # Scoped run: load decompose result from top-level cache to get system boundary
+            top_cache = PipelineCache(top_cache_dir)
+            decompose_result_sr = top_cache.load_stage("decompose")
+            if decompose_result_sr is None:
+                return {"error": "Scoped run requires decompose to have been run first. Run architect_pipeline(stage='decompose') first."}
+
+            decompose_result = decompose_result_sr.output
+            # Find the matching system boundary
+            boundary = None
+            for sys in decompose_result.systems:
+                if sys.system_id == scope or sys.name == scope or _slugify(sys.name) == _slugify(scope):
+                    boundary = sys
+                    break
+            if boundary is None:
+                available = [f"{s.system_id} ({s.name})" for s in decompose_result.systems]
+                return {"error": f"System '{scope}' not found. Available: {available}"}
+
+            cache_dir = top_cache_dir / _slugify(boundary.name)
+            scope_files = [Path(f) for f in boundary.files]
+            system_name = boundary.name
+        else:
+            cache_dir = top_cache_dir
+            scope_files = []
+            system_name = root.name
+
         # Initialize cache
         cache = PipelineCache(cache_dir)
         if clear_cache:
             cache.clear()
 
-        stages = {
-            "observe": ObserveStage(),
-            "infer": InferStage(),
-            "allocate": AllocateStage(),
-            "relate": RelateStage(),
-            "specify": SpecifyStage(),
-            "contract": ContractStage(),
-            "validate": ValidateStage(),
-            "decompose": DecomposeStage(),
-            "synthesize": SynthesizeStage(),
-            "emit": EmitStage(),
-        }
+        # For scoped runs, only use stages up to validate (no decompose/synthesize/emit)
+        if scope:
+            stages = {
+                "observe": ObserveStage(),
+                "infer": InferStage(),
+                "allocate": AllocateStage(),
+                "relate": RelateStage(),
+                "specify": SpecifyStage(),
+                "contract": ContractStage(),
+                "validate": ValidateStage(),
+            }
+        else:
+            stages = {
+                "observe": ObserveStage(),
+                "infer": InferStage(),
+                "allocate": AllocateStage(),
+                "relate": RelateStage(),
+                "specify": SpecifyStage(),
+                "contract": ContractStage(),
+                "validate": ValidateStage(),
+                "decompose": DecomposeStage(),
+                "synthesize": SynthesizeStage(),
+                "emit": EmitStage(),
+            }
 
         store = LearningStore(learning_path)
         coord = PipelineCoordinator(stages, learning_store=store)
         ctx = PipelineContext(repo_path=root, output_dir=output_dir)
         ctx.config["coordinator"] = coord
+
+        # Set scope if scoped run
+        if scope:
+            ctx.scope = boundary.system_id
+            ctx.scope_files = scope_files
 
         # Hydrate context from cache (resume from previous calls)
         cached_stages = cache.hydrate_context(ctx)
@@ -163,7 +231,7 @@ async def run_pipeline(
 
         # Generate report and lessons
         report = generate_pipeline_report(
-            results, system_name=root.name, llm_calls=ctx.llm_calls
+            results, system_name=system_name, llm_calls=ctx.llm_calls
         )
 
         lesson_entries: list[LessonEntry] = []
@@ -176,7 +244,7 @@ async def run_pipeline(
             )
             stage_llm = [c for c in ctx.llm_calls if c.stage == name]
             lesson_entries.extend(LessonEntry.from_llm_calls(name, stage_llm))
-        lessons = generate_lessons(lesson_entries, system_name=root.name)
+        lessons = generate_lessons(lesson_entries, system_name=system_name)
 
         # LLM call summaries
         llm_summaries = []
@@ -197,7 +265,7 @@ async def run_pipeline(
         except Exception:
             pass
 
-        return {
+        response = {
             "stages_completed": list(results.keys()),
             "current_stage": target_stage_name,
             "from_cache": cached_stages,
@@ -209,6 +277,14 @@ async def run_pipeline(
             "llm_calls": llm_summaries,
             "total_llm_tokens": sum(c.total_tokens for c in ctx.llm_calls),
         }
+
+        # Add scope info if scoped run
+        if scope:
+            response["scope"] = boundary.system_id
+            response["system_name"] = boundary.name
+            response["system_files"] = boundary.files
+
+        return response
     except Exception as e:
         import traceback
         return {"error": f"Pipeline failed: {e}", "traceback": traceback.format_exc()}
