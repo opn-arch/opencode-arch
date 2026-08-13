@@ -5,6 +5,9 @@ Run with: python -m opencode_arch.mcp.server
 """
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 try:
     from mcp.server.fastmcp import FastMCP
 
@@ -33,6 +36,7 @@ try:
     from opencode_arch.mcp.tools.author import author_architecture
     from opencode_arch.mcp.tools.gate import check_gate
     from opencode_arch.mcp.tools.pipeline import run_pipeline
+    from opencode_arch.mcp.tools.learn import record_learning, GLOBAL_LEARNING_PATH
 
     @mcp.tool()
     async def architect_scan(repo_path: str) -> dict:
@@ -387,6 +391,26 @@ try:
             scope=scope,
         )
         return json.dumps(result, indent=2, default=str)
+
+    @mcp.tool()
+    async def architect_learn(
+        learning_type: str,
+        stage: str = "", condition: str = "", action: str = "",
+        rationale: str = "", learned_from: str = "",
+        name: str = "", indicators: str = "", problem: str = "", solution: str = "",
+        trigger: str = "", diagnosis: str = "", fix_applied: str = "",
+        validation: str = "", files_changed: str = "", commit: str = "",
+        threshold_parameter: str = "", threshold_value: str = "",
+    ) -> str:
+        """Record a learning (heuristic, archetype, or workflow) to the global store."""
+        return await record_learning(
+            learning_type=learning_type, stage=stage, condition=condition,
+            action=action, rationale=rationale, learned_from=learned_from,
+            name=name, indicators=indicators, problem=problem, solution=solution,
+            trigger=trigger, diagnosis=diagnosis, fix_applied=fix_applied,
+            validation=validation, files_changed=files_changed, commit=commit,
+            threshold_parameter=threshold_parameter, threshold_value=threshold_value,
+        )
 
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
