@@ -228,13 +228,19 @@ try:
     async def architect_docs(repo_path: str, formats: str = "all") -> dict:
         """Generate standard SE documentation from architecture model.
 
-        Produces component specs, ICDs, dependency matrix, health report from
+        Produces component specs, ICDs, dependency matrix, health report,
+        and SE documents (ConOps, Functional Analysis, Logical Architecture,
+        Requirements Analysis, V&V, Operations Manual, Maintenance Manual,
+        Use Cases, Risk Assessment, Interface Specification) from
         .architecture-model.yaml. Run after extraction.
 
         Args:
             repo_path: Absolute path to the repository.
             formats: Comma-separated doc types: all, component_spec, icd,
-                dependency_matrix, health, drift, index.
+                dependency_matrix, health, drift, index, se_all, conops,
+                functional_analysis, logical_architecture, requirements_analysis,
+                verification_validation, operations_manual, maintenance_manual,
+                use_cases, risk_assessment, interface_spec.
         """
         return await generate_docs(repo_path=repo_path, formats=formats)
 

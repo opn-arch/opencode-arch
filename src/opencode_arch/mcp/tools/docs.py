@@ -17,7 +17,11 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
     Args:
         repo_path: Absolute path to the repository.
         formats: Comma-separated list of doc types to generate.
-            Options: all, component_spec, icd, dependency_matrix, health, drift, index.
+            Options: all, component_spec, icd, dependency_matrix, health, drift, index,
+            se_all, conops, functional_analysis, logical_architecture, requirements_analysis,
+            verification_validation, operations_manual, maintenance_manual, use_cases,
+            risk_assessment, interface_spec, api_reference, data_model, deployment_guide,
+            security_analysis, cli_reference, plugin_guide.
             Default: "all".
 
     Returns:
@@ -210,6 +214,28 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
                     errors.append("drift: skipped (no previous model for comparison)")
             except Exception as e:
                 errors.append(f"drift: {e}")
+
+        # SE documents (standard systems engineering docs)
+        se_keys = {
+            "se_all", "conops", "functional_analysis", "logical_architecture",
+            "requirements_analysis", "verification_validation", "operations_manual",
+            "maintenance_manual", "use_cases", "risk_assessment", "interface_spec",
+            "api_reference", "data_model", "deployment_guide", "security_analysis",
+            "cli_reference", "plugin_guide",
+        }
+        if requested & se_keys or "all" in requested or "se_all" in requested:
+            try:
+                from architecture_model.docs.se.generator import generate_se_docs
+                se_dir = output_dir / "se"
+                se_filter = None
+                if "se_all" not in requested and "all" not in requested:
+                    se_filter = list(requested & se_keys - {"se_all"})
+                se_result = generate_se_docs(model, se_dir, manifest, doc_filter=se_filter)
+                for p in se_result.get("generated", []):
+                    generated.append(str(Path(p).relative_to(path)) if Path(p).is_relative_to(path) else p)
+                errors.extend(se_result.get("errors", []))
+            except Exception as e:
+                errors.append(f"se_docs: {e}")
 
         # Index generated LAST — needs paths of other generated docs
         if "index" in requested or "all" in requested:
