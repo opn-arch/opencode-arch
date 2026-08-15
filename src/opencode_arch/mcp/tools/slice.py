@@ -1,22 +1,29 @@
 """architect_slice MCP tool — compress repository context for LLM consumption."""
+
 from __future__ import annotations
 
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
 import yaml
 
 
+# Simple in-process cache for slicing results (cleared on process restart)
+_slice_cache: dict[tuple, str] = {}
+_CACHE_MAX = 32
+
+
 def compute_adaptive_budget(module_count: int, base: int = 4000) -> int:
     """Scale token budget with repository size.
-    
+
     Small repos (<=20 modules): base budget (4000 tokens)
     Medium repos: +200 tokens per 10 modules over 20
     Large repos: capped at 16000 tokens
-    
+
     Examples:
         20 modules → 4000 tokens
-        50 modules → 4600 tokens  
+        50 modules → 4600 tokens
         100 modules → 5600 tokens
         161 modules → 6800 tokens
         500 modules → 16000 tokens (capped)
@@ -24,7 +31,7 @@ def compute_adaptive_budget(module_count: int, base: int = 4000) -> int:
     if module_count <= 20:
         return base
     extra = ((module_count - 20) // 10) * 200
-    return min(base + extra, 16000)
+    return min(base + extra, 64000)
 
 
 # Compression ratio thresholds (from telemetry analysis of 389 regen outcomes)
@@ -40,7 +47,9 @@ def _estimate_source_size(path: Path) -> int:
         for f in path.rglob(ext):
             # Skip vendor, node_modules, .git
             parts = f.parts
-            if any(p in parts for p in ("vendor", "_vendor", "node_modules", ".git", "__pycache__")):
+            if any(
+                p in parts for p in ("vendor", "_vendor", "node_modules", ".git", "__pycache__")
+            ):
                 continue
             try:
                 total += f.stat().st_size
@@ -77,6 +86,11 @@ async def slice_context(
     if not path.exists():
         return f"Error: Repository path does not exist: {repo_path}"
 
+    # Cache check
+    cache_key = (repo_path, focus, budget, detail)
+    if cache_key in _slice_cache:
+        return _slice_cache[cache_key]
+
     try:
         model_file = path / ".architecture-model.yaml"
 
@@ -84,11 +98,13 @@ async def slice_context(
         if budget <= 0:
             if model_file.exists():
                 from architecture_model.core.parser import load_model
+
                 model = load_model(model_file)
-                file_count = sum(len(getattr(c, 'files', [])) for c in model.entities.components)
+                file_count = sum(len(getattr(c, "files", [])) for c in model.entities.components)
                 budget = compute_adaptive_budget(file_count)
             else:
                 from architecture_model.manifest.generator import generate_manifest
+
                 manifest = generate_manifest(path)
                 budget = compute_adaptive_budget(len(manifest.modules))
 
@@ -96,12 +112,14 @@ async def slice_context(
             source_size = _estimate_source_size(path)
             min_budget_for_50x = source_size // (50 * 4)  # 50x compression, 4 chars/token
             if min_budget_for_50x > budget:
-                budget = min(min_budget_for_50x, 16000)  # cap at 16K tokens
+                budget = min(min_budget_for_50x, 64000)  # cap at 64K tokens
 
         if model_file.exists():
             result = _slice_from_model(path, focus, budget, detail)
         else:
             result = _slice_from_manifest(path, focus, budget)
+            # SL6: Prepend guidance when no model exists
+            result = _no_model_guidance(path) + "\n---\n\n" + result
 
         # Compression ratio guard: warn if context is dangerously compressed
         source_size = _estimate_source_size(path)
@@ -124,11 +142,24 @@ async def slice_context(
                 )
                 result = warning + result
 
+        # Append linked requirements context when focusing on a component/block
+        if focus != "all" and (path / ".architecture" / "requirements.yaml").exists():
+            result = _append_requirements_context(path, focus, result)
+
         try:
             from opencode_arch.telemetry.collector import drain_and_store
+
             drain_and_store(tool="architect_slice", repo=path.name)
         except Exception:
             pass
+
+        # Cache result (bounded LRU)
+        if len(_slice_cache) >= _CACHE_MAX:
+            # Remove oldest entry
+            oldest_key = next(iter(_slice_cache))
+            del _slice_cache[oldest_key]
+        _slice_cache[cache_key] = result
+
         return result
 
     except Exception as e:
@@ -158,11 +189,21 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
             return format_model_context(sub_model, max_tokens=budget, detail_level=detail)
         # Complexity-proportional budget: complex blocks get more tokens
         block_budget = _compute_block_budget(model, focus, budget)
-        return format_source_block_context(model, source_block=focus, max_tokens=block_budget, project_root=project_root)
+        return format_source_block_context(
+            model, source_block=focus, max_tokens=block_budget, project_root=project_root
+        )
     elif focus in (
-        "functional-architecture", "logical-architecture", "use-cases",
-        "icd", "requirements-analysis", "operations-manual", "conops",
-        "testing", "deployment-guide", "data-dictionary", "readme",
+        "functional-architecture",
+        "logical-architecture",
+        "use-cases",
+        "icd",
+        "requirements-analysis",
+        "operations-manual",
+        "conops",
+        "testing",
+        "deployment-guide",
+        "data-dictionary",
+        "readme",
     ):
         return format_artifact_context(model, artifact_name=focus, max_tokens=budget)
     else:
@@ -180,14 +221,16 @@ def _compute_block_budget(model: Any, source_block: str, total_budget: int) -> i
     Simple blocks get the minimum needed.
     Telemetry: <10 signatures reliably converge; complex blocks need 2-3x more context.
     """
-    components = [c for c in model.entities.components if getattr(c, 'source_block', '') == source_block]
+    components = [
+        c for c in model.entities.components if getattr(c, "source_block", "") == source_block
+    ]
     if not components:
         # No source_block match — give full budget
         return total_budget
 
     # Complexity = total signatures + total files
-    sig_count = sum(len(getattr(c, 'signatures', [])) for c in components)
-    file_count = sum(len(getattr(c, 'files', [])) for c in components)
+    sig_count = sum(len(getattr(c, "signatures", [])) for c in components)
+    file_count = sum(len(getattr(c, "files", [])) for c in components)
     complexity = sig_count + file_count
 
     # Simple (< 10): base budget, Complex (10-30): 1.5x, Very complex (>30): 2x
@@ -209,15 +252,15 @@ def _slice_from_manifest(project_root: Path, focus: str, budget: int) -> str:
     groups_info = []
     try:
         from architecture_model.manifest.grouping import group_modules
+
         groups = group_modules(manifest.modules, manifest.interfaces)
         groups_info = [
-            {"name": g.name, "files": g.modules, "primary": g.primary_file}
-            for g in groups
+            {"name": g.name, "files": g.modules, "primary": g.primary_file} for g in groups
         ]
     except Exception:
         pass
 
-    manifest_dict = manifest.to_dict() if hasattr(manifest, 'to_dict') else manifest
+    manifest_dict = manifest.to_dict() if hasattr(manifest, "to_dict") else manifest
     manifest_yaml = yaml.dump(manifest_dict, default_flow_style=False, sort_keys=False)
 
     char_budget = budget * 4
@@ -239,3 +282,58 @@ def _slice_from_manifest(project_root: Path, focus: str, budget: int) -> str:
         manifest_yaml = yaml.dump(summary, default_flow_style=False, sort_keys=False)
 
     return manifest_yaml[:char_budget]
+
+
+def _no_model_guidance(project_root: Path) -> str:
+    """SL6: Return helpful guidance when no architecture model exists."""
+    return (
+        f"# No architecture model found at {project_root}/.architecture-model.yaml\n\n"
+        "To create one, follow this workflow:\n"
+        "1. `architect_scan(repo_path)` — scan the codebase AST\n"
+        "2. `architect_group(repo_path)` — discover component boundaries\n"
+        "3. Build a YAML model from the scan + group output\n"
+        "4. `architect_extract(repo_path, model_yaml)` — store and validate\n"
+        "5. `architect_slice(repo_path)` — now you can slice the model\n\n"
+        "Or use `architect_pipeline(repo_path, stage='observe')` for automated extraction.\n"
+    )
+
+
+def _append_requirements_context(project_root: Path, focus: str, result: str) -> str:
+    """Include linked requirements when slicing a specific component/block."""
+    try:
+        req_file = project_root / ".architecture" / "requirements.yaml"
+        data = yaml.safe_load(req_file.read_text()) or {}
+        requirements = data.get("requirements", [])
+        if not requirements:
+            return result
+
+        # Filter: if focus is a component ID or block ID, match linked requirements
+        focus_lower = focus.lower()
+        matched = [
+            r
+            for r in requirements
+            if (
+                r.get("component_id", "").lower() == focus_lower
+                or focus_lower in r.get("title", "").lower()
+                or focus_lower in r.get("description", "").lower()
+            )
+        ]
+        if not matched:
+            # Show all requirements if focusing on a block (they may relate)
+            matched = requirements[:10]  # cap at 10
+
+        if matched:
+            req_section = "\n\n---\n# Linked Requirements\n"
+            for r in matched:
+                priority = r.get("priority", "should")
+                req_section += f"- [{priority.upper()}] {r.get('title', 'untitled')}"
+                if r.get("component_id"):
+                    req_section += f" (component: {r['component_id']})"
+                req_section += "\n"
+                if r.get("description"):
+                    req_section += f"  {r['description'][:200]}\n"
+            result += req_section
+
+    except Exception:
+        pass
+    return result

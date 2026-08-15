@@ -1,4 +1,5 @@
 """architect_check MCP tool — verify model representativeness against code reality."""
+
 from __future__ import annotations
 
 import tempfile
@@ -11,7 +12,7 @@ from opencode_arch.mcp.quality import with_quality
 
 
 @with_quality
-async def check_representativeness(repo_path: str, model_yaml: str) -> dict[str, Any]:
+async def check_representativeness(repo_path: str, model_yaml: str = "") -> dict[str, Any]:
     """Check how well an architecture model represents the actual codebase.
 
     Supports three modes:
@@ -22,6 +23,7 @@ async def check_representativeness(repo_path: str, model_yaml: str) -> dict[str,
     Args:
         repo_path: Absolute path to the repository root.
         model_yaml: The architecture model YAML to evaluate.
+            If empty, reads from {repo_path}/.architecture-model.yaml.
 
     Returns:
         Dict with scores, details, and suggested improvements.
@@ -33,17 +35,48 @@ async def check_representativeness(repo_path: str, model_yaml: str) -> dict[str,
     try:
         from architecture_model.manifest.generator import generate_manifest
         from architecture_model.core.parser import load_model
-        from architecture_model.core.representativeness import compute_representativeness as _compute
+        from architecture_model.core.representativeness import (
+            compute_representativeness as _compute,
+        )
 
-        # Parse the model via temp file
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
-            f.write(model_yaml)
-            tmp_path = f.name
-
-        try:
-            model = load_model(tmp_path)
-        finally:
-            Path(tmp_path).unlink(missing_ok=True)
+        # C1: Read from disk if model_yaml is empty/looks like a file path
+        if not model_yaml or not model_yaml.strip():
+            model_file = path / ".architecture-model.yaml"
+            if model_file.exists():
+                model = load_model(model_file)
+            else:
+                return {
+                    "error": f"No model found at {model_file}. Run architect_extract first, or pass model_yaml inline."
+                }
+        else:
+            # Check if it looks like a file path
+            stripped = model_yaml.strip()
+            if (
+                not stripped.startswith(("{", "[", "-", "#"))
+                and "\n" not in stripped
+                and (
+                    stripped.startswith("/")
+                    or stripped.startswith("~")
+                    or stripped.endswith(".yaml")
+                    or stripped.endswith(".yml")
+                )
+            ):
+                candidate = Path(stripped).expanduser()
+                if candidate.exists():
+                    model = load_model(candidate)
+                else:
+                    return {
+                        "error": f"'{stripped}' looks like a file path but doesn't exist. Pass inline YAML or leave empty to read from .architecture-model.yaml."
+                    }
+            else:
+                # Parse inline YAML via temp file
+                with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
+                    f.write(model_yaml)
+                    tmp_path = f.name
+                try:
+                    model = load_model(tmp_path)
+                finally:
+                    Path(tmp_path).unlink(missing_ok=True)
 
         # Try hierarchical mode (config-based)
         output = _try_hierarchical(path, model)
@@ -67,6 +100,7 @@ async def check_representativeness(repo_path: str, model_yaml: str) -> dict[str,
 
         try:
             from opencode_arch.telemetry.collector import drain_and_store
+
             drain_and_store(tool="architect_check", repo=path.name)
         except Exception:
             pass
@@ -81,7 +115,9 @@ def _try_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
     """Attempt hierarchical check if recursive manifests are available via config."""
     try:
         from architecture_model.manifest.recursive import generate_recursive_manifests
-        from architecture_model.core.representativeness import compute_hierarchical_representativeness
+        from architecture_model.core.representativeness import (
+            compute_hierarchical_representativeness,
+        )
         from architecture_model.config.loader import get_config
 
         config = get_config(path)
@@ -92,9 +128,7 @@ def _try_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
         if not recursive_manifests:
             return None
 
-        result = compute_hierarchical_representativeness(
-            root_model, {}, recursive_manifests
-        )
+        result = compute_hierarchical_representativeness(root_model, {}, recursive_manifests)
 
         return _format_hierarchical_output(result)
 
@@ -108,7 +142,9 @@ def _try_auto_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
         from architecture_model.manifest.generator import generate_manifest
         from architecture_model.manifest.grouping import group_modules, auto_source_blocks
         from architecture_model.manifest.recursive import generate_recursive_manifests
-        from architecture_model.core.representativeness import compute_hierarchical_representativeness
+        from architecture_model.core.representativeness import (
+            compute_hierarchical_representativeness,
+        )
 
         manifest = generate_manifest(path)
         groups = group_modules(manifest.modules, manifest.interfaces)
@@ -117,13 +153,13 @@ def _try_auto_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
         if not source_block_config or len(source_block_config) < 2:
             return None
 
-        recursive_manifests = generate_recursive_manifests(path, source_block_override=source_block_config)
+        recursive_manifests = generate_recursive_manifests(
+            path, source_block_override=source_block_config
+        )
         if not recursive_manifests:
             return None
 
-        result = compute_hierarchical_representativeness(
-            root_model, {}, recursive_manifests
-        )
+        result = compute_hierarchical_representativeness(root_model, {}, recursive_manifests)
 
         output = _format_hierarchical_output(result)
         output["mode"] = "hierarchical_auto"

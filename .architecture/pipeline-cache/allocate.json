@@ -1,0 +1,298 @@
+{
+  "__dataclass__": "StageResult",
+  "__module__": "architecture_model.pipeline.protocol",
+  "output": {
+    "__dataclass__": "AllocationResult",
+    "__module__": "architecture_model.pipeline.allocate_types",
+    "components": [
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-1",
+        "name": "Selector",
+        "capability_id": "CAP-1",
+        "files": [
+          "src/opencode_arch/artifacts/selector.py",
+          "src/opencode_arch/artifacts/context.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-2",
+        "name": "Templates",
+        "capability_id": "CAP-2",
+        "files": [
+          "src/opencode_arch/artifacts/templates.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-3",
+        "name": "Diagrams",
+        "capability_id": "CAP-3",
+        "files": [
+          "src/opencode_arch/artifacts/diagrams.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-4",
+        "name": "Cache",
+        "capability_id": "CAP-4",
+        "files": [
+          "src/opencode_arch/llm/cache.py",
+          "src/opencode_arch/requirements/matcher.py",
+          "src/opencode_arch/requirements/llm_extractor.py",
+          "src/opencode_arch/requirements/retroactive.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-5",
+        "name": "Formatter",
+        "capability_id": "CAP-5",
+        "files": [
+          "src/opencode_arch/context/formatter.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-6",
+        "name": "Pipeline Bridge",
+        "capability_id": "CAP-6",
+        "files": [
+          "src/opencode_arch/context/pipeline_bridge.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-7",
+        "name": "Patterns",
+        "capability_id": "CAP-7",
+        "files": [
+          "src/opencode_arch/learning/patterns.py",
+          "src/opencode_arch/learning/classifier.py",
+          "src/opencode_arch/learning/adapter.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-8",
+        "name": "Resolution",
+        "capability_id": "CAP-8",
+        "files": [
+          "src/opencode_arch/agent/resolution.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-9",
+        "name": "Quality",
+        "capability_id": "CAP-9",
+        "files": [
+          "src/opencode_arch/mcp/quality.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-10",
+        "name": "Metrics",
+        "capability_id": "CAP-10",
+        "files": [
+          "src/opencode_arch/cli/metrics.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-11",
+        "name": "Docs Validator",
+        "capability_id": "CAP-11",
+        "files": [
+          "src/opencode_arch/cli/docs.py",
+          "src/opencode_arch/cli/docs_validator.py",
+          "src/opencode_arch/cli/regen_loop.py",
+          "src/opencode_arch/cli/generate.py",
+          "src/opencode_arch/cli/bench.py",
+          "src/opencode_arch/cli/extract.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-12",
+        "name": "Calibrate",
+        "capability_id": "CAP-12",
+        "files": [
+          "src/opencode_arch/cli/calibrate.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-13",
+        "name": "Spot Check",
+        "capability_id": "CAP-13",
+        "files": [
+          "src/opencode_arch/regen/spot_check.py",
+          "src/opencode_arch/regen/self_heal.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-14",
+        "name": "CLI Main",
+        "capability_id": "CAP-14",
+        "files": [
+          "src/opencode_arch/mcp/__main__.py",
+          "src/opencode_arch/cli/main.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-15-1",
+        "name": "Infrastructure (learning)",
+        "capability_id": "",
+        "files": [
+          "src/opencode_arch/learning/assessor.py",
+          "src/opencode_arch/learning/lessons.py",
+          "src/opencode_arch/learning/maintainer.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-15-2",
+        "name": "Infrastructure (runner)",
+        "capability_id": "",
+        "files": [
+          "src/opencode_arch/runner/opencode.py",
+          "src/opencode_arch/runner/base.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-15-3",
+        "name": "Infrastructure (mcp)",
+        "capability_id": "",
+        "files": [
+          "src/opencode_arch/mcp/server.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-15-4",
+        "name": "Infrastructure (requirements)",
+        "capability_id": "",
+        "files": [
+          "src/opencode_arch/requirements/parser.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-15-5",
+        "name": "Infrastructure (cli)",
+        "capability_id": "",
+        "files": [
+          "src/opencode_arch/cli/confidence.py",
+          "src/opencode_arch/cli/prompts.py",
+          "src/opencode_arch/cli/gap_analyzer.py",
+          "src/opencode_arch/cli/launch.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-15-6",
+        "name": "Infrastructure (prompts)",
+        "capability_id": "",
+        "files": [
+          "src/opencode_arch/prompts/regen.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-15-7",
+        "name": "Infrastructure (telemetry)",
+        "capability_id": "",
+        "files": [
+          "src/opencode_arch/telemetry/store.py",
+          "src/opencode_arch/telemetry/recorder.py",
+          "src/opencode_arch/telemetry/collector.py"
+        ],
+        "layer": "infra"
+      },
+      {
+        "__dataclass__": "ComponentAllocation",
+        "__module__": "architecture_model.pipeline.allocate_types",
+        "id": "COMP-15-8",
+        "name": "Infrastructure (prompts)",
+        "capability_id": "",
+        "files": [
+          "src/opencode_arch/llm/prompts/audit.py",
+          "src/opencode_arch/llm/prompts/matching.py",
+          "src/opencode_arch/llm/prompts/requirements.py"
+        ],
+        "layer": "infra"
+      }
+    ],
+    "unallocated": [],
+    "file_coverage": 100.0,
+    "boundary_coherence": 100.0
+  },
+  "quality": {
+    "__dataclass__": "QualityMetrics",
+    "__module__": "architecture_model.pipeline.protocol",
+    "score": 100,
+    "sub_scores": {
+      "file_coverage": 100.0,
+      "boundary_coherence": 100.0,
+      "component_count": 22.0
+    },
+    "thresholds": {
+      "file_coverage": 95.0,
+      "boundary_coherence": 50.0
+    },
+    "llm_prompt": ""
+  },
+  "diagnostics": [],
+  "uncertainties": [],
+  "input_hash": "45",
+  "duration_ms": 3,
+  "version": "1.0"
+}

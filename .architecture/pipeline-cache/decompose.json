@@ -1,0 +1,541 @@
+{
+  "__dataclass__": "StageResult",
+  "__module__": "architecture_model.pipeline.protocol",
+  "output": {
+    "__dataclass__": "DecomposeResult",
+    "__module__": "architecture_model.pipeline.decompose_types",
+    "systems": [
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-docs-validator",
+        "name": "Docs Validator",
+        "component_ids": [
+          "COMP-11"
+        ],
+        "files": [
+          "src/opencode_arch/cli/docs.py",
+          "src/opencode_arch/cli/docs_validator.py",
+          "src/opencode_arch/cli/regen_loop.py",
+          "src/opencode_arch/cli/generate.py",
+          "src/opencode_arch/cli/bench.py",
+          "src/opencode_arch/cli/extract.py"
+        ],
+        "complexity": 6.0,
+        "is_full_system": true
+      }
+    ],
+    "inline_components": [
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-selector",
+        "name": "Selector",
+        "component_ids": [
+          "COMP-1"
+        ],
+        "files": [
+          "src/opencode_arch/artifacts/selector.py",
+          "src/opencode_arch/artifacts/context.py"
+        ],
+        "complexity": 2.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-templates",
+        "name": "Templates",
+        "component_ids": [
+          "COMP-2"
+        ],
+        "files": [
+          "src/opencode_arch/artifacts/templates.py"
+        ],
+        "complexity": 1.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-diagrams",
+        "name": "Diagrams",
+        "component_ids": [
+          "COMP-3"
+        ],
+        "files": [
+          "src/opencode_arch/artifacts/diagrams.py"
+        ],
+        "complexity": 1.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-cache",
+        "name": "Cache",
+        "component_ids": [
+          "COMP-4"
+        ],
+        "files": [
+          "src/opencode_arch/llm/cache.py",
+          "src/opencode_arch/requirements/matcher.py",
+          "src/opencode_arch/requirements/llm_extractor.py",
+          "src/opencode_arch/requirements/retroactive.py"
+        ],
+        "complexity": 4.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-formatter",
+        "name": "Formatter",
+        "component_ids": [
+          "COMP-5"
+        ],
+        "files": [
+          "src/opencode_arch/context/formatter.py"
+        ],
+        "complexity": 1.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-pipeline-bridge",
+        "name": "Pipeline Bridge",
+        "component_ids": [
+          "COMP-6"
+        ],
+        "files": [
+          "src/opencode_arch/context/pipeline_bridge.py"
+        ],
+        "complexity": 1.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-patterns",
+        "name": "Patterns",
+        "component_ids": [
+          "COMP-7"
+        ],
+        "files": [
+          "src/opencode_arch/learning/patterns.py",
+          "src/opencode_arch/learning/classifier.py",
+          "src/opencode_arch/learning/adapter.py"
+        ],
+        "complexity": 3.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-resolution",
+        "name": "Resolution",
+        "component_ids": [
+          "COMP-8"
+        ],
+        "files": [
+          "src/opencode_arch/agent/resolution.py"
+        ],
+        "complexity": 1.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-quality",
+        "name": "Quality",
+        "component_ids": [
+          "COMP-9"
+        ],
+        "files": [
+          "src/opencode_arch/mcp/quality.py"
+        ],
+        "complexity": 1.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-metrics",
+        "name": "Metrics",
+        "component_ids": [
+          "COMP-10"
+        ],
+        "files": [
+          "src/opencode_arch/cli/metrics.py"
+        ],
+        "complexity": 1.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-calibrate",
+        "name": "Calibrate",
+        "component_ids": [
+          "COMP-12"
+        ],
+        "files": [
+          "src/opencode_arch/cli/calibrate.py"
+        ],
+        "complexity": 1.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-spot-check",
+        "name": "Spot Check",
+        "component_ids": [
+          "COMP-13"
+        ],
+        "files": [
+          "src/opencode_arch/regen/spot_check.py",
+          "src/opencode_arch/regen/self_heal.py"
+        ],
+        "complexity": 2.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-cli-main",
+        "name": "CLI Main",
+        "component_ids": [
+          "COMP-14"
+        ],
+        "files": [
+          "src/opencode_arch/mcp/__main__.py",
+          "src/opencode_arch/cli/main.py"
+        ],
+        "complexity": 2.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-infrastructure-(learning)",
+        "name": "Infrastructure (learning)",
+        "component_ids": [
+          "COMP-15-1"
+        ],
+        "files": [
+          "src/opencode_arch/learning/assessor.py",
+          "src/opencode_arch/learning/lessons.py",
+          "src/opencode_arch/learning/maintainer.py"
+        ],
+        "complexity": 3.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-infrastructure-(runner)",
+        "name": "Infrastructure (runner)",
+        "component_ids": [
+          "COMP-15-2"
+        ],
+        "files": [
+          "src/opencode_arch/runner/opencode.py",
+          "src/opencode_arch/runner/base.py"
+        ],
+        "complexity": 2.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-infrastructure-(mcp)",
+        "name": "Infrastructure (mcp)",
+        "component_ids": [
+          "COMP-15-3"
+        ],
+        "files": [
+          "src/opencode_arch/mcp/server.py"
+        ],
+        "complexity": 1.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-infrastructure-(requirements)",
+        "name": "Infrastructure (requirements)",
+        "component_ids": [
+          "COMP-15-4"
+        ],
+        "files": [
+          "src/opencode_arch/requirements/parser.py"
+        ],
+        "complexity": 1.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-infrastructure-(cli)",
+        "name": "Infrastructure (cli)",
+        "component_ids": [
+          "COMP-15-5"
+        ],
+        "files": [
+          "src/opencode_arch/cli/confidence.py",
+          "src/opencode_arch/cli/prompts.py",
+          "src/opencode_arch/cli/gap_analyzer.py",
+          "src/opencode_arch/cli/launch.py"
+        ],
+        "complexity": 4.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-infrastructure-(prompts)",
+        "name": "Infrastructure (prompts)",
+        "component_ids": [
+          "COMP-15-6"
+        ],
+        "files": [
+          "src/opencode_arch/prompts/regen.py"
+        ],
+        "complexity": 1.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-infrastructure-(telemetry)",
+        "name": "Infrastructure (telemetry)",
+        "component_ids": [
+          "COMP-15-7"
+        ],
+        "files": [
+          "src/opencode_arch/telemetry/store.py",
+          "src/opencode_arch/telemetry/recorder.py",
+          "src/opencode_arch/telemetry/collector.py"
+        ],
+        "complexity": 3.0,
+        "is_full_system": false
+      },
+      {
+        "__dataclass__": "SystemBoundary",
+        "__module__": "architecture_model.pipeline.decompose_types",
+        "system_id": "SYS-infrastructure-(prompts)",
+        "name": "Infrastructure (prompts)",
+        "component_ids": [
+          "COMP-15-8"
+        ],
+        "files": [
+          "src/opencode_arch/llm/prompts/audit.py",
+          "src/opencode_arch/llm/prompts/matching.py",
+          "src/opencode_arch/llm/prompts/requirements.py"
+        ],
+        "complexity": 3.0,
+        "is_full_system": false
+      }
+    ],
+    "inter_system_edges": [
+      [
+        "SYS-quality",
+        "SYS-formatter",
+        "depends-on"
+      ],
+      [
+        "SYS-docs-validator",
+        "SYS-infrastructure-(prompts)",
+        "depends-on"
+      ],
+      [
+        "SYS-infrastructure-(telemetry)",
+        "SYS-infrastructure-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-pipeline-bridge",
+        "SYS-infrastructure-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-metrics",
+        "SYS-infrastructure-(telemetry)",
+        "depends-on"
+      ],
+      [
+        "SYS-docs-validator",
+        "SYS-cli-main",
+        "depends-on"
+      ],
+      [
+        "SYS-docs-validator",
+        "SYS-infrastructure-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-docs-validator",
+        "SYS-infrastructure-(prompts)",
+        "depends-on"
+      ],
+      [
+        "SYS-docs-validator",
+        "SYS-calibrate",
+        "depends-on"
+      ],
+      [
+        "SYS-cache",
+        "SYS-infrastructure-(requirements)",
+        "depends-on"
+      ],
+      [
+        "SYS-metrics",
+        "SYS-infrastructure-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-patterns",
+        "SYS-infrastructure-(learning)",
+        "depends-on"
+      ],
+      [
+        "SYS-pipeline-bridge",
+        "SYS-formatter",
+        "depends-on"
+      ],
+      [
+        "SYS-docs-validator",
+        "SYS-metrics",
+        "depends-on"
+      ],
+      [
+        "SYS-quality",
+        "SYS-selector",
+        "depends-on"
+      ],
+      [
+        "SYS-patterns",
+        "SYS-infrastructure-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-resolution",
+        "SYS-infrastructure-(learning)",
+        "depends-on"
+      ],
+      [
+        "SYS-cache",
+        "SYS-infrastructure-(cli)",
+        "depends-on"
+      ],
+      [
+        "SYS-cli-main",
+        "SYS-infrastructure-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-resolution",
+        "SYS-patterns",
+        "depends-on"
+      ],
+      [
+        "SYS-quality",
+        "SYS-pipeline-bridge",
+        "depends-on"
+      ],
+      [
+        "SYS-pipeline-bridge",
+        "SYS-infrastructure-(requirements)",
+        "depends-on"
+      ],
+      [
+        "SYS-cache",
+        "SYS-infrastructure-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-docs-validator",
+        "SYS-selector",
+        "depends-on"
+      ],
+      [
+        "SYS-selector",
+        "SYS-templates",
+        "depends-on"
+      ],
+      [
+        "SYS-cache",
+        "SYS-infrastructure-(prompts)",
+        "depends-on"
+      ],
+      [
+        "SYS-docs-validator",
+        "SYS-spot-check",
+        "depends-on"
+      ],
+      [
+        "SYS-docs-validator",
+        "SYS-templates",
+        "depends-on"
+      ],
+      [
+        "SYS-pipeline-bridge",
+        "SYS-selector",
+        "depends-on"
+      ],
+      [
+        "SYS-cli-main",
+        "SYS-infrastructure-(mcp)",
+        "depends-on"
+      ],
+      [
+        "SYS-docs-validator",
+        "SYS-infrastructure-(cli)",
+        "depends-on"
+      ],
+      [
+        "SYS-cache",
+        "SYS-infrastructure-(prompts)",
+        "depends-on"
+      ],
+      [
+        "SYS-selector",
+        "SYS-infrastructure-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-cli-main",
+        "SYS-quality",
+        "depends-on"
+      ],
+      [
+        "SYS-selector",
+        "SYS-diagrams",
+        "depends-on"
+      ],
+      [
+        "SYS-docs-validator",
+        "SYS-diagrams",
+        "depends-on"
+      ]
+    ]
+  },
+  "quality": {
+    "__dataclass__": "QualityMetrics",
+    "__module__": "architecture_model.pipeline.protocol",
+    "score": 100.0,
+    "sub_scores": {
+      "system_count": 1.0,
+      "inline_count": 21.0
+    },
+    "thresholds": {},
+    "llm_prompt": ""
+  },
+  "diagnostics": [],
+  "uncertainties": [],
+  "input_hash": "",
+  "duration_ms": 0,
+  "version": "1.0"
+}

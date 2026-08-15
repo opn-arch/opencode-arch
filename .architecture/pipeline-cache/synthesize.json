@@ -1,0 +1,1754 @@
+{
+  "__dataclass__": "StageResult",
+  "__module__": "architecture_model.pipeline.protocol",
+  "output": {
+    "__dataclass__": "SynthesizeResult",
+    "__module__": "architecture_model.pipeline.synthesize_types",
+    "sos_model": {
+      "__dataclass__": "SoSModel",
+      "__module__": "architecture_model.pipeline.synthesize_types",
+      "model_yaml": "meta:\n  schema_version: '2.0'\n  system_of_systems: true\nentities:\n  systems:\n  - id: SYS-docs-validator\n    name: Docs Validator\n    model_path: docs-validator/.architecture-model.yaml\n  - id: SYS-selector\n    name: Selector\n    model_path: selector/.architecture-model.yaml\n  - id: SYS-templates\n    name: Templates\n    model_path: templates/.architecture-model.yaml\n  - id: SYS-diagrams\n    name: Diagrams\n    model_path: diagrams/.architecture-model.yaml\n  - id: SYS-cache\n    name: Cache\n    model_path: cache/.architecture-model.yaml\n  - id: SYS-formatter\n    name: Formatter\n    model_path: formatter/.architecture-model.yaml\n  - id: SYS-pipeline-bridge\n    name: Pipeline Bridge\n    model_path: pipeline-bridge/.architecture-model.yaml\n  - id: SYS-patterns\n    name: Patterns\n    model_path: patterns/.architecture-model.yaml\n  - id: SYS-resolution\n    name: Resolution\n    model_path: resolution/.architecture-model.yaml\n  - id: SYS-quality\n    name: Quality\n    model_path: quality/.architecture-model.yaml\n  - id: SYS-metrics\n    name: Metrics\n    model_path: metrics/.architecture-model.yaml\n  - id: SYS-calibrate\n    name: Calibrate\n    model_path: calibrate/.architecture-model.yaml\n  - id: SYS-spot-check\n    name: Spot Check\n    model_path: spot-check/.architecture-model.yaml\n  - id: SYS-cli-main\n    name: CLI Main\n    model_path: cli-main/.architecture-model.yaml\n  - id: SYS-infrastructure-(learning)\n    name: Infrastructure (learning)\n    model_path: infrastructure-learning/.architecture-model.yaml\n  - id: SYS-infrastructure-(runner)\n    name: Infrastructure (runner)\n    model_path: infrastructure-runner/.architecture-model.yaml\n  - id: SYS-infrastructure-(mcp)\n    name: Infrastructure (mcp)\n    model_path: infrastructure-mcp/.architecture-model.yaml\n  - id: SYS-infrastructure-(requirements)\n    name: Infrastructure (requirements)\n    model_path: infrastructure-requirements/.architecture-model.yaml\n  - id: SYS-infrastructure-(cli)\n    name: Infrastructure (cli)\n    model_path: infrastructure-cli/.architecture-model.yaml\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    model_path: infrastructure-prompts/.architecture-model.yaml\n  - id: SYS-infrastructure-(telemetry)\n    name: Infrastructure (telemetry)\n    model_path: infrastructure-telemetry/.architecture-model.yaml\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    model_path: infrastructure-prompts/.architecture-model.yaml\n  actors:\n  - id: ACT-1\n    name: CLI User\n  capabilities:\n  - id: CAP-1\n    name: Selector\n  - id: CAP-2\n    name: Templates\n  - id: CAP-3\n    name: Diagrams\n  - id: CAP-4\n    name: Cache\n  - id: CAP-5\n    name: Formatter\n  - id: CAP-6\n    name: Pipeline Bridge\n  - id: CAP-7\n    name: Patterns\n  - id: CAP-8\n    name: Resolution\n  - id: CAP-9\n    name: Quality\n  - id: CAP-10\n    name: Metrics\n  - id: CAP-11\n    name: Docs Validator\n  - id: CAP-12\n    name: Calibrate\n  - id: CAP-13\n    name: Spot Check\n  - id: CAP-14\n    name: CLI Main\n  inline_components:\n  - id: SYS-selector\n    name: Selector\n    files:\n    - src/opencode_arch/artifacts/selector.py\n    - src/opencode_arch/artifacts/context.py\n  - id: SYS-templates\n    name: Templates\n    files:\n    - src/opencode_arch/artifacts/templates.py\n  - id: SYS-diagrams\n    name: Diagrams\n    files:\n    - src/opencode_arch/artifacts/diagrams.py\n  - id: SYS-cache\n    name: Cache\n    files:\n    - src/opencode_arch/llm/cache.py\n    - src/opencode_arch/requirements/matcher.py\n    - src/opencode_arch/requirements/llm_extractor.py\n    - src/opencode_arch/requirements/retroactive.py\n  - id: SYS-formatter\n    name: Formatter\n    files:\n    - src/opencode_arch/context/formatter.py\n  - id: SYS-pipeline-bridge\n    name: Pipeline Bridge\n    files:\n    - src/opencode_arch/context/pipeline_bridge.py\n  - id: SYS-patterns\n    name: Patterns\n    files:\n    - src/opencode_arch/learning/patterns.py\n    - src/opencode_arch/learning/classifier.py\n    - src/opencode_arch/learning/adapter.py\n  - id: SYS-resolution\n    name: Resolution\n    files:\n    - src/opencode_arch/agent/resolution.py\n  - id: SYS-quality\n    name: Quality\n    files:\n    - src/opencode_arch/mcp/quality.py\n  - id: SYS-metrics\n    name: Metrics\n    files:\n    - src/opencode_arch/cli/metrics.py\n  - id: SYS-calibrate\n    name: Calibrate\n    files:\n    - src/opencode_arch/cli/calibrate.py\n  - id: SYS-spot-check\n    name: Spot Check\n    files:\n    - src/opencode_arch/regen/spot_check.py\n    - src/opencode_arch/regen/self_heal.py\n  - id: SYS-cli-main\n    name: CLI Main\n    files:\n    - src/opencode_arch/mcp/__main__.py\n    - src/opencode_arch/cli/main.py\n  - id: SYS-infrastructure-(learning)\n    name: Infrastructure (learning)\n    files:\n    - src/opencode_arch/learning/assessor.py\n    - src/opencode_arch/learning/lessons.py\n    - src/opencode_arch/learning/maintainer.py\n  - id: SYS-infrastructure-(runner)\n    name: Infrastructure (runner)\n    files:\n    - src/opencode_arch/runner/opencode.py\n    - src/opencode_arch/runner/base.py\n  - id: SYS-infrastructure-(mcp)\n    name: Infrastructure (mcp)\n    files:\n    - src/opencode_arch/mcp/server.py\n  - id: SYS-infrastructure-(requirements)\n    name: Infrastructure (requirements)\n    files:\n    - src/opencode_arch/requirements/parser.py\n  - id: SYS-infrastructure-(cli)\n    name: Infrastructure (cli)\n    files:\n    - src/opencode_arch/cli/confidence.py\n    - src/opencode_arch/cli/prompts.py\n    - src/opencode_arch/cli/gap_analyzer.py\n    - src/opencode_arch/cli/launch.py\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    files:\n    - src/opencode_arch/prompts/regen.py\n  - id: SYS-infrastructure-(telemetry)\n    name: Infrastructure (telemetry)\n    files:\n    - src/opencode_arch/telemetry/store.py\n    - src/opencode_arch/telemetry/recorder.py\n    - src/opencode_arch/telemetry/collector.py\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    files:\n    - src/opencode_arch/llm/prompts/audit.py\n    - src/opencode_arch/llm/prompts/matching.py\n    - src/opencode_arch/llm/prompts/requirements.py\nrelationships:\n- from: SYS-quality\n  to: SYS-formatter\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-infrastructure-(telemetry)\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-metrics\n  to: SYS-infrastructure-(telemetry)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-cli-main\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-calibrate\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(requirements)\n  type: depends-on\n- from: SYS-metrics\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-patterns\n  to: SYS-infrastructure-(learning)\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-formatter\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-metrics\n  type: depends-on\n- from: SYS-quality\n  to: SYS-selector\n  type: depends-on\n- from: SYS-patterns\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-resolution\n  to: SYS-infrastructure-(learning)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(cli)\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-resolution\n  to: SYS-patterns\n  type: depends-on\n- from: SYS-quality\n  to: SYS-pipeline-bridge\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-infrastructure-(requirements)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-selector\n  type: depends-on\n- from: SYS-selector\n  to: SYS-templates\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-spot-check\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-templates\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-selector\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-infrastructure-(mcp)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(cli)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-selector\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-quality\n  type: depends-on\n- from: SYS-selector\n  to: SYS-diagrams\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-diagrams\n  type: depends-on\n",
+      "actors": [
+        {
+          "id": "ACT-1",
+          "name": "CLI User"
+        }
+      ],
+      "emergent_capabilities": [
+        {
+          "id": "CAP-1",
+          "name": "Selector"
+        },
+        {
+          "id": "CAP-2",
+          "name": "Templates"
+        },
+        {
+          "id": "CAP-3",
+          "name": "Diagrams"
+        },
+        {
+          "id": "CAP-4",
+          "name": "Cache"
+        },
+        {
+          "id": "CAP-5",
+          "name": "Formatter"
+        },
+        {
+          "id": "CAP-6",
+          "name": "Pipeline Bridge"
+        },
+        {
+          "id": "CAP-7",
+          "name": "Patterns"
+        },
+        {
+          "id": "CAP-8",
+          "name": "Resolution"
+        },
+        {
+          "id": "CAP-9",
+          "name": "Quality"
+        },
+        {
+          "id": "CAP-10",
+          "name": "Metrics"
+        },
+        {
+          "id": "CAP-11",
+          "name": "Docs Validator"
+        },
+        {
+          "id": "CAP-12",
+          "name": "Calibrate"
+        },
+        {
+          "id": "CAP-13",
+          "name": "Spot Check"
+        },
+        {
+          "id": "CAP-14",
+          "name": "CLI Main"
+        }
+      ],
+      "cross_system_behaviors": [],
+      "inter_system_interfaces": [
+        {
+          "from": "SYS-quality",
+          "to": "SYS-formatter",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-infrastructure-(prompts)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-infrastructure-(telemetry)",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-pipeline-bridge",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-metrics",
+          "to": "SYS-infrastructure-(telemetry)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-cli-main",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-infrastructure-(prompts)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-calibrate",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cache",
+          "to": "SYS-infrastructure-(requirements)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-metrics",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-patterns",
+          "to": "SYS-infrastructure-(learning)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-pipeline-bridge",
+          "to": "SYS-formatter",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-metrics",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-quality",
+          "to": "SYS-selector",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-patterns",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-resolution",
+          "to": "SYS-infrastructure-(learning)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cache",
+          "to": "SYS-infrastructure-(cli)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cli-main",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-resolution",
+          "to": "SYS-patterns",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-quality",
+          "to": "SYS-pipeline-bridge",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-pipeline-bridge",
+          "to": "SYS-infrastructure-(requirements)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cache",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-selector",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-selector",
+          "to": "SYS-templates",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cache",
+          "to": "SYS-infrastructure-(prompts)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-spot-check",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-templates",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-pipeline-bridge",
+          "to": "SYS-selector",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cli-main",
+          "to": "SYS-infrastructure-(mcp)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-infrastructure-(cli)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cache",
+          "to": "SYS-infrastructure-(prompts)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-selector",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cli-main",
+          "to": "SYS-quality",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-selector",
+          "to": "SYS-diagrams",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-diagrams",
+          "type": "depends-on"
+        }
+      ],
+      "constraints": []
+    },
+    "sos_model_yaml": "meta:\n  schema_version: '2.0'\n  system_of_systems: true\nentities:\n  systems:\n  - id: SYS-docs-validator\n    name: Docs Validator\n    model_path: docs-validator/.architecture-model.yaml\n  - id: SYS-selector\n    name: Selector\n    model_path: selector/.architecture-model.yaml\n  - id: SYS-templates\n    name: Templates\n    model_path: templates/.architecture-model.yaml\n  - id: SYS-diagrams\n    name: Diagrams\n    model_path: diagrams/.architecture-model.yaml\n  - id: SYS-cache\n    name: Cache\n    model_path: cache/.architecture-model.yaml\n  - id: SYS-formatter\n    name: Formatter\n    model_path: formatter/.architecture-model.yaml\n  - id: SYS-pipeline-bridge\n    name: Pipeline Bridge\n    model_path: pipeline-bridge/.architecture-model.yaml\n  - id: SYS-patterns\n    name: Patterns\n    model_path: patterns/.architecture-model.yaml\n  - id: SYS-resolution\n    name: Resolution\n    model_path: resolution/.architecture-model.yaml\n  - id: SYS-quality\n    name: Quality\n    model_path: quality/.architecture-model.yaml\n  - id: SYS-metrics\n    name: Metrics\n    model_path: metrics/.architecture-model.yaml\n  - id: SYS-calibrate\n    name: Calibrate\n    model_path: calibrate/.architecture-model.yaml\n  - id: SYS-spot-check\n    name: Spot Check\n    model_path: spot-check/.architecture-model.yaml\n  - id: SYS-cli-main\n    name: CLI Main\n    model_path: cli-main/.architecture-model.yaml\n  - id: SYS-infrastructure-(learning)\n    name: Infrastructure (learning)\n    model_path: infrastructure-learning/.architecture-model.yaml\n  - id: SYS-infrastructure-(runner)\n    name: Infrastructure (runner)\n    model_path: infrastructure-runner/.architecture-model.yaml\n  - id: SYS-infrastructure-(mcp)\n    name: Infrastructure (mcp)\n    model_path: infrastructure-mcp/.architecture-model.yaml\n  - id: SYS-infrastructure-(requirements)\n    name: Infrastructure (requirements)\n    model_path: infrastructure-requirements/.architecture-model.yaml\n  - id: SYS-infrastructure-(cli)\n    name: Infrastructure (cli)\n    model_path: infrastructure-cli/.architecture-model.yaml\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    model_path: infrastructure-prompts/.architecture-model.yaml\n  - id: SYS-infrastructure-(telemetry)\n    name: Infrastructure (telemetry)\n    model_path: infrastructure-telemetry/.architecture-model.yaml\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    model_path: infrastructure-prompts/.architecture-model.yaml\n  actors:\n  - id: ACT-1\n    name: CLI User\n  capabilities:\n  - id: CAP-1\n    name: Selector\n  - id: CAP-2\n    name: Templates\n  - id: CAP-3\n    name: Diagrams\n  - id: CAP-4\n    name: Cache\n  - id: CAP-5\n    name: Formatter\n  - id: CAP-6\n    name: Pipeline Bridge\n  - id: CAP-7\n    name: Patterns\n  - id: CAP-8\n    name: Resolution\n  - id: CAP-9\n    name: Quality\n  - id: CAP-10\n    name: Metrics\n  - id: CAP-11\n    name: Docs Validator\n  - id: CAP-12\n    name: Calibrate\n  - id: CAP-13\n    name: Spot Check\n  - id: CAP-14\n    name: CLI Main\n  inline_components:\n  - id: SYS-selector\n    name: Selector\n    files:\n    - src/opencode_arch/artifacts/selector.py\n    - src/opencode_arch/artifacts/context.py\n  - id: SYS-templates\n    name: Templates\n    files:\n    - src/opencode_arch/artifacts/templates.py\n  - id: SYS-diagrams\n    name: Diagrams\n    files:\n    - src/opencode_arch/artifacts/diagrams.py\n  - id: SYS-cache\n    name: Cache\n    files:\n    - src/opencode_arch/llm/cache.py\n    - src/opencode_arch/requirements/matcher.py\n    - src/opencode_arch/requirements/llm_extractor.py\n    - src/opencode_arch/requirements/retroactive.py\n  - id: SYS-formatter\n    name: Formatter\n    files:\n    - src/opencode_arch/context/formatter.py\n  - id: SYS-pipeline-bridge\n    name: Pipeline Bridge\n    files:\n    - src/opencode_arch/context/pipeline_bridge.py\n  - id: SYS-patterns\n    name: Patterns\n    files:\n    - src/opencode_arch/learning/patterns.py\n    - src/opencode_arch/learning/classifier.py\n    - src/opencode_arch/learning/adapter.py\n  - id: SYS-resolution\n    name: Resolution\n    files:\n    - src/opencode_arch/agent/resolution.py\n  - id: SYS-quality\n    name: Quality\n    files:\n    - src/opencode_arch/mcp/quality.py\n  - id: SYS-metrics\n    name: Metrics\n    files:\n    - src/opencode_arch/cli/metrics.py\n  - id: SYS-calibrate\n    name: Calibrate\n    files:\n    - src/opencode_arch/cli/calibrate.py\n  - id: SYS-spot-check\n    name: Spot Check\n    files:\n    - src/opencode_arch/regen/spot_check.py\n    - src/opencode_arch/regen/self_heal.py\n  - id: SYS-cli-main\n    name: CLI Main\n    files:\n    - src/opencode_arch/mcp/__main__.py\n    - src/opencode_arch/cli/main.py\n  - id: SYS-infrastructure-(learning)\n    name: Infrastructure (learning)\n    files:\n    - src/opencode_arch/learning/assessor.py\n    - src/opencode_arch/learning/lessons.py\n    - src/opencode_arch/learning/maintainer.py\n  - id: SYS-infrastructure-(runner)\n    name: Infrastructure (runner)\n    files:\n    - src/opencode_arch/runner/opencode.py\n    - src/opencode_arch/runner/base.py\n  - id: SYS-infrastructure-(mcp)\n    name: Infrastructure (mcp)\n    files:\n    - src/opencode_arch/mcp/server.py\n  - id: SYS-infrastructure-(requirements)\n    name: Infrastructure (requirements)\n    files:\n    - src/opencode_arch/requirements/parser.py\n  - id: SYS-infrastructure-(cli)\n    name: Infrastructure (cli)\n    files:\n    - src/opencode_arch/cli/confidence.py\n    - src/opencode_arch/cli/prompts.py\n    - src/opencode_arch/cli/gap_analyzer.py\n    - src/opencode_arch/cli/launch.py\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    files:\n    - src/opencode_arch/prompts/regen.py\n  - id: SYS-infrastructure-(telemetry)\n    name: Infrastructure (telemetry)\n    files:\n    - src/opencode_arch/telemetry/store.py\n    - src/opencode_arch/telemetry/recorder.py\n    - src/opencode_arch/telemetry/collector.py\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    files:\n    - src/opencode_arch/llm/prompts/audit.py\n    - src/opencode_arch/llm/prompts/matching.py\n    - src/opencode_arch/llm/prompts/requirements.py\nrelationships:\n- from: SYS-quality\n  to: SYS-formatter\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-infrastructure-(telemetry)\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-metrics\n  to: SYS-infrastructure-(telemetry)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-cli-main\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-calibrate\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(requirements)\n  type: depends-on\n- from: SYS-metrics\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-patterns\n  to: SYS-infrastructure-(learning)\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-formatter\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-metrics\n  type: depends-on\n- from: SYS-quality\n  to: SYS-selector\n  type: depends-on\n- from: SYS-patterns\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-resolution\n  to: SYS-infrastructure-(learning)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(cli)\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-resolution\n  to: SYS-patterns\n  type: depends-on\n- from: SYS-quality\n  to: SYS-pipeline-bridge\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-infrastructure-(requirements)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-selector\n  type: depends-on\n- from: SYS-selector\n  to: SYS-templates\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-spot-check\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-templates\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-selector\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-infrastructure-(mcp)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(cli)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-selector\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-quality\n  type: depends-on\n- from: SYS-selector\n  to: SYS-diagrams\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-diagrams\n  type: depends-on\n",
+    "system_models": [
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-docs-validator",
+        "name": "Docs Validator",
+        "model_yaml": "meta:\n  schema_version: '2.0'\n  system: Docs Validator\n  system_id: SYS-docs-validator\nentities:\n  capabilities:\n  - id: CAP-1\n    name: Docs\n  - id: CAP-2\n    name: Docs Validator\n  - id: CAP-3\n    name: Regen Loop\n  - id: CAP-4\n    name: Generate\n  - id: CAP-5\n    name: Bench\n  - id: CAP-6\n    name: Extract\nrelationships: []\n",
+        "manifest_json": "{\n  \"modules\": [\n    {\n      \"file\": \"src/opencode_arch/cli/docs.py\",\n      \"functions\": 6,\n      \"classes\": 1\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/docs_validator.py\",\n      \"functions\": 8,\n      \"classes\": 2\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/regen_loop.py\",\n      \"functions\": 13,\n      \"classes\": 1\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/generate.py\",\n      \"functions\": 1,\n      \"classes\": 0\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/bench.py\",\n      \"functions\": 1,\n      \"classes\": 0\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/extract.py\",\n      \"functions\": 2,\n      \"classes\": 0\n    }\n  ]\n}",
+        "pipeline_report_md": "# Pipeline Report: Docs Validator\n\n**Generated:** 2026-08-11T17:18:41Z\n**Total Duration:** 172ms\n**Stages:** 2\n\n## LLM Summary\n\nNo LLM calls \u2014 deterministic pipeline run\n\n## Stage Scores\n\n| Stage | Score | Duration | LLM Calls |\n|-------|-------|----------|-----------|\n| observe | 100 | 172ms | 0 |\n| infer | 100 | 0ms | 0 |\n\n## Stage: observe\n**Score:** 100 | **Duration:** 172ms\n\n### Deterministic Findings\n- Discovered 6 modules\n- 31 functions, 4 classes\n- 0 import edges\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: infer\n**Score:** 100 | **Duration:** 0ms\n\n### Deterministic Findings\n- Inferred 6 capabilities\n- 1 actors\n- 0 behaviors\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n",
+        "lessons_md": "# Lessons: Docs Validator\n\nNo lessons to report.\n",
+        "stage_results": {
+          "observe": {
+            "__dataclass__": "StageResult",
+            "__module__": "architecture_model.pipeline.protocol",
+            "output": {
+              "__dataclass__": "Inventory",
+              "__module__": "architecture_model.pipeline.observe_types",
+              "modules": [
+                {
+                  "__dataclass__": "ModuleRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "src/opencode_arch/cli/docs.py",
+                  "language": "python",
+                  "functions": [
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "run_docs_generate",
+                      "signature": "async def run_docs_generate(repo_path: Path, runner: RunnerBackend, output_dir: Path | None=None, artifact_filter: list[str] | None=None, model_path: Path | None=None) -> DocsResult",
+                      "body_hint": "[16 statements]",
+                      "calls": [
+                        "time",
+                        "resolve",
+                        "mkdir",
+                        "DocsResult",
+                        "Path",
+                        "generate_manifest",
+                        "select_artifacts",
+                        "startswith",
+                        "get",
+                        "_build_generation_prompt",
+                        "_write_artifact",
+                        "append",
+                        "_write_index",
+                        "load_model",
+                        "exists",
+                        "upper",
+                        "_build_capability_detail_prompt",
+                        "get_template",
+                        "assemble_artifact_context",
+                        "str",
+                        "format_capability_detail_context",
+                        "run",
+                        "replace",
+                        "lower"
+                      ],
+                      "decorators": [],
+                      "docstring": "Generate SE documentation for a project.\n\nFlow:\n1. Load model from project (or model_path override)\n2. Generate manifest via generate_manifest()\n3. Call select_artifacts(model, manifest) to determine what to generate\n4. If artifact_filter provided, intersect with selected artifacts\n5. For each artifact:\n   a. Get template from TEMPLATES[artifact_id]\n   b. Assemble context via assemble_artifact_context(template, model, manifest)\n   c. Build full prompt (context + generation instructions)\n   d. Call runner.run(prompt, str(repo_path))\n   e. Write result to output_dir/filename\n6. Generate index.md linking all artifacts\n7. Return DocsResult",
+                      "line_number": 26
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "run_docs_list",
+                      "signature": "async def run_docs_list(repo_path: Path, model_path: Path | None=None) -> list[dict[str, str]]",
+                      "body_hint": "[6 statements]",
+                      "calls": [
+                        "resolve",
+                        "select_artifacts",
+                        "load_model",
+                        "generate_manifest",
+                        "Path",
+                        "str"
+                      ],
+                      "decorators": [],
+                      "docstring": "List which artifacts would be generated for a project.\n\nReturns list of dicts: [{\"id\": ..., \"name\": ..., \"category\": ..., \"priority\": ...}]\nNo runner needed \u2014 just model analysis.",
+                      "line_number": 197
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_build_generation_prompt",
+                      "signature": "def _build_generation_prompt(context: str, template_artifact_id: str) -> str",
+                      "body_hint": "return f\"---\\n{context}\\n\\n---\\nTASK: Generate the '{template_artifact_id}' documentation artifact.\\n\\nWrite a complete, well-structured markdown document. Use the DATA sections above\\nas your source of truth. Do NOT invent information not present in the data.\\n\\nOutput ONLY the markdown content, no code fences or explanations.\\n---\\n\"",
+                      "calls": [],
+                      "decorators": [],
+                      "docstring": "Build the full prompt sent to the agent.\n\nFormat includes context from assemble_artifact_context followed by\ntask instructions for the agent.",
+                      "line_number": 236
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_build_capability_detail_prompt",
+                      "signature": "def _build_capability_detail_prompt(template, cap_context: str, cap_name: str) -> str",
+                      "body_hint": "sections_instructions = '\\n'.join((f'  {s.heading}: {s.instructions}' for s in template.sections)); return f'---\\nSYSTEM: {template.system_prompt}\\n\\n## Architecture Model Data for: {cap_name}\\n\\n{cap_context}\\n\\n---\\nTASK: Generate a detailed API documentation file for this capability.\\n\\nRequired sections:\\n{sections_instructions}\\n\\nWrite a complete, well-structured markdown document. Use the DATA above\\nas your source of truth. Include exact function signatures, parameters,\\nreturn types, algorithm steps, and behavioral sequences.\\nDo NOT invent information not present in the data.\\n\\nOutput ONLY the markdown content, no code fences or explanations.\\n---\\n'",
+                      "calls": [
+                        "join"
+                      ],
+                      "decorators": [],
+                      "docstring": "Build the prompt for a per-capability API detail artifact.\n\nUses the API_DETAIL_TEMPLATE sections as instructions, with the\ncapability-specific context as the grounding data.",
+                      "line_number": 257
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_write_artifact",
+                      "signature": "def _write_artifact(output_dir: Path, filename: str, artifact_id: str, content: str)",
+                      "body_hint": "[4 statements]",
+                      "calls": [
+                        "isoformat",
+                        "write_text",
+                        "now"
+                      ],
+                      "decorators": [],
+                      "docstring": "Write generated artifact with frontmatter.\n\nPrepends YAML frontmatter with artifact_id, timestamp, and generator.",
+                      "line_number": 291
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_write_index",
+                      "signature": "def _write_index(output_dir: Path, generated_artifacts: list[tuple[str, str]])",
+                      "body_hint": "[6 statements]",
+                      "calls": [
+                        "strftime",
+                        "append",
+                        "write_text",
+                        "title",
+                        "join",
+                        "now",
+                        "replace"
+                      ],
+                      "decorators": [],
+                      "docstring": "Write index.md linking all generated artifacts.\n\ngenerated_artifacts: list of (artifact_id, filename) tuples",
+                      "line_number": 308
+                    }
+                  ],
+                  "classes": [
+                    {
+                      "__dataclass__": "ClassRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "DocsResult",
+                      "bases": [],
+                      "methods": [],
+                      "method_details": [],
+                      "attributes": {},
+                      "decorators": [
+                        "dataclass"
+                      ],
+                      "is_abstract": false
+                    }
+                  ],
+                  "constants": [],
+                  "imports": [
+                    "__future__",
+                    "time",
+                    "dataclasses",
+                    "datetime",
+                    "pathlib",
+                    "architecture_model",
+                    "architecture_model.core.types",
+                    "opencode_arch.artifacts",
+                    "opencode_arch.runner.base"
+                  ],
+                  "line_count": 333,
+                  "docstring": "SE Document generation orchestrator."
+                },
+                {
+                  "__dataclass__": "ModuleRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "src/opencode_arch/cli/docs_validator.py",
+                  "language": "python",
+                  "functions": [
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "validate_docs",
+                      "signature": "def validate_docs(docs_dir: Path, model: 'ArchitectureModel', manifest: dict | None=None) -> DocsValidationResult",
+                      "body_hint": "[11 statements]",
+                      "calls": [
+                        "Path",
+                        "sorted",
+                        "_get_manifest_files",
+                        "_get_manifest_symbols",
+                        "_get_model_entity_ids",
+                        "DocsValidationResult",
+                        "glob",
+                        "read_text",
+                        "_get_artifact_id_from_file",
+                        "_extract_component_references",
+                        "extend",
+                        "any",
+                        "_extract_file_references",
+                        "_extract_code_references",
+                        "len",
+                        "append",
+                        "ValidationIssue"
+                      ],
+                      "decorators": [],
+                      "docstring": "Validate all markdown files in docs_dir against model and manifest.\n\nChecks:\n1. File paths mentioned in docs exist in manifest's file inventory\n2. Function/class names referenced exist in manifest's AST data\n3. Component IDs/names referenced match model's components\n4. Interface names referenced match model's interfaces\n\nAn artifact PASSES if it has no \"error\" severity issues.",
+                      "line_number": 60
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_extract_file_references",
+                      "signature": "def _extract_file_references(content: str) -> list[tuple[int, str]]",
+                      "body_hint": "results = []; for line_no, line in enumerate(content.splitlines(), start=1):\n    for match in _FILE_REF_PATTERN.finditer(line):\n        results.append((line_no, match.group(1))); return results",
+                      "calls": [
+                        "enumerate",
+                        "splitlines",
+                        "finditer",
+                        "append",
+                        "group"
+                      ],
+                      "decorators": [],
+                      "docstring": "Extract file path references from markdown content.\n\nLooks for patterns like:\n- `src/foo/bar.py` (backtick-wrapped paths ending in known extensions)\n- References to .py, .ts, .js, .yaml, .json, .toml files\n\nReturns: list of (line_number, path_string)",
+                      "line_number": 150
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_extract_code_references",
+                      "signature": "def _extract_code_references(content: str) -> list[tuple[int, str]]",
+                      "body_hint": "[4 statements]",
+                      "calls": [
+                        "enumerate",
+                        "splitlines",
+                        "set",
+                        "finditer",
+                        "group",
+                        "append",
+                        "add",
+                        "any",
+                        "len",
+                        "islower"
+                      ],
+                      "decorators": [],
+                      "docstring": "Extract function/class name references from markdown.\n\nLooks for patterns like:\n- `function_name()` (backtick-wrapped with parens)\n- `ClassName` (backtick-wrapped PascalCase)\n\nReturns: list of (line_number, name_string)",
+                      "line_number": 166
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_extract_component_references",
+                      "signature": "def _extract_component_references(content: str, model: 'ArchitectureModel') -> list[tuple[int, str]]",
+                      "body_hint": "results = []; for line_no, line in enumerate(content.splitlines(), start=1):\n    for match in _COMPONENT_ID_PATTERN.finditer(line):\n        results.append((line_no, match.group(1))); return results",
+                      "calls": [
+                        "enumerate",
+                        "splitlines",
+                        "finditer",
+                        "append",
+                        "group"
+                      ],
+                      "decorators": [],
+                      "docstring": "Extract component ID/name references that should match the model.\n\nLooks for known component ID patterns (e.g., COMP-1, SVC-1, IF-1) in text.\nReturns: list of (line_number, component_ref)",
+                      "line_number": 209
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_get_manifest_files",
+                      "signature": "def _get_manifest_files(manifest: dict | None) -> set[str]",
+                      "body_hint": "[5 statements]",
+                      "calls": [
+                        "set",
+                        "get",
+                        "add"
+                      ],
+                      "decorators": [],
+                      "docstring": "Get the set of all file paths from manifest.\n\nChecks manifest[\"modules\"] -> each module has \"file\" key\nAlso checks manifest.get(\"files\", [])\nReturns normalized relative paths.",
+                      "line_number": 222
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_get_manifest_symbols",
+                      "signature": "def _get_manifest_symbols(manifest: dict | None) -> set[str]",
+                      "body_hint": "[4 statements]",
+                      "calls": [
+                        "set",
+                        "get",
+                        "add"
+                      ],
+                      "decorators": [],
+                      "docstring": "Get all function/class names from manifest AST data.\n\nChecks manifest[\"modules\"] -> each module may have \"functions\", \"classes\" keys\nReturns set of symbol names.",
+                      "line_number": 246
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_get_model_entity_ids",
+                      "signature": "def _get_model_entity_ids(model: 'ArchitectureModel') -> set[str]",
+                      "body_hint": "return model.all_entity_ids",
+                      "calls": [],
+                      "decorators": [],
+                      "docstring": "Get all entity IDs from the architecture model.",
+                      "line_number": 266
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_get_artifact_id_from_file",
+                      "signature": "def _get_artifact_id_from_file(filepath: Path) -> str",
+                      "body_hint": "try:\n    content = filepath.read_text()\n    if content.startswith('---\\n'):\n        parts = content.split('---\\n', 2)\n        if len(parts) >= 3:\n            import yaml\n            frontmatter = yaml.safe_load(parts[1])\n            if isinstance(frontmatter, dict) and 'artifact_id' in frontmatter:\n                return frontmatter['artifact_id']\nexcept Exception:\n    pass; return filepath.stem",
+                      "calls": [
+                        "read_text",
+                        "startswith",
+                        "split",
+                        "len",
+                        "safe_load",
+                        "isinstance"
+                      ],
+                      "decorators": [],
+                      "docstring": "Extract artifact_id from file frontmatter or filename.\n\nTries to read YAML frontmatter first:\n---\nartifact_id: system-overview\n---\n\nFalls back to: filename without extension (e.g., \"system-overview.md\" -> \"system-overview\")",
+                      "line_number": 271
+                    }
+                  ],
+                  "classes": [
+                    {
+                      "__dataclass__": "ClassRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "ValidationIssue",
+                      "bases": [],
+                      "methods": [],
+                      "method_details": [],
+                      "attributes": {},
+                      "decorators": [
+                        "dataclass"
+                      ],
+                      "is_abstract": false
+                    },
+                    {
+                      "__dataclass__": "ClassRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "DocsValidationResult",
+                      "bases": [],
+                      "methods": [
+                        "is_valid"
+                      ],
+                      "method_details": [
+                        {
+                          "__dataclass__": "FunctionRecord",
+                          "__module__": "architecture_model.pipeline.observe_types",
+                          "name": "is_valid",
+                          "signature": "def is_valid(self) -> bool",
+                          "body_hint": "return not any((i.severity == 'error' for i in self.issues))",
+                          "calls": [
+                            "any"
+                          ],
+                          "decorators": [
+                            "property"
+                          ],
+                          "docstring": "No errors (warnings are OK).",
+                          "line_number": 32
+                        }
+                      ],
+                      "attributes": {},
+                      "decorators": [
+                        "dataclass"
+                      ],
+                      "is_abstract": false
+                    }
+                  ],
+                  "constants": [
+                    {
+                      "__dataclass__": "ConstantRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_PATH_EXTENSIONS",
+                      "value": "('.py', '.ts', '.js', '.jsx', '.tsx', '.yaml', '.yml', '.json', '.toml', '.cfg', '.ini', '.md', '.rst', '.sh', '.bash', '.sql')",
+                      "type": "",
+                      "context": ""
+                    },
+                    {
+                      "__dataclass__": "ConstantRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_FILE_REF_PATTERN",
+                      "value": "re.compile('`([^`\\\\s]+(?:' + '|'.join((re.escape(ext) for ext in _PATH_EXTENSIONS)) + '))`')",
+                      "type": "",
+                      "context": ""
+                    },
+                    {
+                      "__dataclass__": "ConstantRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_FUNC_REF_PATTERN",
+                      "value": "re.compile('`(\\\\w+)\\\\(\\\\)`')",
+                      "type": "",
+                      "context": ""
+                    },
+                    {
+                      "__dataclass__": "ConstantRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_CLASS_REF_PATTERN",
+                      "value": "re.compile('`([A-Z][a-zA-Z0-9]*)`')",
+                      "type": "",
+                      "context": ""
+                    },
+                    {
+                      "__dataclass__": "ConstantRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_COMPONENT_ID_PATTERN",
+                      "value": "re.compile('\\\\b([A-Z]{2,}-\\\\d+)\\\\b')",
+                      "type": "",
+                      "context": ""
+                    }
+                  ],
+                  "imports": [
+                    "__future__",
+                    "re",
+                    "dataclasses",
+                    "pathlib",
+                    "typing"
+                  ],
+                  "line_count": 295,
+                  "docstring": "Validate generated SE documentation against model and manifest."
+                },
+                {
+                  "__dataclass__": "ModuleRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "src/opencode_arch/cli/regen_loop.py",
+                  "language": "python",
+                  "functions": [
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "run_subsystem_tests",
+                      "signature": "def run_subsystem_tests(test_files: list[Path], repo_path: Path) -> dict[str, Any]",
+                      "body_hint": "[8 statements]",
+                      "calls": [
+                        "_parse_pytest_summary",
+                        "str",
+                        "run",
+                        "exists"
+                      ],
+                      "decorators": [],
+                      "docstring": "Run pytest on specific test files and return structured results.\n\nArgs:\n    test_files: List of test file paths to run.\n    repo_path: Root path of the repository (used as cwd).\n\nReturns:\n    {\"passed\": int, \"failed\": int, \"total\": int, \"pass_rate\": float, \"output\": str}",
+                      "line_number": 36
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_parse_pytest_summary",
+                      "signature": "def _parse_pytest_summary(output: str) -> tuple[int, int, int]",
+                      "body_hint": "[8 statements]",
+                      "calls": [
+                        "compile",
+                        "reversed",
+                        "splitlines",
+                        "search",
+                        "int",
+                        "group"
+                      ],
+                      "decorators": [],
+                      "docstring": "Parse pytest output to extract pass/fail counts.\n\nHandles both:\n    - \"5 passed, 2 failed\" (standard summary)\n    - \"X passed\" or \"X failed\" standalone",
+                      "line_number": 88
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_setup_blind_workdir",
+                      "signature": "def _setup_blind_workdir(repo_path: Path, test_files: list[Path]) -> Path",
+                      "body_hint": "[16 statements]",
+                      "calls": [
+                        "Path",
+                        "resolve",
+                        "set",
+                        "mkdtemp",
+                        "relative_to",
+                        "mkdir",
+                        "copy2",
+                        "exists",
+                        "enumerate",
+                        "_find_test_root",
+                        "rglob",
+                        "endswith",
+                        "is_dir",
+                        "add",
+                        "startswith",
+                        "is_file",
+                        "_is_test_file",
+                        "write_text"
+                      ],
+                      "decorators": [],
+                      "docstring": "Create a temporary working directory for blind mode.\n\nCopies only test infrastructure (test files, __init__.py for package\nstructure, conftest.py, pyproject.toml/setup.py) into a temp dir.\nThe agent cannot see original source files \u2014 all behavioral info\nmust come from the prompt.\n\nArgs:\n    repo_path: Original repository root.\n    test_files: Test files to copy into the blind workdir.\n\nReturns:\n    Path to the temporary working directory.",
+                      "line_number": 129
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_extract_signatures_for_subsystem",
+                      "signature": "def _extract_signatures_for_subsystem(repo_path: Path, subsystem) -> list",
+                      "body_hint": "model_file = repo_path / '.architecture-model.yaml'; if not model_file.exists():\n    return []; try:\n    from architecture_model.core.parser import load_model\n    model = load_model(model_file)\n    signatures = []\n    source_stems = {f.stem for f in subsystem.source_files}\n    for comp in model.entities.components:\n        comp_files = getattr(comp, 'files', [])\n        comp_stems = {Path(f).stem for f in comp_files} if comp_files else set()\n        if comp_stems:\n            if not source_stems.intersection(comp_stems):\n                continue\n        elif comp.name not in source_stems:\n            continue\n        for sig in getattr(comp, 'signatures', []):\n            signatures.append(sig)\n    return signatures\nexcept Exception:\n    return []",
+                      "calls": [
+                        "exists",
+                        "load_model",
+                        "getattr",
+                        "set",
+                        "append",
+                        "intersection",
+                        "Path"
+                      ],
+                      "decorators": [],
+                      "docstring": "Extract FunctionSignature data from the architecture model for a subsystem.\n\nLoads the .architecture-model.yaml and finds signatures associated with\nthe subsystem's components. Returns signature objects with body_hint included.\n\nArgs:\n    repo_path: Path to the repository (where .architecture-model.yaml lives).\n    subsystem: Subsystem with source_files to match against components.\n\nReturns:\n    List of signature-like objects with name, params, returns, body_hint.",
+                      "line_number": 254
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_extract_constants_for_subsystem",
+                      "signature": "def _extract_constants_for_subsystem(repo_path: Path, subsystem) -> list",
+                      "body_hint": "model_file = repo_path / '.architecture-model.yaml'; if not model_file.exists():\n    return []; try:\n    from architecture_model.core.parser import load_model\n    model = load_model(model_file)\n    constants = []\n    source_stems = {f.stem for f in subsystem.source_files}\n    for comp in model.entities.components:\n        comp_files = getattr(comp, 'files', [])\n        comp_stems = {Path(f).stem for f in comp_files} if comp_files else set()\n        if comp_stems:\n            if not source_stems.intersection(comp_stems):\n                continue\n        elif comp.name not in source_stems:\n            continue\n        for const in getattr(comp, 'constants', []):\n            constants.append(const)\n    return constants\nexcept Exception:\n    return []",
+                      "calls": [
+                        "exists",
+                        "load_model",
+                        "getattr",
+                        "set",
+                        "append",
+                        "intersection",
+                        "Path"
+                      ],
+                      "decorators": [],
+                      "docstring": "Extract Constant objects from the architecture model for a subsystem.\n\nReturns constants from matched components (module constants, class attributes,\nmodule-level instances) that may not appear in test-derived constants.",
+                      "line_number": 301
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_build_prompt",
+                      "signature": "def _build_prompt(subsystem_name: str, source_files: list[Path], model_context: str, constants: list, signatures: list, contracts: list, dependency_apis: str, iteration: int, max_iterations: int, previous_feedback: str, source_equivalent_tokens: int=0, contract_cap: int=50) -> tuple[str, PromptMetrics]",
+                      "body_hint": "[18 statements]",
+                      "calls": [
+                        "format",
+                        "PromptMetrics",
+                        "join",
+                        "len",
+                        "getattr",
+                        "append"
+                      ],
+                      "decorators": [],
+                      "docstring": "Build the regen prompt for a subsystem iteration.\n\nReturns:\n    Tuple of (prompt_string, PromptMetrics with per-section token counts).",
+                      "line_number": 337
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_compute_source_equivalent",
+                      "signature": "def _compute_source_equivalent(subsystem, repo_path: Path, all_subsystems: list) -> int",
+                      "body_hint": "[4 statements]",
+                      "calls": [
+                        "Path",
+                        "len",
+                        "is_absolute",
+                        "read_text"
+                      ],
+                      "decorators": [],
+                      "docstring": "Compute tokens needed to read source + deps (the 'without extension' baseline).\n\nThis represents what the agent would need to read WITHOUT the architecture\nmodel extension \u2014 the raw source files of the subsystem plus all its\ndependencies.\n\nArgs:\n    subsystem: Subsystem object with .source_files and .dependencies.\n    repo_path: Root path of the repository.\n    all_subsystems: All subsystems (to resolve dependency source files).\n\nReturns:\n    Estimated token count (chars / 4).",
+                      "line_number": 444
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "run_regen_loop",
+                      "signature": "async def run_regen_loop(repo_path: Path, runner: RunnerBackend, max_iterations: int=5, target_pass_rate: float=0.5, subsystem_name: str | None=None, blind: bool=False) -> dict[str, Any]",
+                      "body_hint": "[21 statements]",
+                      "calls": [
+                        "time",
+                        "resolve",
+                        "test_affinity_decompose",
+                        "_load_model_context",
+                        "sum",
+                        "len",
+                        "exists",
+                        "_record_outcome",
+                        "extend",
+                        "run_subsystem_tests",
+                        "TelemetryStore",
+                        "record_learning_curve",
+                        "get_report_cards",
+                        "generate_report_card",
+                        "record_report_card",
+                        "extract_lessons",
+                        "detect_drift",
+                        "Path",
+                        "_process_subsystem",
+                        "get",
+                        "max",
+                        "record_lesson",
+                        "auto_fix_drift",
+                        "values",
+                        "dumps",
+                        "record_drift_flag"
+                      ],
+                      "decorators": [],
+                      "docstring": "Run the test-as-oracle decomposed regen loop.\n\nDecomposes the repo into subsystems by test affinity, then iteratively\nregenerates code per subsystem using the LLM, running tests after each\nattempt to measure convergence.\n\nArgs:\n    repo_path: Path to the target repository.\n    runner: RunnerBackend for LLM invocation.\n    max_iterations: Max iterations per subsystem (default 5).\n    target_pass_rate: Stop when this pass rate is achieved (default 0.5).\n    subsystem_name: If set, only process this subsystem.\n    blind: If True, agent works in temp dir without source file access.\n\nReturns:\n    Summary dict with per-subsystem results and overall metrics.",
+                      "line_number": 480
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_process_subsystem",
+                      "signature": "async def _process_subsystem(subsystem, repo_path: Path, runner: RunnerBackend, model_context: str, max_iterations: int, target_pass_rate: float, blind: bool=False, all_subsystems: list | None=None) -> dict[str, Any]",
+                      "body_hint": "[25 statements]",
+                      "calls": [
+                        "time",
+                        "_build_dependency_context",
+                        "_compute_source_equivalent",
+                        "range",
+                        "_setup_blind_workdir",
+                        "_extract_signatures_for_subsystem",
+                        "_extract_constants_for_subsystem",
+                        "exists",
+                        "sum",
+                        "get_adaptations",
+                        "_build_prompt",
+                        "run_subsystem_tests",
+                        "analyze_gaps",
+                        "_format_token_metrics",
+                        "apply_adaptations",
+                        "get",
+                        "run",
+                        "classify_failures",
+                        "len",
+                        "relative_to",
+                        "append",
+                        "analyze_test_file",
+                        "extend",
+                        "add",
+                        "getattr",
+                        "str",
+                        "resolve"
+                      ],
+                      "decorators": [],
+                      "docstring": "Process a single subsystem through the regen loop.",
+                      "line_number": 685
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_load_model_context",
+                      "signature": "def _load_model_context(repo_path: Path) -> str",
+                      "body_hint": "model_file = repo_path / '.architecture-model.yaml'; if not model_file.exists():\n    return ''; try:\n    from architecture_model.core.parser import load_model\n    from opencode_arch.context import format_model_context\n    model = load_model(model_file)\n    return format_model_context(model, max_tokens=2000, detail_level='standard')\nexcept Exception:\n    return ''",
+                      "calls": [
+                        "exists",
+                        "load_model",
+                        "format_model_context"
+                      ],
+                      "decorators": [],
+                      "docstring": "Try to load architecture model context for the repo.",
+                      "line_number": 878
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_build_dependency_context",
+                      "signature": "def _build_dependency_context(subsystem, repo_path: Path) -> str",
+                      "body_hint": "[7 statements]",
+                      "calls": [
+                        "join",
+                        "exists",
+                        "load_model",
+                        "append",
+                        "getattr",
+                        "set",
+                        "Path"
+                      ],
+                      "decorators": [],
+                      "docstring": "Build rich context string for dependency APIs.\n\nLoads the architecture model and extracts the public API surface\n(constants, classes, function signatures) of each dependency subsystem's\ncomponents. This gives the blind regen agent enough information to produce\ncorrect imports and usage without access to source files.\n\nArgs:\n    subsystem: Subsystem object with .dependencies list of dep names.\n    repo_path: Path to repo root (where .architecture-model.yaml lives).\n\nReturns:\n    Formatted string with API surface per dependency, or \"\" if no deps.",
+                      "line_number": 894
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_format_token_metrics",
+                      "signature": "def _format_token_metrics(metrics: PromptMetrics) -> dict[str, Any]",
+                      "body_hint": "return {'prompt_tokens': metrics.total_tokens, 'source_equivalent_tokens': metrics.source_equivalent_tokens, 'compression_ratio': metrics.compression_ratio, 'sections': {'model_context': metrics.model_context_tokens, 'signatures': metrics.signatures_tokens, 'constants': metrics.constants_tokens, 'contracts': metrics.contracts_tokens, 'dependency_apis': metrics.dependency_tokens, 'feedback': metrics.feedback_tokens}}",
+                      "calls": [],
+                      "decorators": [],
+                      "docstring": "Format PromptMetrics into a serializable dict for result tracking.",
+                      "line_number": 987
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_record_outcome",
+                      "signature": "def _record_outcome(repo_path: Path, subsystem, result: dict[str, Any], mode: str='normal')",
+                      "body_hint": "try:\n    from opencode_arch.telemetry.store import TelemetryStore\n    store = TelemetryStore()\n    features = result.get('features', {})\n    token_metrics = result.get('token_metrics', {})\n    store.log_regen_outcome(repo=repo_path.name, subsystem=subsystem.name, iteration=result.get('iterations', 0), features={'constant_count': features.get('constant_count', 0), 'signature_count': features.get('signature_count', 0), 'contract_count': features.get('contract_count', 0)}, pass_rate=result.get('pass_rate', 0.0), time_seconds=result.get('time_seconds', 0.0), prompt_tokens=token_metrics.get('prompt_tokens', 0), source_equivalent_tokens=token_metrics.get('source_equivalent_tokens', 0), compression_ratio=token_metrics.get('compression_ratio', 0.0), mode=mode)\nexcept Exception:\n    pass",
+                      "calls": [
+                        "TelemetryStore",
+                        "get",
+                        "log_regen_outcome"
+                      ],
+                      "decorators": [],
+                      "docstring": "Record regen outcome to telemetry store.",
+                      "line_number": 1004
+                    }
+                  ],
+                  "classes": [
+                    {
+                      "__dataclass__": "ClassRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "PromptMetrics",
+                      "bases": [],
+                      "methods": [],
+                      "method_details": [],
+                      "attributes": {},
+                      "decorators": [
+                        "dataclass"
+                      ],
+                      "is_abstract": false
+                    }
+                  ],
+                  "constants": [],
+                  "imports": [
+                    "__future__",
+                    "shutil",
+                    "subprocess",
+                    "sys",
+                    "tempfile",
+                    "time",
+                    "dataclasses",
+                    "pathlib",
+                    "typing",
+                    "architecture_model.core.decomposer",
+                    "architecture_model.manifest.test_analyzer",
+                    "opencode_arch.cli.gap_analyzer",
+                    "opencode_arch.prompts.regen",
+                    "opencode_arch.runner.base"
+                  ],
+                  "line_count": 1028,
+                  "docstring": "Regen-loop orchestrator \u2014 iterative subsystem-decomposed code regeneration."
+                },
+                {
+                  "__dataclass__": "ModuleRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "src/opencode_arch/cli/generate.py",
+                  "language": "python",
+                  "functions": [
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "run_generate",
+                      "signature": "async def run_generate(repo_path: str, runner: RunnerBackend, max_iter: int=3, test_command: str | None=None) -> dict[str, Any]",
+                      "body_hint": "[10 statements]",
+                      "calls": [
+                        "Path",
+                        "time",
+                        "range",
+                        "exists",
+                        "format",
+                        "TelemetryStore",
+                        "record",
+                        "get",
+                        "join",
+                        "run",
+                        "run_tests_on_generated_code",
+                        "str",
+                        "int",
+                        "resolve"
+                      ],
+                      "decorators": [],
+                      "docstring": "Run the test-guided code generation loop.",
+                      "line_number": 12
+                    }
+                  ],
+                  "classes": [],
+                  "constants": [],
+                  "imports": [
+                    "__future__",
+                    "time",
+                    "pathlib",
+                    "typing",
+                    "opencode_arch.runner.base",
+                    "opencode_arch.cli.prompts"
+                  ],
+                  "line_count": 68,
+                  "docstring": "Generate command - test-guided code generation loop."
+                },
+                {
+                  "__dataclass__": "ModuleRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "src/opencode_arch/cli/bench.py",
+                  "language": "python",
+                  "functions": [
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "run_bench",
+                      "signature": "async def run_bench(repos: list[str], runner: RunnerBackend, budget: int=4000, target_score: int=80) -> list[dict[str, Any]]",
+                      "body_hint": "results = []; for repo_path in repos:\n    result = await run_extract(repo_path=repo_path, runner=runner, budget=budget, target_score=target_score)\n    result['repo'] = repo_path\n    results.append(result); return results",
+                      "calls": [
+                        "append",
+                        "run_extract"
+                      ],
+                      "decorators": [],
+                      "docstring": "Run extraction benchmark on multiple repositories.",
+                      "line_number": 10
+                    }
+                  ],
+                  "classes": [],
+                  "constants": [],
+                  "imports": [
+                    "__future__",
+                    "typing",
+                    "opencode_arch.runner.base",
+                    "opencode_arch.cli.extract"
+                  ],
+                  "line_count": 25,
+                  "docstring": "Bench command - benchmark extraction on multiple repos."
+                },
+                {
+                  "__dataclass__": "ModuleRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "src/opencode_arch/cli/extract.py",
+                  "language": "python",
+                  "functions": [
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "run_extract",
+                      "signature": "async def run_extract(repo_path: str, runner: RunnerBackend, budget: int=4000, focus: str='all', target_score: int=80) -> dict[str, Any]",
+                      "body_hint": "[12 statements]",
+                      "calls": [
+                        "Path",
+                        "time",
+                        "format",
+                        "_extract_yaml_from_output",
+                        "exists",
+                        "run",
+                        "store_extraction",
+                        "get",
+                        "str",
+                        "resolve"
+                      ],
+                      "decorators": [],
+                      "docstring": "Run the full extraction loop.\n\n1. Validates repo exists\n2. Calls runner with extraction prompt\n3. Parses YAML from output\n4. Validates and stores via tool APIs\n5. Returns metrics",
+                      "line_number": 13
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_extract_yaml_from_output",
+                      "signature": "def _extract_yaml_from_output(output: str) -> str | None",
+                      "body_hint": "[7 statements]",
+                      "calls": [
+                        "search",
+                        "strip",
+                        "group"
+                      ],
+                      "decorators": [],
+                      "docstring": "Extract YAML content from agent output (between ```yaml fences).",
+                      "line_number": 77
+                    }
+                  ],
+                  "classes": [],
+                  "constants": [],
+                  "imports": [
+                    "__future__",
+                    "re",
+                    "time",
+                    "pathlib",
+                    "typing",
+                    "opencode_arch.runner.base",
+                    "opencode_arch.cli.prompts"
+                  ],
+                  "line_count": 93,
+                  "docstring": "Extract command - full architecture extraction loop."
+                }
+              ],
+              "edges": [],
+              "routes": [],
+              "constraints": [
+                {
+                  "__dataclass__": "ConstraintRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "name": "Python >=3.11",
+                  "value": "Project requires Python >=3.11",
+                  "source": "config",
+                  "constraint_type": ""
+                },
+                {
+                  "__dataclass__": "ConstraintRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "name": "CI/CD: GitHub Actions",
+                  "value": "Project uses GitHub Actions for CI/CD",
+                  "source": "config",
+                  "constraint_type": ""
+                }
+              ],
+              "test_files": [],
+              "docs": [
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "CONTEXT.md",
+                  "title": "opencode-arch",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "CHANGELOG.md",
+                  "title": "Changelog",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "README.md",
+                  "title": "opencode-arch",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "CONTRIBUTING.md",
+                  "title": "Contributing to opencode-arch",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/phase2-design.md",
+                  "title": "Phase 2 Design: Oracle-First opencode-arch",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/getting-started.md",
+                  "title": "Getting Started with opencode-arch",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/phase2-implementation-plan.md",
+                  "title": "Phase 2: Oracle-First opencode-arch Implementation Plan",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/extraction-flow.md",
+                  "title": "Architecture Extraction Flow",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/training-data.md",
+                  "title": "Collecting Training Data with opencode-arch",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/metrics-dashboard.md",
+                  "title": "---",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/functional-architecture.md",
+                  "title": "---",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/api-detail-cap-generate-telemetry.md",
+                  "title": "API Detail \u2014 CAP-GENERATE: Code Generation & CAP-TELEMETRY: Telemetry & Metrics",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/api-detail-cap-learn.md",
+                  "title": "API Detail \u2014 CAP-LEARN: Learning Loop",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/api-detail-cap-extract.md",
+                  "title": "API Detail \u2014 CAP-EXTRACT: Architecture Extraction",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/api-detail-cap-regen.md",
+                  "title": "API Detail \u2014 CAP-REGEN: Subsystem Regen-Loop",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/api-detail-cap-mcp.md",
+                  "title": "API Detail \u2014 CAP-MCP: MCP Tool Serving",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/integration-guide.md",
+                  "title": "---",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/dependency-graph.md",
+                  "title": "---",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/layer-architecture.md",
+                  "title": "---",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/index.md",
+                  "title": "SE Documentation Index \u2014 opencode-arch",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/constraint-register.md",
+                  "title": "---",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/component-catalog.md",
+                  "title": "---",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/system-overview.md",
+                  "title": "---",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/capability-map.md",
+                  "title": "---",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/api-detail-cap-docs.md",
+                  "title": "API Detail \u2014 CAP-DOCS: SE Document Generation",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/behavior-flows.md",
+                  "title": "---",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/deployment-view.md",
+                  "title": "---",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/se/api-reference.md",
+                  "title": "---",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/plans/2026-07-06-e2e-benchmark-framework.md",
+                  "title": "E2E Benchmark Framework Implementation Plan",
+                  "summary": ""
+                },
+                {
+                  "__dataclass__": "DocRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "docs/plans/2026-07-08-model-driven-se-docs.md",
+                  "title": "Model-Driven SE Document Generator \u2014 Implementation Plan",
+                  "summary": ""
+                }
+              ]
+            },
+            "quality": {
+              "__dataclass__": "QualityMetrics",
+              "__module__": "architecture_model.pipeline.protocol",
+              "score": 100,
+              "sub_scores": {
+                "parse_success_rate": 100.0,
+                "symbol_density": 6.666666666666667,
+                "file_count": 6.0
+              },
+              "thresholds": {
+                "parse_success_rate": 90.0
+              },
+              "llm_prompt": ""
+            },
+            "diagnostics": [],
+            "uncertainties": [],
+            "input_hash": "6",
+            "duration_ms": 172,
+            "version": "1.0"
+          },
+          "infer": {
+            "__dataclass__": "StageResult",
+            "__module__": "architecture_model.pipeline.protocol",
+            "output": {
+              "__dataclass__": "InferenceResult",
+              "__module__": "architecture_model.pipeline.infer_types",
+              "capabilities": [
+                {
+                  "__dataclass__": "InferredCapability",
+                  "__module__": "architecture_model.pipeline.infer_types",
+                  "id": "CAP-1",
+                  "name": "Docs",
+                  "description": "Domain logic in src/opencode_arch/cli/docs.py",
+                  "evidence_source": "domain_module",
+                  "sub_capabilities": []
+                },
+                {
+                  "__dataclass__": "InferredCapability",
+                  "__module__": "architecture_model.pipeline.infer_types",
+                  "id": "CAP-2",
+                  "name": "Docs Validator",
+                  "description": "Domain logic in src/opencode_arch/cli/docs_validator.py",
+                  "evidence_source": "domain_module",
+                  "sub_capabilities": []
+                },
+                {
+                  "__dataclass__": "InferredCapability",
+                  "__module__": "architecture_model.pipeline.infer_types",
+                  "id": "CAP-3",
+                  "name": "Regen Loop",
+                  "description": "Domain logic in src/opencode_arch/cli/regen_loop.py",
+                  "evidence_source": "domain_module",
+                  "sub_capabilities": []
+                },
+                {
+                  "__dataclass__": "InferredCapability",
+                  "__module__": "architecture_model.pipeline.infer_types",
+                  "id": "CAP-4",
+                  "name": "Generate",
+                  "description": "Domain logic in src/opencode_arch/cli/generate.py",
+                  "evidence_source": "domain_module",
+                  "sub_capabilities": []
+                },
+                {
+                  "__dataclass__": "InferredCapability",
+                  "__module__": "architecture_model.pipeline.infer_types",
+                  "id": "CAP-5",
+                  "name": "Bench",
+                  "description": "Domain logic in src/opencode_arch/cli/bench.py",
+                  "evidence_source": "domain_module",
+                  "sub_capabilities": []
+                },
+                {
+                  "__dataclass__": "InferredCapability",
+                  "__module__": "architecture_model.pipeline.infer_types",
+                  "id": "CAP-6",
+                  "name": "Extract",
+                  "description": "Domain logic in src/opencode_arch/cli/extract.py",
+                  "evidence_source": "domain_module",
+                  "sub_capabilities": []
+                }
+              ],
+              "actors": [
+                {
+                  "__dataclass__": "InferredActor",
+                  "__module__": "architecture_model.pipeline.infer_types",
+                  "id": "ACT-1",
+                  "name": "User",
+                  "actor_type": "human",
+                  "evidence_source": "default"
+                }
+              ],
+              "behaviors": []
+            },
+            "quality": {
+              "__dataclass__": "QualityMetrics",
+              "__module__": "architecture_model.pipeline.protocol",
+              "score": 100,
+              "sub_scores": {
+                "capability_coverage": 100.0,
+                "actor_completeness": 100.0,
+                "capability_count": 6.0
+              },
+              "thresholds": {
+                "capability_coverage": 60.0
+              },
+              "llm_prompt": ""
+            },
+            "diagnostics": [],
+            "uncertainties": [],
+            "input_hash": "6",
+            "duration_ms": 0,
+            "version": "1.0"
+          }
+        },
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-selector",
+        "name": "Selector",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-templates",
+        "name": "Templates",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-diagrams",
+        "name": "Diagrams",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-cache",
+        "name": "Cache",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-formatter",
+        "name": "Formatter",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-pipeline-bridge",
+        "name": "Pipeline Bridge",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-patterns",
+        "name": "Patterns",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-resolution",
+        "name": "Resolution",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-quality",
+        "name": "Quality",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-metrics",
+        "name": "Metrics",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-calibrate",
+        "name": "Calibrate",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-spot-check",
+        "name": "Spot Check",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-cli-main",
+        "name": "CLI Main",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-infrastructure-(learning)",
+        "name": "Infrastructure (learning)",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-infrastructure-(runner)",
+        "name": "Infrastructure (runner)",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-infrastructure-(mcp)",
+        "name": "Infrastructure (mcp)",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-infrastructure-(requirements)",
+        "name": "Infrastructure (requirements)",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-infrastructure-(cli)",
+        "name": "Infrastructure (cli)",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-infrastructure-(prompts)",
+        "name": "Infrastructure (prompts)",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-infrastructure-(telemetry)",
+        "name": "Infrastructure (telemetry)",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      },
+      {
+        "__dataclass__": "SystemModel",
+        "__module__": "architecture_model.pipeline.synthesize_types",
+        "system_id": "SYS-infrastructure-(prompts)",
+        "name": "Infrastructure (prompts)",
+        "model_yaml": "",
+        "manifest_json": "",
+        "pipeline_report_md": "",
+        "lessons_md": "",
+        "stage_results": {},
+        "llm_calls": []
+      }
+    ],
+    "top_manifest_json": "",
+    "pipeline_report_md": "# Pipeline Report: System-of-Systems\n\n**Generated:** 2026-08-11T17:18:41Z\n**Total Duration:** 518ms\n**Stages:** 8\n\n## LLM Summary\n\nNo LLM calls \u2014 deterministic pipeline run\n\n## Stage Scores\n\n| Stage | Score | Duration | LLM Calls |\n|-------|-------|----------|-----------|\n| observe | 99 | 484ms | 0 |\n| infer | 83 | 0ms | 0 |\n| allocate | 100 | 3ms | 0 |\n| contract | 72 | 0ms | 0 |\n| relate | 81 | 31ms | 0 |\n| specify | 50 | 0ms | 0 |\n| decompose | 100.0 | 0ms | 0 |\n| validate | 100 | 0ms | 0 |\n\n## Stage: observe\n**Score:** 99 | **Duration:** 484ms\n\n### Deterministic Findings\n- Discovered 155 modules\n- 341 functions, 148 classes\n- 0 import edges\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n- \u26a0\ufe0f parse-failed: Parse failed: src/opencode_arch/cli/export_data.py: unindent does not match any outer indentation level (export_data.py, line 74)\n\n## Stage: infer\n**Score:** 83 | **Duration:** 0ms\n\n### Deterministic Findings\n- Inferred 14 capabilities\n- 1 actors\n- 0 behaviors\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n### Uncertainties\n- ambiguous_module: src/opencode_arch/learning/assessor.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/learning/classifier.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/learning/lessons.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/learning/adapter.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/learning/maintainer.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/mcp/server.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/mcp/__main__.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/requirements/matcher.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/requirements/parser.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/requirements/llm_extractor.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/requirements/retroactive.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/regen_loop.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/confidence.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/generate.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/prompts.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/bench.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/gap_analyzer.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/launch.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/extract.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/telemetry/store.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/telemetry/recorder.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/telemetry/collector.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/regen/self_heal.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/llm/prompts/audit.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/llm/prompts/matching.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/llm/prompts/requirements.py has no clear capability affiliation\n\n## Stage: allocate\n**Score:** 100 | **Duration:** 3ms\n\n### Deterministic Findings\n- 22 components\n- File coverage: 10000%\n- 0 unallocated files\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: contract\n**Score:** 72 | **Duration:** 0ms\n\n### Deterministic Findings\n- 43 contracts\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: relate\n**Score:** 81 | **Duration:** 31ms\n\n### Deterministic Findings\n- 36 depends-on relationships\n- 22 contains relationships\n- 14 realizes relationships\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: specify\n**Score:** 50 | **Duration:** 0ms\n\n### Deterministic Findings\n- 1 interfaces\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: decompose\n**Score:** 100.0 | **Duration:** 0ms\n\n### Deterministic Findings\n- 1 systems\n- 21 inline components\n- 36 inter-system edges\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: validate\n**Score:** 100 | **Duration:** 0ms\n\n### Deterministic Findings\n- Score: 100/100\n- 0 issues\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n",
+    "lessons_md": "# Lessons: System-of-Systems\n\n## Stage: observe\n- Parse failed: src/opencode_arch/cli/export_data.py: unindent does not match any outer indentation level (export_data.py, line 74)\n\n## Stage: infer\n- Ambiguous module required resolution (26 instances)\n",
+    "all_llm_calls": []
+  },
+  "quality": {
+    "__dataclass__": "QualityMetrics",
+    "__module__": "architecture_model.pipeline.protocol",
+    "score": 100.0,
+    "sub_scores": {
+      "system_count": 1.0,
+      "sos_complete": 100.0
+    },
+    "thresholds": {},
+    "llm_prompt": ""
+  },
+  "diagnostics": [],
+  "uncertainties": [],
+  "input_hash": "",
+  "duration_ms": 179,
+  "version": "1.0"
+}

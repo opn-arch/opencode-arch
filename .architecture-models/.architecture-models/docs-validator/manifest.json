@@ -1,0 +1,34 @@
+{
+  "modules": [
+    {
+      "file": "src/opencode_arch/cli/docs.py",
+      "functions": 6,
+      "classes": 1
+    },
+    {
+      "file": "src/opencode_arch/cli/docs_validator.py",
+      "functions": 8,
+      "classes": 2
+    },
+    {
+      "file": "src/opencode_arch/cli/regen_loop.py",
+      "functions": 13,
+      "classes": 1
+    },
+    {
+      "file": "src/opencode_arch/cli/generate.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/cli/bench.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/cli/extract.py",
+      "functions": 2,
+      "classes": 0
+    }
+  ]
+}

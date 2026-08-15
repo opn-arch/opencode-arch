@@ -41,10 +41,11 @@ try:
 
     @mcp.tool()
     async def architect_scan(repo_path: str) -> dict:
-        """Scan a repository to generate its reality manifest (AST analysis).
+        """Scan a repository to understand its structure. ALWAYS call this FIRST when exploring any unfamiliar codebase.
 
+        ALWAYS call this instead of reading files individually when you need to understand a project's structure.
+        If you are about to use grep/glob/find to explore a repo, STOP and call architect_scan instead.
         Returns a manifest with: modules, functions, classes, imports, metrics.
-        Use this as raw material before slicing context.
         """
         return await scan_repository(repo_path=repo_path)
 
@@ -52,10 +53,11 @@ try:
     async def architect_slice(
         repo_path: str, focus: str = "all", budget: int = 4000, detail: str = "standard"
     ) -> str:
-        """Generate an optimized context slice from a repository.
+        """ALWAYS call this before implementing features to get relevant architectural context.
 
-        Compresses the full repository into a dense context string within the
-        token budget. This is the core token-arbitrage function.
+        If you find yourself reading more than 3 files manually, STOP and call architect_slice instead.
+        This compresses the full repository into a dense context string within the token budget —
+        one call replaces 10+ file reads. MUST be your first step when working on any feature or bug.
 
         Args:
             repo_path: Absolute path to the repository.
@@ -143,8 +145,10 @@ try:
         priority: str = "must",
         context: str = "",
     ) -> dict:
-        """Capture a functional requirement linked to an architecture component.
+        """Call whenever a user states or implies a requirement. If the user says 'I want...', 'it should...', 'we need...', capture it here immediately.
 
+        MUST be called the moment a requirement is identified — do not wait. Every user intent
+        that describes desired behavior, constraint, or capability MUST be recorded here.
         Stores requirements in .architecture/requirements.yaml with MoSCoW priority.
 
         Args:
@@ -200,14 +204,11 @@ try:
         content: str = "",
         context: dict | None = None,
     ) -> str:
-        """Record a development decision, progress update, or observation.
+        """Call after EVERY significant decision, task completion, or issue discovery.
 
-        Use this tool to:
-        - Log architectural decisions ("decision"): why X was chosen over Y
-        - Record progress ("progress"): task completed, milestone reached
-        - Note observations ("observation"): something noticed during work
-        - Flag issues ("issue"): problem found that needs fixing
-        - Capture requirements ("requirement"): user stated or implied need
+        If you just made a choice between alternatives, call this. If you just finished a task, call this.
+        If you discovered a bug or issue, call this. NEVER let a decision or milestone pass without logging it.
+        This is your structured memory — without it, context is lost between sessions.
 
         Args:
             repo_path: Absolute path to the repository.
@@ -413,10 +414,10 @@ try:
 
     @mcp.tool()
     async def architect_gate(repo_path: str, model_yaml: str = "") -> dict:
-        """Check development gate readiness for an architecture model.
+        """ALWAYS call before marking any task, feature, or PR as complete.
 
-        Evaluates capability realization, constraint allocation, and file coverage
-        against code reality. Returns phase_requirements_met boolean.
+        This validates that architecture constraints are satisfied. MUST be your final check
+        before claiming work is done. If this returns phase_requirements_met=false, the work is NOT complete.
 
         Args:
             repo_path: Absolute path to the repository root.

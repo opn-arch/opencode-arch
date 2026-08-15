@@ -1,0 +1,19 @@
+meta:
+  schema_version: '2.0'
+  system: Docs Validator
+  system_id: SYS-docs-validator
+entities:
+  capabilities:
+  - id: CAP-1
+    name: Docs
+  - id: CAP-2
+    name: Docs Validator
+  - id: CAP-3
+    name: Regen Loop
+  - id: CAP-4
+    name: Generate
+  - id: CAP-5
+    name: Bench
+  - id: CAP-6
+    name: Extract
+relationships: []

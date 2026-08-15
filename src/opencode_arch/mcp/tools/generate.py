@@ -1,5 +1,6 @@
 # src/opencode_arch/mcp/tools/generate.py
 """architect_generate MCP tool — run tests on generated code."""
+
 from __future__ import annotations
 
 import json
@@ -53,6 +54,7 @@ async def run_tests_on_generated_code(
 
         try:
             from opencode_arch.telemetry.collector import drain_and_store
+
             drain_and_store(tool="architect_generate", repo=path.name)
         except Exception:
             pass
@@ -60,41 +62,67 @@ async def run_tests_on_generated_code(
         return parsed
 
     except subprocess.TimeoutExpired:
-        return {"error": "Test execution timed out (120s)", "passed": False, "pass_rate": 0.0, "total_tests": 0}
+        return {
+            "error": "Test execution timed out (120s)",
+            "passed": False,
+            "pass_rate": 0.0,
+            "total_tests": 0,
+        }
     except Exception as e:
-        return {"error": f"Test execution failed: {e}", "passed": False, "pass_rate": 0.0, "total_tests": 0}
+        return {
+            "error": f"Test execution failed: {e}",
+            "passed": False,
+            "pass_rate": 0.0,
+            "total_tests": 0,
+        }
 
 
 def _parse_pytest_output(output: str, returncode: int) -> dict[str, Any]:
     """Parse pytest output to extract pass/fail counts."""
+    import re
+
     total = 0
     passed_count = 0
+    failed_count = 0
     failures: list[str] = []
 
-    for line in output.split("\n"):
-        # Look for summary line: "5 passed, 2 failed in 0.5s"
-        if "passed" in line or "failed" in line or "error" in line:
-            parts = line.strip().split()
-            for i, part in enumerate(parts):
-                if part == "passed" and i > 0:
-                    try:
-                        passed_count = int(parts[i - 1])
-                    except ValueError:
-                        pass
-                elif part == "failed" and i > 0:
-                    try:
-                        total += int(parts[i - 1])
-                    except ValueError:
-                        pass
+    # Match the pytest summary line: "=== N passed, M failed, K errors in Xs ==="
+    # or "N passed in Xs" or "N failed in Xs"
+    summary_pattern = re.compile(
+        r"=+\s*(.*?)\s*=+\s*$|^(\d+\s+(?:passed|failed|error).*in\s+[\d.]+s)\s*$",
+        re.MULTILINE,
+    )
+    count_pattern = re.compile(
+        r"(\d+)\s+(passed|failed|error|errors|warnings?|deselected|skipped|xfailed|xpassed)"
+    )
 
-        # Capture FAILED test names
+    for match in summary_pattern.finditer(output):
+        summary_text = match.group(1) or match.group(2) or ""
+        for count_match in count_pattern.finditer(summary_text):
+            count = int(count_match.group(1))
+            category = count_match.group(2)
+            if category == "passed":
+                passed_count = count
+            elif category == "failed":
+                failed_count = count
+            elif category in ("error", "errors"):
+                failed_count += count
+
+    total = passed_count + failed_count
+
+    # Capture FAILED test names
+    for line in output.split("\n"):
         if line.startswith("FAILED"):
             failures.append(line.strip())
 
-    total += passed_count
-
     if total == 0 and "no tests ran" in output.lower():
-        return {"passed": True, "pass_rate": 0.0, "total_tests": 0, "passed_tests": 0, "failures": []}
+        return {
+            "passed": True,
+            "pass_rate": 0.0,
+            "total_tests": 0,
+            "passed_tests": 0,
+            "failures": [],
+        }
 
     pass_rate = passed_count / total if total > 0 else 0.0
 

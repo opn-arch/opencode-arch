@@ -3,6 +3,7 @@
 Allows agents or external tools to submit dependency/export data for
 non-Python repos. Stores the graph and runs grouping + interface extraction.
 """
+
 from __future__ import annotations
 
 import json
@@ -29,7 +30,10 @@ async def ingest_source_graph(
         from architecture_model.manifest.protocol import SourceGraph
         from architecture_model.manifest.grouping import group_source_graph, auto_source_blocks
         from architecture_model.core.types import (
-            ArchitectureModel, Component, Entities, ModelMeta,
+            ArchitectureModel,
+            Component,
+            Entities,
+            ModelMeta,
         )
         from architecture_model.orchestration.auto_enrich import extract_component_interfaces
         from architecture_model.core.parser import save_model
@@ -49,22 +53,24 @@ async def ingest_source_graph(
         # Create components from groups
         components: list[Component] = []
         for idx, group in enumerate(groups, 1):
-            components.append(Component(
-                id=f"COMP-{idx}",
-                name=group.name,
-                status="ACTIVE",
-                files=group.modules,
-            ))
+            components.append(
+                Component(
+                    id=f"COMP-{idx}",
+                    name=group.name,
+                    status="ACTIVE",
+                    files=group.modules,
+                )
+            )
 
         # Build model with relationships from edges
         from architecture_model.core.types import Relationship, RelationType
-        
+
         # Map files to component IDs
         file_to_comp: dict[str, str] = {}
         for comp in components:
-            for f in (comp.files or []):
+            for f in comp.files or []:
                 file_to_comp[f] = comp.id
-        
+
         # Convert edges to relationships between components
         relationships: list[Relationship] = []
         seen_rels: set[tuple[str, str]] = set()
@@ -75,12 +81,14 @@ async def ingest_source_graph(
                 pair = (source_comp, target_comp)
                 if pair not in seen_rels:
                     seen_rels.add(pair)
-                    relationships.append(Relationship(
-                        type=RelationType.DEPENDS_ON,
-                        from_id=source_comp,
-                        to_id=target_comp,
-                        description=f"{edge.source} -> {edge.target}",
-                    ))
+                    relationships.append(
+                        Relationship(
+                            type=RelationType.DEPENDS_ON,
+                            from_id=source_comp,
+                            to_id=target_comp,
+                            description=f"{edge.source} -> {edge.target}",
+                        )
+                    )
 
         model = ArchitectureModel(
             meta=ModelMeta(project=project_root.name, schema_version="1.3"),
@@ -93,13 +101,14 @@ async def ingest_source_graph(
 
         # Enrich components from SourceGraph (signatures, symbols, contracts, patterns)
         from architecture_model.orchestration.auto_enrich import enrich_from_source_graph
+
         enrich_from_source_graph(model, graph)
 
         # Generate F-block config
         source_block_config = auto_source_blocks(groups, threshold=3)
 
-        # Save the model
-        model_path = project_root / ".architecture-model-extracted.yaml"
+        # I2: Save to canonical path so downstream tools (slice, check, docs) work
+        model_path = project_root / ".architecture-model.yaml"
         save_model(model, model_path)
 
         # Also save the source graph for later use
@@ -118,8 +127,7 @@ async def ingest_source_graph(
             "edges": len(graph.edges),
             "language": graph.language,
             "groups": [
-                {"name": g.name, "files": g.modules, "file_count": len(g.modules)}
-                for g in groups
+                {"name": g.name, "files": g.modules, "file_count": len(g.modules)} for g in groups
             ],
         }
 

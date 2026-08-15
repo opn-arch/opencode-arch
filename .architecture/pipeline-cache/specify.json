@@ -1,0 +1,39 @@
+{
+  "__dataclass__": "StageResult",
+  "__module__": "architecture_model.pipeline.protocol",
+  "output": {
+    "__dataclass__": "SpecifyResult",
+    "__module__": "architecture_model.pipeline.specify_types",
+    "interfaces": [
+      {
+        "__dataclass__": "InterfaceSpec",
+        "__module__": "architecture_model.pipeline.specify_types",
+        "id": "IF-1",
+        "name": "main CLI",
+        "component_id": "COMP-14",
+        "interface_type": "cli",
+        "methods": [],
+        "description": ""
+      }
+    ]
+  },
+  "quality": {
+    "__dataclass__": "QualityMetrics",
+    "__module__": "architecture_model.pipeline.protocol",
+    "score": 50,
+    "sub_scores": {
+      "interface_count": 1.0,
+      "rest_count": 0.0,
+      "cli_count": 1.0,
+      "library_count": 0.0,
+      "component_coverage": 0.05
+    },
+    "thresholds": {},
+    "llm_prompt": ""
+  },
+  "diagnostics": [],
+  "uncertainties": [],
+  "input_hash": "0",
+  "duration_ms": 0,
+  "version": "1.0"
+}
