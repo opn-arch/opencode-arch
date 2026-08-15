@@ -7,6 +7,7 @@ resolves them via LLM, and passes resolutions on the next call.
 For subsystem enrichment, use the `scope` parameter after decompose to run
 scoped pipelines on individual detected systems.
 """
+
 from __future__ import annotations
 
 import re
@@ -100,13 +101,19 @@ async def run_pipeline(
             top_cache = PipelineCache(top_cache_dir)
             decompose_result_sr = top_cache.load_stage("decompose")
             if decompose_result_sr is None:
-                return {"error": "Scoped run requires decompose to have been run first. Run architect_pipeline(stage='decompose') first."}
+                return {
+                    "error": "Scoped run requires decompose to have been run first. Run architect_pipeline(stage='decompose') first."
+                }
 
             decompose_result = decompose_result_sr.output
             # Find the matching system boundary
             boundary = None
             for sys in decompose_result.systems:
-                if sys.system_id == scope or sys.name == scope or _slugify(sys.name) == _slugify(scope):
+                if (
+                    sys.system_id == scope
+                    or sys.name == scope
+                    or _slugify(sys.name) == _slugify(scope)
+                ):
                     boundary = sys
                     break
             if boundary is None:
@@ -176,27 +183,38 @@ async def run_pipeline(
                 ctx.prior_corrections.append(ev)
 
                 # Record LLM call for each resolution
-                ctx.llm_calls.append(LLMCallRecord(
-                    stage=res.get("for_stage", stage or "unknown"),
-                    purpose=f"resolve uncertainty: {res.get('category', 'unknown')}",
-                    timestamp=time.strftime("%Y-%m-%dT%H:%M:%S"),
-                    model=res.get("model", ""),
-                    prompt_tokens=res.get("prompt_tokens", 0),
-                    completion_tokens=res.get("completion_tokens", 0),
-                    total_tokens=res.get("total_tokens", 0),
-                    duration_ms=res.get("duration_ms", 0),
-                    confidence=res.get("confidence", 0.8),
-                    items_produced=1,
-                    notes=res.get("resolution", ""),
-                    files_sent=res.get("files_sent", []),
-                    slices_sent=res.get("slices_sent", []),
-                ))
+                ctx.llm_calls.append(
+                    LLMCallRecord(
+                        stage=res.get("for_stage", stage or "unknown"),
+                        purpose=f"resolve uncertainty: {res.get('category', 'unknown')}",
+                        timestamp=time.strftime("%Y-%m-%dT%H:%M:%S"),
+                        model=res.get("model", ""),
+                        prompt_tokens=res.get("prompt_tokens", 0),
+                        completion_tokens=res.get("completion_tokens", 0),
+                        total_tokens=res.get("total_tokens", 0),
+                        duration_ms=res.get("duration_ms", 0),
+                        confidence=res.get("confidence", 0.8),
+                        items_produced=1,
+                        notes=res.get("resolution", ""),
+                        files_sent=res.get("files_sent", []),
+                        slices_sent=res.get("slices_sent", []),
+                    )
+                )
 
         # Run pipeline
         if stage:
             results = coord.run_to(stage, ctx)
         else:
             results = coord.run_all(ctx)
+
+        # LLM enrichment: if llm_callback is set, enrich the target stage output
+        enrichment_changes: list[str] = []
+        if ctx.llm_callback is not None:
+            target = stage or list(results.keys())[-1]
+            try:
+                enrichment_changes = await coord.enrich_stage_output(target, ctx)
+            except Exception:
+                pass
 
         # Persist newly computed stages to cache
         for name, result in results.items():
@@ -221,27 +239,23 @@ async def run_pipeline(
         uncertainties_to_resolve = []
         if target_result and target_result.uncertainties:
             for u in target_result.uncertainties:
-                uncertainties_to_resolve.append({
-                    "category": u.category,
-                    "description": u.description,
-                    "context": u.context,
-                    "suggested_fallback": u.suggested_fallback,
-                    "priority": u.priority,
-                })
+                uncertainties_to_resolve.append(
+                    {
+                        "category": u.category,
+                        "description": u.description,
+                        "context": u.context,
+                        "suggested_fallback": u.suggested_fallback,
+                        "priority": u.priority,
+                    }
+                )
 
         # Generate report and lessons
-        report = generate_pipeline_report(
-            results, system_name=system_name, llm_calls=ctx.llm_calls
-        )
+        report = generate_pipeline_report(results, system_name=system_name, llm_calls=ctx.llm_calls)
 
         lesson_entries: list[LessonEntry] = []
         for name, result in results.items():
-            lesson_entries.extend(
-                LessonEntry.from_diagnostics(name, result.diagnostics)
-            )
-            lesson_entries.extend(
-                LessonEntry.from_uncertainties(name, result.uncertainties)
-            )
+            lesson_entries.extend(LessonEntry.from_diagnostics(name, result.diagnostics))
+            lesson_entries.extend(LessonEntry.from_uncertainties(name, result.uncertainties))
             stage_llm = [c for c in ctx.llm_calls if c.stage == name]
             lesson_entries.extend(LessonEntry.from_llm_calls(name, stage_llm))
         lessons = generate_lessons(lesson_entries, system_name=system_name)
@@ -249,21 +263,39 @@ async def run_pipeline(
         # LLM call summaries
         llm_summaries = []
         for call in ctx.llm_calls:
-            llm_summaries.append({
-                "stage": call.stage,
-                "purpose": call.purpose,
-                "tokens": call.total_tokens,
-                "model": call.model,
-                "cached": call.cached,
-                "files_sent": call.files_sent,
-            })
+            llm_summaries.append(
+                {
+                    "stage": call.stage,
+                    "purpose": call.purpose,
+                    "tokens": call.total_tokens,
+                    "model": call.model,
+                    "cached": call.cached,
+                    "files_sent": call.files_sent,
+                }
+            )
 
         # Record telemetry
         try:
             from opencode_arch.telemetry.collector import drain_and_store
+
             drain_and_store(tool="architect_pipeline", repo=root.name)
         except Exception:
             pass
+
+        # Auto-log progress for each completed stage
+        try:
+            from .log import log_entry
+
+            for name, result in results.items():
+                if name not in cached_stages:
+                    await log_entry(
+                        repo_path=repo_path,
+                        log_type="progress",
+                        title=f"Pipeline stage '{name}' completed (score: {result.quality.score})",
+                        context={"stage": name, "score": result.quality.score, "from_cache": False},
+                    )
+        except Exception:
+            pass  # best-effort logging
 
         response = {
             "stages_completed": list(results.keys()),
@@ -276,6 +308,8 @@ async def run_pipeline(
             "artifacts_dir": str(output_dir),
             "llm_calls": llm_summaries,
             "total_llm_tokens": sum(c.total_tokens for c in ctx.llm_calls),
+            "enrichment_changes": enrichment_changes,
+            "hint": "Use architect_log to record decisions made during this stage.",
         }
 
         # Add scope info if scoped run
@@ -287,4 +321,5 @@ async def run_pipeline(
         return response
     except Exception as e:
         import traceback
+
         return {"error": f"Pipeline failed: {e}", "traceback": traceback.format_exc()}

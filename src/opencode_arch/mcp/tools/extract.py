@@ -1,4 +1,5 @@
 """architect_extract MCP tool — validate and store an architecture extraction."""
+
 from __future__ import annotations
 
 import shutil
@@ -14,6 +15,7 @@ from opencode_arch.mcp.quality import with_quality
 # Lazy import to allow patching in tests
 def _get_telemetry_store():
     from opencode_arch.telemetry.store import TelemetryStore
+
     return TelemetryStore
 
 
@@ -46,7 +48,13 @@ async def store_extraction(
         # Parse the YAML
         raw = yaml.safe_load(model_yaml)
         if not isinstance(raw, dict):
-            return {"stored": False, "error": "YAML did not parse to a dict", "score": 0, "pipeline": pipeline, "warnings": warnings}
+            return {
+                "stored": False,
+                "error": "YAML did not parse to a dict",
+                "score": 0,
+                "pipeline": pipeline,
+                "warnings": warnings,
+            }
 
         # Validate using architecture_model
         from architecture_model.core.parser import _parse_raw
@@ -55,12 +63,13 @@ async def store_extraction(
         model = _parse_raw(raw)
 
         # Entity fallback: if relationships exist but no components, return suggestions
-        has_components = bool(getattr(model.entities, 'components', None))
+        has_components = bool(getattr(model.entities, "components", None))
         has_relationships = bool(model.relationships)
         if has_relationships and not has_components:
             try:
                 from architecture_model.manifest.generator import generate_manifest
                 from architecture_model.manifest.grouping import create_components_from_manifest
+
                 manifest = generate_manifest(path)
                 components = create_components_from_manifest(manifest)
                 if components:
@@ -73,11 +82,17 @@ async def store_extraction(
                             "and call architect_extract again with a complete model."
                         ),
                         "suggested_components": [
-                            {"id": c.id, "name": c.name, "files": c.files}
-                            for c in components
+                            {"id": c.id, "name": c.name, "files": c.files} for c in components
                         ],
                         "original_relationships": [
-                            {"from": r.from_id, "to": r.to_id, "type": str(r.type.value) if hasattr(r.type, 'value') else str(r.type), "description": getattr(r, 'description', '')}
+                            {
+                                "from": r.from_id,
+                                "to": r.to_id,
+                                "type": str(r.type.value)
+                                if hasattr(r.type, "value")
+                                else str(r.type),
+                                "description": getattr(r, "description", ""),
+                            }
                             for r in model.relationships
                         ],
                         "pipeline": pipeline,
@@ -114,6 +129,7 @@ async def store_extraction(
         output_path = path / ".architecture-model.yaml"
         try:
             from architecture_model.core.parser import save_model
+
             save_model(model, output_path)
         except Exception:
             # Fallback: write raw YAML if serialization fails
@@ -138,6 +154,7 @@ async def store_extraction(
 
         try:
             from opencode_arch.telemetry.collector import drain_and_store
+
             drain_and_store(tool="architect_extract", repo=path.name)
             pipeline["telemetry_drain"] = {"status": "ok"}
         except Exception as e:
@@ -154,13 +171,16 @@ async def store_extraction(
             rep = None
             try:
                 from architecture_model.core.representativeness import compute_representativeness
+
                 rep = compute_representativeness(model, manifest)
                 pipeline["representativeness"] = {"status": "ok"}
             except Exception as e:
                 pipeline["representativeness"] = {"status": "error", "error": str(e)}
 
             save_project(
-                Path(repo_path), model, manifest,
+                Path(repo_path),
+                model,
+                manifest,
                 representativeness=rep,
                 telemetry={"context_tokens": context_tokens} if context_tokens else None,
             )
@@ -176,15 +196,24 @@ async def store_extraction(
             "telemetry_recorded": telemetry_recorded,
         }
 
+        # E3: Surface representativeness scores in response
+        if rep is not None:
+            result["representativeness"] = {
+                "file_coverage": round(rep.file_coverage, 1),
+                "relationship_accuracy": round(rep.relationship_accuracy, 1),
+                "boundary_coherence": round(rep.boundary_coherence, 1),
+                "overall": round(rep.overall, 1),
+            }
+
         # Warn if entities empty but relationships exist
         has_entities = False
-        if hasattr(model, 'entities'):
+        if hasattr(model, "entities"):
             ent = model.entities
-            if hasattr(ent, 'components'):
+            if hasattr(ent, "components"):
                 has_entities = bool(ent.components)
             elif isinstance(ent, dict):
                 has_entities = any(bool(v) for v in ent.values())
-        has_rels = bool(getattr(model, 'relationships', None))
+        has_rels = bool(getattr(model, "relationships", None))
         if has_rels and not has_entities:
             result["warning"] = (
                 "Model has relationships but no entities/components defined. "
@@ -195,6 +224,7 @@ async def store_extraction(
         _manifest = None
         try:
             from architecture_model.manifest.generator import generate_manifest as _gen_early
+
             _manifest = _gen_early(path)
         except Exception:
             pass
@@ -202,6 +232,7 @@ async def store_extraction(
         # Auto-generate SE docs
         try:
             from opencode_arch.mcp.tools.docs import generate_docs
+
             docs_result = await generate_docs(repo_path=repo_path, manifest=_manifest)
             if isinstance(docs_result, dict) and docs_result.get("generated"):
                 result["docs_generated"] = docs_result["generated"]
@@ -213,10 +244,11 @@ async def store_extraction(
         if _manifest is not None:
             try:
                 import json as _json_manifest
+
                 models_dir = path / ".architecture-models"
                 models_dir.mkdir(parents=True, exist_ok=True)
                 manifest_path = models_dir / "manifest.json"
-                manifest_data = _manifest.to_dict() if hasattr(_manifest, 'to_dict') else _manifest
+                manifest_data = _manifest.to_dict() if hasattr(_manifest, "to_dict") else _manifest
                 manifest_path.write_text(_json_manifest.dumps(manifest_data, indent=2))
                 result["manifest_path"] = str(manifest_path.relative_to(path))
             except Exception:
@@ -225,6 +257,7 @@ async def store_extraction(
         # Auto-generate diagrams
         try:
             from architecture_model.docs.diagrams import generate_all_diagrams
+
             diag_dir = path / "docs" / "architecture" / "diagrams"
             diagram_paths = generate_all_diagrams(model, diag_dir)
             result["diagrams_generated"] = len(diagram_paths)
@@ -248,16 +281,22 @@ async def store_extraction(
             source_block_override = None
             try:
                 from architecture_model.config.loader import get_config
+
                 cfg = get_config(path)
                 if not cfg.source_block_dict:
-                    from architecture_model.manifest.generator import generate_manifest as _gen_manifest
+                    from architecture_model.manifest.generator import (
+                        generate_manifest as _gen_manifest,
+                    )
+
                     m = _gen_manifest(path)
                     if m.functional_blocks:
                         source_block_override = m.functional_blocks
             except Exception:
                 pass
 
-            recursive = generate_recursive_manifests(path, source_block_override=source_block_override)
+            recursive = generate_recursive_manifests(
+                path, source_block_override=source_block_override
+            )
             if recursive:
                 manifests_dir = path / ".architecture" / "manifests"
                 manifests_dir.mkdir(parents=True, exist_ok=True)
@@ -278,12 +317,13 @@ async def store_extraction(
             if _manifest is None:
                 try:
                     from architecture_model.manifest.generator import generate_manifest as _gen
+
                     _manifest = _gen(path)
                 except Exception:
                     pass
 
-            if _manifest and hasattr(model.entities, 'components') and model.entities.components:
-                existing_behaviors = getattr(model.entities, 'behaviors', None) or []
+            if _manifest and hasattr(model.entities, "components") and model.entities.components:
+                existing_behaviors = getattr(model.entities, "behaviors", None) or []
                 if not existing_behaviors:
                     top_behaviors, top_rels = create_behaviors_from_manifest(model, _manifest)
                     if top_behaviors:
@@ -293,7 +333,7 @@ async def store_extraction(
                         result["behaviors_created"] = len(top_behaviors)
 
             # Recursive: behaviors for each sub-model
-            if 'sub_models' in result and _manifest:
+            if "sub_models" in result and _manifest:
                 try:
                     sub_beh_count = 0
                     out_dir = path / ".architecture-models"
@@ -303,41 +343,72 @@ async def store_extraction(
                             continue
                         # Load sub-model
                         from architecture_model.core.parser import load_model as _load
+
                         sub_model = _load(sub_model_path)
                         # Get recursive manifest for this block
                         rm_path = path / ".architecture" / "manifests" / f"{block_id}.json"
                         if rm_path.exists():
                             import json as _j
-                            from architecture_model.manifest.types import Manifest as _M, MetricsResult as _MR
-                            from architecture_model.manifest.types import ModuleInfo as _MI, FunctionInfo as _FI, ModuleStatus as _MS
+                            from architecture_model.manifest.types import (
+                                Manifest as _M,
+                                MetricsResult as _MR,
+                            )
+                            from architecture_model.manifest.types import (
+                                ModuleInfo as _MI,
+                                FunctionInfo as _FI,
+                                ModuleStatus as _MS,
+                            )
+
                             rm_data = _j.loads(rm_path.read_text())
                             # Reconstruct manifest from JSON
                             rm_modules = []
                             for md in rm_data.get("modules", []):
-                                fns = [_FI(name=f.get("name",""), signature=f.get("signature",""), calls=f.get("calls",[]), raises=f.get("raises",[])) for f in (md.get("functions") or [])]
-                                rm_modules.append(_MI(
-                                    file=md["file"],
-                                    name=md.get("name",""),
-                                    docstring=md.get("docstring"),
-                                    functions=fns,
-                                    imports=md.get("imports",[]),
-                                    line_count=md.get("line_count",0),
-                                    status=_MS.ACTIVE,
-                                    classes=[],
-                                ))
+                                fns = [
+                                    _FI(
+                                        name=f.get("name", ""),
+                                        signature=f.get("signature", ""),
+                                        calls=f.get("calls", []),
+                                        raises=f.get("raises", []),
+                                    )
+                                    for f in (md.get("functions") or [])
+                                ]
+                                rm_modules.append(
+                                    _MI(
+                                        file=md["file"],
+                                        name=md.get("name", ""),
+                                        docstring=md.get("docstring"),
+                                        functions=fns,
+                                        imports=md.get("imports", []),
+                                        line_count=md.get("line_count", 0),
+                                        status=_MS.ACTIVE,
+                                        classes=[],
+                                    )
+                                )
                             rm_ifaces = rm_data.get("interfaces", [])
-                            iface_objs = [type("I", (), {"source": i.get("source",""), "target": i.get("target","")})() for i in rm_ifaces]
+                            iface_objs = [
+                                type(
+                                    "I",
+                                    (),
+                                    {"source": i.get("source", ""), "target": i.get("target", "")},
+                                )()
+                                for i in rm_ifaces
+                            ]
                             rm_manifest = _M(
                                 modules=rm_modules,
                                 interfaces=iface_objs,
                                 functional_blocks={},
-                                generated_at=rm_data.get("generated_at",""),
+                                generated_at=rm_data.get("generated_at", ""),
                                 project_root=str(path),
                                 metrics=_MR(values={"total_python_files": len(rm_modules)}),
                             )
-                            sub_behs, sub_rels = create_behaviors_from_manifest(sub_model, rm_manifest)
+                            sub_behs, sub_rels = create_behaviors_from_manifest(
+                                sub_model, rm_manifest
+                            )
                             if sub_behs:
-                                if not hasattr(sub_model.entities, 'behaviors') or sub_model.entities.behaviors is None:
+                                if (
+                                    not hasattr(sub_model.entities, "behaviors")
+                                    or sub_model.entities.behaviors is None
+                                ):
                                     sub_model.entities.behaviors = []
                                 sub_model.entities.behaviors.extend(sub_behs)
                                 sub_model.relationships.extend(sub_rels)
@@ -354,18 +425,22 @@ async def store_extraction(
         # Auto-extract interfaces from cross-component imports
         try:
             from architecture_model.orchestration.auto_enrich import (
-                extract_component_interfaces, manifest_to_source_graph,
+                extract_component_interfaces,
+                manifest_to_source_graph,
             )
             from architecture_model.core.parser import save_model as _save_iface
 
             if _manifest is None:
                 try:
-                    from architecture_model.manifest.generator import generate_manifest as _gen_iface
+                    from architecture_model.manifest.generator import (
+                        generate_manifest as _gen_iface,
+                    )
+
                     _manifest = _gen_iface(path)
                 except Exception:
                     pass
 
-            if _manifest and hasattr(model.entities, 'components') and model.entities.components:
+            if _manifest and hasattr(model.entities, "components") and model.entities.components:
                 source_graph = manifest_to_source_graph(_manifest, model)
                 interface_count = extract_component_interfaces(model, source_graph)
                 if interface_count > 0:
@@ -376,7 +451,12 @@ async def store_extraction(
                         try:
                             from architecture_model.core.parser import dump_model
                             import yaml as _yaml_iface
-                            output_path.write_text(_yaml_iface.dump(dump_model(model), default_flow_style=False, sort_keys=False))
+
+                            output_path.write_text(
+                                _yaml_iface.dump(
+                                    dump_model(model), default_flow_style=False, sort_keys=False
+                                )
+                            )
                         except Exception:
                             pass  # Interface data is in memory; persist is best-effort
                 pipeline["interfaces"] = {"status": "ok", "count": interface_count}
@@ -387,15 +467,26 @@ async def store_extraction(
 
         # Auto-classify behavior flows and generate per-behavior artifacts
         try:
-            from architecture_model.manifest.call_graph import build_call_graph, trace_flow, map_flow_to_components
-            from architecture_model.orchestration.behavior_flows import (
-                classify_behaviors, summarize_crud_group, build_behavior_manifest,
-                build_behavior_sub_model, build_file_to_comp, BehaviorClassification,
+            from architecture_model.manifest.call_graph import (
+                build_call_graph,
+                trace_flow,
+                map_flow_to_components,
             )
-            from architecture_model.docs.behavior_spec import generate_behavior_spec, generate_behavior_index
+            from architecture_model.orchestration.behavior_flows import (
+                classify_behaviors,
+                summarize_crud_group,
+                build_behavior_manifest,
+                build_behavior_sub_model,
+                build_file_to_comp,
+                BehaviorClassification,
+            )
+            from architecture_model.docs.behavior_spec import (
+                generate_behavior_spec,
+                generate_behavior_index,
+            )
             from architecture_model.core.parser import save_model as _save_beh
 
-            if _manifest and hasattr(model.entities, 'behaviors') and model.entities.behaviors:
+            if _manifest and hasattr(model.entities, "behaviors") and model.entities.behaviors:
                 # Build call graph
                 call_graph = build_call_graph(_manifest)
                 file_to_comp = build_file_to_comp(model, _manifest)
@@ -419,7 +510,9 @@ async def store_extraction(
                         # Scoped manifest
                         scoped = build_behavior_manifest(behavior, flow_trace, _manifest)
                         # Sub-model
-                        sub_model = build_behavior_sub_model(behavior, flow_trace, model, file_to_comp)
+                        sub_model = build_behavior_sub_model(
+                            behavior, flow_trace, model, file_to_comp
+                        )
                         # Write sub-model
                         beh_out = beh_model_dir / behavior.id
                         beh_out.mkdir(parents=True, exist_ok=True)
@@ -459,11 +552,21 @@ async def store_extraction(
                         comp_dir.mkdir(parents=True, exist_ok=True)
                         comp = next((c for c in model.entities.components if c.id == comp_id), None)
                         if comp:
-                            from architecture_model.core.types import ArchitectureModel as _AM, Entities as _E, ModelMeta as _MM
+                            from architecture_model.core.types import (
+                                ArchitectureModel as _AM,
+                                Entities as _E,
+                                ModelMeta as _MM,
+                            )
+
                             sub = _AM(
                                 meta=_MM(project=f"{path.name}/{comp.name}", schema_version="1.3"),
                                 entities=_E(components=[comp], behaviors=comp_behaviors),
-                                relationships=[r for r in model.relationships if r.from_id == comp_id or r.to_id in {b.id for b in comp_behaviors}],
+                                relationships=[
+                                    r
+                                    for r in model.relationships
+                                    if r.from_id == comp_id
+                                    or r.to_id in {b.id for b in comp_behaviors}
+                                ],
                             )
                             try:
                                 _save_compact(sub, comp_dir / ".architecture-model.yaml")
@@ -471,7 +574,9 @@ async def store_extraction(
                                 pass
 
                     _save_beh(model, output_path)
-                    result["behaviors_reduced"] = f"{original_count} -> {len(model.entities.behaviors)}"
+                    result["behaviors_reduced"] = (
+                        f"{original_count} -> {len(model.entities.behaviors)}"
+                    )
                     pipeline["compaction"] = {"status": "ok"}
                 except Exception as e:
                     pipeline["compaction"] = {"status": "error", "error": str(e)}
@@ -480,11 +585,27 @@ async def store_extraction(
         except Exception as e:
             pipeline["behavior_flows"] = {"status": "error", "error": str(e)}
 
+        result["next_steps"] = (
+            "Use architect_slice for focused context on specific components. "
+            "Use architect_log to record architectural decisions."
+        )
         result["pipeline"] = pipeline
         result["warnings"] = warnings
         return result
 
     except yaml.YAMLError as e:
-        return {"stored": False, "error": f"Invalid YAML: {e}", "score": 0, "pipeline": pipeline, "warnings": warnings}
+        return {
+            "stored": False,
+            "error": f"Invalid YAML: {e}",
+            "score": 0,
+            "pipeline": pipeline,
+            "warnings": warnings,
+        }
     except Exception as e:
-        return {"stored": False, "error": f"Validation failed: {e}", "score": 0, "pipeline": pipeline, "warnings": warnings}
+        return {
+            "stored": False,
+            "error": f"Validation failed: {e}",
+            "score": 0,
+            "pipeline": pipeline,
+            "warnings": warnings,
+        }
