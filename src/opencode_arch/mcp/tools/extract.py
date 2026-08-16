@@ -27,6 +27,17 @@ async def store_extraction(
 ) -> dict[str, Any]:
     """Validate and store an architecture model extraction.
 
+    IMPORTANT: Do NOT manually write .architecture-model.yaml via file tools.
+    ALWAYS use this tool to store models — it validates, backs up, and records telemetry.
+
+    Preferred workflow:
+      1. architect_scan(repo_path) — get reality manifest
+      2. architect_group(repo_path) — get component boundaries
+      3. Build YAML model from scan+group output
+      4. architect_extract(repo_path, model_yaml) — validate and store
+
+    Or use architect_pipeline(repo_path) for fully automated extraction.
+
     Called AFTER the agent has produced a YAML architecture model.
     Validates the model, writes it to .architecture-model.yaml,
     and records telemetry.
