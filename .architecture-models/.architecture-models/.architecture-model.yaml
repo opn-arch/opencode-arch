@@ -66,9 +66,9 @@ entities:
   - id: SYS-infrastructure-(telemetry)
     name: Infrastructure (telemetry)
     model_path: infrastructure-telemetry/.architecture-model.yaml
-  - id: SYS-infrastructure-(prompts)
-    name: Infrastructure (prompts)
-    model_path: infrastructure-prompts/.architecture-model.yaml
+  - id: SYS-infrastructure-(llm)
+    name: Infrastructure (llm)
+    model_path: infrastructure-llm/.architecture-model.yaml
   actors:
   - id: ACT-1
     name: CLI User
@@ -105,8 +105,8 @@ entities:
   - id: SYS-selector
     name: Selector
     files:
-    - src/opencode_arch/artifacts/selector.py
     - src/opencode_arch/artifacts/context.py
+    - src/opencode_arch/artifacts/selector.py
   - id: SYS-templates
     name: Templates
     files:
@@ -119,8 +119,8 @@ entities:
     name: Cache
     files:
     - src/opencode_arch/llm/cache.py
-    - src/opencode_arch/requirements/matcher.py
     - src/opencode_arch/requirements/llm_extractor.py
+    - src/opencode_arch/requirements/matcher.py
     - src/opencode_arch/requirements/retroactive.py
   - id: SYS-formatter
     name: Formatter
@@ -133,9 +133,9 @@ entities:
   - id: SYS-patterns
     name: Patterns
     files:
-    - src/opencode_arch/learning/patterns.py
-    - src/opencode_arch/learning/classifier.py
     - src/opencode_arch/learning/adapter.py
+    - src/opencode_arch/learning/classifier.py
+    - src/opencode_arch/learning/patterns.py
   - id: SYS-resolution
     name: Resolution
     files:
@@ -155,13 +155,13 @@ entities:
   - id: SYS-spot-check
     name: Spot Check
     files:
-    - src/opencode_arch/regen/spot_check.py
     - src/opencode_arch/regen/self_heal.py
+    - src/opencode_arch/regen/spot_check.py
   - id: SYS-cli-main
     name: CLI Main
     files:
-    - src/opencode_arch/mcp/__main__.py
     - src/opencode_arch/cli/main.py
+    - src/opencode_arch/mcp/__main__.py
   - id: SYS-infrastructure-(learning)
     name: Infrastructure (learning)
     files:
@@ -171,8 +171,8 @@ entities:
   - id: SYS-infrastructure-(runner)
     name: Infrastructure (runner)
     files:
-    - src/opencode_arch/runner/opencode.py
     - src/opencode_arch/runner/base.py
+    - src/opencode_arch/runner/opencode.py
   - id: SYS-infrastructure-(mcp)
     name: Infrastructure (mcp)
     files:
@@ -185,9 +185,9 @@ entities:
     name: Infrastructure (cli)
     files:
     - src/opencode_arch/cli/confidence.py
-    - src/opencode_arch/cli/prompts.py
     - src/opencode_arch/cli/gap_analyzer.py
     - src/opencode_arch/cli/launch.py
+    - src/opencode_arch/cli/prompts.py
   - id: SYS-infrastructure-(prompts)
     name: Infrastructure (prompts)
     files:
@@ -195,121 +195,121 @@ entities:
   - id: SYS-infrastructure-(telemetry)
     name: Infrastructure (telemetry)
     files:
-    - src/opencode_arch/telemetry/store.py
-    - src/opencode_arch/telemetry/recorder.py
     - src/opencode_arch/telemetry/collector.py
-  - id: SYS-infrastructure-(prompts)
-    name: Infrastructure (prompts)
+    - src/opencode_arch/telemetry/recorder.py
+    - src/opencode_arch/telemetry/store.py
+  - id: SYS-infrastructure-(llm)
+    name: Infrastructure (llm)
     files:
     - src/opencode_arch/llm/prompts/audit.py
     - src/opencode_arch/llm/prompts/matching.py
     - src/opencode_arch/llm/prompts/requirements.py
 relationships:
-- from: SYS-quality
-  to: SYS-formatter
-  type: depends-on
-- from: SYS-docs-validator
-  to: SYS-infrastructure-(prompts)
-  type: depends-on
-- from: SYS-infrastructure-(telemetry)
-  to: SYS-infrastructure-(runner)
+- from: SYS-pipeline-bridge
+  to: SYS-infrastructure-(requirements)
   type: depends-on
 - from: SYS-pipeline-bridge
   to: SYS-infrastructure-(runner)
   type: depends-on
 - from: SYS-metrics
-  to: SYS-infrastructure-(telemetry)
-  type: depends-on
-- from: SYS-docs-validator
-  to: SYS-cli-main
-  type: depends-on
-- from: SYS-docs-validator
   to: SYS-infrastructure-(runner)
   type: depends-on
-- from: SYS-docs-validator
-  to: SYS-infrastructure-(prompts)
+- from: SYS-quality
+  to: SYS-selector
   type: depends-on
-- from: SYS-docs-validator
-  to: SYS-calibrate
-  type: depends-on
-- from: SYS-cache
-  to: SYS-infrastructure-(requirements)
-  type: depends-on
-- from: SYS-metrics
-  to: SYS-infrastructure-(runner)
-  type: depends-on
-- from: SYS-patterns
-  to: SYS-infrastructure-(learning)
-  type: depends-on
-- from: SYS-pipeline-bridge
+- from: SYS-quality
   to: SYS-formatter
   type: depends-on
 - from: SYS-docs-validator
-  to: SYS-metrics
-  type: depends-on
-- from: SYS-quality
-  to: SYS-selector
-  type: depends-on
-- from: SYS-patterns
-  to: SYS-infrastructure-(runner)
-  type: depends-on
-- from: SYS-resolution
-  to: SYS-infrastructure-(learning)
-  type: depends-on
-- from: SYS-cache
-  to: SYS-infrastructure-(cli)
-  type: depends-on
-- from: SYS-cli-main
-  to: SYS-infrastructure-(runner)
-  type: depends-on
-- from: SYS-resolution
-  to: SYS-patterns
-  type: depends-on
-- from: SYS-quality
-  to: SYS-pipeline-bridge
-  type: depends-on
-- from: SYS-pipeline-bridge
-  to: SYS-infrastructure-(requirements)
-  type: depends-on
-- from: SYS-cache
-  to: SYS-infrastructure-(runner)
-  type: depends-on
-- from: SYS-docs-validator
-  to: SYS-selector
-  type: depends-on
-- from: SYS-selector
-  to: SYS-templates
-  type: depends-on
-- from: SYS-cache
   to: SYS-infrastructure-(prompts)
   type: depends-on
 - from: SYS-docs-validator
   to: SYS-spot-check
   type: depends-on
-- from: SYS-docs-validator
-  to: SYS-templates
+- from: SYS-metrics
+  to: SYS-infrastructure-(telemetry)
   type: depends-on
-- from: SYS-pipeline-bridge
+- from: SYS-docs-validator
   to: SYS-selector
   type: depends-on
-- from: SYS-cli-main
-  to: SYS-infrastructure-(mcp)
+- from: SYS-infrastructure-(telemetry)
+  to: SYS-infrastructure-(runner)
+  type: depends-on
+- from: SYS-cache
+  to: SYS-infrastructure-(llm)
+  type: depends-on
+- from: SYS-resolution
+  to: SYS-infrastructure-(learning)
+  type: depends-on
+- from: SYS-docs-validator
+  to: SYS-infrastructure-(runner)
+  type: depends-on
+- from: SYS-docs-validator
+  to: SYS-calibrate
   type: depends-on
 - from: SYS-docs-validator
   to: SYS-infrastructure-(cli)
   type: depends-on
+- from: SYS-patterns
+  to: SYS-infrastructure-(runner)
+  type: depends-on
+- from: SYS-selector
+  to: SYS-diagrams
+  type: depends-on
+- from: SYS-selector
+  to: SYS-templates
+  type: depends-on
+- from: SYS-docs-validator
+  to: SYS-infrastructure-(llm)
+  type: depends-on
 - from: SYS-cache
   to: SYS-infrastructure-(prompts)
   type: depends-on
-- from: SYS-selector
+- from: SYS-cli-main
   to: SYS-infrastructure-(runner)
+  type: depends-on
+- from: SYS-quality
+  to: SYS-pipeline-bridge
+  type: depends-on
+- from: SYS-docs-validator
+  to: SYS-diagrams
+  type: depends-on
+- from: SYS-cli-main
+  to: SYS-infrastructure-(mcp)
   type: depends-on
 - from: SYS-cli-main
   to: SYS-quality
   type: depends-on
-- from: SYS-selector
-  to: SYS-diagrams
+- from: SYS-resolution
+  to: SYS-patterns
+  type: depends-on
+- from: SYS-cache
+  to: SYS-infrastructure-(runner)
+  type: depends-on
+- from: SYS-cache
+  to: SYS-infrastructure-(requirements)
   type: depends-on
 - from: SYS-docs-validator
-  to: SYS-diagrams
+  to: SYS-templates
+  type: depends-on
+- from: SYS-patterns
+  to: SYS-infrastructure-(learning)
+  type: depends-on
+- from: SYS-docs-validator
+  to: SYS-metrics
+  type: depends-on
+- from: SYS-pipeline-bridge
+  to: SYS-selector
+  type: depends-on
+- from: SYS-cache
+  to: SYS-infrastructure-(cli)
+  type: depends-on
+- from: SYS-pipeline-bridge
+  to: SYS-formatter
+  type: depends-on
+- from: SYS-selector
+  to: SYS-infrastructure-(runner)
+  type: depends-on
+- from: SYS-docs-validator
+  to: SYS-cli-main
   type: depends-on

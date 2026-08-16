@@ -142,14 +142,66 @@
         "evidence_source": "cli_pattern"
       }
     ],
-    "behaviors": []
+    "behaviors": [
+      {
+        "__dataclass__": "InferredBehavior",
+        "__module__": "architecture_model.pipeline.infer_types",
+        "id": "BEH-1",
+        "name": "CLI: Run Benchmark",
+        "actor_id": "ACT-1",
+        "capability_id": "",
+        "steps": [
+          "ArgumentParser",
+          "add_argument",
+          "parse_args",
+          "print",
+          "run_benchmark"
+        ],
+        "triggers": [],
+        "behavior_type": "use_case"
+      },
+      {
+        "__dataclass__": "InferredBehavior",
+        "__module__": "architecture_model.pipeline.infer_types",
+        "id": "BEH-2",
+        "name": "CLI: Benchmark Economy",
+        "actor_id": "ACT-1",
+        "capability_id": "",
+        "steps": [
+          "ArgumentParser",
+          "add_argument",
+          "parse_args",
+          "run",
+          "print_report"
+        ],
+        "triggers": [],
+        "behavior_type": "use_case"
+      },
+      {
+        "__dataclass__": "InferredBehavior",
+        "__module__": "architecture_model.pipeline.infer_types",
+        "id": "BEH-3",
+        "name": "CLI: Main",
+        "actor_id": "ACT-1",
+        "capability_id": "",
+        "steps": [
+          "ArgumentParser",
+          "add_subparsers",
+          "add_parser",
+          "add_argument",
+          "parse_args"
+        ],
+        "triggers": [],
+        "behavior_type": "use_case"
+      }
+    ]
   },
   "quality": {
     "__dataclass__": "QualityMetrics",
     "__module__": "architecture_model.pipeline.protocol",
     "score": 83,
     "sub_scores": {
-      "capability_coverage": 83.22580645161291,
+      "capability_coverage": 83.9506172839506,
       "actor_completeness": 100.0,
       "capability_count": 14.0
     },
@@ -160,6 +212,39 @@
   },
   "diagnostics": [],
   "uncertainties": [
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "complex_behavior",
+      "description": "TelemetryStore in src/opencode_arch/telemetry/store.py has 18 public methods \u2014 needs LLM analysis to identify key workflows and use cases",
+      "context": {
+        "class": "TelemetryStore",
+        "file": "src/opencode_arch/telemetry/store.py",
+        "methods": [
+          "record",
+          "query",
+          "averages",
+          "log_regen_outcome",
+          "get_patterns",
+          "query_regen_outcomes",
+          "record_learning_curve",
+          "get_learning_curve",
+          "record_report_card",
+          "get_report_cards",
+          "record_lesson",
+          "get_lessons",
+          "mark_lesson_applied",
+          "record_drift_flag",
+          "get_drift_flags",
+          "resolve_drift_flag",
+          "record_function_metric",
+          "get_function_metrics"
+        ],
+        "method_count": 18
+      },
+      "suggested_fallback": "Create generic workflow for TelemetryStore",
+      "priority": "medium"
+    },
     {
       "__dataclass__": "Uncertainty",
       "__module__": "architecture_model.pipeline.protocol",
@@ -395,7 +480,7 @@
       "priority": "informational"
     }
   ],
-  "input_hash": "155",
+  "input_hash": "162",
   "duration_ms": 0,
   "version": "1.0"
 }

@@ -7,7 +7,7 @@
     "sos_model": {
       "__dataclass__": "SoSModel",
       "__module__": "architecture_model.pipeline.synthesize_types",
-      "model_yaml": "meta:\n  schema_version: '2.0'\n  system_of_systems: true\nentities:\n  systems:\n  - id: SYS-docs-validator\n    name: Docs Validator\n    model_path: docs-validator/.architecture-model.yaml\n  - id: SYS-selector\n    name: Selector\n    model_path: selector/.architecture-model.yaml\n  - id: SYS-templates\n    name: Templates\n    model_path: templates/.architecture-model.yaml\n  - id: SYS-diagrams\n    name: Diagrams\n    model_path: diagrams/.architecture-model.yaml\n  - id: SYS-cache\n    name: Cache\n    model_path: cache/.architecture-model.yaml\n  - id: SYS-formatter\n    name: Formatter\n    model_path: formatter/.architecture-model.yaml\n  - id: SYS-pipeline-bridge\n    name: Pipeline Bridge\n    model_path: pipeline-bridge/.architecture-model.yaml\n  - id: SYS-patterns\n    name: Patterns\n    model_path: patterns/.architecture-model.yaml\n  - id: SYS-resolution\n    name: Resolution\n    model_path: resolution/.architecture-model.yaml\n  - id: SYS-quality\n    name: Quality\n    model_path: quality/.architecture-model.yaml\n  - id: SYS-metrics\n    name: Metrics\n    model_path: metrics/.architecture-model.yaml\n  - id: SYS-calibrate\n    name: Calibrate\n    model_path: calibrate/.architecture-model.yaml\n  - id: SYS-spot-check\n    name: Spot Check\n    model_path: spot-check/.architecture-model.yaml\n  - id: SYS-cli-main\n    name: CLI Main\n    model_path: cli-main/.architecture-model.yaml\n  - id: SYS-infrastructure-(learning)\n    name: Infrastructure (learning)\n    model_path: infrastructure-learning/.architecture-model.yaml\n  - id: SYS-infrastructure-(runner)\n    name: Infrastructure (runner)\n    model_path: infrastructure-runner/.architecture-model.yaml\n  - id: SYS-infrastructure-(mcp)\n    name: Infrastructure (mcp)\n    model_path: infrastructure-mcp/.architecture-model.yaml\n  - id: SYS-infrastructure-(requirements)\n    name: Infrastructure (requirements)\n    model_path: infrastructure-requirements/.architecture-model.yaml\n  - id: SYS-infrastructure-(cli)\n    name: Infrastructure (cli)\n    model_path: infrastructure-cli/.architecture-model.yaml\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    model_path: infrastructure-prompts/.architecture-model.yaml\n  - id: SYS-infrastructure-(telemetry)\n    name: Infrastructure (telemetry)\n    model_path: infrastructure-telemetry/.architecture-model.yaml\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    model_path: infrastructure-prompts/.architecture-model.yaml\n  actors:\n  - id: ACT-1\n    name: CLI User\n  capabilities:\n  - id: CAP-1\n    name: Selector\n  - id: CAP-2\n    name: Templates\n  - id: CAP-3\n    name: Diagrams\n  - id: CAP-4\n    name: Cache\n  - id: CAP-5\n    name: Formatter\n  - id: CAP-6\n    name: Pipeline Bridge\n  - id: CAP-7\n    name: Patterns\n  - id: CAP-8\n    name: Resolution\n  - id: CAP-9\n    name: Quality\n  - id: CAP-10\n    name: Metrics\n  - id: CAP-11\n    name: Docs Validator\n  - id: CAP-12\n    name: Calibrate\n  - id: CAP-13\n    name: Spot Check\n  - id: CAP-14\n    name: CLI Main\n  inline_components:\n  - id: SYS-selector\n    name: Selector\n    files:\n    - src/opencode_arch/artifacts/selector.py\n    - src/opencode_arch/artifacts/context.py\n  - id: SYS-templates\n    name: Templates\n    files:\n    - src/opencode_arch/artifacts/templates.py\n  - id: SYS-diagrams\n    name: Diagrams\n    files:\n    - src/opencode_arch/artifacts/diagrams.py\n  - id: SYS-cache\n    name: Cache\n    files:\n    - src/opencode_arch/llm/cache.py\n    - src/opencode_arch/requirements/matcher.py\n    - src/opencode_arch/requirements/llm_extractor.py\n    - src/opencode_arch/requirements/retroactive.py\n  - id: SYS-formatter\n    name: Formatter\n    files:\n    - src/opencode_arch/context/formatter.py\n  - id: SYS-pipeline-bridge\n    name: Pipeline Bridge\n    files:\n    - src/opencode_arch/context/pipeline_bridge.py\n  - id: SYS-patterns\n    name: Patterns\n    files:\n    - src/opencode_arch/learning/patterns.py\n    - src/opencode_arch/learning/classifier.py\n    - src/opencode_arch/learning/adapter.py\n  - id: SYS-resolution\n    name: Resolution\n    files:\n    - src/opencode_arch/agent/resolution.py\n  - id: SYS-quality\n    name: Quality\n    files:\n    - src/opencode_arch/mcp/quality.py\n  - id: SYS-metrics\n    name: Metrics\n    files:\n    - src/opencode_arch/cli/metrics.py\n  - id: SYS-calibrate\n    name: Calibrate\n    files:\n    - src/opencode_arch/cli/calibrate.py\n  - id: SYS-spot-check\n    name: Spot Check\n    files:\n    - src/opencode_arch/regen/spot_check.py\n    - src/opencode_arch/regen/self_heal.py\n  - id: SYS-cli-main\n    name: CLI Main\n    files:\n    - src/opencode_arch/mcp/__main__.py\n    - src/opencode_arch/cli/main.py\n  - id: SYS-infrastructure-(learning)\n    name: Infrastructure (learning)\n    files:\n    - src/opencode_arch/learning/assessor.py\n    - src/opencode_arch/learning/lessons.py\n    - src/opencode_arch/learning/maintainer.py\n  - id: SYS-infrastructure-(runner)\n    name: Infrastructure (runner)\n    files:\n    - src/opencode_arch/runner/opencode.py\n    - src/opencode_arch/runner/base.py\n  - id: SYS-infrastructure-(mcp)\n    name: Infrastructure (mcp)\n    files:\n    - src/opencode_arch/mcp/server.py\n  - id: SYS-infrastructure-(requirements)\n    name: Infrastructure (requirements)\n    files:\n    - src/opencode_arch/requirements/parser.py\n  - id: SYS-infrastructure-(cli)\n    name: Infrastructure (cli)\n    files:\n    - src/opencode_arch/cli/confidence.py\n    - src/opencode_arch/cli/prompts.py\n    - src/opencode_arch/cli/gap_analyzer.py\n    - src/opencode_arch/cli/launch.py\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    files:\n    - src/opencode_arch/prompts/regen.py\n  - id: SYS-infrastructure-(telemetry)\n    name: Infrastructure (telemetry)\n    files:\n    - src/opencode_arch/telemetry/store.py\n    - src/opencode_arch/telemetry/recorder.py\n    - src/opencode_arch/telemetry/collector.py\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    files:\n    - src/opencode_arch/llm/prompts/audit.py\n    - src/opencode_arch/llm/prompts/matching.py\n    - src/opencode_arch/llm/prompts/requirements.py\nrelationships:\n- from: SYS-quality\n  to: SYS-formatter\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-infrastructure-(telemetry)\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-metrics\n  to: SYS-infrastructure-(telemetry)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-cli-main\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-calibrate\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(requirements)\n  type: depends-on\n- from: SYS-metrics\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-patterns\n  to: SYS-infrastructure-(learning)\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-formatter\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-metrics\n  type: depends-on\n- from: SYS-quality\n  to: SYS-selector\n  type: depends-on\n- from: SYS-patterns\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-resolution\n  to: SYS-infrastructure-(learning)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(cli)\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-resolution\n  to: SYS-patterns\n  type: depends-on\n- from: SYS-quality\n  to: SYS-pipeline-bridge\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-infrastructure-(requirements)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-selector\n  type: depends-on\n- from: SYS-selector\n  to: SYS-templates\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-spot-check\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-templates\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-selector\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-infrastructure-(mcp)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(cli)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-selector\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-quality\n  type: depends-on\n- from: SYS-selector\n  to: SYS-diagrams\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-diagrams\n  type: depends-on\n",
+      "model_yaml": "meta:\n  schema_version: '2.0'\n  system_of_systems: true\nentities:\n  systems:\n  - id: SYS-docs-validator\n    name: Docs Validator\n    model_path: docs-validator/.architecture-model.yaml\n  - id: SYS-selector\n    name: Selector\n    model_path: selector/.architecture-model.yaml\n  - id: SYS-templates\n    name: Templates\n    model_path: templates/.architecture-model.yaml\n  - id: SYS-diagrams\n    name: Diagrams\n    model_path: diagrams/.architecture-model.yaml\n  - id: SYS-cache\n    name: Cache\n    model_path: cache/.architecture-model.yaml\n  - id: SYS-formatter\n    name: Formatter\n    model_path: formatter/.architecture-model.yaml\n  - id: SYS-pipeline-bridge\n    name: Pipeline Bridge\n    model_path: pipeline-bridge/.architecture-model.yaml\n  - id: SYS-patterns\n    name: Patterns\n    model_path: patterns/.architecture-model.yaml\n  - id: SYS-resolution\n    name: Resolution\n    model_path: resolution/.architecture-model.yaml\n  - id: SYS-quality\n    name: Quality\n    model_path: quality/.architecture-model.yaml\n  - id: SYS-metrics\n    name: Metrics\n    model_path: metrics/.architecture-model.yaml\n  - id: SYS-calibrate\n    name: Calibrate\n    model_path: calibrate/.architecture-model.yaml\n  - id: SYS-spot-check\n    name: Spot Check\n    model_path: spot-check/.architecture-model.yaml\n  - id: SYS-cli-main\n    name: CLI Main\n    model_path: cli-main/.architecture-model.yaml\n  - id: SYS-infrastructure-(learning)\n    name: Infrastructure (learning)\n    model_path: infrastructure-learning/.architecture-model.yaml\n  - id: SYS-infrastructure-(runner)\n    name: Infrastructure (runner)\n    model_path: infrastructure-runner/.architecture-model.yaml\n  - id: SYS-infrastructure-(mcp)\n    name: Infrastructure (mcp)\n    model_path: infrastructure-mcp/.architecture-model.yaml\n  - id: SYS-infrastructure-(requirements)\n    name: Infrastructure (requirements)\n    model_path: infrastructure-requirements/.architecture-model.yaml\n  - id: SYS-infrastructure-(cli)\n    name: Infrastructure (cli)\n    model_path: infrastructure-cli/.architecture-model.yaml\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    model_path: infrastructure-prompts/.architecture-model.yaml\n  - id: SYS-infrastructure-(telemetry)\n    name: Infrastructure (telemetry)\n    model_path: infrastructure-telemetry/.architecture-model.yaml\n  - id: SYS-infrastructure-(llm)\n    name: Infrastructure (llm)\n    model_path: infrastructure-llm/.architecture-model.yaml\n  actors:\n  - id: ACT-1\n    name: CLI User\n  capabilities:\n  - id: CAP-1\n    name: Selector\n  - id: CAP-2\n    name: Templates\n  - id: CAP-3\n    name: Diagrams\n  - id: CAP-4\n    name: Cache\n  - id: CAP-5\n    name: Formatter\n  - id: CAP-6\n    name: Pipeline Bridge\n  - id: CAP-7\n    name: Patterns\n  - id: CAP-8\n    name: Resolution\n  - id: CAP-9\n    name: Quality\n  - id: CAP-10\n    name: Metrics\n  - id: CAP-11\n    name: Docs Validator\n  - id: CAP-12\n    name: Calibrate\n  - id: CAP-13\n    name: Spot Check\n  - id: CAP-14\n    name: CLI Main\n  inline_components:\n  - id: SYS-selector\n    name: Selector\n    files:\n    - src/opencode_arch/artifacts/context.py\n    - src/opencode_arch/artifacts/selector.py\n  - id: SYS-templates\n    name: Templates\n    files:\n    - src/opencode_arch/artifacts/templates.py\n  - id: SYS-diagrams\n    name: Diagrams\n    files:\n    - src/opencode_arch/artifacts/diagrams.py\n  - id: SYS-cache\n    name: Cache\n    files:\n    - src/opencode_arch/llm/cache.py\n    - src/opencode_arch/requirements/llm_extractor.py\n    - src/opencode_arch/requirements/matcher.py\n    - src/opencode_arch/requirements/retroactive.py\n  - id: SYS-formatter\n    name: Formatter\n    files:\n    - src/opencode_arch/context/formatter.py\n  - id: SYS-pipeline-bridge\n    name: Pipeline Bridge\n    files:\n    - src/opencode_arch/context/pipeline_bridge.py\n  - id: SYS-patterns\n    name: Patterns\n    files:\n    - src/opencode_arch/learning/adapter.py\n    - src/opencode_arch/learning/classifier.py\n    - src/opencode_arch/learning/patterns.py\n  - id: SYS-resolution\n    name: Resolution\n    files:\n    - src/opencode_arch/agent/resolution.py\n  - id: SYS-quality\n    name: Quality\n    files:\n    - src/opencode_arch/mcp/quality.py\n  - id: SYS-metrics\n    name: Metrics\n    files:\n    - src/opencode_arch/cli/metrics.py\n  - id: SYS-calibrate\n    name: Calibrate\n    files:\n    - src/opencode_arch/cli/calibrate.py\n  - id: SYS-spot-check\n    name: Spot Check\n    files:\n    - src/opencode_arch/regen/self_heal.py\n    - src/opencode_arch/regen/spot_check.py\n  - id: SYS-cli-main\n    name: CLI Main\n    files:\n    - src/opencode_arch/cli/main.py\n    - src/opencode_arch/mcp/__main__.py\n  - id: SYS-infrastructure-(learning)\n    name: Infrastructure (learning)\n    files:\n    - src/opencode_arch/learning/assessor.py\n    - src/opencode_arch/learning/lessons.py\n    - src/opencode_arch/learning/maintainer.py\n  - id: SYS-infrastructure-(runner)\n    name: Infrastructure (runner)\n    files:\n    - src/opencode_arch/runner/base.py\n    - src/opencode_arch/runner/opencode.py\n  - id: SYS-infrastructure-(mcp)\n    name: Infrastructure (mcp)\n    files:\n    - src/opencode_arch/mcp/server.py\n  - id: SYS-infrastructure-(requirements)\n    name: Infrastructure (requirements)\n    files:\n    - src/opencode_arch/requirements/parser.py\n  - id: SYS-infrastructure-(cli)\n    name: Infrastructure (cli)\n    files:\n    - src/opencode_arch/cli/confidence.py\n    - src/opencode_arch/cli/gap_analyzer.py\n    - src/opencode_arch/cli/launch.py\n    - src/opencode_arch/cli/prompts.py\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    files:\n    - src/opencode_arch/prompts/regen.py\n  - id: SYS-infrastructure-(telemetry)\n    name: Infrastructure (telemetry)\n    files:\n    - src/opencode_arch/telemetry/collector.py\n    - src/opencode_arch/telemetry/recorder.py\n    - src/opencode_arch/telemetry/store.py\n  - id: SYS-infrastructure-(llm)\n    name: Infrastructure (llm)\n    files:\n    - src/opencode_arch/llm/prompts/audit.py\n    - src/opencode_arch/llm/prompts/matching.py\n    - src/opencode_arch/llm/prompts/requirements.py\nrelationships:\n- from: SYS-pipeline-bridge\n  to: SYS-infrastructure-(requirements)\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-metrics\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-quality\n  to: SYS-selector\n  type: depends-on\n- from: SYS-quality\n  to: SYS-formatter\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-spot-check\n  type: depends-on\n- from: SYS-metrics\n  to: SYS-infrastructure-(telemetry)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-selector\n  type: depends-on\n- from: SYS-infrastructure-(telemetry)\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(llm)\n  type: depends-on\n- from: SYS-resolution\n  to: SYS-infrastructure-(learning)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-calibrate\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(cli)\n  type: depends-on\n- from: SYS-patterns\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-selector\n  to: SYS-diagrams\n  type: depends-on\n- from: SYS-selector\n  to: SYS-templates\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(llm)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-quality\n  to: SYS-pipeline-bridge\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-diagrams\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-infrastructure-(mcp)\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-quality\n  type: depends-on\n- from: SYS-resolution\n  to: SYS-patterns\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(requirements)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-templates\n  type: depends-on\n- from: SYS-patterns\n  to: SYS-infrastructure-(learning)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-metrics\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-selector\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(cli)\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-formatter\n  type: depends-on\n- from: SYS-selector\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-cli-main\n  type: depends-on\n",
       "actors": [
         {
           "id": "ACT-1",
@@ -72,21 +72,24 @@
           "name": "CLI Main"
         }
       ],
-      "cross_system_behaviors": [],
+      "cross_system_behaviors": [
+        {
+          "id": "BEH-1",
+          "name": "CLI: Run Benchmark"
+        },
+        {
+          "id": "BEH-2",
+          "name": "CLI: Benchmark Economy"
+        },
+        {
+          "id": "BEH-3",
+          "name": "CLI: Main"
+        }
+      ],
       "inter_system_interfaces": [
         {
-          "from": "SYS-quality",
-          "to": "SYS-formatter",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-docs-validator",
-          "to": "SYS-infrastructure-(prompts)",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-infrastructure-(telemetry)",
-          "to": "SYS-infrastructure-(runner)",
+          "from": "SYS-pipeline-bridge",
+          "to": "SYS-infrastructure-(requirements)",
           "type": "depends-on"
         },
         {
@@ -96,111 +99,21 @@
         },
         {
           "from": "SYS-metrics",
-          "to": "SYS-infrastructure-(telemetry)",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-docs-validator",
-          "to": "SYS-cli-main",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-docs-validator",
           "to": "SYS-infrastructure-(runner)",
           "type": "depends-on"
         },
         {
-          "from": "SYS-docs-validator",
-          "to": "SYS-infrastructure-(prompts)",
+          "from": "SYS-quality",
+          "to": "SYS-selector",
           "type": "depends-on"
         },
         {
-          "from": "SYS-docs-validator",
-          "to": "SYS-calibrate",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-cache",
-          "to": "SYS-infrastructure-(requirements)",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-metrics",
-          "to": "SYS-infrastructure-(runner)",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-patterns",
-          "to": "SYS-infrastructure-(learning)",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-pipeline-bridge",
+          "from": "SYS-quality",
           "to": "SYS-formatter",
           "type": "depends-on"
         },
         {
           "from": "SYS-docs-validator",
-          "to": "SYS-metrics",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-quality",
-          "to": "SYS-selector",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-patterns",
-          "to": "SYS-infrastructure-(runner)",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-resolution",
-          "to": "SYS-infrastructure-(learning)",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-cache",
-          "to": "SYS-infrastructure-(cli)",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-cli-main",
-          "to": "SYS-infrastructure-(runner)",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-resolution",
-          "to": "SYS-patterns",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-quality",
-          "to": "SYS-pipeline-bridge",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-pipeline-bridge",
-          "to": "SYS-infrastructure-(requirements)",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-cache",
-          "to": "SYS-infrastructure-(runner)",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-docs-validator",
-          "to": "SYS-selector",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-selector",
-          "to": "SYS-templates",
-          "type": "depends-on"
-        },
-        {
-          "from": "SYS-cache",
           "to": "SYS-infrastructure-(prompts)",
           "type": "depends-on"
         },
@@ -210,18 +123,38 @@
           "type": "depends-on"
         },
         {
-          "from": "SYS-docs-validator",
-          "to": "SYS-templates",
+          "from": "SYS-metrics",
+          "to": "SYS-infrastructure-(telemetry)",
           "type": "depends-on"
         },
         {
-          "from": "SYS-pipeline-bridge",
+          "from": "SYS-docs-validator",
           "to": "SYS-selector",
           "type": "depends-on"
         },
         {
-          "from": "SYS-cli-main",
-          "to": "SYS-infrastructure-(mcp)",
+          "from": "SYS-infrastructure-(telemetry)",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cache",
+          "to": "SYS-infrastructure-(llm)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-resolution",
+          "to": "SYS-infrastructure-(learning)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-calibrate",
           "type": "depends-on"
         },
         {
@@ -230,13 +163,48 @@
           "type": "depends-on"
         },
         {
+          "from": "SYS-patterns",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-selector",
+          "to": "SYS-diagrams",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-selector",
+          "to": "SYS-templates",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-infrastructure-(llm)",
+          "type": "depends-on"
+        },
+        {
           "from": "SYS-cache",
           "to": "SYS-infrastructure-(prompts)",
           "type": "depends-on"
         },
         {
-          "from": "SYS-selector",
+          "from": "SYS-cli-main",
           "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-quality",
+          "to": "SYS-pipeline-bridge",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-diagrams",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cli-main",
+          "to": "SYS-infrastructure-(mcp)",
           "type": "depends-on"
         },
         {
@@ -245,28 +213,73 @@
           "type": "depends-on"
         },
         {
-          "from": "SYS-selector",
-          "to": "SYS-diagrams",
+          "from": "SYS-resolution",
+          "to": "SYS-patterns",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cache",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cache",
+          "to": "SYS-infrastructure-(requirements)",
           "type": "depends-on"
         },
         {
           "from": "SYS-docs-validator",
-          "to": "SYS-diagrams",
+          "to": "SYS-templates",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-patterns",
+          "to": "SYS-infrastructure-(learning)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-metrics",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-pipeline-bridge",
+          "to": "SYS-selector",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-cache",
+          "to": "SYS-infrastructure-(cli)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-pipeline-bridge",
+          "to": "SYS-formatter",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-selector",
+          "to": "SYS-infrastructure-(runner)",
+          "type": "depends-on"
+        },
+        {
+          "from": "SYS-docs-validator",
+          "to": "SYS-cli-main",
           "type": "depends-on"
         }
       ],
       "constraints": []
     },
-    "sos_model_yaml": "meta:\n  schema_version: '2.0'\n  system_of_systems: true\nentities:\n  systems:\n  - id: SYS-docs-validator\n    name: Docs Validator\n    model_path: docs-validator/.architecture-model.yaml\n  - id: SYS-selector\n    name: Selector\n    model_path: selector/.architecture-model.yaml\n  - id: SYS-templates\n    name: Templates\n    model_path: templates/.architecture-model.yaml\n  - id: SYS-diagrams\n    name: Diagrams\n    model_path: diagrams/.architecture-model.yaml\n  - id: SYS-cache\n    name: Cache\n    model_path: cache/.architecture-model.yaml\n  - id: SYS-formatter\n    name: Formatter\n    model_path: formatter/.architecture-model.yaml\n  - id: SYS-pipeline-bridge\n    name: Pipeline Bridge\n    model_path: pipeline-bridge/.architecture-model.yaml\n  - id: SYS-patterns\n    name: Patterns\n    model_path: patterns/.architecture-model.yaml\n  - id: SYS-resolution\n    name: Resolution\n    model_path: resolution/.architecture-model.yaml\n  - id: SYS-quality\n    name: Quality\n    model_path: quality/.architecture-model.yaml\n  - id: SYS-metrics\n    name: Metrics\n    model_path: metrics/.architecture-model.yaml\n  - id: SYS-calibrate\n    name: Calibrate\n    model_path: calibrate/.architecture-model.yaml\n  - id: SYS-spot-check\n    name: Spot Check\n    model_path: spot-check/.architecture-model.yaml\n  - id: SYS-cli-main\n    name: CLI Main\n    model_path: cli-main/.architecture-model.yaml\n  - id: SYS-infrastructure-(learning)\n    name: Infrastructure (learning)\n    model_path: infrastructure-learning/.architecture-model.yaml\n  - id: SYS-infrastructure-(runner)\n    name: Infrastructure (runner)\n    model_path: infrastructure-runner/.architecture-model.yaml\n  - id: SYS-infrastructure-(mcp)\n    name: Infrastructure (mcp)\n    model_path: infrastructure-mcp/.architecture-model.yaml\n  - id: SYS-infrastructure-(requirements)\n    name: Infrastructure (requirements)\n    model_path: infrastructure-requirements/.architecture-model.yaml\n  - id: SYS-infrastructure-(cli)\n    name: Infrastructure (cli)\n    model_path: infrastructure-cli/.architecture-model.yaml\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    model_path: infrastructure-prompts/.architecture-model.yaml\n  - id: SYS-infrastructure-(telemetry)\n    name: Infrastructure (telemetry)\n    model_path: infrastructure-telemetry/.architecture-model.yaml\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    model_path: infrastructure-prompts/.architecture-model.yaml\n  actors:\n  - id: ACT-1\n    name: CLI User\n  capabilities:\n  - id: CAP-1\n    name: Selector\n  - id: CAP-2\n    name: Templates\n  - id: CAP-3\n    name: Diagrams\n  - id: CAP-4\n    name: Cache\n  - id: CAP-5\n    name: Formatter\n  - id: CAP-6\n    name: Pipeline Bridge\n  - id: CAP-7\n    name: Patterns\n  - id: CAP-8\n    name: Resolution\n  - id: CAP-9\n    name: Quality\n  - id: CAP-10\n    name: Metrics\n  - id: CAP-11\n    name: Docs Validator\n  - id: CAP-12\n    name: Calibrate\n  - id: CAP-13\n    name: Spot Check\n  - id: CAP-14\n    name: CLI Main\n  inline_components:\n  - id: SYS-selector\n    name: Selector\n    files:\n    - src/opencode_arch/artifacts/selector.py\n    - src/opencode_arch/artifacts/context.py\n  - id: SYS-templates\n    name: Templates\n    files:\n    - src/opencode_arch/artifacts/templates.py\n  - id: SYS-diagrams\n    name: Diagrams\n    files:\n    - src/opencode_arch/artifacts/diagrams.py\n  - id: SYS-cache\n    name: Cache\n    files:\n    - src/opencode_arch/llm/cache.py\n    - src/opencode_arch/requirements/matcher.py\n    - src/opencode_arch/requirements/llm_extractor.py\n    - src/opencode_arch/requirements/retroactive.py\n  - id: SYS-formatter\n    name: Formatter\n    files:\n    - src/opencode_arch/context/formatter.py\n  - id: SYS-pipeline-bridge\n    name: Pipeline Bridge\n    files:\n    - src/opencode_arch/context/pipeline_bridge.py\n  - id: SYS-patterns\n    name: Patterns\n    files:\n    - src/opencode_arch/learning/patterns.py\n    - src/opencode_arch/learning/classifier.py\n    - src/opencode_arch/learning/adapter.py\n  - id: SYS-resolution\n    name: Resolution\n    files:\n    - src/opencode_arch/agent/resolution.py\n  - id: SYS-quality\n    name: Quality\n    files:\n    - src/opencode_arch/mcp/quality.py\n  - id: SYS-metrics\n    name: Metrics\n    files:\n    - src/opencode_arch/cli/metrics.py\n  - id: SYS-calibrate\n    name: Calibrate\n    files:\n    - src/opencode_arch/cli/calibrate.py\n  - id: SYS-spot-check\n    name: Spot Check\n    files:\n    - src/opencode_arch/regen/spot_check.py\n    - src/opencode_arch/regen/self_heal.py\n  - id: SYS-cli-main\n    name: CLI Main\n    files:\n    - src/opencode_arch/mcp/__main__.py\n    - src/opencode_arch/cli/main.py\n  - id: SYS-infrastructure-(learning)\n    name: Infrastructure (learning)\n    files:\n    - src/opencode_arch/learning/assessor.py\n    - src/opencode_arch/learning/lessons.py\n    - src/opencode_arch/learning/maintainer.py\n  - id: SYS-infrastructure-(runner)\n    name: Infrastructure (runner)\n    files:\n    - src/opencode_arch/runner/opencode.py\n    - src/opencode_arch/runner/base.py\n  - id: SYS-infrastructure-(mcp)\n    name: Infrastructure (mcp)\n    files:\n    - src/opencode_arch/mcp/server.py\n  - id: SYS-infrastructure-(requirements)\n    name: Infrastructure (requirements)\n    files:\n    - src/opencode_arch/requirements/parser.py\n  - id: SYS-infrastructure-(cli)\n    name: Infrastructure (cli)\n    files:\n    - src/opencode_arch/cli/confidence.py\n    - src/opencode_arch/cli/prompts.py\n    - src/opencode_arch/cli/gap_analyzer.py\n    - src/opencode_arch/cli/launch.py\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    files:\n    - src/opencode_arch/prompts/regen.py\n  - id: SYS-infrastructure-(telemetry)\n    name: Infrastructure (telemetry)\n    files:\n    - src/opencode_arch/telemetry/store.py\n    - src/opencode_arch/telemetry/recorder.py\n    - src/opencode_arch/telemetry/collector.py\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    files:\n    - src/opencode_arch/llm/prompts/audit.py\n    - src/opencode_arch/llm/prompts/matching.py\n    - src/opencode_arch/llm/prompts/requirements.py\nrelationships:\n- from: SYS-quality\n  to: SYS-formatter\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-infrastructure-(telemetry)\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-metrics\n  to: SYS-infrastructure-(telemetry)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-cli-main\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-calibrate\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(requirements)\n  type: depends-on\n- from: SYS-metrics\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-patterns\n  to: SYS-infrastructure-(learning)\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-formatter\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-metrics\n  type: depends-on\n- from: SYS-quality\n  to: SYS-selector\n  type: depends-on\n- from: SYS-patterns\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-resolution\n  to: SYS-infrastructure-(learning)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(cli)\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-resolution\n  to: SYS-patterns\n  type: depends-on\n- from: SYS-quality\n  to: SYS-pipeline-bridge\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-infrastructure-(requirements)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-selector\n  type: depends-on\n- from: SYS-selector\n  to: SYS-templates\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-spot-check\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-templates\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-selector\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-infrastructure-(mcp)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(cli)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-selector\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-quality\n  type: depends-on\n- from: SYS-selector\n  to: SYS-diagrams\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-diagrams\n  type: depends-on\n",
+    "sos_model_yaml": "meta:\n  schema_version: '2.0'\n  system_of_systems: true\nentities:\n  systems:\n  - id: SYS-docs-validator\n    name: Docs Validator\n    model_path: docs-validator/.architecture-model.yaml\n  - id: SYS-selector\n    name: Selector\n    model_path: selector/.architecture-model.yaml\n  - id: SYS-templates\n    name: Templates\n    model_path: templates/.architecture-model.yaml\n  - id: SYS-diagrams\n    name: Diagrams\n    model_path: diagrams/.architecture-model.yaml\n  - id: SYS-cache\n    name: Cache\n    model_path: cache/.architecture-model.yaml\n  - id: SYS-formatter\n    name: Formatter\n    model_path: formatter/.architecture-model.yaml\n  - id: SYS-pipeline-bridge\n    name: Pipeline Bridge\n    model_path: pipeline-bridge/.architecture-model.yaml\n  - id: SYS-patterns\n    name: Patterns\n    model_path: patterns/.architecture-model.yaml\n  - id: SYS-resolution\n    name: Resolution\n    model_path: resolution/.architecture-model.yaml\n  - id: SYS-quality\n    name: Quality\n    model_path: quality/.architecture-model.yaml\n  - id: SYS-metrics\n    name: Metrics\n    model_path: metrics/.architecture-model.yaml\n  - id: SYS-calibrate\n    name: Calibrate\n    model_path: calibrate/.architecture-model.yaml\n  - id: SYS-spot-check\n    name: Spot Check\n    model_path: spot-check/.architecture-model.yaml\n  - id: SYS-cli-main\n    name: CLI Main\n    model_path: cli-main/.architecture-model.yaml\n  - id: SYS-infrastructure-(learning)\n    name: Infrastructure (learning)\n    model_path: infrastructure-learning/.architecture-model.yaml\n  - id: SYS-infrastructure-(runner)\n    name: Infrastructure (runner)\n    model_path: infrastructure-runner/.architecture-model.yaml\n  - id: SYS-infrastructure-(mcp)\n    name: Infrastructure (mcp)\n    model_path: infrastructure-mcp/.architecture-model.yaml\n  - id: SYS-infrastructure-(requirements)\n    name: Infrastructure (requirements)\n    model_path: infrastructure-requirements/.architecture-model.yaml\n  - id: SYS-infrastructure-(cli)\n    name: Infrastructure (cli)\n    model_path: infrastructure-cli/.architecture-model.yaml\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    model_path: infrastructure-prompts/.architecture-model.yaml\n  - id: SYS-infrastructure-(telemetry)\n    name: Infrastructure (telemetry)\n    model_path: infrastructure-telemetry/.architecture-model.yaml\n  - id: SYS-infrastructure-(llm)\n    name: Infrastructure (llm)\n    model_path: infrastructure-llm/.architecture-model.yaml\n  actors:\n  - id: ACT-1\n    name: CLI User\n  capabilities:\n  - id: CAP-1\n    name: Selector\n  - id: CAP-2\n    name: Templates\n  - id: CAP-3\n    name: Diagrams\n  - id: CAP-4\n    name: Cache\n  - id: CAP-5\n    name: Formatter\n  - id: CAP-6\n    name: Pipeline Bridge\n  - id: CAP-7\n    name: Patterns\n  - id: CAP-8\n    name: Resolution\n  - id: CAP-9\n    name: Quality\n  - id: CAP-10\n    name: Metrics\n  - id: CAP-11\n    name: Docs Validator\n  - id: CAP-12\n    name: Calibrate\n  - id: CAP-13\n    name: Spot Check\n  - id: CAP-14\n    name: CLI Main\n  inline_components:\n  - id: SYS-selector\n    name: Selector\n    files:\n    - src/opencode_arch/artifacts/context.py\n    - src/opencode_arch/artifacts/selector.py\n  - id: SYS-templates\n    name: Templates\n    files:\n    - src/opencode_arch/artifacts/templates.py\n  - id: SYS-diagrams\n    name: Diagrams\n    files:\n    - src/opencode_arch/artifacts/diagrams.py\n  - id: SYS-cache\n    name: Cache\n    files:\n    - src/opencode_arch/llm/cache.py\n    - src/opencode_arch/requirements/llm_extractor.py\n    - src/opencode_arch/requirements/matcher.py\n    - src/opencode_arch/requirements/retroactive.py\n  - id: SYS-formatter\n    name: Formatter\n    files:\n    - src/opencode_arch/context/formatter.py\n  - id: SYS-pipeline-bridge\n    name: Pipeline Bridge\n    files:\n    - src/opencode_arch/context/pipeline_bridge.py\n  - id: SYS-patterns\n    name: Patterns\n    files:\n    - src/opencode_arch/learning/adapter.py\n    - src/opencode_arch/learning/classifier.py\n    - src/opencode_arch/learning/patterns.py\n  - id: SYS-resolution\n    name: Resolution\n    files:\n    - src/opencode_arch/agent/resolution.py\n  - id: SYS-quality\n    name: Quality\n    files:\n    - src/opencode_arch/mcp/quality.py\n  - id: SYS-metrics\n    name: Metrics\n    files:\n    - src/opencode_arch/cli/metrics.py\n  - id: SYS-calibrate\n    name: Calibrate\n    files:\n    - src/opencode_arch/cli/calibrate.py\n  - id: SYS-spot-check\n    name: Spot Check\n    files:\n    - src/opencode_arch/regen/self_heal.py\n    - src/opencode_arch/regen/spot_check.py\n  - id: SYS-cli-main\n    name: CLI Main\n    files:\n    - src/opencode_arch/cli/main.py\n    - src/opencode_arch/mcp/__main__.py\n  - id: SYS-infrastructure-(learning)\n    name: Infrastructure (learning)\n    files:\n    - src/opencode_arch/learning/assessor.py\n    - src/opencode_arch/learning/lessons.py\n    - src/opencode_arch/learning/maintainer.py\n  - id: SYS-infrastructure-(runner)\n    name: Infrastructure (runner)\n    files:\n    - src/opencode_arch/runner/base.py\n    - src/opencode_arch/runner/opencode.py\n  - id: SYS-infrastructure-(mcp)\n    name: Infrastructure (mcp)\n    files:\n    - src/opencode_arch/mcp/server.py\n  - id: SYS-infrastructure-(requirements)\n    name: Infrastructure (requirements)\n    files:\n    - src/opencode_arch/requirements/parser.py\n  - id: SYS-infrastructure-(cli)\n    name: Infrastructure (cli)\n    files:\n    - src/opencode_arch/cli/confidence.py\n    - src/opencode_arch/cli/gap_analyzer.py\n    - src/opencode_arch/cli/launch.py\n    - src/opencode_arch/cli/prompts.py\n  - id: SYS-infrastructure-(prompts)\n    name: Infrastructure (prompts)\n    files:\n    - src/opencode_arch/prompts/regen.py\n  - id: SYS-infrastructure-(telemetry)\n    name: Infrastructure (telemetry)\n    files:\n    - src/opencode_arch/telemetry/collector.py\n    - src/opencode_arch/telemetry/recorder.py\n    - src/opencode_arch/telemetry/store.py\n  - id: SYS-infrastructure-(llm)\n    name: Infrastructure (llm)\n    files:\n    - src/opencode_arch/llm/prompts/audit.py\n    - src/opencode_arch/llm/prompts/matching.py\n    - src/opencode_arch/llm/prompts/requirements.py\nrelationships:\n- from: SYS-pipeline-bridge\n  to: SYS-infrastructure-(requirements)\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-metrics\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-quality\n  to: SYS-selector\n  type: depends-on\n- from: SYS-quality\n  to: SYS-formatter\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-spot-check\n  type: depends-on\n- from: SYS-metrics\n  to: SYS-infrastructure-(telemetry)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-selector\n  type: depends-on\n- from: SYS-infrastructure-(telemetry)\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(llm)\n  type: depends-on\n- from: SYS-resolution\n  to: SYS-infrastructure-(learning)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-calibrate\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(cli)\n  type: depends-on\n- from: SYS-patterns\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-selector\n  to: SYS-diagrams\n  type: depends-on\n- from: SYS-selector\n  to: SYS-templates\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-infrastructure-(llm)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(prompts)\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-quality\n  to: SYS-pipeline-bridge\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-diagrams\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-infrastructure-(mcp)\n  type: depends-on\n- from: SYS-cli-main\n  to: SYS-quality\n  type: depends-on\n- from: SYS-resolution\n  to: SYS-patterns\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(requirements)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-templates\n  type: depends-on\n- from: SYS-patterns\n  to: SYS-infrastructure-(learning)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-metrics\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-selector\n  type: depends-on\n- from: SYS-cache\n  to: SYS-infrastructure-(cli)\n  type: depends-on\n- from: SYS-pipeline-bridge\n  to: SYS-formatter\n  type: depends-on\n- from: SYS-selector\n  to: SYS-infrastructure-(runner)\n  type: depends-on\n- from: SYS-docs-validator\n  to: SYS-cli-main\n  type: depends-on\n",
     "system_models": [
       {
         "__dataclass__": "SystemModel",
         "__module__": "architecture_model.pipeline.synthesize_types",
         "system_id": "SYS-docs-validator",
         "name": "Docs Validator",
-        "model_yaml": "meta:\n  schema_version: '2.0'\n  system: Docs Validator\n  system_id: SYS-docs-validator\nentities:\n  capabilities:\n  - id: CAP-1\n    name: Docs\n  - id: CAP-2\n    name: Docs Validator\n  - id: CAP-3\n    name: Regen Loop\n  - id: CAP-4\n    name: Generate\n  - id: CAP-5\n    name: Bench\n  - id: CAP-6\n    name: Extract\nrelationships: []\n",
-        "manifest_json": "{\n  \"modules\": [\n    {\n      \"file\": \"src/opencode_arch/cli/docs.py\",\n      \"functions\": 6,\n      \"classes\": 1\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/docs_validator.py\",\n      \"functions\": 8,\n      \"classes\": 2\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/regen_loop.py\",\n      \"functions\": 13,\n      \"classes\": 1\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/generate.py\",\n      \"functions\": 1,\n      \"classes\": 0\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/bench.py\",\n      \"functions\": 1,\n      \"classes\": 0\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/extract.py\",\n      \"functions\": 2,\n      \"classes\": 0\n    }\n  ]\n}",
-        "pipeline_report_md": "# Pipeline Report: Docs Validator\n\n**Generated:** 2026-08-11T17:18:41Z\n**Total Duration:** 172ms\n**Stages:** 2\n\n## LLM Summary\n\nNo LLM calls \u2014 deterministic pipeline run\n\n## Stage Scores\n\n| Stage | Score | Duration | LLM Calls |\n|-------|-------|----------|-----------|\n| observe | 100 | 172ms | 0 |\n| infer | 100 | 0ms | 0 |\n\n## Stage: observe\n**Score:** 100 | **Duration:** 172ms\n\n### Deterministic Findings\n- Discovered 6 modules\n- 31 functions, 4 classes\n- 0 import edges\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: infer\n**Score:** 100 | **Duration:** 0ms\n\n### Deterministic Findings\n- Inferred 6 capabilities\n- 1 actors\n- 0 behaviors\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n",
+        "model_yaml": "meta:\n  schema_version: '2.0'\n  system: Docs Validator\n  system_id: SYS-docs-validator\nentities:\n  capabilities:\n  - id: CAP-1\n    name: Bench\n  - id: CAP-2\n    name: Docs\n  - id: CAP-3\n    name: Docs Validator\n  - id: CAP-4\n    name: Extract\n  - id: CAP-5\n    name: Generate\n  - id: CAP-6\n    name: Regen Loop\n  actors:\n  - id: ACT-1\n    name: User\n    actor_type: human\n    evidence_source: default\nrelationships: []\n",
+        "manifest_json": "{\n  \"modules\": [\n    {\n      \"file\": \"src/opencode_arch/cli/bench.py\",\n      \"functions\": 1,\n      \"classes\": 0\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/docs.py\",\n      \"functions\": 6,\n      \"classes\": 1\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/docs_validator.py\",\n      \"functions\": 8,\n      \"classes\": 2\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/extract.py\",\n      \"functions\": 2,\n      \"classes\": 0\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/generate.py\",\n      \"functions\": 1,\n      \"classes\": 0\n    },\n    {\n      \"file\": \"src/opencode_arch/cli/regen_loop.py\",\n      \"functions\": 13,\n      \"classes\": 1\n    }\n  ]\n}",
+        "pipeline_report_md": "# Pipeline Report: Docs Validator\n\n**Generated:** 2026-08-16T01:01:29Z\n**Total Duration:** 194ms\n**Stages:** 2\n\n## LLM Summary\n\nNo LLM calls \u2014 deterministic pipeline run\n\n## Stage Scores\n\n| Stage | Score | Duration | LLM Calls |\n|-------|-------|----------|-----------|\n| observe | 100 | 194ms | 0 |\n| infer | 100 | 0ms | 0 |\n\n## Stage: observe\n**Score:** 100 | **Duration:** 194ms\n\n### Deterministic Findings\n- Discovered 6 modules\n- 31 functions, 4 classes\n- 1 import edges\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: infer\n**Score:** 100 | **Duration:** 0ms\n\n### Deterministic Findings\n- Inferred 6 capabilities\n- 1 actors\n- 0 behaviors\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n",
         "lessons_md": "# Lessons: Docs Validator\n\nNo lessons to report.\n",
         "stage_results": {
           "observe": {
@@ -276,6 +289,38 @@
               "__dataclass__": "Inventory",
               "__module__": "architecture_model.pipeline.observe_types",
               "modules": [
+                {
+                  "__dataclass__": "ModuleRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "src/opencode_arch/cli/bench.py",
+                  "language": "python",
+                  "functions": [
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "run_bench",
+                      "signature": "async def run_bench(repos: list[str], runner: RunnerBackend, budget: int=4000, target_score: int=80) -> list[dict[str, Any]]",
+                      "body_hint": "results = []; for repo_path in repos:\n    result = await run_extract(repo_path=repo_path, runner=runner, budget=budget, target_score=target_score)\n    result['repo'] = repo_path\n    results.append(result); return results",
+                      "calls": [
+                        "append",
+                        "run_extract"
+                      ],
+                      "decorators": [],
+                      "docstring": "Run extraction benchmark on multiple repositories.",
+                      "line_number": 10
+                    }
+                  ],
+                  "classes": [],
+                  "constants": [],
+                  "imports": [
+                    "__future__",
+                    "typing",
+                    "opencode_arch.runner.base",
+                    "opencode_arch.cli.extract"
+                  ],
+                  "line_count": 25,
+                  "docstring": "Bench command - benchmark extraction on multiple repos."
+                },
                 {
                   "__dataclass__": "ModuleRecord",
                   "__module__": "architecture_model.pipeline.observe_types",
@@ -677,6 +722,110 @@
                 {
                   "__dataclass__": "ModuleRecord",
                   "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "src/opencode_arch/cli/extract.py",
+                  "language": "python",
+                  "functions": [
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "run_extract",
+                      "signature": "async def run_extract(repo_path: str, runner: RunnerBackend, budget: int=4000, focus: str='all', target_score: int=80) -> dict[str, Any]",
+                      "body_hint": "[12 statements]",
+                      "calls": [
+                        "Path",
+                        "time",
+                        "format",
+                        "_extract_yaml_from_output",
+                        "exists",
+                        "run",
+                        "store_extraction",
+                        "get",
+                        "str",
+                        "resolve"
+                      ],
+                      "decorators": [],
+                      "docstring": "Run the full extraction loop.\n\n1. Validates repo exists\n2. Calls runner with extraction prompt\n3. Parses YAML from output\n4. Validates and stores via tool APIs\n5. Returns metrics",
+                      "line_number": 13
+                    },
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "_extract_yaml_from_output",
+                      "signature": "def _extract_yaml_from_output(output: str) -> str | None",
+                      "body_hint": "[7 statements]",
+                      "calls": [
+                        "search",
+                        "strip",
+                        "group"
+                      ],
+                      "decorators": [],
+                      "docstring": "Extract YAML content from agent output (between ```yaml fences).",
+                      "line_number": 77
+                    }
+                  ],
+                  "classes": [],
+                  "constants": [],
+                  "imports": [
+                    "__future__",
+                    "re",
+                    "time",
+                    "pathlib",
+                    "typing",
+                    "opencode_arch.runner.base",
+                    "opencode_arch.cli.prompts"
+                  ],
+                  "line_count": 93,
+                  "docstring": "Extract command - full architecture extraction loop."
+                },
+                {
+                  "__dataclass__": "ModuleRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "path": "src/opencode_arch/cli/generate.py",
+                  "language": "python",
+                  "functions": [
+                    {
+                      "__dataclass__": "FunctionRecord",
+                      "__module__": "architecture_model.pipeline.observe_types",
+                      "name": "run_generate",
+                      "signature": "async def run_generate(repo_path: str, runner: RunnerBackend, max_iter: int=3, test_command: str | None=None) -> dict[str, Any]",
+                      "body_hint": "[10 statements]",
+                      "calls": [
+                        "Path",
+                        "time",
+                        "range",
+                        "exists",
+                        "format",
+                        "TelemetryStore",
+                        "record",
+                        "get",
+                        "join",
+                        "run",
+                        "run_tests_on_generated_code",
+                        "str",
+                        "int",
+                        "resolve"
+                      ],
+                      "decorators": [],
+                      "docstring": "Run the test-guided code generation loop.",
+                      "line_number": 12
+                    }
+                  ],
+                  "classes": [],
+                  "constants": [],
+                  "imports": [
+                    "__future__",
+                    "time",
+                    "pathlib",
+                    "typing",
+                    "opencode_arch.runner.base",
+                    "opencode_arch.cli.prompts"
+                  ],
+                  "line_count": 68,
+                  "docstring": "Generate command - test-guided code generation loop."
+                },
+                {
+                  "__dataclass__": "ModuleRecord",
+                  "__module__": "architecture_model.pipeline.observe_types",
                   "path": "src/opencode_arch/cli/regen_loop.py",
                   "language": "python",
                   "functions": [
@@ -988,145 +1137,19 @@
                   ],
                   "line_count": 1028,
                   "docstring": "Regen-loop orchestrator \u2014 iterative subsystem-decomposed code regeneration."
-                },
-                {
-                  "__dataclass__": "ModuleRecord",
-                  "__module__": "architecture_model.pipeline.observe_types",
-                  "path": "src/opencode_arch/cli/generate.py",
-                  "language": "python",
-                  "functions": [
-                    {
-                      "__dataclass__": "FunctionRecord",
-                      "__module__": "architecture_model.pipeline.observe_types",
-                      "name": "run_generate",
-                      "signature": "async def run_generate(repo_path: str, runner: RunnerBackend, max_iter: int=3, test_command: str | None=None) -> dict[str, Any]",
-                      "body_hint": "[10 statements]",
-                      "calls": [
-                        "Path",
-                        "time",
-                        "range",
-                        "exists",
-                        "format",
-                        "TelemetryStore",
-                        "record",
-                        "get",
-                        "join",
-                        "run",
-                        "run_tests_on_generated_code",
-                        "str",
-                        "int",
-                        "resolve"
-                      ],
-                      "decorators": [],
-                      "docstring": "Run the test-guided code generation loop.",
-                      "line_number": 12
-                    }
-                  ],
-                  "classes": [],
-                  "constants": [],
-                  "imports": [
-                    "__future__",
-                    "time",
-                    "pathlib",
-                    "typing",
-                    "opencode_arch.runner.base",
-                    "opencode_arch.cli.prompts"
-                  ],
-                  "line_count": 68,
-                  "docstring": "Generate command - test-guided code generation loop."
-                },
-                {
-                  "__dataclass__": "ModuleRecord",
-                  "__module__": "architecture_model.pipeline.observe_types",
-                  "path": "src/opencode_arch/cli/bench.py",
-                  "language": "python",
-                  "functions": [
-                    {
-                      "__dataclass__": "FunctionRecord",
-                      "__module__": "architecture_model.pipeline.observe_types",
-                      "name": "run_bench",
-                      "signature": "async def run_bench(repos: list[str], runner: RunnerBackend, budget: int=4000, target_score: int=80) -> list[dict[str, Any]]",
-                      "body_hint": "results = []; for repo_path in repos:\n    result = await run_extract(repo_path=repo_path, runner=runner, budget=budget, target_score=target_score)\n    result['repo'] = repo_path\n    results.append(result); return results",
-                      "calls": [
-                        "append",
-                        "run_extract"
-                      ],
-                      "decorators": [],
-                      "docstring": "Run extraction benchmark on multiple repositories.",
-                      "line_number": 10
-                    }
-                  ],
-                  "classes": [],
-                  "constants": [],
-                  "imports": [
-                    "__future__",
-                    "typing",
-                    "opencode_arch.runner.base",
-                    "opencode_arch.cli.extract"
-                  ],
-                  "line_count": 25,
-                  "docstring": "Bench command - benchmark extraction on multiple repos."
-                },
-                {
-                  "__dataclass__": "ModuleRecord",
-                  "__module__": "architecture_model.pipeline.observe_types",
-                  "path": "src/opencode_arch/cli/extract.py",
-                  "language": "python",
-                  "functions": [
-                    {
-                      "__dataclass__": "FunctionRecord",
-                      "__module__": "architecture_model.pipeline.observe_types",
-                      "name": "run_extract",
-                      "signature": "async def run_extract(repo_path: str, runner: RunnerBackend, budget: int=4000, focus: str='all', target_score: int=80) -> dict[str, Any]",
-                      "body_hint": "[12 statements]",
-                      "calls": [
-                        "Path",
-                        "time",
-                        "format",
-                        "_extract_yaml_from_output",
-                        "exists",
-                        "run",
-                        "store_extraction",
-                        "get",
-                        "str",
-                        "resolve"
-                      ],
-                      "decorators": [],
-                      "docstring": "Run the full extraction loop.\n\n1. Validates repo exists\n2. Calls runner with extraction prompt\n3. Parses YAML from output\n4. Validates and stores via tool APIs\n5. Returns metrics",
-                      "line_number": 13
-                    },
-                    {
-                      "__dataclass__": "FunctionRecord",
-                      "__module__": "architecture_model.pipeline.observe_types",
-                      "name": "_extract_yaml_from_output",
-                      "signature": "def _extract_yaml_from_output(output: str) -> str | None",
-                      "body_hint": "[7 statements]",
-                      "calls": [
-                        "search",
-                        "strip",
-                        "group"
-                      ],
-                      "decorators": [],
-                      "docstring": "Extract YAML content from agent output (between ```yaml fences).",
-                      "line_number": 77
-                    }
-                  ],
-                  "classes": [],
-                  "constants": [],
-                  "imports": [
-                    "__future__",
-                    "re",
-                    "time",
-                    "pathlib",
-                    "typing",
-                    "opencode_arch.runner.base",
-                    "opencode_arch.cli.prompts"
-                  ],
-                  "line_count": 93,
-                  "docstring": "Extract command - full architecture extraction loop."
                 }
               ],
-              "edges": [],
+              "edges": [
+                {
+                  "__dataclass__": "ImportEdge",
+                  "__module__": "architecture_model.pipeline.observe_types",
+                  "source": "src/opencode_arch/cli/bench.py",
+                  "target": "src/opencode_arch/cli/extract.py",
+                  "symbols": [
+                    "extract"
+                  ]
+                }
+              ],
               "routes": [],
               "constraints": [
                 {
@@ -1377,7 +1400,7 @@
             "diagnostics": [],
             "uncertainties": [],
             "input_hash": "6",
-            "duration_ms": 172,
+            "duration_ms": 194,
             "version": "1.0"
           },
           "infer": {
@@ -1391,42 +1414,6 @@
                   "__dataclass__": "InferredCapability",
                   "__module__": "architecture_model.pipeline.infer_types",
                   "id": "CAP-1",
-                  "name": "Docs",
-                  "description": "Domain logic in src/opencode_arch/cli/docs.py",
-                  "evidence_source": "domain_module",
-                  "sub_capabilities": []
-                },
-                {
-                  "__dataclass__": "InferredCapability",
-                  "__module__": "architecture_model.pipeline.infer_types",
-                  "id": "CAP-2",
-                  "name": "Docs Validator",
-                  "description": "Domain logic in src/opencode_arch/cli/docs_validator.py",
-                  "evidence_source": "domain_module",
-                  "sub_capabilities": []
-                },
-                {
-                  "__dataclass__": "InferredCapability",
-                  "__module__": "architecture_model.pipeline.infer_types",
-                  "id": "CAP-3",
-                  "name": "Regen Loop",
-                  "description": "Domain logic in src/opencode_arch/cli/regen_loop.py",
-                  "evidence_source": "domain_module",
-                  "sub_capabilities": []
-                },
-                {
-                  "__dataclass__": "InferredCapability",
-                  "__module__": "architecture_model.pipeline.infer_types",
-                  "id": "CAP-4",
-                  "name": "Generate",
-                  "description": "Domain logic in src/opencode_arch/cli/generate.py",
-                  "evidence_source": "domain_module",
-                  "sub_capabilities": []
-                },
-                {
-                  "__dataclass__": "InferredCapability",
-                  "__module__": "architecture_model.pipeline.infer_types",
-                  "id": "CAP-5",
                   "name": "Bench",
                   "description": "Domain logic in src/opencode_arch/cli/bench.py",
                   "evidence_source": "domain_module",
@@ -1435,9 +1422,45 @@
                 {
                   "__dataclass__": "InferredCapability",
                   "__module__": "architecture_model.pipeline.infer_types",
-                  "id": "CAP-6",
+                  "id": "CAP-2",
+                  "name": "Docs",
+                  "description": "Domain logic in src/opencode_arch/cli/docs.py",
+                  "evidence_source": "domain_module",
+                  "sub_capabilities": []
+                },
+                {
+                  "__dataclass__": "InferredCapability",
+                  "__module__": "architecture_model.pipeline.infer_types",
+                  "id": "CAP-3",
+                  "name": "Docs Validator",
+                  "description": "Domain logic in src/opencode_arch/cli/docs_validator.py",
+                  "evidence_source": "domain_module",
+                  "sub_capabilities": []
+                },
+                {
+                  "__dataclass__": "InferredCapability",
+                  "__module__": "architecture_model.pipeline.infer_types",
+                  "id": "CAP-4",
                   "name": "Extract",
                   "description": "Domain logic in src/opencode_arch/cli/extract.py",
+                  "evidence_source": "domain_module",
+                  "sub_capabilities": []
+                },
+                {
+                  "__dataclass__": "InferredCapability",
+                  "__module__": "architecture_model.pipeline.infer_types",
+                  "id": "CAP-5",
+                  "name": "Generate",
+                  "description": "Domain logic in src/opencode_arch/cli/generate.py",
+                  "evidence_source": "domain_module",
+                  "sub_capabilities": []
+                },
+                {
+                  "__dataclass__": "InferredCapability",
+                  "__module__": "architecture_model.pipeline.infer_types",
+                  "id": "CAP-6",
+                  "name": "Regen Loop",
+                  "description": "Domain logic in src/opencode_arch/cli/regen_loop.py",
                   "evidence_source": "domain_module",
                   "sub_capabilities": []
                 }
@@ -1720,8 +1743,8 @@
       {
         "__dataclass__": "SystemModel",
         "__module__": "architecture_model.pipeline.synthesize_types",
-        "system_id": "SYS-infrastructure-(prompts)",
-        "name": "Infrastructure (prompts)",
+        "system_id": "SYS-infrastructure-(llm)",
+        "name": "Infrastructure (llm)",
         "model_yaml": "",
         "manifest_json": "",
         "pipeline_report_md": "",
@@ -1731,8 +1754,8 @@
       }
     ],
     "top_manifest_json": "",
-    "pipeline_report_md": "# Pipeline Report: System-of-Systems\n\n**Generated:** 2026-08-11T17:18:41Z\n**Total Duration:** 518ms\n**Stages:** 8\n\n## LLM Summary\n\nNo LLM calls \u2014 deterministic pipeline run\n\n## Stage Scores\n\n| Stage | Score | Duration | LLM Calls |\n|-------|-------|----------|-----------|\n| observe | 99 | 484ms | 0 |\n| infer | 83 | 0ms | 0 |\n| allocate | 100 | 3ms | 0 |\n| contract | 72 | 0ms | 0 |\n| relate | 81 | 31ms | 0 |\n| specify | 50 | 0ms | 0 |\n| decompose | 100.0 | 0ms | 0 |\n| validate | 100 | 0ms | 0 |\n\n## Stage: observe\n**Score:** 99 | **Duration:** 484ms\n\n### Deterministic Findings\n- Discovered 155 modules\n- 341 functions, 148 classes\n- 0 import edges\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n- \u26a0\ufe0f parse-failed: Parse failed: src/opencode_arch/cli/export_data.py: unindent does not match any outer indentation level (export_data.py, line 74)\n\n## Stage: infer\n**Score:** 83 | **Duration:** 0ms\n\n### Deterministic Findings\n- Inferred 14 capabilities\n- 1 actors\n- 0 behaviors\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n### Uncertainties\n- ambiguous_module: src/opencode_arch/learning/assessor.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/learning/classifier.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/learning/lessons.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/learning/adapter.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/learning/maintainer.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/mcp/server.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/mcp/__main__.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/requirements/matcher.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/requirements/parser.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/requirements/llm_extractor.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/requirements/retroactive.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/regen_loop.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/confidence.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/generate.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/prompts.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/bench.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/gap_analyzer.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/launch.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/extract.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/telemetry/store.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/telemetry/recorder.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/telemetry/collector.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/regen/self_heal.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/llm/prompts/audit.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/llm/prompts/matching.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/llm/prompts/requirements.py has no clear capability affiliation\n\n## Stage: allocate\n**Score:** 100 | **Duration:** 3ms\n\n### Deterministic Findings\n- 22 components\n- File coverage: 10000%\n- 0 unallocated files\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: contract\n**Score:** 72 | **Duration:** 0ms\n\n### Deterministic Findings\n- 43 contracts\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: relate\n**Score:** 81 | **Duration:** 31ms\n\n### Deterministic Findings\n- 36 depends-on relationships\n- 22 contains relationships\n- 14 realizes relationships\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: specify\n**Score:** 50 | **Duration:** 0ms\n\n### Deterministic Findings\n- 1 interfaces\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: decompose\n**Score:** 100.0 | **Duration:** 0ms\n\n### Deterministic Findings\n- 1 systems\n- 21 inline components\n- 36 inter-system edges\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: validate\n**Score:** 100 | **Duration:** 0ms\n\n### Deterministic Findings\n- Score: 100/100\n- 0 issues\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n",
-    "lessons_md": "# Lessons: System-of-Systems\n\n## Stage: observe\n- Parse failed: src/opencode_arch/cli/export_data.py: unindent does not match any outer indentation level (export_data.py, line 74)\n\n## Stage: infer\n- Ambiguous module required resolution (26 instances)\n",
+    "pipeline_report_md": "# Pipeline Report: System-of-Systems\n\n**Generated:** 2026-08-16T01:01:29Z\n**Total Duration:** 576ms\n**Stages:** 8\n\n## LLM Summary\n\nNo LLM calls \u2014 deterministic pipeline run\n\n## Stage Scores\n\n| Stage | Score | Duration | LLM Calls |\n|-------|-------|----------|-----------|\n| observe | 99 | 542ms | 0 |\n| infer | 83 | 0ms | 0 |\n| allocate | 65 | 3ms | 0 |\n| contract | 72 | 0ms | 0 |\n| relate | 81 | 31ms | 0 |\n| specify | 50 | 0ms | 0 |\n| decompose | 100.0 | 0ms | 0 |\n| validate | 100 | 0ms | 0 |\n\n## Stage: observe\n**Score:** 99 | **Duration:** 542ms\n\n### Deterministic Findings\n- Discovered 162 modules\n- 359 functions, 149 classes\n- 146 import edges\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n- \u26a0\ufe0f parse-failed: Parse failed: src/opencode_arch/cli/export_data.py: unindent does not match any outer indentation level (export_data.py, line 74)\n\n## Stage: infer\n**Score:** 83 | **Duration:** 0ms\n\n### Deterministic Findings\n- Inferred 14 capabilities\n- 1 actors\n- 3 behaviors\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n### Uncertainties\n- complex_behavior: TelemetryStore in src/opencode_arch/telemetry/store.py has 18 public methods \u2014 needs LLM analysis to identify key workflows and use cases\n- ambiguous_module: src/opencode_arch/learning/assessor.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/learning/classifier.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/learning/lessons.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/learning/adapter.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/learning/maintainer.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/mcp/server.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/mcp/__main__.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/requirements/matcher.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/requirements/parser.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/requirements/llm_extractor.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/requirements/retroactive.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/regen_loop.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/confidence.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/generate.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/prompts.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/bench.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/gap_analyzer.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/launch.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/cli/extract.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/telemetry/store.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/telemetry/recorder.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/telemetry/collector.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/regen/self_heal.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/llm/prompts/audit.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/llm/prompts/matching.py has no clear capability affiliation\n- ambiguous_module: src/opencode_arch/llm/prompts/requirements.py has no clear capability affiliation\n\n## Stage: allocate\n**Score:** 65 | **Duration:** 3ms\n\n### Deterministic Findings\n- 22 components\n- File coverage: 10000%\n- 0 unallocated files\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: contract\n**Score:** 72 | **Duration:** 0ms\n\n### Deterministic Findings\n- 43 contracts\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: relate\n**Score:** 81 | **Duration:** 31ms\n\n### Deterministic Findings\n- 36 depends-on relationships\n- 22 contains relationships\n- 14 realizes relationships\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: specify\n**Score:** 50 | **Duration:** 0ms\n\n### Deterministic Findings\n- 1 interfaces\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: decompose\n**Score:** 100.0 | **Duration:** 0ms\n\n### Deterministic Findings\n- 1 systems\n- 21 inline components\n- 36 inter-system edges\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n\n## Stage: validate\n**Score:** 100 | **Duration:** 0ms\n\n### Deterministic Findings\n- Score: 100/100\n- 1 issues\n\n### LLM Calls\n*(none)*\n\n### Diagnostics\n*(none)*\n",
+    "lessons_md": "# Lessons: System-of-Systems\n\n## Stage: observe\n- Parse failed: src/opencode_arch/cli/export_data.py: unindent does not match any outer indentation level (export_data.py, line 74)\n\n## Stage: infer\n- Ambiguous module required resolution (26 instances)\n- TelemetryStore in src/opencode_arch/telemetry/store.py has 18 public methods \u2014 needs LLM analysis to identify key workflows and use cases\n",
     "all_llm_calls": []
   },
   "quality": {
@@ -1749,6 +1772,6 @@
   "diagnostics": [],
   "uncertainties": [],
   "input_hash": "",
-  "duration_ms": 179,
+  "duration_ms": 200,
   "version": "1.0"
 }

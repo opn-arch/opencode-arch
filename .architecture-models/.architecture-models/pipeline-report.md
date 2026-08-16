@@ -1,7 +1,7 @@
 # Pipeline Report: System-of-Systems
 
-**Generated:** 2026-08-11T17:18:41Z
-**Total Duration:** 518ms
+**Generated:** 2026-08-16T01:01:29Z
+**Total Duration:** 576ms
 **Stages:** 8
 
 ## LLM Summary
@@ -12,9 +12,9 @@ No LLM calls — deterministic pipeline run
 
 | Stage | Score | Duration | LLM Calls |
 |-------|-------|----------|-----------|
-| observe | 99 | 484ms | 0 |
+| observe | 99 | 542ms | 0 |
 | infer | 83 | 0ms | 0 |
-| allocate | 100 | 3ms | 0 |
+| allocate | 65 | 3ms | 0 |
 | contract | 72 | 0ms | 0 |
 | relate | 81 | 31ms | 0 |
 | specify | 50 | 0ms | 0 |
@@ -22,12 +22,12 @@ No LLM calls — deterministic pipeline run
 | validate | 100 | 0ms | 0 |
 
 ## Stage: observe
-**Score:** 99 | **Duration:** 484ms
+**Score:** 99 | **Duration:** 542ms
 
 ### Deterministic Findings
-- Discovered 155 modules
-- 341 functions, 148 classes
-- 0 import edges
+- Discovered 162 modules
+- 359 functions, 149 classes
+- 146 import edges
 
 ### LLM Calls
 *(none)*
@@ -41,7 +41,7 @@ No LLM calls — deterministic pipeline run
 ### Deterministic Findings
 - Inferred 14 capabilities
 - 1 actors
-- 0 behaviors
+- 3 behaviors
 
 ### LLM Calls
 *(none)*
@@ -50,6 +50,7 @@ No LLM calls — deterministic pipeline run
 *(none)*
 
 ### Uncertainties
+- complex_behavior: TelemetryStore in src/opencode_arch/telemetry/store.py has 18 public methods — needs LLM analysis to identify key workflows and use cases
 - ambiguous_module: src/opencode_arch/learning/assessor.py has no clear capability affiliation
 - ambiguous_module: src/opencode_arch/learning/classifier.py has no clear capability affiliation
 - ambiguous_module: src/opencode_arch/learning/lessons.py has no clear capability affiliation
@@ -78,7 +79,7 @@ No LLM calls — deterministic pipeline run
 - ambiguous_module: src/opencode_arch/llm/prompts/requirements.py has no clear capability affiliation
 
 ## Stage: allocate
-**Score:** 100 | **Duration:** 3ms
+**Score:** 65 | **Duration:** 3ms
 
 ### Deterministic Findings
 - 22 components
@@ -148,7 +149,7 @@ No LLM calls — deterministic pipeline run
 
 ### Deterministic Findings
 - Score: 100/100
-- 0 issues
+- 1 issues
 
 ### LLM Calls
 *(none)*

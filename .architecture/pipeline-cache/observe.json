@@ -6408,6 +6408,122 @@
       {
         "__dataclass__": "ModuleRecord",
         "__module__": "architecture_model.pipeline.observe_types",
+        "path": "tests/test_learn_tool.py",
+        "language": "python",
+        "functions": [
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "learning_path",
+            "signature": "def learning_path(tmp_path)",
+            "body_hint": "return tmp_path / 'arch-learning'",
+            "calls": [],
+            "decorators": [
+              "pytest.fixture"
+            ],
+            "docstring": null,
+            "line_number": 11
+          }
+        ],
+        "classes": [
+          {
+            "__dataclass__": "ClassRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "TestArchitectLearn",
+            "bases": [],
+            "methods": [
+              "test_add_heuristic",
+              "test_add_archetype",
+              "test_add_workflow",
+              "test_unknown_type"
+            ],
+            "method_details": [
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_add_heuristic",
+                "signature": "async def test_add_heuristic(self, learning_path)",
+                "body_hint": "[4 statements]",
+                "calls": [
+                  "loads",
+                  "startswith",
+                  "record_learning"
+                ],
+                "decorators": [
+                  "pytest.mark.asyncio"
+                ],
+                "docstring": null,
+                "line_number": 17
+              },
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_add_archetype",
+                "signature": "async def test_add_archetype(self, learning_path)",
+                "body_hint": "[4 statements]",
+                "calls": [
+                  "loads",
+                  "startswith",
+                  "record_learning"
+                ],
+                "decorators": [
+                  "pytest.mark.asyncio"
+                ],
+                "docstring": null,
+                "line_number": 34
+              },
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_add_workflow",
+                "signature": "async def test_add_workflow(self, learning_path)",
+                "body_hint": "[4 statements]",
+                "calls": [
+                  "loads",
+                  "startswith",
+                  "record_learning"
+                ],
+                "decorators": [
+                  "pytest.mark.asyncio"
+                ],
+                "docstring": null,
+                "line_number": 48
+              },
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_unknown_type",
+                "signature": "async def test_unknown_type(self, learning_path)",
+                "body_hint": "result = await record_learning(learning_type='bogus', _learning_path=learning_path); data = json.loads(result); assert data['status'] == 'error'",
+                "calls": [
+                  "loads",
+                  "record_learning"
+                ],
+                "decorators": [
+                  "pytest.mark.asyncio"
+                ],
+                "docstring": null,
+                "line_number": 64
+              }
+            ],
+            "attributes": {},
+            "decorators": [],
+            "is_abstract": false
+          }
+        ],
+        "constants": [],
+        "imports": [
+          "json",
+          "pathlib",
+          "pytest",
+          "opencode_arch.mcp.tools.learn"
+        ],
+        "line_count": 70,
+        "docstring": "Tests for architect_learn tool."
+      },
+      {
+        "__dataclass__": "ModuleRecord",
+        "__module__": "architecture_model.pipeline.observe_types",
         "path": "tests/test_regen_prompts.py",
         "language": "python",
         "functions": [],
@@ -13281,9 +13397,11 @@
         "classes": [],
         "constants": [],
         "imports": [
-          "__future__"
+          "__future__",
+          "json",
+          "pathlib"
         ],
-        "line_count": 375,
+        "line_count": 559,
         "docstring": "FastMCP server entry point for opencode-arch.\n\nRun with: python -m opencode_arch.mcp.server"
       },
       {
@@ -16140,6 +16258,125 @@
       {
         "__dataclass__": "ModuleRecord",
         "__module__": "architecture_model.pipeline.observe_types",
+        "path": "src/opencode_arch/mcp/tools/sync.py",
+        "language": "python",
+        "functions": [
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "sync_findings",
+            "signature": "async def sync_findings(repo_path: str, api_url: str=DEFAULT_API_URL, dry_run: bool=False) -> dict[str, Any]",
+            "body_hint": "[11 statements]",
+            "calls": [
+              "items",
+              "_load_existing_from_api",
+              "exists",
+              "get",
+              "encode",
+              "_mark_synced",
+              "splitlines",
+              "ratio",
+              "append",
+              "Request",
+              "urlopen",
+              "len",
+              "dumps",
+              "safe_load",
+              "read_text",
+              "strip",
+              "loads",
+              "SequenceMatcher",
+              "setdefault",
+              "str",
+              "lower",
+              "strftime",
+              "now"
+            ],
+            "decorators": [],
+            "docstring": "Push unsynced findings and devlog entries to logs-db API.\n\nCALL THIS at end of session, after significant work, or when architect_evaluate\nshows high unsynced count. Performs fuzzy dedup against existing DB entries.\n\nArgs:\n    repo_path: Repository root (syncs findings from all 3 repos).\n    api_url: logs-db API URL (default http://localhost:8000).\n    dry_run: If True, report what would sync without pushing.\n\nReturns:\n    {synced_count, skipped_duplicates, errors, dry_run}",
+            "line_number": 23
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_load_existing_from_api",
+            "signature": "def _load_existing_from_api(api_url: str) -> dict[str, list[str]]",
+            "body_hint": "existing: dict[str, list[str]] = {}; try:\n    for page in range(1, 10):\n        req = urllib.request.Request(f'{api_url}/api/logs?page={page}&per_page=50')\n        resp = urllib.request.urlopen(req)\n        logs = json.loads(resp.read())\n        if not logs:\n            break\n        for log in logs:\n            for sys in log.get('systems', []):\n                existing.setdefault(sys['name'], []).append(log['title'])\n        if len(logs) < 50:\n            break\nexcept Exception:\n    pass; return existing",
+            "calls": [
+              "range",
+              "Request",
+              "urlopen",
+              "loads",
+              "read",
+              "get",
+              "len",
+              "append",
+              "setdefault"
+            ],
+            "decorators": [],
+            "docstring": "Load existing log titles from API grouped by system.",
+            "line_number": 168
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_mark_synced",
+            "signature": "def _mark_synced(findings: list[dict]) -> None",
+            "body_hint": "by_path: dict[str, list[dict]] = {}; for f in findings:\n    path = f.get('_source_path')\n    if path and path.endswith('.yaml'):\n        by_path.setdefault(path, []).append(f); for path_str, items in by_path.items():\n    path = Path(path_str)\n    if not path.exists():\n        continue\n    try:\n        data = yaml.safe_load(path.read_text()) or {}\n        titles_to_mark = {i.get('title') for i in items}\n        for finding in data.get('findings', []):\n            if finding.get('title') in titles_to_mark:\n                finding['synced'] = True\n        path.write_text(yaml.dump(data, default_flow_style=False, sort_keys=False))\n    except Exception:\n        pass",
+            "calls": [
+              "items",
+              "get",
+              "Path",
+              "endswith",
+              "append",
+              "exists",
+              "write_text",
+              "safe_load",
+              "dump",
+              "setdefault",
+              "read_text"
+            ],
+            "decorators": [],
+            "docstring": "Mark findings as synced in their source YAML files.",
+            "line_number": 188
+          }
+        ],
+        "classes": [],
+        "constants": [
+          {
+            "__dataclass__": "ConstantRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "WORKSPACE_REPOS",
+            "value": "{'logs-db': Path.home() / 'Documents/Projects/logs_db', 'opencode-arch': Path.home() / 'Documents/Projects/opencode-arch', 'architecture-model-standard': Path.home() / 'Documents/Projects/architecture-model-standard'}",
+            "type": "",
+            "context": ""
+          },
+          {
+            "__dataclass__": "ConstantRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "DEFAULT_API_URL",
+            "value": "'http://localhost:8000'",
+            "type": "",
+            "context": ""
+          }
+        ],
+        "imports": [
+          "__future__",
+          "json",
+          "yaml",
+          "urllib.request",
+          "urllib.error",
+          "datetime",
+          "difflib",
+          "pathlib",
+          "typing"
+        ],
+        "line_count": 208,
+        "docstring": "Sync local findings to logs-db API with fuzzy dedup."
+      },
+      {
+        "__dataclass__": "ModuleRecord",
+        "__module__": "architecture_model.pipeline.observe_types",
         "path": "src/opencode_arch/mcp/tools/ingest.py",
         "language": "python",
         "functions": [
@@ -16148,7 +16385,7 @@
             "__module__": "architecture_model.pipeline.observe_types",
             "name": "ingest_source_graph",
             "signature": "async def ingest_source_graph(repo_path: str, source_graph_json: str) -> dict",
-            "body_hint": "try:\n    from architecture_model.manifest.protocol import SourceGraph\n    from architecture_model.manifest.grouping import group_source_graph, auto_source_blocks\n    from architecture_model.core.types import ArchitectureModel, Component, Entities, ModelMeta\n    from architecture_model.orchestration.auto_enrich import extract_component_interfaces\n    from architecture_model.core.parser import save_model\n    project_root = Path(repo_path)\n    data = json.loads(source_graph_json)\n    graph = SourceGraph.from_json(data)\n    graph.root = repo_path\n    groups = group_source_graph(graph)\n    if not groups:\n        return {'error': 'No non-trivial source units found', 'units': len(graph.units)}\n    components: list[Component] = []\n    for idx, group in enumerate(groups, 1):\n        components.append(Component(id=f'COMP-{idx}', name=group.name, status='ACTIVE', files=group.modules))\n    from architecture_model.core.types import Relationship, RelationType\n    file_to_comp: dict[str, str] = {}\n    for comp in components:\n        for f in comp.files or []:\n            file_to_comp[f] = comp.id\n    relationships: list[Relationship] = []\n    seen_rels: set[tuple[str, str]] = set()\n    for edge in graph.edges:\n        source_comp = file_to_comp.get(edge.source)\n        target_comp = file_to_comp.get(edge.target)\n        if source_comp and target_comp and (source_comp != target_comp):\n            pair = (source_comp, target_comp)\n            if pair not in seen_rels:\n                seen_rels.add(pair)\n                relationships.append(Relationship(type=RelationType.DEPENDS_ON, from_id=source_comp, to_id=target_comp, description=f'{edge.source} -> {edge.target}'))\n    model = ArchitectureModel(meta=ModelMeta(project=project_root.name, schema_version='1.3'), entities=Entities(components=components), relationships=relationships)\n    n_ifaces = extract_component_interfaces(model, graph)\n    from architecture_model.orchestration.auto_enrich import enrich_from_source_graph\n    enrich_from_source_graph(model, graph)\n    source_block_config = auto_source_blocks(groups, threshold=3)\n    model_path = project_root / '.architecture-model-extracted.yaml'\n    save_model(model, model_path)\n    graph_path = project_root / '.architecture-models' / 'source-graph.json'\n    graph_path.parent.mkdir(parents=True, exist_ok=True)\n    graph_path.write_text(json.dumps(graph.to_json(), indent=2))\n    return {'stored': True, 'model_path': str(model_path), 'graph_path': str(graph_path), 'components': len(components), 'interfaces': n_ifaces, 'source_blocks': len(source_block_config), 'units': len(graph.units), 'edges': len(graph.edges), 'language': graph.language, 'groups': [{'name': g.name, 'files': g.modules, 'file_count': len(g.modules)} for g in groups]}\nexcept json.JSONDecodeError as e:\n    return {'error': f'Invalid JSON: {e}'}\nexcept Exception as e:\n    return {'error': str(e)}",
+            "body_hint": "try:\n    from architecture_model.manifest.protocol import SourceGraph\n    from architecture_model.manifest.grouping import group_source_graph, auto_source_blocks\n    from architecture_model.core.types import ArchitectureModel, Component, Entities, ModelMeta\n    from architecture_model.orchestration.auto_enrich import extract_component_interfaces\n    from architecture_model.core.parser import save_model\n    project_root = Path(repo_path)\n    data = json.loads(source_graph_json)\n    graph = SourceGraph.from_json(data)\n    graph.root = repo_path\n    groups = group_source_graph(graph)\n    if not groups:\n        return {'error': 'No non-trivial source units found', 'units': len(graph.units)}\n    components: list[Component] = []\n    for idx, group in enumerate(groups, 1):\n        components.append(Component(id=f'COMP-{idx}', name=group.name, status='ACTIVE', files=group.modules))\n    from architecture_model.core.types import Relationship, RelationType\n    file_to_comp: dict[str, str] = {}\n    for comp in components:\n        for f in comp.files or []:\n            file_to_comp[f] = comp.id\n    relationships: list[Relationship] = []\n    seen_rels: set[tuple[str, str]] = set()\n    for edge in graph.edges:\n        source_comp = file_to_comp.get(edge.source)\n        target_comp = file_to_comp.get(edge.target)\n        if source_comp and target_comp and (source_comp != target_comp):\n            pair = (source_comp, target_comp)\n            if pair not in seen_rels:\n                seen_rels.add(pair)\n                relationships.append(Relationship(type=RelationType.DEPENDS_ON, from_id=source_comp, to_id=target_comp, description=f'{edge.source} -> {edge.target}'))\n    model = ArchitectureModel(meta=ModelMeta(project=project_root.name, schema_version='1.3'), entities=Entities(components=components), relationships=relationships)\n    n_ifaces = extract_component_interfaces(model, graph)\n    from architecture_model.orchestration.auto_enrich import enrich_from_source_graph\n    enrich_from_source_graph(model, graph)\n    source_block_config = auto_source_blocks(groups, threshold=3)\n    model_path = project_root / '.architecture-model.yaml'\n    save_model(model, model_path)\n    graph_path = project_root / '.architecture-models' / 'source-graph.json'\n    graph_path.parent.mkdir(parents=True, exist_ok=True)\n    graph_path.write_text(json.dumps(graph.to_json(), indent=2))\n    return {'stored': True, 'model_path': str(model_path), 'graph_path': str(graph_path), 'components': len(components), 'interfaces': n_ifaces, 'source_blocks': len(source_block_config), 'units': len(graph.units), 'edges': len(graph.edges), 'language': graph.language, 'groups': [{'name': g.name, 'files': g.modules, 'file_count': len(g.modules)} for g in groups]}\nexcept json.JSONDecodeError as e:\n    return {'error': f'Invalid JSON: {e}'}\nexcept Exception as e:\n    return {'error': str(e)}",
             "calls": [
               "Path",
               "loads",
@@ -16179,7 +16416,7 @@
               "with_quality"
             ],
             "docstring": "Ingest a SourceGraph JSON and generate architecture components.\n\nArgs:\n    repo_path: Absolute path to the repository.\n    source_graph_json: JSON string with SourceGraph data.\n\nReturns:\n    Dict with components, interfaces, and group info.",
-            "line_number": 15
+            "line_number": 16
           }
         ],
         "classes": [],
@@ -16190,7 +16427,7 @@
           "pathlib",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 129,
+        "line_count": 137,
         "docstring": "architect_ingest tool \u2014 accept a SourceGraph JSON for any language.\n\nAllows agents or external tools to submit dependency/export data for\nnon-Python repos. Stores the graph and runs grouping + interface extraction."
       },
       {
@@ -16322,27 +16559,31 @@
             "__dataclass__": "FunctionRecord",
             "__module__": "architecture_model.pipeline.observe_types",
             "name": "check_representativeness",
-            "signature": "async def check_representativeness(repo_path: str, model_yaml: str) -> dict[str, Any]",
-            "body_hint": "path = Path(repo_path); if not path.exists():\n    return {'error': f'Repository path does not exist: {repo_path}'}; try:\n    from architecture_model.manifest.generator import generate_manifest\n    from architecture_model.core.parser import load_model\n    from architecture_model.core.representativeness import compute_representativeness as _compute\n    with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:\n        f.write(model_yaml)\n        tmp_path = f.name\n    try:\n        model = load_model(tmp_path)\n    finally:\n        Path(tmp_path).unlink(missing_ok=True)\n    output = _try_hierarchical(path, model)\n    if output is None:\n        output = _try_auto_hierarchical(path, model)\n    if output is None:\n        manifest = generate_manifest(path)\n        result = _compute(model, manifest.modules, manifest.interfaces)\n        output = {'mode': 'flat', 'file_coverage': round(result.file_coverage, 1), 'relationship_accuracy': round(result.relationship_accuracy, 1), 'boundary_coherence': round(result.boundary_coherence, 1), 'overall': round(result.overall, 1), 'uncovered_files': result.uncovered_files, 'unverified_relationships': result.unverified_relationships, 'low_coherence_components': result.low_coherence_components}\n    try:\n        from opencode_arch.telemetry.collector import drain_and_store\n        drain_and_store(tool='architect_check', repo=path.name)\n    except Exception:\n        pass\n    return output\nexcept Exception as e:\n    return {'error': f'Check failed: {e}'}",
+            "signature": "async def check_representativeness(repo_path: str, model_yaml: str='') -> dict[str, Any]",
+            "body_hint": "path = Path(repo_path); if not path.exists():\n    return {'error': f'Repository path does not exist: {repo_path}'}; try:\n    from architecture_model.manifest.generator import generate_manifest\n    from architecture_model.core.parser import load_model\n    from architecture_model.core.representativeness import compute_representativeness as _compute\n    if not model_yaml or not model_yaml.strip():\n        model_file = path / '.architecture-model.yaml'\n        if model_file.exists():\n            model = load_model(model_file)\n        else:\n            return {'error': f'No model found at {model_file}. Run architect_extract first, or pass model_yaml inline.'}\n    else:\n        stripped = model_yaml.strip()\n        if not stripped.startswith(('{', '[', '-', '#')) and '\\n' not in stripped and (stripped.startswith('/') or stripped.startswith('~') or stripped.endswith('.yaml') or stripped.endswith('.yml')):\n            candidate = Path(stripped).expanduser()\n            if candidate.exists():\n                model = load_model(candidate)\n            else:\n                return {'error': f\"'{stripped}' looks like a file path but doesn't exist. Pass inline YAML or leave empty to read from .architecture-model.yaml.\"}\n        else:\n            with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:\n                f.write(model_yaml)\n                tmp_path = f.name\n            try:\n                model = load_model(tmp_path)\n            finally:\n                Path(tmp_path).unlink(missing_ok=True)\n    output = _try_hierarchical(path, model)\n    if output is None:\n        output = _try_auto_hierarchical(path, model)\n    if output is None:\n        manifest = generate_manifest(path)\n        result = _compute(model, manifest.modules, manifest.interfaces)\n        output = {'mode': 'flat', 'file_coverage': round(result.file_coverage, 1), 'relationship_accuracy': round(result.relationship_accuracy, 1), 'boundary_coherence': round(result.boundary_coherence, 1), 'overall': round(result.overall, 1), 'uncovered_files': result.uncovered_files, 'unverified_relationships': result.unverified_relationships, 'low_coherence_components': result.low_coherence_components}\n    try:\n        from opencode_arch.telemetry.collector import drain_and_store\n        drain_and_store(tool='architect_check', repo=path.name)\n    except Exception:\n        pass\n    return output\nexcept Exception as e:\n    return {'error': f'Check failed: {e}'}",
             "calls": [
               "Path",
               "exists",
               "_try_hierarchical",
-              "NamedTemporaryFile",
-              "write",
-              "load_model",
-              "unlink",
+              "strip",
               "_try_auto_hierarchical",
               "generate_manifest",
               "_compute",
               "drain_and_store",
-              "round"
+              "load_model",
+              "expanduser",
+              "round",
+              "startswith",
+              "endswith",
+              "NamedTemporaryFile",
+              "write",
+              "unlink"
             ],
             "decorators": [
               "with_quality"
             ],
-            "docstring": "Check how well an architecture model represents the actual codebase.\n\nSupports three modes:\n- Hierarchical (config): uses pre-existing source_block_dict from config\n- Hierarchical (auto): generates F-blocks from module grouping when no config exists\n- Flat: fallback when neither hierarchical path is available\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    model_yaml: The architecture model YAML to evaluate.\n\nReturns:\n    Dict with scores, details, and suggested improvements.",
-            "line_number": 14
+            "docstring": "Check how well an architecture model represents the actual codebase.\n\nSupports three modes:\n- Hierarchical (config): uses pre-existing source_block_dict from config\n- Hierarchical (auto): generates F-blocks from module grouping when no config exists\n- Flat: fallback when neither hierarchical path is available\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    model_yaml: The architecture model YAML to evaluate.\n        If empty, reads from {repo_path}/.architecture-model.yaml.\n\nReturns:\n    Dict with scores, details, and suggested improvements.",
+            "line_number": 15
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -16359,7 +16600,7 @@
             ],
             "decorators": [],
             "docstring": "Attempt hierarchical check if recursive manifests are available via config.",
-            "line_number": 80
+            "line_number": 114
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -16378,7 +16619,7 @@
             ],
             "decorators": [],
             "docstring": "Attempt hierarchical check using auto-generated F-blocks from module grouping.",
-            "line_number": 105
+            "line_number": 139
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -16392,7 +16633,7 @@
             ],
             "decorators": [],
             "docstring": "Format a hierarchical representativeness result into output dict.",
-            "line_number": 137
+            "line_number": 173
           }
         ],
         "classes": [],
@@ -16405,7 +16646,7 @@
           "yaml",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 162,
+        "line_count": 198,
         "docstring": "architect_check MCP tool \u2014 verify model representativeness against code reality."
       },
       {
@@ -16462,13 +16703,13 @@
             "__module__": "architecture_model.pipeline.observe_types",
             "name": "compute_adaptive_budget",
             "signature": "def compute_adaptive_budget(module_count: int, base: int=4000) -> int",
-            "body_hint": "if module_count <= 20:\n    return base; extra = (module_count - 20) // 10 * 200; return min(base + extra, 16000)",
+            "body_hint": "if module_count <= 20:\n    return base; extra = (module_count - 20) // 10 * 200; return min(base + extra, 64000)",
             "calls": [
               "min"
             ],
             "decorators": [],
-            "docstring": "Scale token budget with repository size.\n\nSmall repos (<=20 modules): base budget (4000 tokens)\nMedium repos: +200 tokens per 10 modules over 20\nLarge repos: capped at 16000 tokens\n\nExamples:\n    20 modules \u2192 4000 tokens\n    50 modules \u2192 4600 tokens  \n    100 modules \u2192 5600 tokens\n    161 modules \u2192 6800 tokens\n    500 modules \u2192 16000 tokens (capped)",
-            "line_number": 10
+            "docstring": "Scale token budget with repository size.\n\nSmall repos (<=20 modules): base budget (4000 tokens)\nMedium repos: +200 tokens per 10 modules over 20\nLarge repos: capped at 16000 tokens\n\nExamples:\n    20 modules \u2192 4000 tokens\n    50 modules \u2192 4600 tokens\n    100 modules \u2192 5600 tokens\n    161 modules \u2192 6800 tokens\n    500 modules \u2192 16000 tokens (capped)",
+            "line_number": 17
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -16483,32 +16724,36 @@
             ],
             "decorators": [],
             "docstring": "Estimate total source code size in chars (quick heuristic).",
-            "line_number": 36
+            "line_number": 43
           },
           {
             "__dataclass__": "FunctionRecord",
             "__module__": "architecture_model.pipeline.observe_types",
             "name": "slice_context",
             "signature": "async def slice_context(repo_path: str, focus: str='all', budget: int=0, detail: str='standard') -> str",
-            "body_hint": "path = Path(repo_path); if not path.exists():\n    return f'Error: Repository path does not exist: {repo_path}'; try:\n    model_file = path / '.architecture-model.yaml'\n    if budget <= 0:\n        if model_file.exists():\n            from architecture_model.core.parser import load_model\n            model = load_model(model_file)\n            file_count = sum((len(getattr(c, 'files', [])) for c in model.entities.components))\n            budget = compute_adaptive_budget(file_count)\n        else:\n            from architecture_model.manifest.generator import generate_manifest\n            manifest = generate_manifest(path)\n            budget = compute_adaptive_budget(len(manifest.modules))\n        source_size = _estimate_source_size(path)\n        min_budget_for_50x = source_size // (50 * 4)\n        if min_budget_for_50x > budget:\n            budget = min(min_budget_for_50x, 16000)\n    if model_file.exists():\n        result = _slice_from_model(path, focus, budget, detail)\n    else:\n        result = _slice_from_manifest(path, focus, budget)\n    source_size = _estimate_source_size(path)\n    char_budget = budget * 4\n    if source_size > 0 and char_budget > 0:\n        ratio = source_size / char_budget\n        if ratio > COMPRESSION_CRITICAL_THRESHOLD:\n            warning = f\"# COMPRESSION WARNING: {ratio:.0f}x compression detected!\\n# Source: {source_size // 1024}KB compressed into {char_budget // 1024}KB context.\\n# At >200x compression, regeneration pass rate drops to ~19%.\\n# RECOMMENDATION: Use focused slicing (architect_slice with focus='F1', 'F2', etc.)\\n# to slice per-block. Available source-blocks can be found via architect_scan.\\n\\n\"\n            result = warning + result\n        elif ratio > COMPRESSION_WARN_THRESHOLD:\n            warning = f'# NOTE: {ratio:.0f}x compression ratio (>50x reduces pass rate).\\n# Consider per-block slicing for better regeneration outcomes.\\n\\n'\n            result = warning + result\n    try:\n        from opencode_arch.telemetry.collector import drain_and_store\n        drain_and_store(tool='architect_slice', repo=path.name)\n    except Exception:\n        pass\n    return result\nexcept Exception as e:\n    return f'Error during context slicing: {e}'",
+            "body_hint": "[5 statements]",
             "calls": [
               "Path",
               "exists",
               "_estimate_source_size",
               "_slice_from_model",
               "_slice_from_manifest",
+              "_append_requirements_context",
               "drain_and_store",
+              "len",
+              "next",
               "load_model",
               "sum",
               "compute_adaptive_budget",
               "generate_manifest",
               "min",
-              "len",
+              "iter",
+              "_no_model_guidance",
               "getattr"
             ],
             "decorators": [],
             "docstring": "Generate an optimized context slice from a repository.\n\nThis is the core token-arbitrage function. It compresses a full repository\ninto a dense, structured context string within the token budget.\n\nIf an .architecture-model.yaml exists, uses the model + slicer + formatter.\nOtherwise, falls back to manifest-based context.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    focus: Focus scope - \"all\", an source-block ID (e.g. \"F1\"), a layer name,\n           or an artifact name (e.g. \"icd\", \"requirements-analysis\").\n    budget: Maximum token budget (1 token ~ 4 chars).\n    detail: Detail level - \"minimal\", \"standard\", or \"full\".\n\nReturns:\n    Formatted context string within budget, or error message.",
-            "line_number": 52
+            "line_number": 61
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -16529,7 +16774,7 @@
             ],
             "decorators": [],
             "docstring": "Slice context using the architecture model (rich path).",
-            "line_number": 138
+            "line_number": 169
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -16546,7 +16791,7 @@
             ],
             "decorators": [],
             "docstring": "Allocate budget proportionally to block complexity.\n\nComplex blocks (many signatures/files) get more tokens.\nSimple blocks get the minimum needed.\nTelemetry: <10 signatures reliably converge; complex blocks need 2-3x more context.",
-            "line_number": 176
+            "line_number": 217
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -16566,11 +16811,47 @@
             ],
             "decorators": [],
             "docstring": "Slice context using manifest only (no architecture model yet).",
-            "line_number": 202
+            "line_number": 245
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_no_model_guidance",
+            "signature": "def _no_model_guidance(project_root: Path) -> str",
+            "body_hint": "return f\"# No architecture model found at {project_root}/.architecture-model.yaml\\n\\nTo create one, follow this workflow:\\n1. `architect_scan(repo_path)` \u2014 scan the codebase AST\\n2. `architect_group(repo_path)` \u2014 discover component boundaries\\n3. Build a YAML model from the scan + group output\\n4. `architect_extract(repo_path, model_yaml)` \u2014 store and validate\\n5. `architect_slice(repo_path)` \u2014 now you can slice the model\\n\\nOr use `architect_pipeline(repo_path, stage='observe')` for automated extraction.\\n\"",
+            "calls": [],
+            "decorators": [],
+            "docstring": "SL6: Return helpful guidance when no architecture model exists.",
+            "line_number": 287
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_append_requirements_context",
+            "signature": "def _append_requirements_context(project_root: Path, focus: str, result: str) -> str",
+            "body_hint": "try:\n    req_file = project_root / '.architecture' / 'requirements.yaml'\n    data = yaml.safe_load(req_file.read_text()) or {}\n    requirements = data.get('requirements', [])\n    if not requirements:\n        return result\n    focus_lower = focus.lower()\n    matched = [r for r in requirements if r.get('component_id', '').lower() == focus_lower or focus_lower in r.get('title', '').lower() or focus_lower in r.get('description', '').lower()]\n    if not matched:\n        matched = requirements[:10]\n    if matched:\n        req_section = '\\n\\n---\\n# Linked Requirements\\n'\n        for r in matched:\n            priority = r.get('priority', 'should')\n            req_section += f\"- [{priority.upper()}] {r.get('title', 'untitled')}\"\n            if r.get('component_id'):\n                req_section += f\" (component: {r['component_id']})\"\n            req_section += '\\n'\n            if r.get('description'):\n                req_section += f\"  {r['description'][:200]}\\n\"\n        result += req_section\nexcept Exception:\n    pass; return result",
+            "calls": [
+              "get",
+              "lower",
+              "safe_load",
+              "read_text",
+              "upper"
+            ],
+            "decorators": [],
+            "docstring": "Include linked requirements when slicing a specific component/block.",
+            "line_number": 301
           }
         ],
         "classes": [],
         "constants": [
+          {
+            "__dataclass__": "ConstantRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_CACHE_MAX",
+            "value": "32",
+            "type": "",
+            "context": ""
+          },
           {
             "__dataclass__": "ConstantRecord",
             "__module__": "architecture_model.pipeline.observe_types",
@@ -16590,11 +16871,12 @@
         ],
         "imports": [
           "__future__",
+          "functools",
           "pathlib",
           "typing",
           "yaml"
         ],
-        "line_count": 241,
+        "line_count": 339,
         "docstring": "architect_slice MCP tool \u2014 compress repository context for LLM consumption."
       },
       {
@@ -16651,6 +16933,54 @@
       {
         "__dataclass__": "ModuleRecord",
         "__module__": "architecture_model.pipeline.observe_types",
+        "path": "src/opencode_arch/mcp/tools/log.py",
+        "language": "python",
+        "functions": [
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "log_entry",
+            "signature": "async def log_entry(repo_path: str, log_type: str='', title: str='', content: str='', context: dict | None=None, batch: bool=False, entries: str='') -> dict[str, Any]",
+            "body_hint": "[12 statements]",
+            "calls": [
+              "Path",
+              "mkdir",
+              "exists",
+              "sum",
+              "isoformat",
+              "open",
+              "write",
+              "loads",
+              "isinstance",
+              "len",
+              "get",
+              "append",
+              "now",
+              "dumps",
+              "splitlines",
+              "strip",
+              "read_text"
+            ],
+            "decorators": [],
+            "docstring": "Append a development log entry (single or batch).\n\nArgs:\n    repo_path: Repository root path.\n    log_type: \"decision\" | \"progress\" | \"observation\" | \"issue\" | \"requirement\"\n    title: Short title (1 line).\n    content: Optional longer description.\n    context: Optional dict (files_changed, component_id, tool, etc.)\n    batch: If True, parse `entries` as JSON array of objects.\n    entries: JSON string of [{log_type, title, content?, context?}, ...] when batch=True.",
+            "line_number": 11
+          }
+        ],
+        "classes": [],
+        "constants": [],
+        "imports": [
+          "__future__",
+          "json",
+          "datetime",
+          "pathlib",
+          "typing"
+        ],
+        "line_count": 99,
+        "docstring": "Record development decisions and progress to .architecture/devlog.jsonl."
+      },
+      {
+        "__dataclass__": "ModuleRecord",
+        "__module__": "architecture_model.pipeline.observe_types",
         "path": "src/opencode_arch/mcp/tools/generate.py",
         "language": "python",
         "functions": [
@@ -16673,26 +17003,28 @@
               "with_quality"
             ],
             "docstring": "Run the repository's test suite against generated code.\n\nThis is the quality gate for code generation. The agent generates code,\nthen calls this tool to verify it passes the original tests.\n\nArgs:\n    repo_path: Path to the repository with generated code + tests.\n    test_command: Custom test command. Defaults to pytest.\n\nReturns:\n    Dict with: passed (bool), pass_rate (float), total_tests (int),\n    passed_tests (int), failures (list of failure descriptions).",
-            "line_number": 15
+            "line_number": 16
           },
           {
             "__dataclass__": "FunctionRecord",
             "__module__": "architecture_model.pipeline.observe_types",
             "name": "_parse_pytest_output",
             "signature": "def _parse_pytest_output(output: str, returncode: int) -> dict[str, Any]",
-            "body_hint": "[8 statements]",
+            "body_hint": "[13 statements]",
             "calls": [
+              "compile",
+              "finditer",
               "split",
               "startswith",
-              "enumerate",
+              "group",
+              "int",
               "append",
               "lower",
-              "strip",
-              "int"
+              "strip"
             ],
             "decorators": [],
             "docstring": "Parse pytest output to extract pass/fail counts.",
-            "line_number": 68
+            "line_number": 80
           }
         ],
         "classes": [],
@@ -16706,7 +17038,7 @@
           "typing",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 107,
+        "line_count": 135,
         "docstring": "architect_generate MCP tool \u2014 run tests on generated code."
       },
       {
@@ -16948,6 +17280,7 @@
               "generate_integration_flows",
               "generate_all_diagrams",
               "extend",
+              "generate_se_docs",
               "generate_index",
               "relative_to",
               "split",
@@ -16960,18 +17293,20 @@
               "generate_behavior_index",
               "sorted",
               "generate_drift_report",
+              "list",
               "generate_component_spec",
               "summarize_crud_group",
               "glob",
               "_load",
               "build_behavior_manifest",
               "generate_behavior_spec",
-              "items"
+              "items",
+              "is_relative_to"
             ],
             "decorators": [
               "with_quality"
             ],
-            "docstring": "Generate standard SE documentation from an architecture model.\n\nProduces component specs, ICDs, dependency matrix, health report,\nand index from .architecture-model.yaml.\n\nArgs:\n    repo_path: Absolute path to the repository.\n    formats: Comma-separated list of doc types to generate.\n        Options: all, component_spec, icd, dependency_matrix, health, drift, index.\n        Default: \"all\".\n\nReturns:\n    Dict with generated file paths and any errors.",
+            "docstring": "Generate standard SE documentation from an architecture model.\n\nProduces component specs, ICDs, dependency matrix, health report,\nand index from .architecture-model.yaml.\n\nArgs:\n    repo_path: Absolute path to the repository.\n    formats: Comma-separated list of doc types to generate.\n        Options: all, component_spec, icd, dependency_matrix, health, drift, index,\n        se_all, conops, functional_analysis, logical_architecture, requirements_analysis,\n        verification_validation, operations_manual, maintenance_manual, use_cases,\n        risk_assessment, interface_spec, api_reference, data_model, deployment_guide,\n        security_analysis, cli_reference, plugin_guide.\n        Default: \"all\".\n\nReturns:\n    Dict with generated file paths and any errors.",
             "line_number": 11
           }
         ],
@@ -16983,7 +17318,7 @@
           "typing",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 237,
+        "line_count": 263,
         "docstring": "architect_docs MCP tool \u2014 generate SE documentation from architecture model."
       },
       {
@@ -17034,6 +17369,83 @@
       {
         "__dataclass__": "ModuleRecord",
         "__module__": "architecture_model.pipeline.observe_types",
+        "path": "src/opencode_arch/mcp/tools/assess.py",
+        "language": "python",
+        "functions": [
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "assess_conversation",
+            "signature": "async def assess_conversation(repo_path: str, conversation_text: str, scope: str='all') -> dict[str, Any]",
+            "body_hint": "[16 statements]",
+            "calls": [
+              "Path",
+              "mkdir",
+              "items",
+              "join",
+              "_heuristic_extract",
+              "exists",
+              "write_text",
+              "isoformat",
+              "append",
+              "dump",
+              "len",
+              "str",
+              "get",
+              "safe_load",
+              "read_text",
+              "now",
+              "setdefault"
+            ],
+            "decorators": [],
+            "docstring": "Extract requirements, issues, and observations from conversation text.\n\nCALL THIS after completing a significant piece of work, discovering an issue,\nor when the conversation reveals requirements. Auto-called by architect_gate.\n\nArgs:\n    repo_path: Current repository root path.\n    conversation_text: Recent conversation context (last few exchanges or summary).\n    scope: \"all\" | \"requirements\" | \"issues\" | \"cross-repo\" \u2014 focus dimension.\n\nReturns:\n    {findings_count, findings, stored_to, cross_repo_impacts}",
+            "line_number": 17
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_heuristic_extract",
+            "signature": "def _heuristic_extract(text: str, scope: str) -> list[dict]",
+            "body_hint": "[9 statements]",
+            "calls": [
+              "split",
+              "set",
+              "strip",
+              "lower",
+              "any",
+              "add",
+              "append",
+              "len"
+            ],
+            "decorators": [],
+            "docstring": "Extract findings using keyword heuristics (no LLM needed).",
+            "line_number": 101
+          }
+        ],
+        "classes": [],
+        "constants": [
+          {
+            "__dataclass__": "ConstantRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "WORKSPACE_REPOS",
+            "value": "{'logs-db': Path.home() / 'Documents/Projects/logs_db', 'opencode-arch': Path.home() / 'Documents/Projects/opencode-arch', 'architecture-model-standard': Path.home() / 'Documents/Projects/architecture-model-standard'}",
+            "type": "",
+            "context": ""
+          }
+        ],
+        "imports": [
+          "__future__",
+          "yaml",
+          "datetime",
+          "pathlib",
+          "typing"
+        ],
+        "line_count": 167,
+        "docstring": "Real-time conversation assessment \u2014 extracts requirements, issues, observations."
+      },
+      {
+        "__dataclass__": "ModuleRecord",
+        "__module__": "architecture_model.pipeline.observe_types",
         "path": "src/opencode_arch/mcp/tools/validate.py",
         "language": "python",
         "functions": [
@@ -17041,28 +17453,36 @@
             "__dataclass__": "FunctionRecord",
             "__module__": "architecture_model.pipeline.observe_types",
             "name": "validate_architecture",
-            "signature": "async def validate_architecture(model_yaml: str) -> dict[str, Any]",
-            "body_hint": "try:\n    raw = yaml.safe_load(model_yaml)\n    if raw is None:\n        return {'score': 0, 'issues': ['Empty YAML document'], 'entity_count': 0, 'relationship_count': 0, 'is_valid': False}\n    from architecture_model.core.parser import _parse_raw\n    from architecture_model.core.validator import validate_model\n    model = _parse_raw(raw)\n    validation_result = validate_model(model)\n    try:\n        from opencode_arch.telemetry.collector import drain_and_store\n        drain_and_store(tool='architect_validate', repo='')\n    except Exception:\n        pass\n    return {'score': validation_result.score, 'issues': [str(issue) for issue in validation_result.issues], 'entity_count': model.entity_count, 'relationship_count': model.relationship_count, 'is_valid': validation_result.is_valid}\nexcept Exception as e:\n    return {'score': 0, 'issues': [f'Parse/validation error: {e}'], 'entity_count': 0, 'relationship_count': 0, 'is_valid': False}",
+            "signature": "async def validate_architecture(model_yaml: str, repo_path: str='') -> dict[str, Any]",
+            "body_hint": "try:\n    if not model_yaml or not model_yaml.strip():\n        if repo_path:\n            model_file = Path(repo_path) / '.architecture-model.yaml'\n            if model_file.exists():\n                model_yaml = model_file.read_text()\n            else:\n                return {'score': 0, 'issues': [f'No model found at {model_file}. Run architect_extract first.'], 'entity_count': 0, 'relationship_count': 0, 'is_valid': False}\n        else:\n            return {'score': 0, 'issues': ['Empty model_yaml. Pass inline YAML content or provide repo_path to read from disk.'], 'entity_count': 0, 'relationship_count': 0, 'is_valid': False}\n    stripped = model_yaml.strip()\n    if not stripped.startswith(('{', '[', '-', '#')) and '\\n' not in stripped and (stripped.startswith('/') or stripped.startswith('~') or stripped.endswith('.yaml') or stripped.endswith('.yml')):\n        candidate = Path(stripped).expanduser()\n        if candidate.exists():\n            model_yaml = candidate.read_text()\n        else:\n            return {'score': 0, 'issues': [f\"'{stripped}' looks like a file path but doesn't exist. Pass inline YAML content, not a file path. Or use repo_path parameter to read from .architecture-model.yaml.\"], 'entity_count': 0, 'relationship_count': 0, 'is_valid': False}\n    raw = yaml.safe_load(model_yaml)\n    if raw is None:\n        return {'score': 0, 'issues': ['Empty YAML document'], 'entity_count': 0, 'relationship_count': 0, 'is_valid': False}\n    from architecture_model.core.parser import _parse_raw\n    from architecture_model.core.validator import validate_model\n    model = _parse_raw(raw)\n    validation_result = validate_model(model)\n    try:\n        from opencode_arch.telemetry.collector import drain_and_store\n        drain_and_store(tool='architect_validate', repo='')\n    except Exception:\n        pass\n    return {'score': validation_result.score, 'issues': [str(issue) for issue in validation_result.issues], 'entity_count': model.entity_count, 'relationship_count': model.relationship_count, 'is_valid': validation_result.is_valid}\nexcept Exception as e:\n    return {'score': 0, 'issues': [f'Parse/validation error: {e}'], 'entity_count': 0, 'relationship_count': 0, 'is_valid': False}",
             "calls": [
+              "strip",
               "safe_load",
               "_parse_raw",
               "validate_model",
+              "expanduser",
+              "exists",
               "drain_and_store",
-              "str"
+              "startswith",
+              "endswith",
+              "read_text",
+              "str",
+              "Path"
             ],
             "decorators": [],
-            "docstring": "Validate an architecture model for structural correctness.\n\nArgs:\n    model_yaml: The YAML architecture model string to validate.\n\nReturns:\n    Dict with: score (0-100), issues (list), entity_count, relationship_count, is_valid.",
-            "line_number": 10
+            "docstring": "Validate an architecture model for structural correctness.\n\nArgs:\n    model_yaml: The YAML architecture model string to validate.\n        If empty and repo_path is provided, reads from .architecture-model.yaml.\n    repo_path: Optional repository path to read model from disk.\n\nReturns:\n    Dict with: score (0-100), issues (list), entity_count, relationship_count, is_valid.",
+            "line_number": 12
           }
         ],
         "classes": [],
         "constants": [],
         "imports": [
           "__future__",
+          "pathlib",
           "typing",
           "yaml"
         ],
-        "line_count": 59,
+        "line_count": 119,
         "docstring": "architect_validate MCP tool \u2014 validate architecture model quality."
       },
       {
@@ -17074,9 +17494,24 @@
           {
             "__dataclass__": "FunctionRecord",
             "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_slugify",
+            "signature": "def _slugify(name: str) -> str",
+            "body_hint": "return re.sub('[^a-z0-9]+', '-', name.lower()).strip('-')",
+            "calls": [
+              "strip",
+              "sub",
+              "lower"
+            ],
+            "decorators": [],
+            "docstring": "Convert name to filesystem-safe slug.",
+            "line_number": 21
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
             "name": "run_pipeline",
-            "signature": "async def run_pipeline(repo_path: str, stage: str='', recursive: bool=True, resolutions: list[dict[str, Any]] | None=None, clear_cache: bool=False) -> dict[str, Any]",
-            "body_hint": "[6 statements]",
+            "signature": "async def run_pipeline(repo_path: str, stage: str='', recursive: bool=True, resolutions: list[dict[str, Any]] | None=None, clear_cache: bool=False, scope: str='') -> dict[str, Any]",
+            "body_hint": "[5 statements]",
             "calls": [
               "resolve",
               "exists",
@@ -17091,7 +17526,17 @@
               "generate_pipeline_report",
               "generate_lessons",
               "Path",
+              "load_stage",
               "clear",
+              "run_to",
+              "run_all",
+              "extend",
+              "append",
+              "drain_and_store",
+              "list",
+              "str",
+              "sum",
+              "_slugify",
               "ObserveStage",
               "InferStage",
               "AllocateStage",
@@ -17102,14 +17547,6 @@
               "DecomposeStage",
               "SynthesizeStage",
               "EmitStage",
-              "run_to",
-              "run_all",
-              "extend",
-              "append",
-              "drain_and_store",
-              "list",
-              "str",
-              "sum",
               "Evidence",
               "save_stage",
               "len",
@@ -17119,26 +17556,29 @@
               "keys",
               "format_exc",
               "LLMCallRecord",
+              "enrich_stage_output",
+              "log_entry",
               "strftime"
             ],
             "decorators": [
               "with_quality"
             ],
-            "docstring": "Run the 10-stage extraction pipeline (stage-by-stage or all at once).\n\nArgs:\n    repo_path: Path to the repository root.\n    stage: Run to specific stage (empty = all). One of:\n        observe, infer, allocate, relate, specify, contract,\n        validate, decompose, synthesize, emit.\n    recursive: If True, synthesize stage runs scoped sub-pipelines\n        for each detected system.\n    resolutions: List of resolved uncertainties from the previous stage.\n        Each dict: {category, resolution, confidence, source}.\n        These are converted to Evidence and applied before running.\n    clear_cache: If True, clear cached results before running.\n\nReturns:\n    dict with stages_completed, current_stage, uncertainties_to_resolve,\n    pipeline_report, lessons, artifacts_dir, llm_calls.",
-            "line_number": 17
+            "docstring": "Run the 10-stage extraction pipeline (stage-by-stage or all at once).\n\nCall this tool repeatedly, one stage at a time, to enable LLM enrichment\nbetween stages. Each call persists results to disk cache \u2014 subsequent\ncalls resume from where the previous call left off.\n\nStages (in dependency order):\n    observe \u2192 infer \u2192 allocate \u2192 relate \u2192 specify \u2192 contract \u2192\n    validate \u2192 decompose \u2192 synthesize \u2192 emit\n\nArgs:\n    repo_path: Absolute path to the repository.\n    stage: Run to specific stage (empty = all 10 stages).\n        One of: observe, infer, allocate, relate, specify, contract,\n        validate, decompose, synthesize, emit.\n    recursive: If True, synthesize stage runs scoped sub-pipelines\n        for each detected system.\n    resolutions: List of resolved uncertainties from the previous stage.\n        Each dict: {category, resolution, confidence, source}.\n        These are converted to Evidence and applied before running.\n    clear_cache: If True, clear cached results before running.\n    scope: System ID to run a scoped sub-pipeline on (e.g., \"SYS-1\").\n        Requires decompose to have been run first (top-level cache).\n        Uses per-system cache at .architecture/pipeline-cache/<system-slug>/.\n\nReturns:\n    dict with stages_completed, current_stage, from_cache, stages (scores),\n    uncertainties_to_resolve, pipeline_report, lessons, artifacts_dir,\n    llm_calls, total_llm_tokens.\n    When scope is used, also returns: scope, system_name, system_files.",
+            "line_number": 27
           }
         ],
         "classes": [],
         "constants": [],
         "imports": [
           "__future__",
+          "re",
           "time",
           "pathlib",
           "typing",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 214,
-        "docstring": "architect_pipeline MCP tool \u2014 run the 10-stage extraction pipeline.\n\nSupports stage-by-stage execution with file-based cache persistence.\nThe MCP orchestrator calls this tool once per stage, reviews uncertainties,\nresolves them via LLM, and passes resolutions on the next call."
+        "line_count": 325,
+        "docstring": "architect_pipeline MCP tool \u2014 run the 10-stage extraction pipeline.\n\nSupports stage-by-stage execution with file-based cache persistence.\nThe MCP orchestrator calls this tool once per stage, reviews uncertainties,\nresolves them via LLM, and passes resolutions on the next call.\n\nFor subsystem enrichment, use the `scope` parameter after decompose to run\nscoped pipelines on individual detected systems."
       },
       {
         "__dataclass__": "ModuleRecord",
@@ -17195,7 +17635,7 @@
             "__module__": "architecture_model.pipeline.observe_types",
             "name": "check_gate",
             "signature": "async def check_gate(repo_path: str, model_yaml: str='') -> dict[str, Any]",
-            "body_hint": "repo = Path(repo_path); if not repo.exists():\n    return {'error': f'Repository path does not exist: {repo_path}'}; try:\n    from architecture_model.authoring.gate import check_development_gate\n    from architecture_model.core.parser import load_model\n    from architecture_model.manifest.generator import generate_manifest\n    if model_yaml:\n        import yaml\n        from architecture_model.core.parser import ArchitectureModel\n        from architecture_model.core.parser import _parse_raw\n        raw = yaml.safe_load(model_yaml)\n        model = _parse_raw(raw)\n    else:\n        model_path = repo / '.architecture-model.yaml'\n        if not model_path.exists():\n            return {'error': f'No model found at {model_path} and no model_yaml provided'}\n        model = load_model(model_path)\n    manifest = generate_manifest(repo)\n    phase = None\n    if hasattr(model.meta, 'lifecycle_phase'):\n        phase = model.meta.lifecycle_phase\n    result = check_development_gate(model, manifest, phase=phase)\n    return {'lifecycle_phase': result.phase, 'capability_realization': result.capability_realization, 'constraint_allocation': result.constraint_allocation, 'file_coverage': result.file_coverage, 'overall': result.overall, 'phase_requirements_met': result.phase_requirements_met, 'issues': result.issues}\nexcept Exception as e:\n    return {'error': f'Gate check failed: {e}'}",
+            "body_hint": "repo = Path(repo_path); if not repo.exists():\n    return {'error': f'Repository path does not exist: {repo_path}'}; try:\n    from architecture_model.authoring.gate import check_development_gate\n    from architecture_model.core.parser import load_model\n    from architecture_model.manifest.generator import generate_manifest\n    if model_yaml:\n        import yaml\n        from architecture_model.core.parser import ArchitectureModel\n        from architecture_model.core.parser import _parse_raw\n        raw = yaml.safe_load(model_yaml)\n        model = _parse_raw(raw)\n    else:\n        model_path = repo / '.architecture-model.yaml'\n        if not model_path.exists():\n            return {'error': f'No model found at {model_path} and no model_yaml provided'}\n        model = load_model(model_path)\n    manifest = generate_manifest(repo)\n    phase = None\n    if hasattr(model.meta, 'lifecycle_phase'):\n        phase = model.meta.lifecycle_phase\n    result = check_development_gate(model, manifest, phase=phase)\n    result = {'lifecycle_phase': result.phase, 'capability_realization': result.capability_realization, 'constraint_allocation': result.constraint_allocation, 'file_coverage': result.file_coverage, 'overall': result.overall, 'phase_requirements_met': result.phase_requirements_met, 'issues': result.issues}\n    try:\n        from .assess import assess_conversation\n        from .evaluate import evaluate_workspace\n        assess_result = await assess_conversation(repo_path, conversation_text=f'Gate check completed for {repo_path}')\n        eval_result = await evaluate_workspace(repo_path)\n        result['live_assessment'] = {'findings_count': assess_result.get('findings_count', 0), 'cross_repo_impacts': assess_result.get('cross_repo_impacts', 0)}\n        result['workspace_health'] = eval_result.get('overall_health')\n        result['recommendations'] = eval_result.get('recommendations', [])\n    except Exception:\n        pass\n    return result\nexcept Exception as e:\n    return {'error': f'Gate check failed: {e}'}",
             "calls": [
               "Path",
               "exists",
@@ -17204,11 +17644,14 @@
               "check_development_gate",
               "safe_load",
               "_parse_raw",
-              "load_model"
+              "load_model",
+              "get",
+              "assess_conversation",
+              "evaluate_workspace"
             ],
             "decorators": [],
             "docstring": "Check development gate for an architecture model against code reality.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    model_yaml: Optional YAML string. If empty, reads .architecture-model.yaml.\n\nReturns:\n    Dict with lifecycle_phase, sub-scores, phase_requirements_met, and issues.",
-            "line_number": 8
+            "line_number": 9
           }
         ],
         "classes": [],
@@ -17218,8 +17661,61 @@
           "pathlib",
           "typing"
         ],
-        "line_count": 62,
+        "line_count": 86,
         "docstring": "architect_gate MCP tool \u2014 check development gate readiness."
+      },
+      {
+        "__dataclass__": "ModuleRecord",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "path": "src/opencode_arch/mcp/tools/learn.py",
+        "language": "python",
+        "functions": [
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "record_learning",
+            "signature": "async def record_learning(learning_type: str, stage: str='', condition: str='', action: str='', rationale: str='', learned_from: str='', name: str='', indicators: str='', problem: str='', solution: str='', trigger: str='', diagnosis: str='', fix_applied: str='', validation: str='', files_changed: str='', commit: str='', threshold_parameter: str='', threshold_value: str='', _learning_path: Path | None=None) -> str",
+            "body_hint": "[5 statements]",
+            "calls": [
+              "GlobalLearningStore",
+              "dumps",
+              "get_heuristics",
+              "add_heuristic",
+              "HeuristicRule",
+              "get_archetypes",
+              "add_archetype",
+              "ArchetypePattern",
+              "get_workflows",
+              "add_workflow",
+              "len",
+              "float",
+              "WorkflowLesson",
+              "strip",
+              "split"
+            ],
+            "decorators": [],
+            "docstring": "Record a learning (heuristic, archetype, or workflow) to the global store.",
+            "line_number": 10
+          }
+        ],
+        "classes": [],
+        "constants": [
+          {
+            "__dataclass__": "ConstantRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "GLOBAL_LEARNING_PATH",
+            "value": "Path.home() / '.config' / 'opencode' / 'arch-learning'",
+            "type": "",
+            "context": ""
+          }
+        ],
+        "imports": [
+          "__future__",
+          "json",
+          "pathlib"
+        ],
+        "line_count": 61,
+        "docstring": "architect_learn tool implementation."
       },
       {
         "__dataclass__": "ModuleRecord",
@@ -17302,6 +17798,203 @@
       {
         "__dataclass__": "ModuleRecord",
         "__module__": "architecture_model.pipeline.observe_types",
+        "path": "src/opencode_arch/mcp/tools/diff.py",
+        "language": "python",
+        "functions": [
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "diff_models",
+            "signature": "async def diff_models(repo_path: str, model_a_yaml: str='', model_b_yaml: str='') -> str",
+            "body_hint": "path = Path(repo_path); if not path.exists():\n    return f'Error: Repository path does not exist: {repo_path}'; try:\n    if not model_a_yaml:\n        model_a_path = path / '.architecture-model.yaml'\n        if not model_a_path.exists():\n            return 'Error: No .architecture-model.yaml found. Run architect_extract first.'\n        model_a_yaml = model_a_path.read_text()\n    if not model_b_yaml:\n        import subprocess\n        try:\n            result = subprocess.run(['git', 'show', 'HEAD:.architecture-model.yaml'], capture_output=True, text=True, cwd=str(path))\n            if result.returncode == 0:\n                model_b_yaml = result.stdout\n            else:\n                return 'Error: No previous model version in git. Provide model_b_yaml explicitly.'\n        except FileNotFoundError:\n            return 'Error: git not available.'\n    model_a = yaml.safe_load(model_a_yaml) or {}\n    model_b = yaml.safe_load(model_b_yaml) or {}\n    return _compute_diff(model_a, model_b)\nexcept Exception as e:\n    return f'Error computing diff: {e}'",
+            "calls": [
+              "Path",
+              "exists",
+              "_compute_diff",
+              "read_text",
+              "safe_load",
+              "run",
+              "str"
+            ],
+            "decorators": [],
+            "docstring": "Compare two architecture model versions and return a structured diff.\n\nIf model_a_yaml is empty, reads the current .architecture-model.yaml.\nIf model_b_yaml is empty, reads the last git-committed version.\n\nReturns a structured diff showing added/removed/changed components and relationships.",
+            "line_number": 10
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_compute_diff",
+            "signature": "def _compute_diff(current: dict, previous: dict) -> str",
+            "body_hint": "[21 statements]",
+            "calls": [
+              "sorted",
+              "set",
+              "append",
+              "join",
+              "get",
+              "_diff_component",
+              "_get_rel_keys",
+              "_get_components",
+              "len"
+            ],
+            "decorators": [],
+            "docstring": "Compute structural diff between two model dicts.",
+            "line_number": 63
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_get_components",
+            "signature": "def _get_components(model: dict) -> list[dict]",
+            "body_hint": "[4 statements]",
+            "calls": [
+              "get",
+              "isinstance"
+            ],
+            "decorators": [],
+            "docstring": "Extract components from model dict (handles both flat and nested formats).",
+            "line_number": 133
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_get_rel_keys",
+            "signature": "def _get_rel_keys(model: dict) -> list[str]",
+            "body_hint": "[4 statements]",
+            "calls": [
+              "get",
+              "append"
+            ],
+            "decorators": [],
+            "docstring": "Extract relationship keys as 'source->target(type)' strings.",
+            "line_number": 142
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_diff_component",
+            "signature": "def _diff_component(curr: dict, prev: dict) -> list[str]",
+            "body_hint": "[10 statements]",
+            "calls": [
+              "set",
+              "get",
+              "append",
+              "isinstance",
+              "len",
+              "join",
+              "sorted"
+            ],
+            "decorators": [],
+            "docstring": "Find differences between two versions of the same component.",
+            "line_number": 154
+          }
+        ],
+        "classes": [],
+        "constants": [],
+        "imports": [
+          "__future__",
+          "pathlib",
+          "yaml"
+        ],
+        "line_count": 189,
+        "docstring": "architect_diff MCP tool \u2014 compare two architecture model versions."
+      },
+      {
+        "__dataclass__": "ModuleRecord",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "path": "src/opencode_arch/mcp/tools/evaluate.py",
+        "language": "python",
+        "functions": [
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "evaluate_workspace",
+            "signature": "async def evaluate_workspace(repo_path: str, force_refresh: bool=False) -> dict[str, Any]",
+            "body_hint": "[14 statements]",
+            "calls": [
+              "Path",
+              "mkdir",
+              "items",
+              "write_text",
+              "exists",
+              "_evaluate_repo",
+              "get",
+              "isoformat",
+              "round",
+              "dump",
+              "values",
+              "sum",
+              "len",
+              "append",
+              "safe_load",
+              "fromisoformat",
+              "now",
+              "read_text",
+              "replace",
+              "total_seconds"
+            ],
+            "decorators": [],
+            "docstring": "Compute 3-repo scorecard: model quality, requirements, sync status.\n\nCALL THIS after architect_gate, after completing features, or when you want\na health check of the full workspace. Auto-triggered after 3+ architect_log calls.\n\nArgs:\n    repo_path: Any repo in workspace (used to find .architecture/).\n    force_refresh: Recompute even if cache is <5 min old.\n\nReturns:\n    {scorecards: {system: {metrics}}, overall_health, recommendations}",
+            "line_number": 18
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_evaluate_repo",
+            "signature": "def _evaluate_repo(sys_name: str, sys_path: Path) -> dict",
+            "body_hint": "[31 statements]",
+            "calls": [
+              "get",
+              "len",
+              "set",
+              "list",
+              "round",
+              "exists",
+              "getmtime",
+              "min",
+              "safe_load",
+              "rglob",
+              "sum",
+              "max",
+              "read_text",
+              "add",
+              "timestamp",
+              "isinstance",
+              "str",
+              "splitlines",
+              "strip",
+              "now"
+            ],
+            "decorators": [],
+            "docstring": "Evaluate a single repo's architecture health.",
+            "line_number": 88
+          }
+        ],
+        "classes": [],
+        "constants": [
+          {
+            "__dataclass__": "ConstantRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "WORKSPACE_REPOS",
+            "value": "{'logs-db': Path.home() / 'Documents/Projects/logs_db', 'opencode-arch': Path.home() / 'Documents/Projects/opencode-arch', 'architecture-model-standard': Path.home() / 'Documents/Projects/architecture-model-standard'}",
+            "type": "",
+            "context": ""
+          }
+        ],
+        "imports": [
+          "__future__",
+          "os",
+          "yaml",
+          "datetime",
+          "pathlib",
+          "typing"
+        ],
+        "line_count": 168,
+        "docstring": "Full 3-repo scorecard evaluation."
+      },
+      {
+        "__dataclass__": "ModuleRecord",
+        "__module__": "architecture_model.pipeline.observe_types",
         "path": "src/opencode_arch/mcp/tools/require.py",
         "language": "python",
         "functions": [
@@ -17360,7 +18053,7 @@
             "calls": [],
             "decorators": [],
             "docstring": null,
-            "line_number": 15
+            "line_number": 16
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -17398,6 +18091,7 @@
               "sorted",
               "write_text",
               "compute_representativeness",
+              "round",
               "generate_docs",
               "get",
               "write_sub_models",
@@ -17454,7 +18148,7 @@
               "with_quality"
             ],
             "docstring": "Validate and store an architecture model extraction.\n\nCalled AFTER the agent has produced a YAML architecture model.\nValidates the model, writes it to .architecture-model.yaml,\nand records telemetry.\n\nArgs:\n    repo_path: Path to the repository root (where to save the model).\n    model_yaml: The YAML architecture model produced by the agent.\n    context_tokens: How many tokens of context the agent used (for telemetry).\n\nReturns:\n    Dict with: stored (bool), score (int), issues (list), telemetry_recorded (bool),\n    pipeline (dict), warnings (list).",
-            "line_number": 21
+            "line_number": 23
           }
         ],
         "classes": [],
@@ -17468,7 +18162,7 @@
           "yaml",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 490,
+        "line_count": 611,
         "docstring": "architect_extract MCP tool \u2014 validate and store an architecture extraction."
       },
       {
@@ -17926,7 +18620,1318 @@
         "docstring": "E2E regeneration benchmark: regenerate code from architecture, run real tests."
       }
     ],
-    "edges": [],
+    "edges": [
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_regen_telemetry.py",
+        "target": "src/opencode_arch/telemetry/store.py",
+        "symbols": [
+          "store"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_check_hierarchical.py",
+        "target": "src/opencode_arch/mcp/tools/check.py",
+        "symbols": [
+          "check"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_feedback.py",
+        "target": "src/opencode_arch/mcp/tools/feedback.py",
+        "symbols": [
+          "feedback"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_artifact_context.py",
+        "target": "src/opencode_arch/artifacts/context.py",
+        "symbols": [
+          "context"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_artifact_context.py",
+        "target": "src/opencode_arch/artifacts/templates.py",
+        "symbols": [
+          "templates"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_cli_generate.py",
+        "target": "src/opencode_arch/cli/generate.py",
+        "symbols": [
+          "generate"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_cli_generate.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_group_tool.py",
+        "target": "src/opencode_arch/mcp/tools/group.py",
+        "symbols": [
+          "group"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_req_retroactive.py",
+        "target": "src/opencode_arch/requirements/retroactive.py",
+        "symbols": [
+          "retroactive"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_req_retroactive.py",
+        "target": "src/opencode_arch/llm/cache.py",
+        "symbols": [
+          "cache"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_req_retroactive.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_mcp_validate.py",
+        "target": "src/opencode_arch/mcp/tools/validate.py",
+        "symbols": [
+          "validate"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_launch.py",
+        "target": "src/opencode_arch/cli/launch.py",
+        "symbols": [
+          "launch"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_req_parser.py",
+        "target": "src/opencode_arch/requirements/parser.py",
+        "symbols": [
+          "parser"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_learning_assessor.py",
+        "target": "src/opencode_arch/learning/assessor.py",
+        "symbols": [
+          "assessor"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_cli_extract.py",
+        "target": "src/opencode_arch/cli/extract.py",
+        "symbols": [
+          "extract"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_cli_extract.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_collector_integration.py",
+        "target": "src/opencode_arch/telemetry/collector.py",
+        "symbols": [
+          "collector"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_uncertainty_resolver.py",
+        "target": "src/opencode_arch/agent/resolution.py",
+        "symbols": [
+          "resolution"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_artifact_selector.py",
+        "target": "src/opencode_arch/artifacts/selector.py",
+        "symbols": [
+          "selector"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_trace_req_tool.py",
+        "target": "src/opencode_arch/mcp/tools/trace_requirements.py",
+        "symbols": [
+          "trace_requirements"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_trace_req_tool.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_extract_pipeline.py",
+        "target": "src/opencode_arch/mcp/tools/extract.py",
+        "symbols": [
+          "extract"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_regeneration_proof.py",
+        "target": "src/opencode_arch/cli/calibrate.py",
+        "symbols": [
+          "calibrate"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_docs_cli.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_gap_analyzer.py",
+        "target": "src/opencode_arch/cli/gap_analyzer.py",
+        "symbols": [
+          "gap_analyzer"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_learning_classifier.py",
+        "target": "src/opencode_arch/learning/classifier.py",
+        "symbols": [
+          "classifier"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_learning_classifier.py",
+        "target": "src/opencode_arch/learning/patterns.py",
+        "symbols": [
+          "patterns"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_check_tool.py",
+        "target": "src/opencode_arch/mcp/tools/check.py",
+        "symbols": [
+          "check"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_generate.py",
+        "target": "src/opencode_arch/mcp/tools/generate.py",
+        "symbols": [
+          "generate"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_gate_tool.py",
+        "target": "src/opencode_arch/mcp/tools/gate.py",
+        "symbols": [
+          "gate"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_gate_tool.py",
+        "target": "src/opencode_arch/mcp/tools/author.py",
+        "symbols": [
+          "author"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_function_metrics_table.py",
+        "target": "src/opencode_arch/telemetry/store.py",
+        "symbols": [
+          "store"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_artifact_templates.py",
+        "target": "src/opencode_arch/artifacts/templates.py",
+        "symbols": [
+          "templates"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_artifact_templates.py",
+        "target": "src/opencode_arch/artifacts/selector.py",
+        "symbols": [
+          "selector"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_pipeline_tool.py",
+        "target": "src/opencode_arch/mcp/tools/pipeline.py",
+        "symbols": [
+          "pipeline"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_cli_confidence.py",
+        "target": "src/opencode_arch/cli/confidence.py",
+        "symbols": [
+          "confidence"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_scan.py",
+        "target": "src/opencode_arch/mcp/tools/scan.py",
+        "symbols": [
+          "scan"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_ingest.py",
+        "target": "src/opencode_arch/mcp/tools/ingest.py",
+        "symbols": [
+          "ingest"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_adaptive_budget.py",
+        "target": "src/opencode_arch/mcp/tools/slice.py",
+        "symbols": [
+          "slice"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_learning_adapter.py",
+        "target": "src/opencode_arch/learning/adapter.py",
+        "symbols": [
+          "adapter"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_learning_adapter.py",
+        "target": "src/opencode_arch/learning/patterns.py",
+        "symbols": [
+          "patterns"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_req_matcher.py",
+        "target": "src/opencode_arch/requirements/matcher.py",
+        "symbols": [
+          "matcher"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_req_matcher.py",
+        "target": "src/opencode_arch/requirements/parser.py",
+        "symbols": [
+          "parser"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_req_matcher.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_learn_tool.py",
+        "target": "src/opencode_arch/mcp/tools/learn.py",
+        "symbols": [
+          "learn"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_regen_prompts.py",
+        "target": "src/opencode_arch/prompts/regen.py",
+        "symbols": [
+          "regen"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_llm_audit.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_runner.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_runner.py",
+        "target": "src/opencode_arch/runner/opencode.py",
+        "symbols": [
+          "opencode"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_artifact_diagrams.py",
+        "target": "src/opencode_arch/artifacts/diagrams.py",
+        "symbols": [
+          "diagrams"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_interface_extraction.py",
+        "target": "src/opencode_arch/mcp/tools/extract.py",
+        "symbols": [
+          "extract"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_mcp_extract.py",
+        "target": "src/opencode_arch/mcp/tools/extract.py",
+        "symbols": [
+          "extract"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_cli_bench.py",
+        "target": "src/opencode_arch/cli/bench.py",
+        "symbols": [
+          "bench"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_cli_bench.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_slice.py",
+        "target": "src/opencode_arch/mcp/tools/slice.py",
+        "symbols": [
+          "slice"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_author_tool.py",
+        "target": "src/opencode_arch/mcp/tools/author.py",
+        "symbols": [
+          "author"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_req_llm.py",
+        "target": "src/opencode_arch/requirements/llm_extractor.py",
+        "symbols": [
+          "llm_extractor"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_req_llm.py",
+        "target": "src/opencode_arch/llm/cache.py",
+        "symbols": [
+          "cache"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_req_llm.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_integration.py",
+        "target": "src/opencode_arch/mcp/tools/scan.py",
+        "symbols": [
+          "scan"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_integration.py",
+        "target": "src/opencode_arch/mcp/tools/slice.py",
+        "symbols": [
+          "slice"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_integration.py",
+        "target": "src/opencode_arch/mcp/tools/validate.py",
+        "symbols": [
+          "validate"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_integration.py",
+        "target": "src/opencode_arch/mcp/tools/extract.py",
+        "symbols": [
+          "extract"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_learning_maintainer.py",
+        "target": "src/opencode_arch/learning/maintainer.py",
+        "symbols": [
+          "maintainer"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_regen_loop.py",
+        "target": "src/opencode_arch/cli/regen_loop.py",
+        "symbols": [
+          "regen_loop"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_regen_loop.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_cli_metrics.py",
+        "target": "src/opencode_arch/cli/metrics.py",
+        "symbols": [
+          "metrics"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_cli_metrics.py",
+        "target": "src/opencode_arch/telemetry/store.py",
+        "symbols": [
+          "store"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_calibration_suite.py",
+        "target": "src/opencode_arch/cli/calibrate.py",
+        "symbols": [
+          "calibrate"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_llm_cache.py",
+        "target": "src/opencode_arch/llm/cache.py",
+        "symbols": [
+          "cache"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_llm_cache.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_telemetry.py",
+        "target": "src/opencode_arch/telemetry/store.py",
+        "symbols": [
+          "store"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_telemetry.py",
+        "target": "src/opencode_arch/telemetry/recorder.py",
+        "symbols": [
+          "recorder"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_require.py",
+        "target": "src/opencode_arch/mcp/tools/require.py",
+        "symbols": [
+          "require"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_learning_lessons.py",
+        "target": "src/opencode_arch/learning/lessons.py",
+        "symbols": [
+          "lessons"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_spot_check.py",
+        "target": "src/opencode_arch/regen/spot_check.py",
+        "symbols": [
+          "spot_check"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_spot_check.py",
+        "target": "src/opencode_arch/regen/self_heal.py",
+        "symbols": [
+          "self_heal"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_quality.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_cli_calibrate.py",
+        "target": "src/opencode_arch/cli/calibrate.py",
+        "symbols": [
+          "calibrate"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_regen_blind.py",
+        "target": "src/opencode_arch/cli/regen_loop.py",
+        "symbols": [
+          "regen_loop"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_regen_blind.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/artifacts/__init__.py",
+        "target": "src/opencode_arch/artifacts/selector.py",
+        "symbols": [
+          "selector"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/artifacts/__init__.py",
+        "target": "src/opencode_arch/artifacts/templates.py",
+        "symbols": [
+          "templates"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/artifacts/__init__.py",
+        "target": "src/opencode_arch/artifacts/context.py",
+        "symbols": [
+          "context"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/artifacts/__init__.py",
+        "target": "src/opencode_arch/artifacts/diagrams.py",
+        "symbols": [
+          "diagrams"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/artifacts/context.py",
+        "target": "src/opencode_arch/artifacts/diagrams.py",
+        "symbols": [
+          "diagrams"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/artifacts/context.py",
+        "target": "src/opencode_arch/artifacts/templates.py",
+        "symbols": [
+          "templates"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/context/__init__.py",
+        "target": "src/opencode_arch/context/formatter.py",
+        "symbols": [
+          "formatter"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/context/__init__.py",
+        "target": "src/opencode_arch/context/pipeline_bridge.py",
+        "symbols": [
+          "pipeline_bridge"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/context/pipeline_bridge.py",
+        "target": "src/opencode_arch/context/formatter.py",
+        "symbols": [
+          "formatter"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/learning/classifier.py",
+        "target": "src/opencode_arch/learning/patterns.py",
+        "symbols": [
+          "patterns"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/learning/adapter.py",
+        "target": "src/opencode_arch/learning/patterns.py",
+        "symbols": [
+          "patterns"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/learning/__init__.py",
+        "target": "src/opencode_arch/learning/classifier.py",
+        "symbols": [
+          "classifier"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/learning/__init__.py",
+        "target": "src/opencode_arch/learning/adapter.py",
+        "symbols": [
+          "adapter"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/learning/__init__.py",
+        "target": "src/opencode_arch/learning/assessor.py",
+        "symbols": [
+          "assessor"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/learning/__init__.py",
+        "target": "src/opencode_arch/learning/lessons.py",
+        "symbols": [
+          "lessons"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/learning/__init__.py",
+        "target": "src/opencode_arch/learning/maintainer.py",
+        "symbols": [
+          "maintainer"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/runner/__init__.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/runner/__init__.py",
+        "target": "src/opencode_arch/runner/opencode.py",
+        "symbols": [
+          "opencode"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/runner/opencode.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/agent/__init__.py",
+        "target": "src/opencode_arch/agent/resolution.py",
+        "symbols": []
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/__main__.py",
+        "target": "src/opencode_arch/mcp/server.py",
+        "symbols": [
+          "server"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/requirements/matcher.py",
+        "target": "src/opencode_arch/llm/cache.py",
+        "symbols": [
+          "cache"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/requirements/matcher.py",
+        "target": "src/opencode_arch/llm/prompts/matching.py",
+        "symbols": [
+          "matching"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/requirements/matcher.py",
+        "target": "src/opencode_arch/requirements/parser.py",
+        "symbols": [
+          "parser"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/requirements/llm_extractor.py",
+        "target": "src/opencode_arch/llm/cache.py",
+        "symbols": [
+          "cache"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/requirements/llm_extractor.py",
+        "target": "src/opencode_arch/llm/prompts/requirements.py",
+        "symbols": [
+          "requirements"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/requirements/llm_extractor.py",
+        "target": "src/opencode_arch/requirements/parser.py",
+        "symbols": [
+          "parser"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/requirements/retroactive.py",
+        "target": "src/opencode_arch/llm/cache.py",
+        "symbols": [
+          "cache"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/requirements/retroactive.py",
+        "target": "src/opencode_arch/llm/prompts/requirements.py",
+        "symbols": [
+          "requirements"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/requirements/retroactive.py",
+        "target": "src/opencode_arch/requirements/parser.py",
+        "symbols": [
+          "parser"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/cli/metrics.py",
+        "target": "src/opencode_arch/telemetry/store.py",
+        "symbols": [
+          "store"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/cli/regen_loop.py",
+        "target": "src/opencode_arch/cli/gap_analyzer.py",
+        "symbols": [
+          "gap_analyzer"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/cli/regen_loop.py",
+        "target": "src/opencode_arch/prompts/regen.py",
+        "symbols": [
+          "regen"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/cli/regen_loop.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/cli/generate.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/cli/generate.py",
+        "target": "src/opencode_arch/cli/prompts.py",
+        "symbols": [
+          "prompts"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/cli/docs.py",
+        "target": "src/opencode_arch/artifacts/__init__.py",
+        "symbols": [
+          "artifacts"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/cli/docs.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/cli/bench.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/cli/bench.py",
+        "target": "src/opencode_arch/cli/extract.py",
+        "symbols": [
+          "extract"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/cli/extract.py",
+        "target": "src/opencode_arch/runner/base.py",
+        "symbols": [
+          "base"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/cli/extract.py",
+        "target": "src/opencode_arch/cli/prompts.py",
+        "symbols": [
+          "prompts"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/telemetry/recorder.py",
+        "target": "src/opencode_arch/telemetry/store.py",
+        "symbols": [
+          "store"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/telemetry/__init__.py",
+        "target": "src/opencode_arch/telemetry/store.py",
+        "symbols": [
+          "store"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/telemetry/__init__.py",
+        "target": "src/opencode_arch/telemetry/recorder.py",
+        "symbols": [
+          "recorder"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/regen/self_heal.py",
+        "target": "src/opencode_arch/regen/spot_check.py",
+        "symbols": []
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/ingest.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/llm_audit.py",
+        "target": "src/opencode_arch/llm/cache.py",
+        "symbols": [
+          "cache"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/llm_audit.py",
+        "target": "src/opencode_arch/llm/prompts/audit.py",
+        "symbols": [
+          "audit"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/llm_audit.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/check.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/decompose.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/generate.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/trace_requirements.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/trace_requirements.py",
+        "target": "src/opencode_arch/requirements/parser.py",
+        "symbols": [
+          "parser"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/trace_requirements.py",
+        "target": "src/opencode_arch/requirements/llm_extractor.py",
+        "symbols": [
+          "llm_extractor"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/trace_requirements.py",
+        "target": "src/opencode_arch/requirements/retroactive.py",
+        "symbols": [
+          "retroactive"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/trace_requirements.py",
+        "target": "src/opencode_arch/requirements/matcher.py",
+        "symbols": [
+          "matcher"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/docs.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/export.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/pipeline.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/group.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/scan.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "src/opencode_arch/mcp/tools/extract.py",
+        "target": "src/opencode_arch/mcp/quality.py",
+        "symbols": [
+          "quality"
+        ]
+      }
+    ],
     "routes": [],
     "constraints": [
       {
@@ -18257,6 +20262,14 @@
         "path": "tests/test_req_matcher.py",
         "targets": [
           "req_matcher"
+        ]
+      },
+      {
+        "__dataclass__": "TestFileRecord",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "path": "tests/test_learn_tool.py",
+        "targets": [
+          "learn_tool"
         ]
       },
       {
@@ -18734,9 +20747,9 @@
     "__module__": "architecture_model.pipeline.protocol",
     "score": 99,
     "sub_scores": {
-      "parse_success_rate": 99.35897435897436,
-      "symbol_density": 3.567741935483871,
-      "file_count": 156.0
+      "parse_success_rate": 99.38650306748467,
+      "symbol_density": 3.567901234567901,
+      "file_count": 163.0
     },
     "thresholds": {
       "parse_success_rate": 90.0
@@ -18754,7 +20767,7 @@
     }
   ],
   "uncertainties": [],
-  "input_hash": "156",
-  "duration_ms": 484,
+  "input_hash": "163",
+  "duration_ms": 542,
   "version": "1.0"
 }

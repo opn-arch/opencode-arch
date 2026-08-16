@@ -12,8 +12,8 @@
         "name": "Selector",
         "capability_id": "CAP-1",
         "files": [
-          "src/opencode_arch/artifacts/selector.py",
-          "src/opencode_arch/artifacts/context.py"
+          "src/opencode_arch/artifacts/context.py",
+          "src/opencode_arch/artifacts/selector.py"
         ],
         "layer": "infra"
       },
@@ -47,8 +47,8 @@
         "capability_id": "CAP-4",
         "files": [
           "src/opencode_arch/llm/cache.py",
-          "src/opencode_arch/requirements/matcher.py",
           "src/opencode_arch/requirements/llm_extractor.py",
+          "src/opencode_arch/requirements/matcher.py",
           "src/opencode_arch/requirements/retroactive.py"
         ],
         "layer": "infra"
@@ -82,9 +82,9 @@
         "name": "Patterns",
         "capability_id": "CAP-7",
         "files": [
-          "src/opencode_arch/learning/patterns.py",
+          "src/opencode_arch/learning/adapter.py",
           "src/opencode_arch/learning/classifier.py",
-          "src/opencode_arch/learning/adapter.py"
+          "src/opencode_arch/learning/patterns.py"
         ],
         "layer": "infra"
       },
@@ -128,12 +128,12 @@
         "name": "Docs Validator",
         "capability_id": "CAP-11",
         "files": [
+          "src/opencode_arch/cli/bench.py",
           "src/opencode_arch/cli/docs.py",
           "src/opencode_arch/cli/docs_validator.py",
-          "src/opencode_arch/cli/regen_loop.py",
+          "src/opencode_arch/cli/extract.py",
           "src/opencode_arch/cli/generate.py",
-          "src/opencode_arch/cli/bench.py",
-          "src/opencode_arch/cli/extract.py"
+          "src/opencode_arch/cli/regen_loop.py"
         ],
         "layer": "infra"
       },
@@ -155,8 +155,8 @@
         "name": "Spot Check",
         "capability_id": "CAP-13",
         "files": [
-          "src/opencode_arch/regen/spot_check.py",
-          "src/opencode_arch/regen/self_heal.py"
+          "src/opencode_arch/regen/self_heal.py",
+          "src/opencode_arch/regen/spot_check.py"
         ],
         "layer": "infra"
       },
@@ -167,8 +167,8 @@
         "name": "CLI Main",
         "capability_id": "CAP-14",
         "files": [
-          "src/opencode_arch/mcp/__main__.py",
-          "src/opencode_arch/cli/main.py"
+          "src/opencode_arch/cli/main.py",
+          "src/opencode_arch/mcp/__main__.py"
         ],
         "layer": "infra"
       },
@@ -192,8 +192,8 @@
         "name": "Infrastructure (runner)",
         "capability_id": "",
         "files": [
-          "src/opencode_arch/runner/opencode.py",
-          "src/opencode_arch/runner/base.py"
+          "src/opencode_arch/runner/base.py",
+          "src/opencode_arch/runner/opencode.py"
         ],
         "layer": "infra"
       },
@@ -227,9 +227,9 @@
         "capability_id": "",
         "files": [
           "src/opencode_arch/cli/confidence.py",
-          "src/opencode_arch/cli/prompts.py",
           "src/opencode_arch/cli/gap_analyzer.py",
-          "src/opencode_arch/cli/launch.py"
+          "src/opencode_arch/cli/launch.py",
+          "src/opencode_arch/cli/prompts.py"
         ],
         "layer": "infra"
       },
@@ -251,9 +251,9 @@
         "name": "Infrastructure (telemetry)",
         "capability_id": "",
         "files": [
-          "src/opencode_arch/telemetry/store.py",
+          "src/opencode_arch/telemetry/collector.py",
           "src/opencode_arch/telemetry/recorder.py",
-          "src/opencode_arch/telemetry/collector.py"
+          "src/opencode_arch/telemetry/store.py"
         ],
         "layer": "infra"
       },
@@ -261,7 +261,7 @@
         "__dataclass__": "ComponentAllocation",
         "__module__": "architecture_model.pipeline.allocate_types",
         "id": "COMP-15-8",
-        "name": "Infrastructure (prompts)",
+        "name": "Infrastructure (llm)",
         "capability_id": "",
         "files": [
           "src/opencode_arch/llm/prompts/audit.py",
@@ -273,15 +273,15 @@
     ],
     "unallocated": [],
     "file_coverage": 100.0,
-    "boundary_coherence": 100.0
+    "boundary_coherence": 31.03448275862069
   },
   "quality": {
     "__dataclass__": "QualityMetrics",
     "__module__": "architecture_model.pipeline.protocol",
-    "score": 100,
+    "score": 65,
     "sub_scores": {
       "file_coverage": 100.0,
-      "boundary_coherence": 100.0,
+      "boundary_coherence": 31.03448275862069,
       "component_count": 22.0
     },
     "thresholds": {

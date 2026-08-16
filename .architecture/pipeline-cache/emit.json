@@ -14,9 +14,9 @@
       "/Users/baigm2/Documents/Projects/opencode-arch/.architecture-models/.architecture-models/docs-validator/lessons.md",
       "/Users/baigm2/Documents/Projects/opencode-arch/.architecture-models/.architecture-models/docs/system-interactions.md"
     ],
-    "total_bytes": 17558,
+    "total_bytes": 17914,
     "system_count": 22,
-    "doc_count": 1,
+    "doc_count": 23,
     "output_dir": "/Users/baigm2/Documents/Projects/opencode-arch/.architecture-models/.architecture-models"
   },
   "quality": {
@@ -26,7 +26,7 @@
     "sub_scores": {
       "files_written": 8,
       "systems": 22,
-      "total_bytes": 17558
+      "total_bytes": 17914
     },
     "thresholds": {},
     "llm_prompt": ""
@@ -34,6 +34,6 @@
   "diagnostics": [],
   "uncertainties": [],
   "input_hash": "",
-  "duration_ms": 1,
+  "duration_ms": 141,
   "version": "1.0"
 }

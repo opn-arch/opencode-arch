@@ -5,7 +5,16 @@
     "__dataclass__": "ValidateResult",
     "__module__": "architecture_model.pipeline.validate_types",
     "score": 100,
-    "issues": [],
+    "issues": [
+      {
+        "__dataclass__": "ValidationIssue",
+        "__module__": "architecture_model.pipeline.validate_types",
+        "severity": "info",
+        "message": "Boundary coherence is 31.0% (target: 50%)",
+        "entity_id": "",
+        "rule": "boundary_coherence"
+      }
+    ],
     "is_valid": true
   },
   "quality": {
@@ -15,7 +24,7 @@
     "sub_scores": {
       "error_count": 0.0,
       "warning_count": 0.0,
-      "info_count": 0.0
+      "info_count": 1.0
     },
     "thresholds": {
       "error_count": 0.0

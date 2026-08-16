@@ -1,4 +1,5 @@
 """architect_docs MCP tool — generate SE documentation from architecture model."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -8,7 +9,9 @@ from opencode_arch.mcp.quality import with_quality
 
 
 @with_quality
-async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = None) -> dict[str, Any]:
+async def generate_docs(
+    repo_path: str, formats: str = "all", manifest: Any = None
+) -> dict[str, Any]:
     """Generate standard SE documentation from an architecture model.
 
     Produces component specs, ICDs, dependency matrix, health report,
@@ -43,10 +46,22 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
         model = _parse_raw(raw)
 
         # Determine which docs to generate
-        requested = {f.strip() for f in formats.split(",")} if formats != "all" else {
-            "component_spec", "icd", "dependency_matrix", "health", "drift", "behaviors",
-            "system_design", "integration_flows", "diagrams", "index"
-        }
+        requested = (
+            {f.strip() for f in formats.split(",")}
+            if formats != "all"
+            else {
+                "component_spec",
+                "icd",
+                "dependency_matrix",
+                "health",
+                "drift",
+                "behaviors",
+                "system_design",
+                "integration_flows",
+                "diagrams",
+                "index",
+            }
+        )
 
         output_dir = path / "docs" / "architecture"
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -57,11 +72,11 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
         # Hydrate file_stats from manifest so component specs show Functions/Classes
         if manifest is not None:
             try:
-                _mdata = manifest.to_dict() if hasattr(manifest, 'to_dict') else manifest
+                _mdata = manifest.to_dict() if hasattr(manifest, "to_dict") else manifest
                 _mod_lookup: dict[str, dict] = {}
                 for m in _mdata.get("modules", []):
                     _mod_lookup[m.get("file", "")] = m
-                for comp in getattr(model.entities, 'components', []) or []:
+                for comp in getattr(model.entities, "components", []) or []:
                     if not comp.files:
                         continue
                     if comp.extensions is None:
@@ -81,7 +96,8 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
         if "component_spec" in requested or "all" in requested:
             try:
                 from architecture_model.docs.component_spec import generate_component_spec
-                components = getattr(model.entities, 'components', [])
+
+                components = getattr(model.entities, "components", [])
                 if components:
                     parts = [generate_component_spec(comp, model) for comp in components]
                     content = "\n\n---\n\n".join(parts)
@@ -96,6 +112,7 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
         if "icd" in requested or "all" in requested:
             try:
                 from architecture_model.docs.icd import generate_icd
+
                 content = generate_icd(model)
                 out = output_dir / "icd.md"
                 out.write_text(content)
@@ -106,6 +123,7 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
         if "dependency_matrix" in requested or "all" in requested:
             try:
                 from architecture_model.docs.dependency_matrix import generate_dependency_matrix
+
                 content = generate_dependency_matrix(model)
                 out = output_dir / "dependency_matrix.md"
                 out.write_text(content)
@@ -116,6 +134,7 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
         if "health" in requested or "all" in requested:
             try:
                 from architecture_model.docs.health import generate_health_report
+
                 content = generate_health_report(model, root=path)
                 out = output_dir / "health.md"
                 out.write_text(content)
@@ -126,15 +145,25 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
         if "behaviors" in requested or "all" in requested:
             try:
                 from architecture_model.manifest.generator import generate_manifest
-                from architecture_model.manifest.call_graph import build_call_graph, trace_flow, map_flow_to_components
-                from architecture_model.orchestration.behavior_flows import (
-                    classify_behaviors, summarize_crud_group, build_behavior_manifest,
-                    build_behavior_sub_model, build_file_to_comp,
+                from architecture_model.manifest.call_graph import (
+                    build_call_graph,
+                    trace_flow,
+                    map_flow_to_components,
                 )
-                from architecture_model.docs.behavior_spec import generate_behavior_spec, generate_behavior_index
+                from architecture_model.orchestration.behavior_flows import (
+                    classify_behaviors,
+                    summarize_crud_group,
+                    build_behavior_manifest,
+                    build_behavior_sub_model,
+                    build_file_to_comp,
+                )
+                from architecture_model.docs.behavior_spec import (
+                    generate_behavior_spec,
+                    generate_behavior_index,
+                )
 
                 manifest = generate_manifest(path)
-                behaviors = getattr(model.entities, 'behaviors', [])
+                behaviors = getattr(model.entities, "behaviors", [])
                 if behaviors:
                     call_graph = build_call_graph(manifest)
                     file_to_comp = build_file_to_comp(model, manifest)
@@ -148,7 +177,9 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
                     for behavior, flow_trace in classification.cross_component:
                         try:
                             scoped = build_behavior_manifest(behavior, flow_trace, manifest)
-                            spec_md = generate_behavior_spec(behavior, flow_trace, scoped, file_to_comp)
+                            spec_md = generate_behavior_spec(
+                                behavior, flow_trace, scoped, file_to_comp
+                            )
                             (beh_dir / f"{behavior.id}.md").write_text(spec_md)
                         except Exception:
                             continue
@@ -168,6 +199,7 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
         if "system_design" in requested or "all" in requested:
             try:
                 from architecture_model.docs.system_design import generate_system_design
+
                 content = generate_system_design(model)
                 out = output_dir / "system_design.md"
                 out.write_text(content)
@@ -178,6 +210,7 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
         if "integration_flows" in requested or "all" in requested:
             try:
                 from architecture_model.docs.integration_flows import generate_integration_flows
+
                 content = generate_integration_flows(model)
                 out = output_dir / "integration_flows.md"
                 out.write_text(content)
@@ -188,15 +221,19 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
         if "diagrams" in requested or "all" in requested:
             try:
                 from architecture_model.docs.diagrams import generate_all_diagrams
+
                 diag_dir = output_dir / "diagrams"
                 diagram_paths = generate_all_diagrams(model, diag_dir)
                 generated.extend(str(p.relative_to(path)) for p in diagram_paths)
+            except ImportError as e:
+                errors.append(f"diagrams: import failed — {e} (install missing diagram dependency)")
             except Exception as e:
                 errors.append(f"diagrams: {e}")
 
         if "drift" in requested or "all" in requested:
             try:
                 from architecture_model.docs.drift import generate_drift_report
+
                 # Drift requires old + new model comparison
                 prev_model = None
                 snapshot_dir = path / ".architecture" / "snapshots"
@@ -204,6 +241,7 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
                     snapshots = sorted(snapshot_dir.glob("*.yaml"))
                     if snapshots:
                         from architecture_model.core.parser import load_model as _load
+
                         prev_model = _load(snapshots[-1])
                 if prev_model is not None:
                     content = generate_drift_report(prev_model, model)
@@ -217,22 +255,37 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
 
         # SE documents (standard systems engineering docs)
         se_keys = {
-            "se_all", "conops", "functional_analysis", "logical_architecture",
-            "requirements_analysis", "verification_validation", "operations_manual",
-            "maintenance_manual", "use_cases", "risk_assessment", "interface_spec",
-            "api_reference", "data_model", "deployment_guide", "security_analysis",
-            "cli_reference", "plugin_guide",
+            "se_all",
+            "conops",
+            "functional_analysis",
+            "logical_architecture",
+            "requirements_analysis",
+            "verification_validation",
+            "operations_manual",
+            "maintenance_manual",
+            "use_cases",
+            "risk_assessment",
+            "interface_spec",
+            "api_reference",
+            "data_model",
+            "deployment_guide",
+            "security_analysis",
+            "cli_reference",
+            "plugin_guide",
         }
         if requested & se_keys or "all" in requested or "se_all" in requested:
             try:
                 from architecture_model.docs.se.generator import generate_se_docs
+
                 se_dir = output_dir / "se"
                 se_filter = None
                 if "se_all" not in requested and "all" not in requested:
                     se_filter = list(requested & se_keys - {"se_all"})
                 se_result = generate_se_docs(model, se_dir, manifest, doc_filter=se_filter)
                 for p in se_result.get("generated", []):
-                    generated.append(str(Path(p).relative_to(path)) if Path(p).is_relative_to(path) else p)
+                    generated.append(
+                        str(Path(p).relative_to(path)) if Path(p).is_relative_to(path) else p
+                    )
                 errors.extend(se_result.get("errors", []))
             except Exception as e:
                 errors.append(f"se_docs: {e}")
@@ -241,6 +294,7 @@ async def generate_docs(repo_path: str, formats: str = "all", manifest: Any = No
         if "index" in requested or "all" in requested:
             try:
                 from architecture_model.docs.index import generate_index
+
                 doc_paths_map: dict[str, list[Path]] = {}
                 for gen_path in generated:
                     p = path / gen_path
