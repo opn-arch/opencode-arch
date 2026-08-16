@@ -1,4 +1,5 @@
 """architect_gate MCP tool — check development gate readiness."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -28,8 +29,10 @@ async def check_gate(repo_path: str, model_yaml: str = "") -> dict[str, Any]:
         if model_yaml:
             import yaml
             from architecture_model.core.parser import ArchitectureModel
+
             # Use load_model-compatible path: write temp then load, or parse directly
             from architecture_model.core.parser import _parse_raw
+
             raw = yaml.safe_load(model_yaml)
             model = _parse_raw(raw)
         else:
@@ -49,7 +52,7 @@ async def check_gate(repo_path: str, model_yaml: str = "") -> dict[str, Any]:
         # Run gate check
         result = check_development_gate(model, manifest, phase=phase)
 
-        return {
+        result = {
             "lifecycle_phase": result.phase,
             "capability_realization": result.capability_realization,
             "constraint_allocation": result.constraint_allocation,
@@ -58,5 +61,26 @@ async def check_gate(repo_path: str, model_yaml: str = "") -> dict[str, Any]:
             "phase_requirements_met": result.phase_requirements_met,
             "issues": result.issues,
         }
+
+        # Auto-trigger live assessment and workspace evaluation
+        try:
+            from .assess import assess_conversation
+            from .evaluate import evaluate_workspace
+
+            assess_result = await assess_conversation(
+                repo_path, conversation_text=f"Gate check completed for {repo_path}"
+            )
+            eval_result = await evaluate_workspace(repo_path)
+
+            result["live_assessment"] = {
+                "findings_count": assess_result.get("findings_count", 0),
+                "cross_repo_impacts": assess_result.get("cross_repo_impacts", 0),
+            }
+            result["workspace_health"] = eval_result.get("overall_health")
+            result["recommendations"] = eval_result.get("recommendations", [])
+        except Exception:
+            pass  # Don't let assessment failure block gate
+
+        return result
     except Exception as e:
         return {"error": f"Gate check failed: {e}"}

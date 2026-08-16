@@ -483,6 +483,27 @@ try:
         return json.dumps(result, indent=2, default=str)
 
     @mcp.tool()
+    async def architect_assess(repo_path: str, conversation_text: str = "") -> dict:
+        """CALL THIS after completing work, discovering issues, or when conversation reveals requirements. Extracts structured findings from recent context and stores locally."""
+        from opencode_arch.mcp.tools.assess import assess_conversation
+
+        return await assess_conversation(repo_path=repo_path, conversation_text=conversation_text)
+
+    @mcp.tool()
+    async def architect_evaluate(repo_path: str) -> dict:
+        """CALL THIS for a health check of all 3 systems. Shows model coverage, requirement count, devlog activity, and sync status. Cached for 5 min."""
+        from opencode_arch.mcp.tools.evaluate import evaluate_workspace
+
+        return await evaluate_workspace(repo_path=repo_path)
+
+    @mcp.tool()
+    async def architect_sync(repo_path: str, dry_run: bool = False) -> dict:
+        """CALL THIS at end of session or when evaluate shows unsynced findings. Pushes local findings to logs-db API with fuzzy dedup. Use dry_run=True to preview."""
+        from opencode_arch.mcp.tools.sync import sync_findings
+
+        return await sync_findings(repo_path=repo_path, dry_run=dry_run)
+
+    @mcp.tool()
     async def architect_learn(
         learning_type: str,
         stage: str = "",
