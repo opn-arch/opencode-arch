@@ -198,7 +198,14 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
         regen_header = ""
 
     if focus == "all":
-        return regen_header + format_model_context(model, max_tokens=budget, detail_level=detail)
+        base = regen_header + format_model_context(model, max_tokens=budget, detail_level=detail)
+        # For SoS models (has systems but no components with files), enrich with sub-model data
+        has_file_detail = any(comp.files for comp in (model.entities.components or []))
+        if not has_file_detail and (model.entities.systems or []):
+            enrichment = _enrich_sos_with_files(project_root, budget)
+            if enrichment:
+                base += enrichment
+        return base
     elif (focus.startswith("F") or focus.startswith("S")) and focus[1:].isdigit():
         # Check for sub-model first
         sub_model_path = project_root / ".architecture-models" / focus / ".architecture-model.yaml"
@@ -225,11 +232,150 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
     ):
         return format_artifact_context(model, artifact_name=focus, max_tokens=budget)
     else:
+        # Try as system name (for SoS models) — check sub-models
+        sub_model_dirs = [
+            project_root / ".architecture-models",
+            project_root / ".architecture" / ".architecture-models",
+        ]
+        for smd in sub_model_dirs:
+            if not smd.exists():
+                continue
+            # Try exact match or slug match
+            for subdir in smd.iterdir():
+                if not subdir.is_dir():
+                    continue
+                if subdir.name == focus or focus in subdir.name:
+                    sub_path = subdir / ".architecture-model.yaml"
+                    if sub_path.exists():
+                        sub_model = load_model(sub_path)
+                        return format_model_context(
+                            sub_model, max_tokens=budget, detail_level=detail
+                        )
+
         try:
             sliced = slice_by_layer(model, layer_id=focus)
             return format_model_context(sliced, max_tokens=budget, detail_level=detail)
         except (KeyError, ValueError):
             return format_model_context(model, max_tokens=budget, detail_level=detail)
+
+
+def _enrich_sos_with_files(project_root: Path, budget: int) -> str:
+    """For System-of-Systems models, append component→file mappings from sub-models.
+
+    This bridges the gap between the abstract SoS view (systems + relationships)
+    and the concrete file-level detail an AI needs for impact analysis.
+    Also includes import dependencies for change propagation reasoning.
+    """
+    from architecture_model.core.parser import load_model
+
+    sub_model_dirs = [
+        project_root / ".architecture-models",
+        project_root / ".architecture" / ".architecture-models",
+    ]
+
+    lines = ["\n\n## Component → File Mapping (from sub-models)"]
+    char_budget = budget * 2  # Allow extra chars for file detail
+    used = 0
+    all_files: set[str] = set()
+
+    for smd in sub_model_dirs:
+        if not smd.exists():
+            continue
+        for subdir in sorted(smd.iterdir()):
+            if not subdir.is_dir():
+                continue
+            sub_path = subdir / ".architecture-model.yaml"
+            if not sub_path.exists():
+                continue
+            try:
+                sm = load_model(sub_path)
+                comps = sm.entities.components or []
+                if not comps:
+                    continue
+                sys_line = f"\n### {subdir.name.replace('-', ' ').title()}"
+                lines.append(sys_line)
+                used += len(sys_line)
+                for c in comps:
+                    if not c.files:
+                        continue
+                    file_strs = [str(f) for f in c.files]
+                    all_files.update(file_strs)
+                    comp_line = f"  **{c.name}**: {', '.join(file_strs)}"
+                    if used + len(comp_line) > char_budget:
+                        lines.append("  ... (truncated)")
+                        break
+                    lines.append(comp_line)
+                    used += len(comp_line)
+            except Exception:
+                continue
+
+    # Add import graph if available (from pipeline cache)
+    import_section = _get_import_graph_section(project_root, all_files, char_budget - used)
+    if import_section:
+        lines.append(import_section)
+
+    if len(lines) <= 1:
+        return ""
+    return "\n".join(lines)
+
+
+def _get_import_graph_section(project_root: Path, model_files: set[str], char_budget: int) -> str:
+    """Generate import dependency section from cached pipeline data or quick AST scan."""
+    import json as _json
+
+    # Try to load from pipeline cache
+    cache_locations = [
+        project_root / ".benchmark-cache",
+        project_root / ".architecture",
+    ]
+
+    import_graph: dict[str, list[str]] = {}
+    for cache_dir in cache_locations:
+        if not cache_dir.exists():
+            continue
+        for f in cache_dir.iterdir():
+            if f.name.endswith(".import_graph.json"):
+                try:
+                    data = _json.loads(f.read_text())
+                    import_graph = data.get("forward", {})
+                    break
+                except Exception:
+                    continue
+        if import_graph:
+            break
+
+    if not import_graph or not model_files:
+        return ""
+
+    lines = ["\n\n## Import Dependencies (for change propagation)"]
+    lines.append("(file → files it imports; use to predict cascading changes)")
+    used = len("\n".join(lines))
+
+    shown = 0
+    for src in sorted(import_graph.keys()):
+        if src not in model_files:
+            continue
+        targets = [t for t in import_graph[src] if t in model_files]
+        if not targets:
+            continue
+        line = f"  {src} → {', '.join(sorted(targets)[:5])}"
+        if used + len(line) > char_budget:
+            lines.append(
+                f"  ... (+{sum(1 for s in import_graph if s in model_files) - shown} more)"
+            )
+            break
+        lines.append(line)
+        used += len(line)
+        shown += 1
+        if shown >= 50:
+            lines.append(
+                f"  ... (+{sum(1 for s in import_graph if s in model_files) - shown} more)"
+            )
+            break
+
+    if shown == 0:
+        return ""
+    return "\n".join(lines)
 
 
 def _compute_block_budget(model: Any, source_block: str, total_budget: int) -> int:
