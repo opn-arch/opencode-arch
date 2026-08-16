@@ -81,6 +81,13 @@ async def check_gate(repo_path: str, model_yaml: str = "") -> dict[str, Any]:
         except Exception:
             pass  # Don't let assessment failure block gate
 
+        # Auto-log prompt: remind to log progress
+        result["next_steps"] = [
+            "ALWAYS call architect_log after completing implementation tasks",
+            "Call architect_log after git commits to record progress",
+            "Call architect_log when discovering architectural decisions",
+        ]
+
         return result
     except Exception as e:
         return {"error": f"Gate check failed: {e}"}

@@ -412,4 +412,124 @@ entities:
     - src/opencode_arch/mcp/__init__.py
     - src/opencode_arch/mcp/quality.py
     contract: MCP server registration and tool dispatch
-relationships: []
+relationships:
+- source: COMP-1
+  target: COMP-13
+  type: uses
+  description: Extraction Tools imports from Telemetry
+- source: COMP-1
+  target: COMP-15
+  type: uses
+  description: Extraction Tools imports from MCP Server
+- source: COMP-1
+  target: COMP-8
+  type: uses
+  description: Extraction Tools imports from Documentation Tools
+- source: COMP-10
+  target: COMP-12
+  type: uses
+  description: Requirements Tools imports from Runner
+- source: COMP-10
+  target: COMP-15
+  type: uses
+  description: Requirements Tools imports from MCP Server
+- source: COMP-10
+  target: COMP-4
+  type: uses
+  description: Requirements Tools imports from Requirements
+- source: COMP-15
+  target: COMP-1
+  type: uses
+  description: MCP Server imports from Extraction Tools
+- source: COMP-15
+  target: COMP-10
+  type: uses
+  description: MCP Server imports from Requirements Tools
+- source: COMP-15
+  target: COMP-11
+  type: uses
+  description: MCP Server imports from Live Analysis Tools
+- source: COMP-15
+  target: COMP-6
+  type: uses
+  description: MCP Server imports from Context Tools
+- source: COMP-15
+  target: COMP-7
+  type: uses
+  description: MCP Server imports from Model Management Tools
+- source: COMP-15
+  target: COMP-8
+  type: uses
+  description: MCP Server imports from Documentation Tools
+- source: COMP-15
+  target: COMP-9
+  type: uses
+  description: MCP Server imports from Quality Gate Tools
+- source: COMP-3
+  target: COMP-1
+  type: uses
+  description: CLI Commands imports from Extraction Tools
+- source: COMP-3
+  target: COMP-12
+  type: uses
+  description: CLI Commands imports from Runner
+- source: COMP-3
+  target: COMP-13
+  type: uses
+  description: CLI Commands imports from Telemetry
+- source: COMP-3
+  target: COMP-14
+  type: uses
+  description: CLI Commands imports from Learning
+- source: COMP-3
+  target: COMP-6
+  type: uses
+  description: CLI Commands imports from Context Tools
+- source: COMP-3
+  target: COMP-8
+  type: uses
+  description: CLI Commands imports from Documentation Tools
+- source: COMP-3
+  target: COMP-9
+  type: uses
+  description: CLI Commands imports from Quality Gate Tools
+- source: COMP-6
+  target: COMP-13
+  type: uses
+  description: Context Tools imports from Telemetry
+- source: COMP-6
+  target: COMP-15
+  type: uses
+  description: Context Tools imports from MCP Server
+- source: COMP-7
+  target: COMP-13
+  type: uses
+  description: Model Management Tools imports from Telemetry
+- source: COMP-7
+  target: COMP-15
+  type: uses
+  description: Model Management Tools imports from MCP Server
+- source: COMP-8
+  target: COMP-15
+  type: uses
+  description: Documentation Tools imports from MCP Server
+- source: COMP-9
+  target: COMP-12
+  type: uses
+  description: Quality Gate Tools imports from Runner
+- source: COMP-9
+  target: COMP-13
+  type: uses
+  description: Quality Gate Tools imports from Telemetry
+- source: COMP-9
+  target: COMP-15
+  type: uses
+  description: Quality Gate Tools imports from MCP Server
+- source: COMP-9
+  target: COMP-4
+  type: uses
+  description: Quality Gate Tools imports from Requirements
+- source: COMP-9
+  target: COMP-5
+  type: uses
+  description: Quality Gate Tools imports from Resolution

@@ -86,6 +86,15 @@ async def slice_context(
     if not path.exists():
         return f"Error: Repository path does not exist: {repo_path}"
 
+    # Help/introspect mode: return valid focus values and capabilities
+    if focus in ("help", "introspect", "?"):
+        return _help_text(path)
+
+    # Schema mode: return dataclass definitions for named types
+    if focus.startswith("schema:"):
+        type_name = focus[7:].strip()
+        return _schema_for_type(path, type_name)
+
     # Cache check
     cache_key = (repo_path, focus, budget, detail)
     if cache_key in _slice_cache:
@@ -337,3 +346,98 @@ def _append_requirements_context(project_root: Path, focus: str, result: str) ->
     except Exception:
         pass
     return result
+
+
+def _help_text(project_root: Path) -> str:
+    """Return introspection info: valid focus values, modes, and capabilities."""
+    model_path = project_root / ".architecture-model.yaml"
+    lines = [
+        "# architect_slice — Help / Introspect",
+        "",
+        "## Valid focus values:",
+        "  - `all` — full model context (default)",
+        "  - `help` or `introspect` or `?` — this help text",
+        "  - `schema:<TypeName>` — dataclass field definitions for a named type",
+    ]
+
+    if model_path.exists():
+        model_data = yaml.safe_load(model_path.read_text()) or {}
+        components = model_data.get("entities", {}).get("components", [])
+
+        # Source blocks
+        blocks = sorted(set(c.get("source_block", "") for c in components if c.get("source_block")))
+        if blocks:
+            lines.append(f"  - Source blocks: {', '.join(blocks)}")
+
+        # Component IDs
+        comp_list = [f"{c['id']} ({c['name']})" for c in components]
+        lines.append("  - Component IDs (use as focus):")
+        for c in comp_list:
+            lines.append(f"    - {c}")
+
+        lines.append("  - Artifact names:")
+        artifacts = [
+            "functional-architecture",
+            "logical-architecture",
+            "use-cases",
+            "icd",
+            "requirements-analysis",
+            "operations-manual",
+            "conops",
+            "testing",
+            "deployment-guide",
+            "data-dictionary",
+            "readme",
+        ]
+        for a in artifacts:
+            lines.append(f"    - {a}")
+    else:
+        lines.append("  (no model found — run architect_pipeline first)")
+
+    lines.extend(
+        [
+            "",
+            "## Parameters:",
+            "  - budget: Token budget (0=auto-calculate, max 64000)",
+            "  - detail: minimal | standard | full",
+            "",
+            "## Compression thresholds:",
+            f"  - <50x: good (78% pass rate)",
+            f"  - 50-200x: warning (44-55% pass rate)",
+            f"  - >200x: critical (19% pass rate) — use per-block slicing",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def _schema_for_type(project_root: Path, type_name: str) -> str:
+    """Return dataclass/class field definitions for a named type."""
+    import ast as _ast
+
+    results = []
+    src_dir = project_root / "src"
+    if not src_dir.exists():
+        src_dir = project_root
+
+    for py_file in src_dir.rglob("*.py"):
+        if "__pycache__" in str(py_file):
+            continue
+        try:
+            tree = _ast.parse(py_file.read_text())
+        except Exception:
+            continue
+
+        for node in _ast.walk(tree):
+            if isinstance(node, _ast.ClassDef) and node.name == type_name:
+                # Extract source lines
+                source = py_file.read_text().splitlines()
+                start = node.lineno - 1
+                end = node.end_lineno or (start + 20)
+                class_source = "\n".join(source[start:end])
+                rel_path = py_file.relative_to(project_root)
+                results.append(f"# {rel_path}:{node.lineno}\n{class_source}")
+
+    if not results:
+        return f"Type '{type_name}' not found in {project_root.name}. Try: architect_scan to see available types."
+
+    return f"# Schema for {type_name}\n\n" + "\n\n---\n\n".join(results)
