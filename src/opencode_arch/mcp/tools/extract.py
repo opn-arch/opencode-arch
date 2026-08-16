@@ -596,6 +596,22 @@ async def store_extraction(
         except Exception as e:
             pipeline["behavior_flows"] = {"status": "error", "error": str(e)}
 
+        # Auto-regenerate live artifacts
+        try:
+            from pathlib import Path as _PathRegen
+            import sys
+
+            sys.path.insert(0, str(_PathRegen(repo_path).resolve()))
+            from architecture_model.core.parser import load_model as _load_regen
+            from architecture_model.docs.generator import generate_docs as _generate_live_docs
+
+            _regen_model = _load_regen(str(_PathRegen(repo_path) / ".architecture-model.yaml"))
+            _regen_output_dir = _PathRegen(repo_path) / ".architecture" / "docs"
+            _regen_output_dir.mkdir(parents=True, exist_ok=True)
+            _generate_live_docs(_regen_model, _regen_output_dir)
+        except Exception:
+            pass  # Non-fatal — live artifact regen is best-effort
+
         result["next_steps"] = (
             "Use architect_slice for focused context on specific components. "
             "Use architect_log to record architectural decisions."

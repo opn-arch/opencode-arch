@@ -81,6 +81,22 @@ async def check_gate(repo_path: str, model_yaml: str = "") -> dict[str, Any]:
         except Exception:
             pass  # Don't let assessment failure block gate
 
+        # Regen readiness recommendation
+        try:
+            from architecture_model.core.regen_readiness import compute_regen_readiness
+
+            regen = compute_regen_readiness(model)
+            if regen.overall < 50:
+                result["recommendations"] = result.get("recommendations", [])
+                result["recommendations"].append(
+                    f"Regen readiness is {regen.grade} ({regen.overall:.0f}%). "
+                    "Consider running enrichment before proceeding — model lacks detail for reliable code generation."
+                )
+            result["regen_grade"] = regen.grade
+            result["regen_score"] = round(regen.overall, 1)
+        except Exception:
+            pass
+
         # Auto-log prompt: remind to log progress
         result["next_steps"] = [
             "ALWAYS call architect_log after completing implementation tasks",

@@ -297,6 +297,24 @@ async def run_pipeline(
         except Exception:
             pass  # best-effort logging
 
+        # Auto-regenerate live artifacts
+        try:
+            from pathlib import Path as _PathRegen
+            import sys
+
+            sys.path.insert(0, str(_PathRegen(repo_path).resolve()))
+            from architecture_model.core.parser import load_model as _load_regen
+            from architecture_model.docs.generator import generate_docs as _generate_live_docs
+
+            _model_file_regen = _PathRegen(repo_path) / ".architecture-model.yaml"
+            if _model_file_regen.exists():
+                _regen_model = _load_regen(str(_model_file_regen))
+                _regen_output_dir = _PathRegen(repo_path) / ".architecture" / "docs"
+                _regen_output_dir.mkdir(parents=True, exist_ok=True)
+                _generate_live_docs(_regen_model, _regen_output_dir)
+        except Exception:
+            pass  # Non-fatal — live artifact regen is best-effort
+
         response = {
             "stages_completed": list(results.keys()),
             "current_stage": target_stage_name,

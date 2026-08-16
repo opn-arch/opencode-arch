@@ -188,8 +188,17 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
     model_path = project_root / ".architecture-model.yaml"
     model = load_model(model_path)
 
+    # Try to include regen readiness grade in header
+    try:
+        from architecture_model.core.regen_readiness import compute_regen_readiness
+
+        regen = compute_regen_readiness(model)
+        regen_header = f"# Regen: {regen.grade} ({regen.overall:.0f}%)\n\n"
+    except Exception:
+        regen_header = ""
+
     if focus == "all":
-        return format_model_context(model, max_tokens=budget, detail_level=detail)
+        return regen_header + format_model_context(model, max_tokens=budget, detail_level=detail)
     elif (focus.startswith("F") or focus.startswith("S")) and focus[1:].isdigit():
         # Check for sub-model first
         sub_model_path = project_root / ".architecture-models" / focus / ".architecture-model.yaml"
