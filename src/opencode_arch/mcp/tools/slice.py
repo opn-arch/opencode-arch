@@ -205,6 +205,16 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
             enrichment = _enrich_sos_with_files(project_root, budget)
             if enrichment:
                 base += enrichment
+        # Append test files section if available
+        all_model_files = set()
+        for comp in model.entities.components or []:
+            all_model_files.update(str(f) for f in (comp.files or []))
+        test_section = _get_test_files_section(project_root, all_model_files, budget * 2)
+        if test_section:
+            base += test_section
+        conv_section = _get_convention_hints(project_root)
+        if conv_section:
+            base += conv_section
         return base
     elif (focus.startswith("F") or focus.startswith("S")) and focus[1:].isdigit():
         # Check for sub-model first
@@ -375,6 +385,112 @@ def _get_import_graph_section(project_root: Path, model_files: set[str], char_bu
 
     if shown == 0:
         return ""
+    return "\n".join(lines)
+
+
+def _get_test_files_section(project_root: Path, focus_files: set[str], char_budget: int) -> str:
+    """Generate related test files section from test_map.json or component_test_map.json."""
+    import json as _json
+
+    # Try to load test map
+    test_map: dict[str, list[str]] = {}
+    for loc in [
+        project_root / ".architecture" / "test_map.json",
+        project_root / ".architecture" / "component_test_map.json",
+    ]:
+        if loc.exists():
+            try:
+                test_map = _json.loads(loc.read_text())
+                break
+            except Exception:
+                continue
+
+    if not test_map:
+        return ""
+
+    # Collect test files relevant to the focused source files
+    relevant_tests: dict[str, list[str]] = {}  # test_file → [source files it tests]
+    for source_file in focus_files:
+        tests = test_map.get(source_file, [])
+        for t in tests:
+            relevant_tests.setdefault(t, []).append(source_file)
+
+    if not relevant_tests:
+        return ""
+
+    lines = ["\n\n## Related Test Files"]
+    lines.append("(Files that import this component's source — likely need updating on changes)")
+    used = len("\n".join(lines))
+
+    # Sort by relevance (more source imports = more relevant)
+    sorted_tests = sorted(relevant_tests.items(), key=lambda x: -len(x[1]))
+
+    shown = 0
+    for test_file, sources in sorted_tests:
+        src_hint = sources[0] if len(sources) == 1 else f"{sources[0]} +{len(sources) - 1}"
+        line = f"  - {test_file} (imports {src_hint})"
+        if used + len(line) > char_budget:
+            lines.append(f"  ... (+{len(sorted_tests) - shown} more)")
+            break
+        lines.append(line)
+        used += len(line)
+        shown += 1
+        if shown >= 20:
+            remaining = len(sorted_tests) - shown
+            if remaining > 0:
+                lines.append(f"  ... (+{remaining} more)")
+            break
+
+    if shown == 0:
+        return ""
+    return "\n".join(lines)
+
+
+def _get_convention_hints(project_root: Path) -> str:
+    """Detect and return project test/doc conventions from test_map patterns."""
+    import json as _json
+
+    map_path = project_root / ".architecture" / "test_map.json"
+    if not map_path.exists():
+        return ""
+    try:
+        test_map = _json.loads(map_path.read_text())
+    except Exception:
+        return ""
+
+    if not test_map:
+        return ""
+
+    # Analyze test file patterns
+    all_tests = [t for tests in test_map.values() for t in tests]
+    if not all_tests:
+        return ""
+
+    from collections import Counter
+
+    patterns: Counter = Counter()
+    for t in all_tests:
+        parts = Path(t).parts
+        if len(parts) > 1 and "_tests" in parts[-2]:
+            patterns["mirror ({module}_tests/)"] += 1
+        elif Path(t).stem.startswith("test_"):
+            patterns["prefix (test_{module}.py)"] += 1
+        else:
+            patterns["other"] += 1
+
+    dominant = patterns.most_common(1)[0][0] if patterns else "unknown"
+
+    # Check for docs directory
+    docs_dirs = []
+    for d in ["docs", "doc", "documentation"]:
+        if (project_root / d).is_dir():
+            docs_dirs.append(d + "/")
+
+    lines = ["\n\n## Project Conventions"]
+    lines.append(f"  - Test pattern: {dominant}")
+    if docs_dirs:
+        lines.append(f"  - Documentation: {', '.join(docs_dirs)}")
+
     return "\n".join(lines)
 
 
