@@ -1,0 +1,154 @@
+{
+  "modules": [
+    {
+      "file": "src/opencode_arch/mcp/__main__.py",
+      "functions": 0,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/quality.py",
+      "functions": 3,
+      "classes": 1
+    },
+    {
+      "file": "src/opencode_arch/mcp/server.py",
+      "functions": 0,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/assess.py",
+      "functions": 2,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/author.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/check.py",
+      "functions": 4,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/correct.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/decompose.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/diff.py",
+      "functions": 5,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/docs.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/evaluate.py",
+      "functions": 2,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/export.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/extract.py",
+      "functions": 2,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/feedback.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/gate.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/generate.py",
+      "functions": 2,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/group.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/ingest.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/learn.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/llm_audit.py",
+      "functions": 5,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/log.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/pipeline.py",
+      "functions": 2,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/regen_score.py",
+      "functions": 3,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/require.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/scan.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/slice.py",
+      "functions": 15,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/stats.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/sync.py",
+      "functions": 3,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/trace_requirements.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/mcp/tools/validate.py",
+      "functions": 1,
+      "classes": 0
+    }
+  ]
+}

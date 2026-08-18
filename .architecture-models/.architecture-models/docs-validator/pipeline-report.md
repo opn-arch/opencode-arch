@@ -1,7 +1,7 @@
 # Pipeline Report: Docs Validator
 
-**Generated:** 2026-08-16T01:01:29Z
-**Total Duration:** 194ms
+**Generated:** 2026-08-18T12:27:25Z
+**Total Duration:** 201ms
 **Stages:** 2
 
 ## LLM Summary
@@ -12,11 +12,11 @@ No LLM calls — deterministic pipeline run
 
 | Stage | Score | Duration | LLM Calls |
 |-------|-------|----------|-----------|
-| observe | 100 | 194ms | 0 |
+| observe | 100 | 201ms | 0 |
 | infer | 100 | 0ms | 0 |
 
 ## Stage: observe
-**Score:** 100 | **Duration:** 194ms
+**Score:** 100 | **Duration:** 201ms
 
 ### Deterministic Findings
 - Discovered 6 modules

@@ -1,0 +1,20 @@
+meta:
+  schema_version: '2.0'
+  system: Src (artifacts)
+  system_id: SYS-src-(artifacts)
+entities:
+  capabilities:
+  - id: CAP-1
+    name: Context
+  - id: CAP-2
+    name: Diagrams
+  - id: CAP-3
+    name: Selector
+  - id: CAP-4
+    name: Templates
+  actors:
+  - id: ACT-1
+    name: User
+    actor_type: human
+    evidence_source: default
+relationships: []

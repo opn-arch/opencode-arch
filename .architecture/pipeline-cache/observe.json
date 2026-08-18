@@ -12112,17 +12112,19 @@
             "__module__": "architecture_model.pipeline.observe_types",
             "name": "format_model_context",
             "signature": "def format_model_context(model: ArchitectureModel, max_tokens: int=4000, detail_level: str='standard') -> str",
-            "body_hint": "[14 statements]",
+            "body_hint": "[15 statements]",
             "calls": [
               "append",
               "join",
               "_format_header",
               "_format_relationships_compact",
+              "_format_behavior_names",
+              "_format_interface_names",
               "_format_capabilities",
               "_format_actors",
+              "_format_constraints",
               "_format_interfaces",
               "_format_layers",
-              "_format_constraints",
               "len",
               "hasattr",
               "_format_behaviors",
@@ -12149,7 +12151,7 @@
             ],
             "decorators": [],
             "docstring": "Format context for a single F-block (for artifact section regeneration).\n\nProduces: capability description, related UCs, components, interfaces.\nIf *project_root* is given, sub-models are auto-loaded for richer detail,\nand per-block manifests are consumed for function-level context.",
-            "line_number": 119
+            "line_number": 124
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12164,7 +12166,7 @@
             ],
             "decorators": [],
             "docstring": "Format context appropriate for regenerating a specific artifact.\n\nUses artifact-specific slicing then formats at appropriate detail level.",
-            "line_number": 149
+            "line_number": 154
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12185,7 +12187,7 @@
             ],
             "decorators": [],
             "docstring": "Answer a structural question from model data.\n\nSupports questions like:\n- \"What realizes F3?\" \u2192 list behaviors with tag F3\n- \"What does UC-14 depend on?\" \u2192 follow depends-on relationships\n- \"What interfaces does F4 expose?\" \u2192 filter interfaces by provider",
-            "line_number": 174
+            "line_number": 179
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12204,7 +12206,7 @@
             ],
             "decorators": [],
             "docstring": "Determine what entities are affected if a given entity changes.\n\nTraces relationships transitively up to `depth` levels.",
-            "line_number": 240
+            "line_number": 245
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12217,7 +12219,7 @@
             ],
             "decorators": [],
             "docstring": null,
-            "line_number": 283
+            "line_number": 288
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12231,7 +12233,7 @@
             ],
             "decorators": [],
             "docstring": null,
-            "line_number": 292
+            "line_number": 297
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12245,7 +12247,7 @@
             ],
             "decorators": [],
             "docstring": null,
-            "line_number": 301
+            "line_number": 306
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12259,7 +12261,7 @@
             ],
             "decorators": [],
             "docstring": null,
-            "line_number": 311
+            "line_number": 316
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12273,7 +12275,7 @@
             ],
             "decorators": [],
             "docstring": null,
-            "line_number": 326
+            "line_number": 331
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12283,11 +12285,12 @@
             "body_hint": "[4 statements]",
             "calls": [
               "join",
-              "append"
+              "append",
+              "hasattr"
             ],
             "decorators": [],
             "docstring": null,
-            "line_number": 336
+            "line_number": 341
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12298,11 +12301,12 @@
             "calls": [
               "join",
               "append",
-              "len"
+              "len",
+              "hasattr"
             ],
             "decorators": [],
             "docstring": null,
-            "line_number": 348
+            "line_number": 353
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12317,7 +12321,7 @@
             ],
             "decorators": [],
             "docstring": null,
-            "line_number": 357
+            "line_number": 364
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12332,7 +12336,7 @@
             ],
             "decorators": [],
             "docstring": null,
-            "line_number": 369
+            "line_number": 376
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12347,7 +12351,7 @@
             ],
             "decorators": [],
             "docstring": null,
-            "line_number": 378
+            "line_number": 385
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12362,7 +12366,7 @@
             ],
             "decorators": [],
             "docstring": null,
-            "line_number": 388
+            "line_number": 397
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12379,7 +12383,40 @@
             ],
             "decorators": [],
             "docstring": null,
-            "line_number": 397
+            "line_number": 406
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_format_behavior_names",
+            "signature": "def _format_behavior_names(model: ArchitectureModel) -> str",
+            "body_hint": "[5 statements]",
+            "calls": [
+              "join",
+              "append",
+              "len",
+              "getattr"
+            ],
+            "decorators": [],
+            "docstring": "Compact behavior names \u2014 just IDs and names for quick orientation.",
+            "line_number": 424
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_format_interface_names",
+            "signature": "def _format_interface_names(model: ArchitectureModel) -> str",
+            "body_hint": "[5 statements]",
+            "calls": [
+              "join",
+              "append",
+              "len",
+              "hasattr",
+              "str"
+            ],
+            "decorators": [],
+            "docstring": "Compact interface names \u2014 just IDs, type, and provider\u2192consumer.",
+            "line_number": 437
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12390,7 +12427,7 @@
             "calls": [],
             "decorators": [],
             "docstring": "Find the human-readable name for an entity ID.",
-            "line_number": 415
+            "line_number": 450
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12407,7 +12444,7 @@
             ],
             "decorators": [],
             "docstring": "Load per-block manifest.json if it exists.",
-            "line_number": 437
+            "line_number": 472
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -12425,7 +12462,7 @@
             ],
             "decorators": [],
             "docstring": "Format block manifest data as compact context.\n\nIncludes: module names, key function signatures, imports.\nThis fills the semantic gap that causes cross_dep failures.",
-            "line_number": 453
+            "line_number": 488
           }
         ],
         "classes": [],
@@ -12436,7 +12473,7 @@
           "architecture_model.core.types",
           "architecture_model.core.slicer"
         ],
-        "line_count": 492,
+        "line_count": 527,
         "docstring": "LLM Context Formatter: Produce compact model representations for LLM prompt injection.\n\nImplements the LLM Integration Protocol:\n- LOAD: Serialize model (or slice) into compact text for system prompt\n- QUERY: Answer structural questions from model data\n- IMPACT: Determine what entities are affected by a proposed change\n\nThe key constraint is TOKEN BUDGET \u2014 we need maximum information density.\nFormat: structured YAML-like text, ~25:1 compression vs full artifact markdown."
       },
       {
@@ -16731,14 +16768,17 @@
             "__module__": "architecture_model.pipeline.observe_types",
             "name": "slice_context",
             "signature": "async def slice_context(repo_path: str, focus: str='all', budget: int=0, detail: str='standard') -> str",
-            "body_hint": "[5 statements]",
+            "body_hint": "[7 statements]",
             "calls": [
               "Path",
+              "startswith",
               "exists",
+              "_help_text",
+              "strip",
+              "_schema_for_type",
               "_estimate_source_size",
               "_slice_from_model",
               "_slice_from_manifest",
-              "_append_requirements_context",
               "drain_and_store",
               "len",
               "next",
@@ -16747,8 +16787,10 @@
               "compute_adaptive_budget",
               "generate_manifest",
               "min",
+              "_append_requirements_context",
               "iter",
               "_no_model_guidance",
+              "_append_derived_requirements_context",
               "getattr"
             ],
             "decorators": [],
@@ -16760,21 +16802,127 @@
             "__module__": "architecture_model.pipeline.observe_types",
             "name": "_slice_from_model",
             "signature": "def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) -> str",
-            "body_hint": "[6 statements]",
+            "body_hint": "[7 statements]",
             "calls": [
               "load_model",
+              "compute_regen_readiness",
+              "any",
+              "set",
+              "_get_test_files_section",
+              "_get_convention_hints",
               "format_model_context",
+              "_enrich_sos_with_files",
+              "update",
               "isdigit",
               "exists",
               "_compute_block_budget",
               "format_source_block_context",
               "startswith",
               "format_artifact_context",
-              "slice_by_layer"
+              "str",
+              "iterdir",
+              "slice_by_layer",
+              "is_dir"
             ],
             "decorators": [],
             "docstring": "Slice context using the architecture model (rich path).",
-            "line_number": 169
+            "line_number": 181
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_enrich_sos_with_files",
+            "signature": "def _enrich_sos_with_files(project_root: Path, budget: int) -> str",
+            "body_hint": "[11 statements]",
+            "calls": [
+              "set",
+              "_get_import_graph_section",
+              "join",
+              "sorted",
+              "append",
+              "len",
+              "exists",
+              "iterdir",
+              "is_dir",
+              "load_model",
+              "update",
+              "title",
+              "str",
+              "replace"
+            ],
+            "decorators": [],
+            "docstring": "For System-of-Systems models, append component\u2192file mappings from sub-models.\n\nThis bridges the gap between the abstract SoS view (systems + relationships)\nand the concrete file-level detail an AI needs for impact analysis.\nAlso includes import dependencies for change propagation reasoning.",
+            "line_number": 275
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_get_import_graph_section",
+            "signature": "def _get_import_graph_section(project_root: Path, model_files: set[str], char_budget: int) -> str",
+            "body_hint": "[12 statements]",
+            "calls": [
+              "append",
+              "len",
+              "sorted",
+              "join",
+              "iterdir",
+              "keys",
+              "exists",
+              "endswith",
+              "loads",
+              "get",
+              "read_text",
+              "sum"
+            ],
+            "decorators": [],
+            "docstring": "Generate import dependency section from cached pipeline data or quick AST scan.",
+            "line_number": 335
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_get_test_files_section",
+            "signature": "def _get_test_files_section(project_root: Path, focus_files: set[str], char_budget: int) -> str",
+            "body_hint": "[15 statements]",
+            "calls": [
+              "append",
+              "len",
+              "sorted",
+              "join",
+              "exists",
+              "get",
+              "items",
+              "loads",
+              "read_text",
+              "setdefault"
+            ],
+            "decorators": [],
+            "docstring": "Generate related test files section from test_map.json or component_test_map.json.",
+            "line_number": 394
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_get_convention_hints",
+            "signature": "def _get_convention_hints(project_root: Path) -> str",
+            "body_hint": "[17 statements]",
+            "calls": [
+              "Counter",
+              "append",
+              "join",
+              "exists",
+              "loads",
+              "is_dir",
+              "read_text",
+              "values",
+              "Path",
+              "startswith",
+              "len",
+              "most_common"
+            ],
+            "decorators": [],
+            "docstring": "Detect and return project test/doc conventions from test_map patterns.",
+            "line_number": 452
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -16791,7 +16939,7 @@
             ],
             "decorators": [],
             "docstring": "Allocate budget proportionally to block complexity.\n\nComplex blocks (many signatures/files) get more tokens.\nSimple blocks get the minimum needed.\nTelemetry: <10 signatures reliably converge; complex blocks need 2-3x more context.",
-            "line_number": 217
+            "line_number": 500
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -16811,7 +16959,7 @@
             ],
             "decorators": [],
             "docstring": "Slice context using manifest only (no architecture model yet).",
-            "line_number": 245
+            "line_number": 528
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -16822,7 +16970,7 @@
             "calls": [],
             "decorators": [],
             "docstring": "SL6: Return helpful guidance when no architecture model exists.",
-            "line_number": 287
+            "line_number": 570
           },
           {
             "__dataclass__": "FunctionRecord",
@@ -16839,7 +16987,68 @@
             ],
             "decorators": [],
             "docstring": "Include linked requirements when slicing a specific component/block.",
-            "line_number": 301
+            "line_number": 584
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_append_derived_requirements_context",
+            "signature": "def _append_derived_requirements_context(project_root: Path, focus: str, result: str) -> str",
+            "body_hint": "try:\n    req_file = project_root / '.architecture' / 'derived_requirements.yaml'\n    data = yaml.safe_load(req_file.read_text()) or {}\n    requirements = data.get('derived_requirements', [])\n    if not requirements:\n        return result\n    focus_lower = focus.lower()\n    matched = [r for r in requirements if r.get('component_id', '').lower() == focus_lower]\n    if not matched:\n        matched = [r for r in requirements if focus_lower in r.get('name', '').lower() or focus_lower in r.get('source_file', '').lower()]\n    if not matched:\n        matched = [r for r in requirements if r.get('priority') == 'must'][:8]\n    if matched:\n        req_section = '\\n\\n---\\n# Derived Requirements\\n'\n        for r in matched[:12]:\n            priority = r.get('priority', 'should')\n            category = r.get('category', '')\n            req_section += f\"- [{priority}|{category}] {r.get('name', 'untitled')}\"\n            if r.get('component_id'):\n                req_section += f\" \u2192 {r['component_id']}\"\n            req_section += '\\n'\n        if len(matched) > 12:\n            req_section += f'  ... +{len(matched) - 12} more\\n'\n        result += req_section\nexcept Exception:\n    pass; return result",
+            "calls": [
+              "get",
+              "lower",
+              "safe_load",
+              "read_text",
+              "len"
+            ],
+            "decorators": [],
+            "docstring": "Include auto-derived requirements when slicing a specific component/block.",
+            "line_number": 625
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_help_text",
+            "signature": "def _help_text(project_root: Path) -> str",
+            "body_hint": "[5 statements]",
+            "calls": [
+              "exists",
+              "extend",
+              "join",
+              "get",
+              "sorted",
+              "append",
+              "safe_load",
+              "set",
+              "read_text"
+            ],
+            "decorators": [],
+            "docstring": "Return introspection info: valid focus values, modes, and capabilities.",
+            "line_number": 667
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_schema_for_type",
+            "signature": "def _schema_for_type(project_root: Path, type_name: str) -> str",
+            "body_hint": "[7 statements]",
+            "calls": [
+              "rglob",
+              "exists",
+              "walk",
+              "join",
+              "str",
+              "parse",
+              "read_text",
+              "isinstance",
+              "splitlines",
+              "relative_to",
+              "append"
+            ],
+            "decorators": [],
+            "docstring": "Return dataclass/class field definitions for a named type.",
+            "line_number": 729
           }
         ],
         "classes": [],
@@ -16876,7 +17085,7 @@
           "typing",
           "yaml"
         ],
-        "line_count": 339,
+        "line_count": 759,
         "docstring": "architect_slice MCP tool \u2014 compress repository context for LLM consumption."
       },
       {
@@ -17307,7 +17516,7 @@
               "with_quality"
             ],
             "docstring": "Generate standard SE documentation from an architecture model.\n\nProduces component specs, ICDs, dependency matrix, health report,\nand index from .architecture-model.yaml.\n\nArgs:\n    repo_path: Absolute path to the repository.\n    formats: Comma-separated list of doc types to generate.\n        Options: all, component_spec, icd, dependency_matrix, health, drift, index,\n        se_all, conops, functional_analysis, logical_architecture, requirements_analysis,\n        verification_validation, operations_manual, maintenance_manual, use_cases,\n        risk_assessment, interface_spec, api_reference, data_model, deployment_guide,\n        security_analysis, cli_reference, plugin_guide.\n        Default: \"all\".\n\nReturns:\n    Dict with generated file paths and any errors.",
-            "line_number": 11
+            "line_number": 12
           }
         ],
         "classes": [],
@@ -17318,7 +17527,7 @@
           "typing",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 263,
+        "line_count": 317,
         "docstring": "architect_docs MCP tool \u2014 generate SE documentation from architecture model."
       },
       {
@@ -17533,6 +17742,7 @@
               "extend",
               "append",
               "drain_and_store",
+              "insert",
               "list",
               "str",
               "sum",
@@ -17553,6 +17763,10 @@
               "from_diagnostics",
               "from_uncertainties",
               "from_llm_calls",
+              "_PathRegen",
+              "_load_regen",
+              "mkdir",
+              "_generate_live_docs",
               "keys",
               "format_exc",
               "LLMCallRecord",
@@ -17577,7 +17791,7 @@
           "typing",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 325,
+        "line_count": 343,
         "docstring": "architect_pipeline MCP tool \u2014 run the 10-stage extraction pipeline.\n\nSupports stage-by-stage execution with file-based cache persistence.\nThe MCP orchestrator calls this tool once per stage, reviews uncertainties,\nresolves them via LLM, and passes resolutions on the next call.\n\nFor subsystem enrichment, use the `scope` parameter after decompose to run\nscoped pipelines on individual detected systems."
       },
       {
@@ -17635,7 +17849,7 @@
             "__module__": "architecture_model.pipeline.observe_types",
             "name": "check_gate",
             "signature": "async def check_gate(repo_path: str, model_yaml: str='') -> dict[str, Any]",
-            "body_hint": "repo = Path(repo_path); if not repo.exists():\n    return {'error': f'Repository path does not exist: {repo_path}'}; try:\n    from architecture_model.authoring.gate import check_development_gate\n    from architecture_model.core.parser import load_model\n    from architecture_model.manifest.generator import generate_manifest\n    if model_yaml:\n        import yaml\n        from architecture_model.core.parser import ArchitectureModel\n        from architecture_model.core.parser import _parse_raw\n        raw = yaml.safe_load(model_yaml)\n        model = _parse_raw(raw)\n    else:\n        model_path = repo / '.architecture-model.yaml'\n        if not model_path.exists():\n            return {'error': f'No model found at {model_path} and no model_yaml provided'}\n        model = load_model(model_path)\n    manifest = generate_manifest(repo)\n    phase = None\n    if hasattr(model.meta, 'lifecycle_phase'):\n        phase = model.meta.lifecycle_phase\n    result = check_development_gate(model, manifest, phase=phase)\n    result = {'lifecycle_phase': result.phase, 'capability_realization': result.capability_realization, 'constraint_allocation': result.constraint_allocation, 'file_coverage': result.file_coverage, 'overall': result.overall, 'phase_requirements_met': result.phase_requirements_met, 'issues': result.issues}\n    try:\n        from .assess import assess_conversation\n        from .evaluate import evaluate_workspace\n        assess_result = await assess_conversation(repo_path, conversation_text=f'Gate check completed for {repo_path}')\n        eval_result = await evaluate_workspace(repo_path)\n        result['live_assessment'] = {'findings_count': assess_result.get('findings_count', 0), 'cross_repo_impacts': assess_result.get('cross_repo_impacts', 0)}\n        result['workspace_health'] = eval_result.get('overall_health')\n        result['recommendations'] = eval_result.get('recommendations', [])\n    except Exception:\n        pass\n    return result\nexcept Exception as e:\n    return {'error': f'Gate check failed: {e}'}",
+            "body_hint": "repo = Path(repo_path); if not repo.exists():\n    return {'error': f'Repository path does not exist: {repo_path}'}; try:\n    from architecture_model.authoring.gate import check_development_gate\n    from architecture_model.core.parser import load_model\n    from architecture_model.manifest.generator import generate_manifest\n    if model_yaml:\n        import yaml\n        from architecture_model.core.parser import ArchitectureModel\n        from architecture_model.core.parser import _parse_raw\n        raw = yaml.safe_load(model_yaml)\n        model = _parse_raw(raw)\n    else:\n        model_path = repo / '.architecture-model.yaml'\n        if not model_path.exists():\n            return {'error': f'No model found at {model_path} and no model_yaml provided'}\n        model = load_model(model_path)\n    manifest = generate_manifest(repo)\n    phase = None\n    if hasattr(model.meta, 'lifecycle_phase'):\n        phase = model.meta.lifecycle_phase\n    result = check_development_gate(model, manifest, phase=phase)\n    result = {'lifecycle_phase': result.phase, 'capability_realization': result.capability_realization, 'constraint_allocation': result.constraint_allocation, 'file_coverage': result.file_coverage, 'overall': result.overall, 'phase_requirements_met': result.phase_requirements_met, 'issues': result.issues}\n    try:\n        from .assess import assess_conversation\n        from .evaluate import evaluate_workspace\n        assess_result = await assess_conversation(repo_path, conversation_text=f'Gate check completed for {repo_path}')\n        eval_result = await evaluate_workspace(repo_path)\n        result['live_assessment'] = {'findings_count': assess_result.get('findings_count', 0), 'cross_repo_impacts': assess_result.get('cross_repo_impacts', 0)}\n        result['workspace_health'] = eval_result.get('overall_health')\n        result['recommendations'] = eval_result.get('recommendations', [])\n    except Exception:\n        pass\n    try:\n        from architecture_model.core.regen_readiness import compute_regen_readiness\n        regen = compute_regen_readiness(model)\n        if regen.overall < 50:\n            result['recommendations'] = result.get('recommendations', [])\n            result['recommendations'].append(f'Regen readiness is {regen.grade} ({regen.overall:.0f}%). Consider running enrichment before proceeding \u2014 model lacks detail for reliable code generation.')\n        result['regen_grade'] = regen.grade\n        result['regen_score'] = round(regen.overall, 1)\n    except Exception:\n        pass\n    try:\n        from architecture_model.core.completeness import compute_completeness\n        completeness = compute_completeness(model)\n        result['completeness_grade'] = completeness.grade\n        result['completeness_score'] = round(completeness.score, 1)\n        result['completeness_gaps'] = completeness.gaps\n        result['completeness_dimensions'] = {k: round(v, 1) for k, v in completeness.dimensions.items()}\n        if completeness.grade in ('D', 'F'):\n            result['recommendations'] = result.get('recommendations', [])\n            result['recommendations'].append(f'Completeness is {completeness.grade} ({completeness.score:.0f}%). Model captures structure but not behavior \u2014 run enriched pipeline to auto-derive behaviors, interfaces, and requirements.')\n    except Exception:\n        pass\n    result['next_steps'] = ['ALWAYS call architect_log after completing implementation tasks', 'Call architect_log after git commits to record progress', 'Call architect_log when discovering architectural decisions']\n    return result\nexcept Exception as e:\n    return {'error': f'Gate check failed: {e}'}",
             "calls": [
               "Path",
               "exists",
@@ -17646,8 +17860,13 @@
               "_parse_raw",
               "load_model",
               "get",
+              "compute_regen_readiness",
+              "round",
+              "compute_completeness",
               "assess_conversation",
-              "evaluate_workspace"
+              "evaluate_workspace",
+              "append",
+              "items"
             ],
             "decorators": [],
             "docstring": "Check development gate for an architecture model against code reality.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    model_yaml: Optional YAML string. If empty, reads .architecture-model.yaml.\n\nReturns:\n    Dict with lifecycle_phase, sub-scores, phase_requirements_met, and issues.",
@@ -17661,7 +17880,7 @@
           "pathlib",
           "typing"
         ],
-        "line_count": 86,
+        "line_count": 129,
         "docstring": "architect_gate MCP tool \u2014 check development gate readiness."
       },
       {
@@ -17766,22 +17985,24 @@
             "__dataclass__": "FunctionRecord",
             "__module__": "architecture_model.pipeline.observe_types",
             "name": "scan_repository",
-            "signature": "async def scan_repository(repo_path: str) -> dict[str, Any]",
-            "body_hint": "path = Path(repo_path); if not path.exists():\n    return {'error': f'Repository path does not exist: {repo_path}'}; try:\n    from architecture_model.manifest.generator import generate_manifest\n    manifest = generate_manifest(path)\n    suggested = None\n    try:\n        from architecture_model.manifest.grouping import group_modules\n        groups = group_modules(manifest.modules, manifest.interfaces)\n        suggested = [{'name': g.name, 'files': g.modules, 'file_count': len(g.modules)} for g in groups]\n    except Exception:\n        pass\n    try:\n        from opencode_arch.telemetry.collector import drain_and_store\n        drain_and_store(tool='architect_scan', repo=path.name)\n    except Exception:\n        pass\n    result = manifest.to_dict()\n    if suggested:\n        result['suggested_components'] = suggested\n    return result\nexcept Exception as e:\n    return {'error': f'Scan failed: {e}'}",
+            "signature": "async def scan_repository(repo_path: str, mode: str='full') -> dict[str, Any]",
+            "body_hint": "[5 statements]",
             "calls": [
               "Path",
               "exists",
               "generate_manifest",
               "to_dict",
+              "get",
               "group_modules",
               "drain_and_store",
+              "str",
               "len"
             ],
             "decorators": [
               "with_quality"
             ],
-            "docstring": "Scan a repository and generate its reality manifest.\n\nPerforms AST analysis on all source files to produce a ground-truth\ninventory of modules, functions, classes, imports, and metrics.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n\nReturns:\n    Manifest dict with keys: generated_at, project_root, metrics,\n    functional_blocks, modules, interfaces.\n    Returns {\"error\": \"...\"} on failure.",
-            "line_number": 11
+            "docstring": "Scan a repository and generate its reality manifest.\n\nSTOP and call this tool when you need to understand a codebase's structure.\n\nPerforms AST analysis on all source files to produce a ground-truth\ninventory of modules, functions, classes, imports, and metrics.\n\nArgs:\n    repo_path: Absolute path to the repository root.\n    mode: \"full\" (default) - full AST scan\n          \"schema\" - output format description without scanning\n          \"summary\" - quick metrics only (module count, file count)\n\nReturns:\n    Manifest dict with keys: generated_at, project_root, metrics,\n    functional_blocks, modules, interfaces.\n    Returns {\"error\": \"...\"} on failure.",
+            "line_number": 12
           }
         ],
         "classes": [],
@@ -17792,7 +18013,7 @@
           "typing",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 56,
+        "line_count": 98,
         "docstring": "architect_scan MCP tool \u2014 generate reality manifest via AST scanning."
       },
       {
@@ -18084,8 +18305,11 @@
               "len",
               "decompose_model",
               "generate_recursive_manifests",
-              "create_components_from_manifest",
+              "insert",
+              "_load_regen",
               "mkdir",
+              "_generate_live_docs",
+              "create_components_from_manifest",
               "replace",
               "copy2",
               "sorted",
@@ -18118,6 +18342,8 @@
               "summarize_crud_group",
               "compact_for_storage",
               "_save_beh",
+              "resolve",
+              "_PathRegen",
               "isoformat",
               "extend",
               "_save",
@@ -18147,7 +18373,7 @@
             "decorators": [
               "with_quality"
             ],
-            "docstring": "Validate and store an architecture model extraction.\n\nCalled AFTER the agent has produced a YAML architecture model.\nValidates the model, writes it to .architecture-model.yaml,\nand records telemetry.\n\nArgs:\n    repo_path: Path to the repository root (where to save the model).\n    model_yaml: The YAML architecture model produced by the agent.\n    context_tokens: How many tokens of context the agent used (for telemetry).\n\nReturns:\n    Dict with: stored (bool), score (int), issues (list), telemetry_recorded (bool),\n    pipeline (dict), warnings (list).",
+            "docstring": "Validate and store an architecture model extraction.\n\nIMPORTANT: Do NOT manually write .architecture-model.yaml via file tools.\nALWAYS use this tool to store models \u2014 it validates, backs up, and records telemetry.\n\nPreferred workflow:\n  1. architect_scan(repo_path) \u2014 get reality manifest\n  2. architect_group(repo_path) \u2014 get component boundaries\n  3. Build YAML model from scan+group output\n  4. architect_extract(repo_path, model_yaml) \u2014 validate and store\n\nOr use architect_pipeline(repo_path) for fully automated extraction.\n\nCalled AFTER the agent has produced a YAML architecture model.\nValidates the model, writes it to .architecture-model.yaml,\nand records telemetry.\n\nArgs:\n    repo_path: Path to the repository root (where to save the model).\n    model_yaml: The YAML architecture model produced by the agent.\n    context_tokens: How many tokens of context the agent used (for telemetry).\n\nReturns:\n    Dict with: stored (bool), score (int), issues (list), telemetry_recorded (bool),\n    pipeline (dict), warnings (list).",
             "line_number": 23
           }
         ],
@@ -18162,7 +18388,7 @@
           "yaml",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 611,
+        "line_count": 638,
         "docstring": "architect_extract MCP tool \u2014 validate and store an architecture extraction."
       },
       {
@@ -20748,7 +20974,7 @@
     "score": 99,
     "sub_scores": {
       "parse_success_rate": 99.38650306748467,
-      "symbol_density": 3.567901234567901,
+      "symbol_density": 3.623456790123457,
       "file_count": 163.0
     },
     "thresholds": {
@@ -20768,6 +20994,6 @@
   ],
   "uncertainties": [],
   "input_hash": "163",
-  "duration_ms": 542,
+  "duration_ms": 454,
   "version": "1.0"
 }

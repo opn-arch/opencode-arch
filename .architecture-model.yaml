@@ -14,14 +14,17 @@ entities:
     - src/opencode_arch/mcp/tools/group.py
     - src/opencode_arch/mcp/tools/ingest.py
     - src/opencode_arch/mcp/tools/pipeline.py
-    contract: Core extraction pipeline — scan, extract, group, ingest, pipeline orchestration
+    contract: "Core extraction pipeline \u2014 scan, extract, group, ingest, pipeline\
+      \ orchestration"
     constants:
     - name: COMPRESSION_WARN_THRESHOLD
       value: '50'
-      context: architect_slice MCP tool — compress repository context for LLM consumption
+      context: "architect_slice MCP tool \u2014 compress repository context for LLM\
+        \ consumption"
     - name: COMPRESSION_CRITICAL_THRESHOLD
       value: '200'
-      context: architect_slice MCP tool — compress repository context for LLM consumption
+      context: "architect_slice MCP tool \u2014 compress repository context for LLM\
+        \ consumption"
     interfaces:
     - name: exposes_to_Cli
       kind: provides
@@ -49,6 +52,7 @@ entities:
       - cached_llm_call
       - CachedResult
       - LLMCache
+    description: Source in src/opencode_arch/mcp/tools (5 files)
   - id: COMP-2
     name: Artifacts
     status: ACTIVE
@@ -59,6 +63,7 @@ entities:
     - src/opencode_arch/artifacts/selector.py
     - src/opencode_arch/artifacts/templates.py
     contract: Context assembler for artifact generation
+    description: Source in scripts (2 files)
   - id: COMP-3
     name: CLI Commands
     status: ACTIVE
@@ -77,7 +82,8 @@ entities:
     - src/opencode_arch/cli/main.py
     - src/opencode_arch/cli/metrics.py
     - src/opencode_arch/cli/regen_loop.py
-    contract: CLI command implementations — extract, generate, docs, bench, launch, metrics
+    contract: "CLI command implementations \u2014 extract, generate, docs, bench,\
+      \ launch, metrics"
     test_contracts:
     - test_file: test_docs_validator.py
       test_method: test_all_valid_references_pass
@@ -190,6 +196,7 @@ entities:
       target_component: COMP-1
       symbols:
       - drain_and_store
+    description: Source in src/opencode_arch/cli (13 files)
   - id: COMP-4
     name: Requirements
     status: ACTIVE
@@ -210,6 +217,8 @@ entities:
       - cached_llm_call
       - CachedResult
       - LLMCache
+    description: Source in src/opencode_arch/llm, src/opencode_arch/requirements (5
+      files)
   - id: COMP-5
     name: Resolution
     status: ACTIVE
@@ -316,6 +325,8 @@ entities:
       - check_fidelity
       - with_quality
       - SessionAccumulator
+    description: Source in src/opencode_arch/agent, src/opencode_arch/context, src/opencode_arch/mcp
+      (6 files)
   - id: COMP-6
     name: Context Tools
     status: ACTIVE
@@ -324,7 +335,8 @@ entities:
     - src/opencode_arch/mcp/tools/slice.py
     - src/opencode_arch/mcp/tools/check.py
     - src/opencode_arch/mcp/tools/validate.py
-    contract: Context slicing and model validation — slice, check, validate
+    contract: "Context slicing and model validation \u2014 slice, check, validate"
+    description: Source in src/opencode_arch/mcp/tools (3 files)
   - id: COMP-7
     name: Model Management Tools
     status: ACTIVE
@@ -334,7 +346,9 @@ entities:
     - src/opencode_arch/mcp/tools/feedback.py
     - src/opencode_arch/mcp/tools/learn.py
     - src/opencode_arch/mcp/tools/stats.py
-    contract: Model lifecycle management — corrections, feedback, learning, stats
+    contract: "Model lifecycle management \u2014 corrections, feedback, learning,\
+      \ stats"
+    description: Source in src/opencode_arch/mcp/tools (4 files)
   - id: COMP-8
     name: Documentation Tools
     status: ACTIVE
@@ -343,7 +357,8 @@ entities:
     - src/opencode_arch/mcp/tools/docs.py
     - src/opencode_arch/mcp/tools/export.py
     - src/opencode_arch/mcp/tools/decompose.py
-    contract: SE documentation generation and export — docs, export, decompose
+    contract: "SE documentation generation and export \u2014 docs, export, decompose"
+    description: Source in src/opencode_arch/mcp/tools (3 files)
   - id: COMP-9
     name: Quality Gate Tools
     status: ACTIVE
@@ -353,7 +368,9 @@ entities:
     - src/opencode_arch/mcp/tools/generate.py
     - src/opencode_arch/mcp/tools/llm_audit.py
     - src/opencode_arch/mcp/tools/regen_score.py
-    contract: Quality gates and code generation — gate, generate, llm_audit, regen_score
+    contract: "Quality gates and code generation \u2014 gate, generate, llm_audit,\
+      \ regen_score"
+    description: Source in src/opencode_arch/mcp/tools (4 files)
   - id: COMP-10
     name: Requirements Tools
     status: ACTIVE
@@ -362,7 +379,8 @@ entities:
     - src/opencode_arch/mcp/tools/require.py
     - src/opencode_arch/mcp/tools/trace_requirements.py
     - src/opencode_arch/mcp/tools/author.py
-    contract: Requirements capture and tracing — require, trace, author
+    contract: "Requirements capture and tracing \u2014 require, trace, author"
+    description: Source in src/opencode_arch/mcp/tools (3 files)
   - id: COMP-11
     name: Live Analysis Tools
     status: ACTIVE
@@ -373,7 +391,9 @@ entities:
     - src/opencode_arch/mcp/tools/sync.py
     - src/opencode_arch/mcp/tools/log.py
     - src/opencode_arch/mcp/tools/diff.py
-    contract: Live conversation analysis and DB sync — assess, evaluate, sync, log, diff
+    contract: "Live conversation analysis and DB sync \u2014 assess, evaluate, sync,\
+      \ log, diff"
+    description: Source in src/opencode_arch/mcp/tools (5 files)
   - id: COMP-12
     name: Runner
     status: ACTIVE
@@ -381,7 +401,8 @@ entities:
     files:
     - src/opencode_arch/runner/base.py
     - src/opencode_arch/runner/opencode.py
-    contract: LLM runner backends — base protocol and OpenCode implementation
+    contract: "LLM runner backends \u2014 base protocol and OpenCode implementation"
+    description: Source in src/opencode_arch/runner (2 files)
   - id: COMP-13
     name: Telemetry
     status: ACTIVE
@@ -391,6 +412,7 @@ entities:
     - src/opencode_arch/telemetry/recorder.py
     - src/opencode_arch/telemetry/store.py
     contract: Telemetry collection, recording, and persistent storage
+    description: Source in src/opencode_arch/telemetry (3 files)
   - id: COMP-14
     name: Learning
     status: ACTIVE
@@ -402,7 +424,9 @@ entities:
     - src/opencode_arch/learning/lessons.py
     - src/opencode_arch/learning/maintainer.py
     - src/opencode_arch/learning/patterns.py
-    contract: Learning system — prompt adaptation, failure classification, lessons, drift detection
+    contract: "Learning system \u2014 prompt adaptation, failure classification, lessons,\
+      \ drift detection"
+    description: Source in src/opencode_arch/learning (6 files)
   - id: COMP-15
     name: MCP Server
     status: ACTIVE
@@ -412,6 +436,157 @@ entities:
     - src/opencode_arch/mcp/__init__.py
     - src/opencode_arch/mcp/quality.py
     contract: MCP server registration and tool dispatch
+    description: Source in src/opencode_arch/mcp (3 files)
+  behaviors:
+  - id: BEH-1
+    name: 'CLI: Run Benchmark'
+    behavior_type: use_case
+    steps:
+    - ArgumentParser
+    - add_argument
+    - parse_args
+    - print
+    - run_benchmark
+    actor_id: ACT-1
+  - id: BEH-2
+    name: 'CLI: Benchmark Economy'
+    behavior_type: use_case
+    steps:
+    - ArgumentParser
+    - add_argument
+    - parse_args
+    - run
+    - print_report
+    actor_id: ACT-1
+  - id: BEH-3
+    name: 'CLI: Main'
+    behavior_type: use_case
+    steps:
+    - ArgumentParser
+    - add_subparsers
+    - add_parser
+    - add_argument
+    - parse_args
+    actor_id: ACT-1
+  actors:
+  - id: ACT-1
+    name: CLI User
+    actor_type: human
+    goals:
+    - Use opencode-arch effectively
+  interfaces:
+  - id: IF-1
+    name: run_benchmark CLI
+    interface_type: cli
+    component_id: COMP-2
+  - id: IF-2
+    name: benchmark_economy CLI
+    interface_type: cli
+    component_id: COMP-2
+  - id: IF-3
+    name: main CLI
+    interface_type: cli
+    component_id: COMP-3-9
+  constraints:
+  - id: CON-1
+    name: Python >=3.11
+    value: Project requires Python >=3.11
+  - id: CON-2
+    name: 'CI/CD: GitHub Actions'
+    value: Project uses GitHub Actions for CI/CD
+  requirements:
+  - id: REQ-E1
+    name: regen_loop.py has 4 error-handling functions
+    category: error_handling
+    priority: could
+  - id: REQ-I1
+    name: 'RunnerBackend protocol requires: run'
+    category: interface
+    priority: must
+  - id: REQ-O1
+    name: Component COMP-9 has logging instrumentation
+    category: observability
+    priority: could
+  - id: REQ-Q1
+    name: Component COMP-3-5 has 14 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-T5
+    name: 'Python >=3.11: Project requires Python >=3.11'
+    category: technology
+    priority: must
+  - id: REQ-Q10
+    name: Component COMP-3 has 3 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q11
+    name: Component COMP-24 has 3 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q12
+    name: Component COMP-4 has 2 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q13
+    name: Component COMP-28 has 2 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q14
+    name: Component COMP-23 has 2 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q15
+    name: Component COMP-1 has 2 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q16
+    name: Component COMP-3-13 has 2 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q17
+    name: Component COMP-8 has 1 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q18
+    name: Component COMP-15 has 1 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q19
+    name: Component COMP-9 has 1 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q2
+    name: Component COMP-3-5 has 14 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q3
+    name: Component COMP-3-9 has 12 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q4
+    name: Component COMP-3-4 has 7 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q5
+    name: Component COMP-3-12 has 6 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q6
+    name: Component COMP-3-1 has 6 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q7
+    name: Component COMP-3-8 has 5 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q8
+    name: Component COMP-3-2 has 3 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q9
+    name: Component COMP-3-13 has 2 test file(s) covering its source
+    category: quality
+    priority: should
 relationships:
 - source: COMP-1
   target: COMP-13
@@ -533,3 +708,54 @@ relationships:
   target: COMP-5
   type: uses
   description: Quality Gate Tools imports from Resolution
+- from: COMP-3
+  to: REQ-E1
+  type: satisfies
+- from: COMP-3
+  to: REQ-I1
+  type: satisfies
+- from: COMP-3
+  to: REQ-O1
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q1
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q10
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q11
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q2
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q3
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q4
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q5
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q6
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q7
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q8
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q9
+  type: satisfies
+- from: COMP-2
+  to: IF-1
+  type: exposes
+- from: COMP-2
+  to: IF-2
+  type: exposes
+- from: COMP-3
+  to: IF-3
+  type: exposes

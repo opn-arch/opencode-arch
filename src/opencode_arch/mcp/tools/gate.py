@@ -97,6 +97,26 @@ async def check_gate(repo_path: str, model_yaml: str = "") -> dict[str, Any]:
         except Exception:
             pass
 
+        # Completeness grade
+        try:
+            from architecture_model.core.completeness import compute_completeness
+
+            completeness = compute_completeness(model)
+            result["completeness_grade"] = completeness.grade
+            result["completeness_score"] = round(completeness.score, 1)
+            result["completeness_gaps"] = completeness.gaps
+            result["completeness_dimensions"] = {
+                k: round(v, 1) for k, v in completeness.dimensions.items()
+            }
+            if completeness.grade in ("D", "F"):
+                result["recommendations"] = result.get("recommendations", [])
+                result["recommendations"].append(
+                    f"Completeness is {completeness.grade} ({completeness.score:.0f}%). "
+                    "Model captures structure but not behavior — run enriched pipeline to auto-derive behaviors, interfaces, and requirements."
+                )
+        except Exception:
+            pass
+
         # Auto-log prompt: remind to log progress
         result["next_steps"] = [
             "ALWAYS call architect_log after completing implementation tasks",

@@ -1,0 +1,605 @@
+meta:
+  schema_version: '2.0'
+  system: Src (mcp)
+  system_id: SYS-src-(mcp)
+entities:
+  components:
+  - id: src-mcp-COMP-1
+    name: Quality
+    files:
+    - src/opencode_arch/mcp/quality.py
+  - id: src-mcp-COMP-2
+    name: Assess
+    files:
+    - src/opencode_arch/mcp/tools/assess.py
+  - id: src-mcp-COMP-3
+    name: Author
+    files:
+    - src/opencode_arch/mcp/tools/author.py
+  - id: src-mcp-COMP-4
+    name: Check
+    files:
+    - src/opencode_arch/mcp/tools/check.py
+  - id: src-mcp-COMP-5
+    name: Correct
+    files:
+    - src/opencode_arch/mcp/tools/correct.py
+  - id: src-mcp-COMP-6
+    name: Decompose
+    files:
+    - src/opencode_arch/mcp/tools/decompose.py
+  - id: src-mcp-COMP-7
+    name: Diff
+    files:
+    - src/opencode_arch/mcp/tools/diff.py
+  - id: src-mcp-COMP-8
+    name: Docs
+    files:
+    - src/opencode_arch/mcp/tools/docs.py
+  - id: src-mcp-COMP-9
+    name: Evaluate
+    files:
+    - src/opencode_arch/mcp/tools/evaluate.py
+  - id: src-mcp-COMP-10
+    name: Export
+    files:
+    - src/opencode_arch/mcp/tools/export.py
+  - id: src-mcp-COMP-11
+    name: Extract
+    files:
+    - src/opencode_arch/mcp/tools/extract.py
+  - id: src-mcp-COMP-12
+    name: Feedback
+    files:
+    - src/opencode_arch/mcp/tools/feedback.py
+  - id: src-mcp-COMP-13
+    name: Gate
+    files:
+    - src/opencode_arch/mcp/tools/gate.py
+  - id: src-mcp-COMP-14
+    name: Generate
+    files:
+    - src/opencode_arch/mcp/tools/generate.py
+  - id: src-mcp-COMP-15
+    name: Group
+    files:
+    - src/opencode_arch/mcp/tools/group.py
+  - id: src-mcp-COMP-16
+    name: Ingest
+    files:
+    - src/opencode_arch/mcp/tools/ingest.py
+  - id: src-mcp-COMP-17
+    name: Learn
+    files:
+    - src/opencode_arch/mcp/tools/learn.py
+  - id: src-mcp-COMP-18
+    name: Llm Audit
+    files:
+    - src/opencode_arch/mcp/tools/llm_audit.py
+  - id: src-mcp-COMP-19
+    name: Log
+    files:
+    - src/opencode_arch/mcp/tools/log.py
+  - id: src-mcp-COMP-20
+    name: Pipeline
+    files:
+    - src/opencode_arch/mcp/tools/pipeline.py
+  - id: src-mcp-COMP-21
+    name: Regen Score
+    files:
+    - src/opencode_arch/mcp/tools/regen_score.py
+  - id: src-mcp-COMP-22
+    name: Require
+    files:
+    - src/opencode_arch/mcp/tools/require.py
+  - id: src-mcp-COMP-23
+    name: Scan
+    files:
+    - src/opencode_arch/mcp/tools/scan.py
+  - id: src-mcp-COMP-24
+    name: Slice
+    files:
+    - src/opencode_arch/mcp/tools/slice.py
+  - id: src-mcp-COMP-25
+    name: Stats
+    files:
+    - src/opencode_arch/mcp/tools/stats.py
+  - id: src-mcp-COMP-26
+    name: Sync
+    files:
+    - src/opencode_arch/mcp/tools/sync.py
+  - id: src-mcp-COMP-27
+    name: Trace Requirements
+    files:
+    - src/opencode_arch/mcp/tools/trace_requirements.py
+  - id: src-mcp-COMP-28
+    name: Validate
+    files:
+    - src/opencode_arch/mcp/tools/validate.py
+  - id: src-mcp-COMP-29
+    name: Infrastructure
+    files:
+    - src/opencode_arch/mcp/__main__.py
+    - src/opencode_arch/mcp/server.py
+  capabilities:
+  - id: CAP-1
+    name: Quality
+  - id: CAP-2
+    name: Assess
+  - id: CAP-3
+    name: Author
+  - id: CAP-4
+    name: Check
+  - id: CAP-5
+    name: Correct
+  - id: CAP-6
+    name: Decompose
+  - id: CAP-7
+    name: Diff
+  - id: CAP-8
+    name: Docs
+  - id: CAP-9
+    name: Evaluate
+  - id: CAP-10
+    name: Export
+  - id: CAP-11
+    name: Extract
+  - id: CAP-12
+    name: Feedback
+  - id: CAP-13
+    name: Gate
+  - id: CAP-14
+    name: Generate
+  - id: CAP-15
+    name: Group
+  - id: CAP-16
+    name: Ingest
+  - id: CAP-17
+    name: Learn
+  - id: CAP-18
+    name: Llm Audit
+  - id: CAP-19
+    name: Log
+  - id: CAP-20
+    name: Pipeline
+  - id: CAP-21
+    name: Regen Score
+  - id: CAP-22
+    name: Require
+  - id: CAP-23
+    name: Scan
+  - id: CAP-24
+    name: Slice
+  - id: CAP-25
+    name: Stats
+  - id: CAP-26
+    name: Sync
+  - id: CAP-27
+    name: Trace Requirements
+  - id: CAP-28
+    name: Validate
+  actors:
+  - id: ACT-1
+    name: User
+    actor_type: human
+    evidence_source: default
+  layers:
+  - id: LAYER-infra
+    name: infra
+  - id: LAYER-data
+    name: data
+relationships:
+- from: src-mcp-COMP-1
+  to: CAP-1
+  type: realizes
+- from: src-mcp-COMP-2
+  to: CAP-2
+  type: realizes
+- from: src-mcp-COMP-3
+  to: CAP-3
+  type: realizes
+- from: src-mcp-COMP-4
+  to: CAP-4
+  type: realizes
+- from: src-mcp-COMP-5
+  to: CAP-5
+  type: realizes
+- from: src-mcp-COMP-6
+  to: CAP-6
+  type: realizes
+- from: src-mcp-COMP-7
+  to: CAP-7
+  type: realizes
+- from: src-mcp-COMP-8
+  to: CAP-8
+  type: realizes
+- from: src-mcp-COMP-9
+  to: CAP-9
+  type: realizes
+- from: src-mcp-COMP-10
+  to: CAP-10
+  type: realizes
+- from: src-mcp-COMP-11
+  to: CAP-11
+  type: realizes
+- from: src-mcp-COMP-12
+  to: CAP-12
+  type: realizes
+- from: src-mcp-COMP-13
+  to: CAP-13
+  type: realizes
+- from: src-mcp-COMP-14
+  to: CAP-14
+  type: realizes
+- from: src-mcp-COMP-15
+  to: CAP-15
+  type: realizes
+- from: src-mcp-COMP-16
+  to: CAP-16
+  type: realizes
+- from: src-mcp-COMP-17
+  to: CAP-17
+  type: realizes
+- from: src-mcp-COMP-18
+  to: CAP-18
+  type: realizes
+- from: src-mcp-COMP-19
+  to: CAP-19
+  type: realizes
+- from: src-mcp-COMP-20
+  to: CAP-20
+  type: realizes
+- from: src-mcp-COMP-21
+  to: CAP-21
+  type: realizes
+- from: src-mcp-COMP-22
+  to: CAP-22
+  type: realizes
+- from: src-mcp-COMP-23
+  to: CAP-23
+  type: realizes
+- from: src-mcp-COMP-24
+  to: CAP-24
+  type: realizes
+- from: src-mcp-COMP-25
+  to: CAP-25
+  type: realizes
+- from: src-mcp-COMP-26
+  to: CAP-26
+  type: realizes
+- from: src-mcp-COMP-27
+  to: CAP-27
+  type: realizes
+- from: src-mcp-COMP-28
+  to: CAP-28
+  type: realizes
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-18
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-5
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-21
+  type: depends-on
+- from: src-mcp-COMP-6
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-3
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-26
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-13
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-7
+  type: depends-on
+- from: src-mcp-COMP-14
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-19
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-21
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-23
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-6
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-20
+  type: depends-on
+- from: src-mcp-COMP-10
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-16
+  type: depends-on
+- from: src-mcp-COMP-20
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-29
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-27
+  to: src-mcp-COMP-11
+  type: depends-on
+- from: src-mcp-COMP-15
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-18
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-7
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-9
+  type: depends-on
+- from: src-mcp-COMP-26
+  to: src-mcp-COMP-7
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-17
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-25
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-28
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-23
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-11
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-6
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-20
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-16
+  type: depends-on
+- from: src-mcp-COMP-11
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-27
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-2
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-9
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-17
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-14
+  type: depends-on
+- from: src-mcp-COMP-4
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-16
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-8
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-25
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-28
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-10
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-11
+  type: depends-on
+- from: src-mcp-COMP-23
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-8
+  type: depends-on
+- from: src-mcp-COMP-6
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-14
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-2
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-15
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-12
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-27
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-10
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-22
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-8
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-15
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-12
+  type: depends-on
+- from: src-mcp-COMP-4
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-10
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-16
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-20
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-15
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-14
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-24
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-18
+  type: depends-on
+- from: src-mcp-COMP-27
+  to: src-mcp-COMP-22
+  type: depends-on
+- from: src-mcp-COMP-23
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-27
+  type: depends-on
+- from: src-mcp-COMP-11
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-22
+  type: depends-on
+- from: src-mcp-COMP-27
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-4
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-3
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-26
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-5
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-13
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-19
+  type: depends-on
+- from: src-mcp-COMP-8
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-18
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-4
+  type: depends-on
+- from: LAYER-INFRA
+  to: src-mcp-COMP-1
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-2
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-3
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-4
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-5
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-6
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-7
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-8
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-9
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-10
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-11
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-13
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-14
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-15
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-16
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-17
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-18
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-19
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-20
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-21
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-22
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-23
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-24
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-25
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-26
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-27
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-28
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-29
+  type: contains
+- from: LAYER-DATA
+  to: src-mcp-COMP-12
+  type: contains

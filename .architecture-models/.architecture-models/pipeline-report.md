@@ -1,7 +1,7 @@
 # Pipeline Report: System-of-Systems
 
-**Generated:** 2026-08-16T01:01:29Z
-**Total Duration:** 576ms
+**Generated:** 2026-08-18T12:27:25Z
+**Total Duration:** 491ms
 **Stages:** 8
 
 ## LLM Summary
@@ -12,21 +12,21 @@ No LLM calls — deterministic pipeline run
 
 | Stage | Score | Duration | LLM Calls |
 |-------|-------|----------|-----------|
-| observe | 99 | 542ms | 0 |
-| infer | 83 | 0ms | 0 |
+| observe | 99 | 454ms | 0 |
+| infer | 83 | 1ms | 0 |
 | allocate | 65 | 3ms | 0 |
 | contract | 72 | 0ms | 0 |
-| relate | 81 | 31ms | 0 |
+| relate | 81 | 33ms | 0 |
 | specify | 50 | 0ms | 0 |
 | decompose | 100.0 | 0ms | 0 |
 | validate | 100 | 0ms | 0 |
 
 ## Stage: observe
-**Score:** 99 | **Duration:** 542ms
+**Score:** 99 | **Duration:** 454ms
 
 ### Deterministic Findings
 - Discovered 162 modules
-- 359 functions, 149 classes
+- 368 functions, 149 classes
 - 146 import edges
 
 ### LLM Calls
@@ -36,7 +36,7 @@ No LLM calls — deterministic pipeline run
 - ⚠️ parse-failed: Parse failed: src/opencode_arch/cli/export_data.py: unindent does not match any outer indentation level (export_data.py, line 74)
 
 ## Stage: infer
-**Score:** 83 | **Duration:** 0ms
+**Score:** 83 | **Duration:** 1ms
 
 ### Deterministic Findings
 - Inferred 14 capabilities
@@ -105,7 +105,7 @@ No LLM calls — deterministic pipeline run
 *(none)*
 
 ## Stage: relate
-**Score:** 81 | **Duration:** 31ms
+**Score:** 81 | **Duration:** 33ms
 
 ### Deterministic Findings
 - 36 depends-on relationships

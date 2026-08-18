@@ -152,8 +152,11 @@ async def slice_context(
                 result = warning + result
 
         # Append linked requirements context when focusing on a component/block
-        if focus != "all" and (path / ".architecture" / "requirements.yaml").exists():
-            result = _append_requirements_context(path, focus, result)
+        if focus != "all":
+            if (path / ".architecture" / "requirements.yaml").exists():
+                result = _append_requirements_context(path, focus, result)
+            elif (path / ".architecture" / "derived_requirements.yaml").exists():
+                result = _append_derived_requirements_context(path, focus, result)
 
         try:
             from opencode_arch.telemetry.collector import drain_and_store
@@ -612,6 +615,48 @@ def _append_requirements_context(project_root: Path, focus: str, result: str) ->
                 req_section += "\n"
                 if r.get("description"):
                     req_section += f"  {r['description'][:200]}\n"
+            result += req_section
+
+    except Exception:
+        pass
+    return result
+
+
+def _append_derived_requirements_context(project_root: Path, focus: str, result: str) -> str:
+    """Include auto-derived requirements when slicing a specific component/block."""
+    try:
+        req_file = project_root / ".architecture" / "derived_requirements.yaml"
+        data = yaml.safe_load(req_file.read_text()) or {}
+        requirements = data.get("derived_requirements", [])
+        if not requirements:
+            return result
+
+        # Filter by component_id match
+        focus_lower = focus.lower()
+        matched = [r for r in requirements if r.get("component_id", "").lower() == focus_lower]
+        if not matched:
+            # Try matching focus in the requirement name or source_file
+            matched = [
+                r
+                for r in requirements
+                if focus_lower in r.get("name", "").lower()
+                or focus_lower in r.get("source_file", "").lower()
+            ]
+        if not matched:
+            # Show top must-priority requirements
+            matched = [r for r in requirements if r.get("priority") == "must"][:8]
+
+        if matched:
+            req_section = "\n\n---\n# Derived Requirements\n"
+            for r in matched[:12]:
+                priority = r.get("priority", "should")
+                category = r.get("category", "")
+                req_section += f"- [{priority}|{category}] {r.get('name', 'untitled')}"
+                if r.get("component_id"):
+                    req_section += f" → {r['component_id']}"
+                req_section += "\n"
+            if len(matched) > 12:
+                req_section += f"  ... +{len(matched) - 12} more\n"
             result += req_section
 
     except Exception:

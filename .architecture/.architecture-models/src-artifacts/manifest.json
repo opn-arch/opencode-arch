@@ -1,0 +1,29 @@
+{
+  "modules": [
+    {
+      "file": "src/opencode_arch/artifacts/__init__.py",
+      "functions": 0,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/artifacts/context.py",
+      "functions": 13,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/artifacts/diagrams.py",
+      "functions": 7,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/artifacts/selector.py",
+      "functions": 7,
+      "classes": 2
+    },
+    {
+      "file": "src/opencode_arch/artifacts/templates.py",
+      "functions": 1,
+      "classes": 2
+    }
+  ]
+}

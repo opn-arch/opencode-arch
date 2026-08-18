@@ -28,5 +28,95 @@
       "synthesize": 100.0,
       "emit": 100.0
     }
+  },
+  {
+    "date": "2026-08-18",
+    "scores": {
+      "observe": 99.0,
+      "infer": 58.0,
+      "allocate": 83.0,
+      "contract": 71.0,
+      "relate": 100.0,
+      "specify": 50.0,
+      "decompose": 100.0,
+      "validate": 80.0,
+      "synthesize": 100.0,
+      "emit": 100.0
+    }
+  },
+  {
+    "date": "2026-08-18",
+    "scores": {
+      "observe": 99.0,
+      "infer": 58.0,
+      "allocate": 83.0,
+      "contract": 71.0,
+      "relate": 100.0,
+      "specify": 50.0,
+      "decompose": 100.0,
+      "validate": 80.0,
+      "synthesize": 100.0,
+      "emit": 100.0
+    }
+  },
+  {
+    "date": "2026-08-18",
+    "scores": {
+      "observe": 99.0,
+      "infer": 58.0,
+      "allocate": 83.0,
+      "contract": 71.0,
+      "relate": 100.0,
+      "specify": 50.0,
+      "decompose": 100.0,
+      "validate": 80.0,
+      "synthesize": 100.0,
+      "emit": 100.0
+    }
+  },
+  {
+    "date": "2026-08-18",
+    "scores": {
+      "observe": 99.0,
+      "infer": 58.0,
+      "allocate": 83.0,
+      "contract": 71.0,
+      "relate": 100.0,
+      "specify": 50.0,
+      "decompose": 100.0,
+      "validate": 80.0,
+      "synthesize": 100.0,
+      "emit": 100.0
+    }
+  },
+  {
+    "date": "2026-08-18",
+    "scores": {
+      "observe": 99.0,
+      "infer": 58.0,
+      "allocate": 83.0,
+      "contract": 71.0,
+      "relate": 100.0,
+      "specify": 50.0,
+      "decompose": 100.0,
+      "validate": 80.0,
+      "synthesize": 100.0,
+      "emit": 100.0
+    }
+  },
+  {
+    "date": "2026-08-18",
+    "scores": {
+      "observe": 99.0,
+      "infer": 83.0,
+      "allocate": 65.0,
+      "contract": 72.0,
+      "relate": 81.0,
+      "specify": 50.0,
+      "decompose": 100.0,
+      "validate": 100.0,
+      "synthesize": 100.0,
+      "emit": 100.0
+    }
   }
 ]

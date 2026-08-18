@@ -1,0 +1,24 @@
+meta:
+  schema_version: '2.0'
+  system: Src (learning)
+  system_id: SYS-src-(learning)
+entities:
+  capabilities:
+  - id: CAP-1
+    name: Adapter
+  - id: CAP-2
+    name: Assessor
+  - id: CAP-3
+    name: Classifier
+  - id: CAP-4
+    name: Lessons
+  - id: CAP-5
+    name: Maintainer
+  - id: CAP-6
+    name: Patterns
+  actors:
+  - id: ACT-1
+    name: User
+    actor_type: human
+    evidence_source: default
+relationships: []

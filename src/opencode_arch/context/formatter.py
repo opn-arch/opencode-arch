@@ -76,20 +76,25 @@ def format_model_context(
     if model.relationships:
         priority_2.append(_format_relationships_compact(model))
 
-    # Priority 3: Capabilities + behaviors (compact)
+    # Priority 2b: Behavior and interface NAMES (always at standard+)
+    if detail_level in ("standard", "full"):
+        priority_2.append(_format_behavior_names(model))
+        priority_2.append(_format_interface_names(model))
+
+    # Priority 3: Capabilities + behaviors (compact) + constraints
     if detail_level in ("standard", "full"):
         priority_3.append(_format_capabilities(model))
         priority_3.append(_format_actors(model))
+        priority_3.append(_format_constraints(model))
         if detail_level == "full":
             priority_3.append(_format_behaviors(model))
         else:
             priority_3.append(_format_behaviors_compact(model))
 
-    # Priority 4: Full detail (interfaces, layers, constraints)
+    # Priority 4: Full detail (interfaces, layers)
     if detail_level == "full":
         priority_4.append(_format_interfaces(model))
         priority_4.append(_format_layers(model))
-        priority_4.append(_format_constraints(model))
     elif detail_level == "standard":
         priority_4.append(_format_interfaces_compact(model))
         priority_4.append(_format_layers_compact(model))
@@ -339,7 +344,7 @@ def _format_interfaces(model: ArchitectureModel) -> str:
     lines = ["\n## Interfaces"]
     for iface in model.entities.interfaces:
         lines.append(
-            f"  {iface.id}: {iface.type.value} | {iface.provider} -> {iface.consumer} "
+            f"  {iface.id}: {iface.type.value if hasattr(iface.type, 'value') else iface.type} | {iface.provider} -> {iface.consumer} "
             f"via {iface.protocol} [{iface.status.value}]"
         )
     return "\n".join(lines)
@@ -350,7 +355,9 @@ def _format_interfaces_compact(model: ArchitectureModel) -> str:
         return ""
     lines = [f"\n## Interfaces ({len(model.entities.interfaces)})"]
     for iface in model.entities.interfaces:
-        lines.append(f"  {iface.id}: {iface.provider} -> {iface.consumer} ({iface.type.value})")
+        lines.append(
+            f"  {iface.id}: {iface.provider} -> {iface.consumer} ({iface.type.value if hasattr(iface.type, 'value') else iface.type})"
+        )
     return "\n".join(lines)
 
 
@@ -381,7 +388,9 @@ def _format_components(model: ArchitectureModel) -> str:
     lines = [f"\n## Components ({len(model.entities.components)})"]
     for comp in model.entities.components:
         files = ", ".join(comp.files[:2]) if comp.files else ""
-        lines.append(f"  {comp.id}: {comp.name} (layer={comp.layer}, {comp.source_block}) [{files}]")
+        lines.append(
+            f"  {comp.id}: {comp.name} (layer={comp.layer}, {comp.source_block}) [{files}]"
+        )
     return "\n".join(lines)
 
 
@@ -409,6 +418,32 @@ def _format_relationships_compact(model: ArchitectureModel) -> str:
             lines.append(f"    {rel.from_id} -> {rel.to_id}")
         if len(rels) > 10:
             lines.append(f"    ... +{len(rels) - 10} more")
+    return "\n".join(lines)
+
+
+def _format_behavior_names(model: ArchitectureModel) -> str:
+    """Compact behavior names — just IDs and names for quick orientation."""
+    if not model.entities.behaviors:
+        return ""
+    lines = [f"\n## Key Behaviors ({len(model.entities.behaviors)})"]
+    for beh in model.entities.behaviors[:20]:
+        steps_hint = f" ({len(beh.steps)} steps)" if getattr(beh, "steps", None) else ""
+        lines.append(f"  {beh.id}: {beh.name}{steps_hint}")
+    if len(model.entities.behaviors) > 20:
+        lines.append(f"  ... +{len(model.entities.behaviors) - 20} more")
+    return "\n".join(lines)
+
+
+def _format_interface_names(model: ArchitectureModel) -> str:
+    """Compact interface names — just IDs, type, and provider→consumer."""
+    if not model.entities.interfaces:
+        return ""
+    lines = [f"\n## Interfaces ({len(model.entities.interfaces)})"]
+    for iface in model.entities.interfaces[:15]:
+        itype = iface.type.value if hasattr(iface.type, "value") else str(iface.type)
+        lines.append(f"  {iface.id}: {iface.provider} → {iface.consumer} ({itype})")
+    if len(model.entities.interfaces) > 15:
+        lines.append(f"  ... +{len(model.entities.interfaces) - 15} more")
     return "\n".join(lines)
 
 

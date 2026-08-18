@@ -1,0 +1,39 @@
+{
+  "modules": [
+    {
+      "file": "src/opencode_arch/learning/__init__.py",
+      "functions": 0,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/learning/adapter.py",
+      "functions": 2,
+      "classes": 1
+    },
+    {
+      "file": "src/opencode_arch/learning/assessor.py",
+      "functions": 4,
+      "classes": 1
+    },
+    {
+      "file": "src/opencode_arch/learning/classifier.py",
+      "functions": 3,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/learning/lessons.py",
+      "functions": 2,
+      "classes": 1
+    },
+    {
+      "file": "src/opencode_arch/learning/maintainer.py",
+      "functions": 6,
+      "classes": 1
+    },
+    {
+      "file": "src/opencode_arch/learning/patterns.py",
+      "functions": 0,
+      "classes": 3
+    }
+  ]
+}
