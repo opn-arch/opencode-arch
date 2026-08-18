@@ -2,44 +2,36 @@
 document: Verification & Validation
 system: System
 system_id: SYS-unknown
-generated_at: 2026-08-18T20:07:47Z
+generated_at: 2026-08-18T23:31:28Z
 generator_version: 0.3.0
-model_hash: ceee27c08922
-edition: 5
+model_hash: efca59bc201d
+edition: 7
 ---
 
 > **Model Completeness: F (0%)**
 > Some sections may be empty due to missing model entities.
-> - 56/56 components have no behavioral specification
+> - 57/57 components have no behavioral specification
 > - No interfaces defined on components → interface-spec doc empty
 > - No requirements defined
 > - Actors defined but missing goals/descriptions
 > Run the extraction pipeline or manually add behaviors/interfaces/constraints.
 
 # Verification & Validation: System
-
 ## Verification Matrix
-
 *No test contracts found on components.*
-
 ## Validation Coverage
-
-- **Components with tests:** 0/56 (0%)
+- **Components with tests:** 0/57 (0%)
 - **Total test contracts:** 0
 
 ### Constraint Verification Status
 
 *No constraints to verify.*
-
 ## Behavior Validation
-
 - **Total behaviors:** 3
 - **Behaviors with defined steps:** 0
 - **Behaviors with preconditions:** 0
 - **Behaviors with postconditions:** 0
-
 ## Unverified Items
-
 - Component **Quality** (src-mcp-COMP-1) has no test contracts
 - Component **Assess** (src-mcp-COMP-2) has no test contracts
 - Component **Author** (src-mcp-COMP-3) has no test contracts
@@ -74,25 +66,75 @@ edition: 5
 - Component **Confidence** (src-cli-COMP-3) has no test contracts
 - Component **Docs** (src-cli-COMP-4) has no test contracts
 - Component **Docs Validator** (src-cli-COMP-5) has no test contracts
-- Component **Extract** (src-cli-COMP-6) has no test contracts
-- Component **Gap Analyzer** (src-cli-COMP-7) has no test contracts
-- Component **Generate** (src-cli-COMP-8) has no test contracts
-- Component **Launch** (src-cli-COMP-9) has no test contracts
-- Component **Main** (src-cli-COMP-10) has no test contracts
-- Component **Metrics** (src-cli-COMP-11) has no test contracts
-- Component **Regen Loop** (src-cli-COMP-12) has no test contracts
-- Component **Infrastructure** (src-cli-COMP-13) has no test contracts
-- Component **Benchmark Execution Scripts** (COMP-2) has no test contracts
+- Component **Export Data** (src-cli-COMP-6) has no test contracts
+- Component **Extract** (src-cli-COMP-7) has no test contracts
+- Component **Gap Analyzer** (src-cli-COMP-8) has no test contracts
+- Component **Generate** (src-cli-COMP-9) has no test contracts
+- Component **Launch** (src-cli-COMP-10) has no test contracts
+- Component **Main** (src-cli-COMP-11) has no test contracts
+- Component **Metrics** (src-cli-COMP-12) has no test contracts
+- Component **Regen Loop** (src-cli-COMP-13) has no test contracts
+- Component **Infrastructure** (src-cli-COMP-14) has no test contracts
+- Component **Scripts** (COMP-2) has no test contracts
 - Component **Src (artifacts)** (COMP-3-1) has no test contracts
-- Component **LLM Prompt Relay** (COMP-3-2) has no test contracts
+- Component **Src (llm)** (COMP-3-2) has no test contracts
 - Component **Src (context)** (COMP-3-3) has no test contracts
 - Component **Src (learning)** (COMP-3-4) has no test contracts
 - Component **Src (runner)** (COMP-3-5) has no test contracts
 - Component **Src (agent)** (COMP-3-6) has no test contracts
-- Component **MCP Quality Server** (COMP-3-7) has no test contracts
+- Component **Src (mcp)** (COMP-3-7) has no test contracts
 - Component **Src (requirements)** (COMP-3-8) has no test contracts
-- Component **CLI Commands** (COMP-3-9) has no test contracts
+- Component **Src (cli)** (COMP-3-9) has no test contracts
 - Component **Src (prompts)** (COMP-3-10) has no test contracts
 - Component **Src (extract)** (COMP-3-11) has no test contracts
 - Component **Src (telemetry)** (COMP-3-12) has no test contracts
 - Component **Src (regen)** (COMP-3-13) has no test contracts
+
+---
+
+---
+
+## LLM Review
+
+*Reviewed: 2026-08-18T23:33:04.012558+00:00 | Duration: 5844ms*
+
+**Summary:** This verification & validation artifact reveals a completely untested system with 0% coverage across all 57 components, no requirements defined, no constraints, and no behavioral specifications—rendering it effectively useless as a V&V document in its current state.
+
+- The 0% test contract coverage across all 57 components indicates either a very early-stage project or a model extraction pipeline that hasn't been configured to discover existing tests.
+- Three behaviors exist but have no defined steps, preconditions, or postconditions, making them unverifiable and suggesting the behavioral modeling is placeholder-only.
+
+<details>
+<summary>Review details</summary>
+
+**Prompt sent (truncated):**
+```
+Review the following architecture artifact 'docs/se/verification-validation.md'.
+Respond ONLY in this format:
+SUMMARY: <one paragraph overall assessment>
+COMMENT: <specific observation>
+COMMENT: <another observation>
+
+---
+---
+document: Verification & Validation
+system: System
+system_id: SYS-unknown
+generated_at: 2026-08-18T23:31:28Z
+generator_version: 0.3.0
+model_hash: efca59bc201d
+edition: 7
+---
+
+> **Model Completeness: F (0%)**
+> Some sections may be empty due to missing model entities.
+> - 57
+```
+
+**Full LLM response:**
+```
+SUMMARY: This verification & validation artifact reveals a completely untested system with 0% coverage across all 57 components, no requirements defined, no constraints, and no behavioral specifications—rendering it effectively useless as a V&V document in its current state.
+COMMENT: The 0% test contract coverage across all 57 components indicates either a very early-stage project or a model extraction pipeline that hasn't been configured to discover existing tests.
+COMMENT: Three behaviors exist but have no defined steps, preconditions, or postconditions, making them unverifiable and suggesting the behavioral modeling is placeholder-only.
+```
+
+</details>

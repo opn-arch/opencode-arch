@@ -25,34 +25,38 @@ entities:
     files:
     - src/opencode_arch/cli/docs_validator.py
   - id: src-cli-COMP-6
+    name: Export Data
+    files:
+    - src/opencode_arch/cli/export_data.py
+  - id: src-cli-COMP-7
     name: Extract
     files:
     - src/opencode_arch/cli/extract.py
-  - id: src-cli-COMP-7
+  - id: src-cli-COMP-8
     name: Gap Analyzer
     files:
     - src/opencode_arch/cli/gap_analyzer.py
-  - id: src-cli-COMP-8
+  - id: src-cli-COMP-9
     name: Generate
     files:
     - src/opencode_arch/cli/generate.py
-  - id: src-cli-COMP-9
+  - id: src-cli-COMP-10
     name: Launch
     files:
     - src/opencode_arch/cli/launch.py
-  - id: src-cli-COMP-10
+  - id: src-cli-COMP-11
     name: Main
     files:
     - src/opencode_arch/cli/main.py
-  - id: src-cli-COMP-11
+  - id: src-cli-COMP-12
     name: Metrics
     files:
     - src/opencode_arch/cli/metrics.py
-  - id: src-cli-COMP-12
+  - id: src-cli-COMP-13
     name: Regen Loop
     files:
     - src/opencode_arch/cli/regen_loop.py
-  - id: src-cli-COMP-13
+  - id: src-cli-COMP-14
     name: Infrastructure
     files:
     - src/opencode_arch/cli/prompts.py
@@ -68,20 +72,22 @@ entities:
   - id: CAP-5
     name: Docs Validator
   - id: CAP-6
-    name: Extract
+    name: Export Data
   - id: CAP-7
-    name: Gap Analyzer
+    name: Extract
   - id: CAP-8
-    name: Generate
+    name: Gap Analyzer
   - id: CAP-9
-    name: Launch
+    name: Generate
   - id: CAP-10
-    name: Main
+    name: Launch
   - id: CAP-11
-    name: Metrics
+    name: Main
   - id: CAP-12
-    name: Regen Loop
+    name: Metrics
   - id: CAP-13
+    name: Regen Loop
+  - id: CAP-14
     name: CLI Main
   behaviors:
   - id: BEH-1
@@ -103,7 +109,7 @@ entities:
   - id: IF-1
     name: main CLI
     interface_type: cli
-    component_id: src-cli-COMP-10
+    component_id: src-cli-COMP-11
   layers:
   - id: LAYER-infra
     name: infra
@@ -136,151 +142,76 @@ relationships:
   to: CAP-9
   type: realizes
 - from: src-cli-COMP-10
-  to: CAP-13
+  to: CAP-10
   type: realizes
 - from: src-cli-COMP-11
-  to: CAP-11
+  to: CAP-14
   type: realizes
 - from: src-cli-COMP-12
   to: CAP-12
   type: realizes
-- from: src-cli-COMP-8
-  to: src-cli-COMP-13
-  type: depends-on
-- from: src-cli-COMP-12
-  to: src-cli-COMP-6
-  type: depends-on
-- from: src-cli-COMP-8
-  to: src-cli-COMP-7
-  type: depends-on
-- from: src-cli-COMP-12
+- from: src-cli-COMP-13
+  to: CAP-13
+  type: realizes
+- from: src-cli-COMP-7
   to: src-cli-COMP-5
   type: depends-on
-- from: src-cli-COMP-8
-  to: src-cli-COMP-3
+- from: src-cli-COMP-13
+  to: src-cli-COMP-1
   type: depends-on
-- from: src-cli-COMP-12
-  to: src-cli-COMP-4
-  type: depends-on
-- from: src-cli-COMP-6
-  to: src-cli-COMP-9
-  type: depends-on
-- from: src-cli-COMP-8
-  to: src-cli-COMP-6
-  type: depends-on
-- from: src-cli-COMP-6
+- from: src-cli-COMP-13
   to: src-cli-COMP-11
   type: depends-on
-- from: src-cli-COMP-8
+- from: src-cli-COMP-9
+  to: src-cli-COMP-2
+  type: uses
+- from: src-cli-COMP-7
+  to: src-cli-COMP-13
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-14
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-8
+  type: depends-on
+- from: src-cli-COMP-13
+  to: src-cli-COMP-4
+  type: depends-on
+- from: src-cli-COMP-9
   to: src-cli-COMP-12
   type: depends-on
-- from: src-cli-COMP-8
-  to: src-cli-COMP-5
+- from: src-cli-COMP-13
+  to: src-cli-COMP-14
   type: depends-on
-- from: src-cli-COMP-8
-  to: src-cli-COMP-4
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-9
-  type: depends-on
-- from: src-cli-COMP-6
-  to: src-cli-COMP-2
-  type: uses
-- from: src-cli-COMP-1
-  to: src-cli-COMP-11
-  type: depends-on
-- from: src-cli-COMP-6
-  to: src-cli-COMP-1
-  type: depends-on
-- from: src-cli-COMP-12
-  to: src-cli-COMP-9
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-2
-  type: uses
-- from: src-cli-COMP-6
-  to: src-cli-COMP-10
-  type: depends-on
-- from: src-cli-COMP-12
-  to: src-cli-COMP-11
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-10
-  type: depends-on
-- from: src-cli-COMP-6
-  to: src-cli-COMP-13
-  type: depends-on
-- from: src-cli-COMP-12
-  to: src-cli-COMP-2
-  type: uses
-- from: src-cli-COMP-8
-  to: src-cli-COMP-9
-  type: depends-on
-- from: src-cli-COMP-6
-  to: src-cli-COMP-8
-  type: depends-on
-- from: src-cli-COMP-8
-  to: src-cli-COMP-11
-  type: depends-on
-- from: src-cli-COMP-12
-  to: src-cli-COMP-1
-  type: depends-on
-- from: src-cli-COMP-6
-  to: src-cli-COMP-3
-  type: depends-on
-- from: src-cli-COMP-6
-  to: src-cli-COMP-7
-  type: depends-on
-- from: src-cli-COMP-12
-  to: src-cli-COMP-10
-  type: depends-on
-- from: src-cli-COMP-8
-  to: src-cli-COMP-2
-  type: uses
-- from: src-cli-COMP-1
-  to: src-cli-COMP-13
-  type: depends-on
-- from: src-cli-COMP-12
-  to: src-cli-COMP-8
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-7
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-8
-  type: depends-on
-- from: src-cli-COMP-8
-  to: src-cli-COMP-10
-  type: depends-on
-- from: src-cli-COMP-6
-  to: src-cli-COMP-12
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-3
-  type: depends-on
-- from: src-cli-COMP-6
-  to: src-cli-COMP-5
-  type: depends-on
-- from: src-cli-COMP-8
-  to: src-cli-COMP-1
-  type: depends-on
-- from: src-cli-COMP-12
-  to: src-cli-COMP-13
-  type: depends-on
-- from: src-cli-COMP-6
-  to: src-cli-COMP-4
-  type: depends-on
-- from: src-cli-COMP-1
+- from: src-cli-COMP-7
   to: src-cli-COMP-6
   type: depends-on
-- from: src-cli-COMP-12
+- from: src-cli-COMP-1
   to: src-cli-COMP-3
   type: depends-on
-- from: src-cli-COMP-12
-  to: src-cli-COMP-7
+- from: src-cli-COMP-9
+  to: src-cli-COMP-5
+  type: depends-on
+- from: src-cli-COMP-13
+  to: src-cli-COMP-8
+  type: depends-on
+- from: src-cli-COMP-9
+  to: src-cli-COMP-10
   type: depends-on
 - from: src-cli-COMP-1
-  to: src-cli-COMP-4
+  to: src-cli-COMP-2
+  type: uses
+- from: src-cli-COMP-9
+  to: src-cli-COMP-7
+  type: depends-on
+- from: src-cli-COMP-9
+  to: src-cli-COMP-13
+  type: depends-on
+- from: src-cli-COMP-13
+  to: src-cli-COMP-3
+  type: depends-on
+- from: src-cli-COMP-7
+  to: src-cli-COMP-9
   type: depends-on
 - from: src-cli-COMP-1
   to: src-cli-COMP-12
@@ -288,6 +219,96 @@ relationships:
 - from: src-cli-COMP-1
   to: src-cli-COMP-5
   type: depends-on
+- from: src-cli-COMP-13
+  to: src-cli-COMP-2
+  type: uses
+- from: src-cli-COMP-1
+  to: src-cli-COMP-10
+  type: depends-on
+- from: src-cli-COMP-7
+  to: src-cli-COMP-11
+  type: depends-on
+- from: src-cli-COMP-7
+  to: src-cli-COMP-1
+  type: depends-on
+- from: src-cli-COMP-9
+  to: src-cli-COMP-6
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-7
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-13
+  type: depends-on
+- from: src-cli-COMP-13
+  to: src-cli-COMP-12
+  type: depends-on
+- from: src-cli-COMP-13
+  to: src-cli-COMP-5
+  type: depends-on
+- from: src-cli-COMP-13
+  to: src-cli-COMP-10
+  type: depends-on
+- from: src-cli-COMP-7
+  to: src-cli-COMP-4
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-6
+  type: depends-on
+- from: src-cli-COMP-7
+  to: src-cli-COMP-14
+  type: depends-on
+- from: src-cli-COMP-9
+  to: src-cli-COMP-1
+  type: depends-on
+- from: src-cli-COMP-7
+  to: src-cli-COMP-8
+  type: depends-on
+- from: src-cli-COMP-13
+  to: src-cli-COMP-7
+  type: depends-on
+- from: src-cli-COMP-9
+  to: src-cli-COMP-11
+  type: depends-on
+- from: src-cli-COMP-7
+  to: src-cli-COMP-3
+  type: depends-on
+- from: src-cli-COMP-9
+  to: src-cli-COMP-4
+  type: depends-on
+- from: src-cli-COMP-13
+  to: src-cli-COMP-6
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-9
+  type: depends-on
+- from: src-cli-COMP-9
+  to: src-cli-COMP-14
+  type: depends-on
+- from: src-cli-COMP-7
+  to: src-cli-COMP-2
+  type: uses
+- from: src-cli-COMP-1
+  to: src-cli-COMP-11
+  type: depends-on
+- from: src-cli-COMP-9
+  to: src-cli-COMP-8
+  type: depends-on
+- from: src-cli-COMP-13
+  to: src-cli-COMP-9
+  type: depends-on
+- from: src-cli-COMP-7
+  to: src-cli-COMP-12
+  type: depends-on
+- from: src-cli-COMP-9
+  to: src-cli-COMP-3
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-4
+  type: depends-on
+- from: src-cli-COMP-7
+  to: src-cli-COMP-10
+  type: depends-on
 - from: LAYER-INFRA
   to: src-cli-COMP-1
   type: contains
@@ -326,4 +347,7 @@ relationships:
   type: contains
 - from: LAYER-INFRA
   to: src-cli-COMP-13
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-14
   type: contains

@@ -1,0 +1,517 @@
+{
+  "__dataclass__": "StageResult",
+  "__module__": "architecture_model.pipeline.protocol",
+  "output": {
+    "__dataclass__": "ContractResult",
+    "__module__": "architecture_model.pipeline.contract_types",
+    "contracts": [
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_regen_telemetry.py",
+        "target_component": "COMP-3-10",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_check_hierarchical.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_feedback.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_artifact_context.py",
+        "target_component": "COMP-3-1",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_cli_generate.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_group_tool.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_req_retroactive.py",
+        "target_component": "COMP-3-8",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_mcp_validate.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_relay.py",
+        "target_component": "COMP-3-2",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_docs_validator.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_launch.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_req_parser.py",
+        "target_component": "COMP-3-8",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_learning_assessor.py",
+        "target_component": "COMP-3-4",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_cli_extract.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_collector_integration.py",
+        "target_component": "COMP-3-12",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_artifact_selector.py",
+        "target_component": "COMP-3-1",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_export_tool.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_extract_pipeline.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_regeneration_proof.py",
+        "target_component": "COMP-3-10",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_docs_cli.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_gap_analyzer.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_learning_classifier.py",
+        "target_component": "COMP-3-4",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_check_tool.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_generate.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_gate_tool.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_function_metrics_table.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_artifact_templates.py",
+        "target_component": "COMP-3-1",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_decompose_tool.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_pipeline_tool.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_cli_confidence.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_scan.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_docs_tool.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_ingest.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_learning_adapter.py",
+        "target_component": "COMP-3-4",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_req_matcher.py",
+        "target_component": "COMP-3-8",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_learn_tool.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_regen_prompts.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_llm_audit.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_dependency_context.py",
+        "target_component": "COMP-3-1",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_artifact_diagrams.py",
+        "target_component": "COMP-3-1",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_interface_extraction.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_mcp_extract.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_cli_bench.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_slice.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_author_tool.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_slice_sub_models.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_stats_correct.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_learning_maintainer.py",
+        "target_component": "COMP-3-4",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_regen_loop.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_cli_metrics.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_llm_cache.py",
+        "target_component": "COMP-3-2",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_require.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_learning_lessons.py",
+        "target_component": "COMP-3-4",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_spot_check.py",
+        "target_component": "COMP-3-13",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_token_metrics.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_quality.py",
+        "target_component": "COMP-3-7",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_cli_calibrate.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/test_regen_blind.py",
+        "target_component": "COMP-3-10",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/e2e/test_extraction.py",
+        "target_component": "COMP-3-9",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/e2e/__init__.py",
+        "target_component": "COMP-3-11",
+        "assertions": 0,
+        "description": ""
+      },
+      {
+        "__dataclass__": "TestContract",
+        "__module__": "architecture_model.pipeline.contract_types",
+        "test_file": "tests/e2e/test_regeneration.py",
+        "target_component": "COMP-3-10",
+        "assertions": 0,
+        "description": ""
+      }
+    ],
+    "coverage_ratio": 71.42857142857143
+  },
+  "quality": {
+    "__dataclass__": "QualityMetrics",
+    "__module__": "architecture_model.pipeline.protocol",
+    "score": 71,
+    "sub_scores": {
+      "test_coverage_ratio": 71.42857142857143,
+      "contract_count": 61.0
+    },
+    "thresholds": {
+      "test_coverage_ratio": 50.0
+    },
+    "llm_prompt": ""
+  },
+  "diagnostics": [],
+  "uncertainties": [],
+  "input_hash": "73",
+  "duration_ms": 0,
+  "version": "1.0"
+}

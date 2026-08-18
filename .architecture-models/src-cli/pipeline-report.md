@@ -1,7 +1,7 @@
 # Pipeline Report: Src (cli)
 
-**Generated:** 2026-08-18T20:07:46Z
-**Total Duration:** 222ms
+**Generated:** 2026-08-18T23:31:28Z
+**Total Duration:** 246ms
 **Stages:** 7
 
 ## LLM Summary
@@ -12,20 +12,20 @@ No LLM calls — deterministic pipeline run
 
 | Stage | Score | Duration | LLM Calls |
 |-------|-------|----------|-----------|
-| observe | 100 | 220ms | 0 |
+| observe | 100 | 245ms | 0 |
 | infer | 92 | 0ms | 0 |
 | allocate | 50 | 0ms | 0 |
 | contract | 0 | 0ms | 0 |
-| relate | 100 | 2ms | 0 |
+| relate | 100 | 1ms | 0 |
 | specify | 50 | 0ms | 0 |
 | validate | 90 | 0ms | 0 |
 
 ## Stage: observe
-**Score:** 100 | **Duration:** 220ms
+**Score:** 100 | **Duration:** 245ms
 
 ### Deterministic Findings
-- Discovered 13 modules
-- 59 functions, 5 classes
+- Discovered 14 modules
+- 60 functions, 5 classes
 - 4 import edges
 
 ### LLM Calls
@@ -38,7 +38,7 @@ No LLM calls — deterministic pipeline run
 **Score:** 92 | **Duration:** 0ms
 
 ### Deterministic Findings
-- Inferred 13 capabilities
+- Inferred 14 capabilities
 - 1 actors
 - 1 behaviors
 
@@ -55,7 +55,7 @@ No LLM calls — deterministic pipeline run
 **Score:** 50 | **Duration:** 0ms
 
 ### Deterministic Findings
-- 13 components
+- 14 components
 - File coverage: 10000%
 - 0 unallocated files
 
@@ -78,12 +78,12 @@ No LLM calls — deterministic pipeline run
 *(none)*
 
 ## Stage: relate
-**Score:** 100 | **Duration:** 2ms
+**Score:** 100 | **Duration:** 1ms
 
 ### Deterministic Findings
-- 44 depends-on relationships
-- 13 contains relationships
-- 12 realizes relationships
+- 48 depends-on relationships
+- 14 contains relationships
+- 13 realizes relationships
 - 4 uses relationships
 
 ### LLM Calls

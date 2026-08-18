@@ -2,24 +2,22 @@
 document: Maintenance Manual
 system: System
 system_id: SYS-unknown
-generated_at: 2026-08-18T20:07:47Z
+generated_at: 2026-08-18T23:31:29Z
 generator_version: 0.3.0
-model_hash: ceee27c08922
-edition: 5
+model_hash: efca59bc201d
+edition: 7
 ---
 
 > **Model Completeness: F (0%)**
 > Some sections may be empty due to missing model entities.
-> - 56/56 components have no behavioral specification
+> - 57/57 components have no behavioral specification
 > - No interfaces defined on components → interface-spec doc empty
 > - No requirements defined
 > - Actors defined but missing goals/descriptions
 > Run the extraction pipeline or manually add behaviors/interfaces/constraints.
 
 # Maintenance Manual: System
-
 ## Component Inventory
-
 | Component | Kind | Layer | Files | Signatures | Test Contracts |
 |-----------|------|-------|-------|-----------|----------------|
 | Quality (src-mcp-COMP-1) | service | — | 1 | 0 | 0 |
@@ -56,78 +54,78 @@ edition: 5
 | Confidence (src-cli-COMP-3) | service | — | 1 | 0 | 0 |
 | Docs (src-cli-COMP-4) | service | — | 1 | 0 | 0 |
 | Docs Validator (src-cli-COMP-5) | service | — | 1 | 0 | 0 |
-| Extract (src-cli-COMP-6) | service | — | 1 | 0 | 0 |
-| Gap Analyzer (src-cli-COMP-7) | service | — | 1 | 0 | 0 |
-| Generate (src-cli-COMP-8) | service | — | 1 | 0 | 0 |
-| Launch (src-cli-COMP-9) | service | — | 1 | 0 | 0 |
-| Main (src-cli-COMP-10) | service | — | 1 | 0 | 0 |
-| Metrics (src-cli-COMP-11) | service | — | 1 | 0 | 0 |
-| Regen Loop (src-cli-COMP-12) | service | — | 1 | 0 | 0 |
-| Infrastructure (src-cli-COMP-13) | service | — | 1 | 0 | 0 |
-| Benchmark Execution Scripts (COMP-2) | service | infra | 2 | 0 | 0 |
+| Export Data (src-cli-COMP-6) | service | — | 1 | 0 | 0 |
+| Extract (src-cli-COMP-7) | service | — | 1 | 0 | 0 |
+| Gap Analyzer (src-cli-COMP-8) | service | — | 1 | 0 | 0 |
+| Generate (src-cli-COMP-9) | service | — | 1 | 0 | 0 |
+| Launch (src-cli-COMP-10) | service | — | 1 | 0 | 0 |
+| Main (src-cli-COMP-11) | service | — | 1 | 0 | 0 |
+| Metrics (src-cli-COMP-12) | service | — | 1 | 0 | 0 |
+| Regen Loop (src-cli-COMP-13) | service | — | 1 | 0 | 0 |
+| Infrastructure (src-cli-COMP-14) | service | — | 1 | 0 | 0 |
+| Benchmark Scripts (COMP-2) | service | infra | 2 | 0 | 0 |
 | Src (artifacts) (COMP-3-1) | service | data | 5 | 0 | 0 |
-| LLM Prompt Relay (COMP-3-2) | service | data | 5 | 0 | 0 |
+| LLM Integration Layer (COMP-3-2) | service | data | 5 | 0 | 0 |
 | Src (context) (COMP-3-3) | service | data | 3 | 0 | 0 |
 | Src (learning) (COMP-3-4) | service | data | 7 | 0 | 0 |
 | Src (runner) (COMP-3-5) | service | data | 2 | 0 | 0 |
 | Src (agent) (COMP-3-6) | service | data | 1 | 0 | 0 |
 | MCP Quality Server (COMP-3-7) | service | data | 30 | 0 | 0 |
 | Src (requirements) (COMP-3-8) | service | data | 4 | 0 | 0 |
-| CLI Commands (COMP-3-9) | service | data | 13 | 0 | 0 |
+| CLI Commands (COMP-3-9) | service | data | 14 | 0 | 0 |
 | Src (prompts) (COMP-3-10) | service | data | 1 | 0 | 0 |
 | Src (extract) (COMP-3-11) | service | data | 1 | 0 | 0 |
 | Src (telemetry) (COMP-3-12) | service | data | 3 | 0 | 0 |
 | Src (regen) (COMP-3-13) | service | data | 2 | 0 | 0 |
-
 ## Dependency Impact Analysis
-
 | Component | Depends On (fan-out) | Depended By (fan-in) | Impact Risk |
 |-----------|---------------------|---------------------|-------------|
-| Quality | Scan, Stats, Evaluate, Require, Validate, Generate, Check, Sync, Regen Score, Assess, Ingest, Pipeline, Group, Correct, Slice, Export, Gate, Log, Decompose, Extract, Trace Requirements, Learn, Diff, Docs, Llm Audit, Author, Feedback | Trace Requirements, Infrastructure, Extract, Scan, Docs, Generate, Decompose, Pipeline, Export, Group, Check, Ingest, Llm Audit | HIGH |
-| Assess | — | Quality, Slice | MEDIUM |
+| Quality | Llm Audit, Slice, Ingest, Validate, Regen Score, Check, Generate, Group, Feedback, Correct, Sync, Trace Requirements, Author, Scan, Assess, Stats, Diff, Decompose, Evaluate, Extract, Require, Docs, Pipeline, Learn, Export, Gate, Log | Export, Scan, Pipeline, Extract, Ingest, Group, Check, Generate, Llm Audit, Docs, Decompose, Infrastructure, Trace Requirements | HIGH |
+| Assess | — | Slice, Quality | MEDIUM |
 | Author | — | Slice, Quality | MEDIUM |
-| Check | Infrastructure, Quality | Quality, Slice | MEDIUM |
-| Correct | — | Quality, Slice | MEDIUM |
+| Check | Infrastructure, Quality | Slice, Quality | MEDIUM |
+| Correct | — | Slice, Quality | MEDIUM |
 | Decompose | Infrastructure, Quality | Slice, Quality | MEDIUM |
-| Diff | — | Sync, Slice, Quality | MEDIUM |
+| Diff | — | Slice, Quality, Sync | MEDIUM |
 | Docs | Infrastructure, Quality | Slice, Quality | MEDIUM |
-| Evaluate | — | Quality, Slice | MEDIUM |
-| Export | Infrastructure, Quality | Quality, Slice | MEDIUM |
-| Extract | Infrastructure, Quality | Slice, Trace Requirements, Quality | MEDIUM |
+| Evaluate | — | Slice, Quality | MEDIUM |
+| Export | Quality, Infrastructure | Slice, Quality | MEDIUM |
+| Extract | Infrastructure, Quality | Trace Requirements, Slice, Quality | MEDIUM |
 | Feedback | — | Slice, Quality | MEDIUM |
 | Gate | — | Slice, Quality | MEDIUM |
 | Generate | Infrastructure, Quality | Quality, Slice | MEDIUM |
-| Group | Infrastructure, Quality | Quality, Slice | MEDIUM |
+| Group | Infrastructure, Quality | Slice, Quality | MEDIUM |
 | Ingest | Infrastructure, Quality | Quality, Slice | MEDIUM |
 | Learn | — | Slice, Quality | MEDIUM |
-| Llm Audit | Infrastructure, Quality | Slice, Quality | MEDIUM |
+| Llm Audit | Infrastructure, Quality | Quality, Slice | MEDIUM |
 | Log | — | Slice, Quality | MEDIUM |
-| Pipeline | Infrastructure, Quality | Quality, Slice | MEDIUM |
+| Pipeline | Quality, Infrastructure | Slice, Quality | MEDIUM |
 | Regen Score | — | Quality, Slice | MEDIUM |
-| Require | — | Trace Requirements, Quality, Slice | MEDIUM |
-| Scan | Infrastructure, Quality | Quality, Slice | MEDIUM |
-| Slice | Gate, Log, Decompose, Extract, Trace Requirements, Learn, Diff, Docs, Llm Audit, Author, Feedback, Scan, Stats, Evaluate, Require, Validate, Generate, Check, Sync, Regen Score, Assess, Ingest, Pipeline, Group, Correct, Export | Quality | LOW |
-| Stats | — | Quality, Slice | MEDIUM |
-| Sync | Diff | Quality, Slice | MEDIUM |
-| Trace Requirements | Infrastructure, Require, Quality, Extract | Slice, Quality | MEDIUM |
+| Require | — | Trace Requirements, Slice, Quality | MEDIUM |
+| Scan | Infrastructure, Quality | Slice, Quality | MEDIUM |
+| Slice | Check, Author, Assess, Group, Feedback, Correct, Sync, Evaluate, Require, Docs, Trace Requirements, Scan, Learn, Export, Stats, Diff, Decompose, Extract, Llm Audit, Pipeline, Ingest, Validate, Gate, Regen Score, Log, Generate | Quality | LOW |
+| Stats | — | Slice, Quality | MEDIUM |
+| Sync | Diff | Slice, Quality | MEDIUM |
+| Trace Requirements | Extract, Require, Infrastructure, Quality | Slice, Quality | MEDIUM |
 | Validate | — | Quality, Slice | MEDIUM |
-| Infrastructure | Quality | Trace Requirements, Generate, Extract, Scan, Docs, Decompose, Pipeline, Export, Group, Check, Ingest, Llm Audit | HIGH |
-| Bench | Launch, Metrics, Main, Infrastructure, Gap Analyzer, Generate, Confidence, Extract, Docs, Regen Loop, Docs Validator | Extract, Regen Loop, Generate | MEDIUM |
+| Infrastructure | Quality | Ingest, Scan, Extract, Check, Generate, Group, Docs, Llm Audit, Decompose, Trace Requirements, Export, Pipeline | HIGH |
+| Bench | Infrastructure, Gap Analyzer, Confidence, Metrics, Docs Validator, Launch, Extract, Regen Loop, Export Data, Generate, Main, Docs | Regen Loop, Extract, Generate | MEDIUM |
 | Calibrate | — | — | LOW |
-| Confidence | — | Generate, Extract, Bench, Regen Loop | MEDIUM |
-| Docs | — | Regen Loop, Generate, Extract, Bench | MEDIUM |
-| Docs Validator | — | Regen Loop, Generate, Extract, Bench | MEDIUM |
-| Extract | Launch, Metrics, Bench, Main, Infrastructure, Generate, Confidence, Gap Analyzer, Regen Loop, Docs Validator, Docs | Regen Loop, Generate, Bench | MEDIUM |
-| Gap Analyzer | — | Generate, Extract, Bench, Regen Loop | MEDIUM |
-| Generate | Infrastructure, Gap Analyzer, Confidence, Extract, Regen Loop, Docs Validator, Docs, Launch, Metrics, Main, Bench | Extract, Regen Loop, Bench | MEDIUM |
-| Launch | — | Extract, Bench, Regen Loop, Generate | MEDIUM |
-| Main | — | Extract, Bench, Regen Loop, Generate | MEDIUM |
-| Metrics | — | Extract, Bench, Regen Loop, Generate | MEDIUM |
-| Regen Loop | Extract, Docs Validator, Docs, Launch, Metrics, Bench, Main, Generate, Infrastructure, Confidence, Gap Analyzer | Generate, Extract, Bench | MEDIUM |
-| Infrastructure | — | Generate, Extract, Bench, Regen Loop | MEDIUM |
-| Benchmark Execution Scripts | — | — | LOW |
+| Confidence | — | Bench, Regen Loop, Extract, Generate | MEDIUM |
+| Docs | — | Regen Loop, Extract, Generate, Bench | MEDIUM |
+| Docs Validator | — | Extract, Generate, Bench, Regen Loop | MEDIUM |
+| Export Data | — | Extract, Generate, Bench, Regen Loop | MEDIUM |
+| Extract | Docs Validator, Regen Loop, Export Data, Generate, Main, Bench, Docs, Infrastructure, Gap Analyzer, Confidence, Metrics, Launch | Generate, Bench, Regen Loop | MEDIUM |
+| Gap Analyzer | — | Bench, Regen Loop, Extract, Generate | MEDIUM |
+| Generate | Metrics, Docs Validator, Launch, Extract, Regen Loop, Export Data, Bench, Main, Docs, Infrastructure, Gap Analyzer, Confidence | Extract, Bench, Regen Loop | MEDIUM |
+| Launch | — | Generate, Bench, Regen Loop, Extract | MEDIUM |
+| Main | — | Regen Loop, Extract, Generate, Bench | MEDIUM |
+| Metrics | — | Generate, Bench, Regen Loop, Extract | MEDIUM |
+| Regen Loop | Bench, Main, Docs, Infrastructure, Gap Analyzer, Confidence, Metrics, Docs Validator, Launch, Extract, Export Data, Generate | Extract, Generate, Bench | MEDIUM |
+| Infrastructure | — | Bench, Regen Loop, Extract, Generate | MEDIUM |
+| Benchmark Scripts | — | — | LOW |
 | Src (artifacts) | — | — | LOW |
-| LLM Prompt Relay | — | — | LOW |
+| LLM Integration Layer | — | — | LOW |
 | Src (context) | — | — | LOW |
 | Src (learning) | — | — | LOW |
 | Src (runner) | — | — | LOW |
@@ -139,22 +137,20 @@ edition: 5
 | Src (extract) | — | — | LOW |
 | Src (telemetry) | — | — | LOW |
 | Src (regen) | — | — | LOW |
-
 ## Modification Procedures
-
 For each component, the following files and dependencies must be considered:
 
 ### Quality (src-mcp-COMP-1)
 
 **Files:**
 - `src/opencode_arch/mcp/quality.py`
-**Downstream dependents (must re-test):** Trace Requirements, Infrastructure, Extract, Scan, Docs, Generate, Decompose, Pipeline, Export, Group, Check, Ingest, Llm Audit
+**Downstream dependents (must re-test):** Export, Scan, Pipeline, Extract, Ingest, Group, Check, Generate, Llm Audit, Docs, Decompose, Infrastructure, Trace Requirements
 
 ### Assess (src-mcp-COMP-2)
 
 **Files:**
 - `src/opencode_arch/mcp/tools/assess.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Author (src-mcp-COMP-3)
 
@@ -166,13 +162,13 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/check.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Correct (src-mcp-COMP-5)
 
 **Files:**
 - `src/opencode_arch/mcp/tools/correct.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Decompose (src-mcp-COMP-6)
 
@@ -184,7 +180,7 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/diff.py`
-**Downstream dependents (must re-test):** Sync, Slice, Quality
+**Downstream dependents (must re-test):** Slice, Quality, Sync
 
 ### Docs (src-mcp-COMP-8)
 
@@ -196,19 +192,19 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/evaluate.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Export (src-mcp-COMP-10)
 
 **Files:**
 - `src/opencode_arch/mcp/tools/export.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Extract (src-mcp-COMP-11)
 
 **Files:**
 - `src/opencode_arch/mcp/tools/extract.py`
-**Downstream dependents (must re-test):** Slice, Trace Requirements, Quality
+**Downstream dependents (must re-test):** Trace Requirements, Slice, Quality
 
 ### Feedback (src-mcp-COMP-12)
 
@@ -232,7 +228,7 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/group.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Ingest (src-mcp-COMP-16)
 
@@ -250,7 +246,7 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/llm_audit.py`
-**Downstream dependents (must re-test):** Slice, Quality
+**Downstream dependents (must re-test):** Quality, Slice
 
 ### Log (src-mcp-COMP-19)
 
@@ -262,7 +258,7 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/pipeline.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Regen Score (src-mcp-COMP-21)
 
@@ -274,13 +270,13 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/require.py`
-**Downstream dependents (must re-test):** Trace Requirements, Quality, Slice
+**Downstream dependents (must re-test):** Trace Requirements, Slice, Quality
 
 ### Scan (src-mcp-COMP-23)
 
 **Files:**
 - `src/opencode_arch/mcp/tools/scan.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Slice (src-mcp-COMP-24)
 
@@ -292,13 +288,13 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/stats.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Sync (src-mcp-COMP-26)
 
 **Files:**
 - `src/opencode_arch/mcp/tools/sync.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Trace Requirements (src-mcp-COMP-27)
 
@@ -317,13 +313,13 @@ For each component, the following files and dependencies must be considered:
 **Files:**
 - `src/opencode_arch/mcp/__main__.py`
 - `src/opencode_arch/mcp/server.py`
-**Downstream dependents (must re-test):** Trace Requirements, Generate, Extract, Scan, Docs, Decompose, Pipeline, Export, Group, Check, Ingest, Llm Audit
+**Downstream dependents (must re-test):** Ingest, Scan, Extract, Check, Generate, Group, Docs, Llm Audit, Decompose, Trace Requirements, Export, Pipeline
 
 ### Bench (src-cli-COMP-1)
 
 **Files:**
 - `src/opencode_arch/cli/bench.py`
-**Downstream dependents (must re-test):** Extract, Regen Loop, Generate
+**Downstream dependents (must re-test):** Regen Loop, Extract, Generate
 
 ### Calibrate (src-cli-COMP-2)
 
@@ -334,69 +330,75 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/cli/confidence.py`
-**Downstream dependents (must re-test):** Generate, Extract, Bench, Regen Loop
+**Downstream dependents (must re-test):** Bench, Regen Loop, Extract, Generate
 
 ### Docs (src-cli-COMP-4)
 
 **Files:**
 - `src/opencode_arch/cli/docs.py`
-**Downstream dependents (must re-test):** Regen Loop, Generate, Extract, Bench
+**Downstream dependents (must re-test):** Regen Loop, Extract, Generate, Bench
 
 ### Docs Validator (src-cli-COMP-5)
 
 **Files:**
 - `src/opencode_arch/cli/docs_validator.py`
-**Downstream dependents (must re-test):** Regen Loop, Generate, Extract, Bench
+**Downstream dependents (must re-test):** Extract, Generate, Bench, Regen Loop
 
-### Extract (src-cli-COMP-6)
+### Export Data (src-cli-COMP-6)
+
+**Files:**
+- `src/opencode_arch/cli/export_data.py`
+**Downstream dependents (must re-test):** Extract, Generate, Bench, Regen Loop
+
+### Extract (src-cli-COMP-7)
 
 **Files:**
 - `src/opencode_arch/cli/extract.py`
-**Downstream dependents (must re-test):** Regen Loop, Generate, Bench
+**Downstream dependents (must re-test):** Generate, Bench, Regen Loop
 
-### Gap Analyzer (src-cli-COMP-7)
+### Gap Analyzer (src-cli-COMP-8)
 
 **Files:**
 - `src/opencode_arch/cli/gap_analyzer.py`
-**Downstream dependents (must re-test):** Generate, Extract, Bench, Regen Loop
+**Downstream dependents (must re-test):** Bench, Regen Loop, Extract, Generate
 
-### Generate (src-cli-COMP-8)
+### Generate (src-cli-COMP-9)
 
 **Files:**
 - `src/opencode_arch/cli/generate.py`
-**Downstream dependents (must re-test):** Extract, Regen Loop, Bench
+**Downstream dependents (must re-test):** Extract, Bench, Regen Loop
 
-### Launch (src-cli-COMP-9)
+### Launch (src-cli-COMP-10)
 
 **Files:**
 - `src/opencode_arch/cli/launch.py`
-**Downstream dependents (must re-test):** Extract, Bench, Regen Loop, Generate
+**Downstream dependents (must re-test):** Generate, Bench, Regen Loop, Extract
 
-### Main (src-cli-COMP-10)
+### Main (src-cli-COMP-11)
 
 **Files:**
 - `src/opencode_arch/cli/main.py`
-**Downstream dependents (must re-test):** Extract, Bench, Regen Loop, Generate
+**Downstream dependents (must re-test):** Regen Loop, Extract, Generate, Bench
 
-### Metrics (src-cli-COMP-11)
+### Metrics (src-cli-COMP-12)
 
 **Files:**
 - `src/opencode_arch/cli/metrics.py`
-**Downstream dependents (must re-test):** Extract, Bench, Regen Loop, Generate
+**Downstream dependents (must re-test):** Generate, Bench, Regen Loop, Extract
 
-### Regen Loop (src-cli-COMP-12)
+### Regen Loop (src-cli-COMP-13)
 
 **Files:**
 - `src/opencode_arch/cli/regen_loop.py`
-**Downstream dependents (must re-test):** Generate, Extract, Bench
+**Downstream dependents (must re-test):** Extract, Generate, Bench
 
-### Infrastructure (src-cli-COMP-13)
+### Infrastructure (src-cli-COMP-14)
 
 **Files:**
 - `src/opencode_arch/cli/prompts.py`
-**Downstream dependents (must re-test):** Generate, Extract, Bench, Regen Loop
+**Downstream dependents (must re-test):** Bench, Regen Loop, Extract, Generate
 
-### Benchmark Execution Scripts (COMP-2)
+### Benchmark Scripts (COMP-2)
 
 **Files:**
 - `scripts/benchmark_economy.py`
@@ -411,7 +413,7 @@ For each component, the following files and dependencies must be considered:
 - `src/opencode_arch/artifacts/selector.py`
 - `src/opencode_arch/artifacts/templates.py`
 
-### LLM Prompt Relay (COMP-3-2)
+### LLM Integration Layer (COMP-3-2)
 
 **Files:**
 - `src/opencode_arch/llm/cache.py`
@@ -490,6 +492,7 @@ For each component, the following files and dependencies must be considered:
 - `src/opencode_arch/cli/confidence.py`
 - `src/opencode_arch/cli/docs.py`
 - `src/opencode_arch/cli/docs_validator.py`
+- `src/opencode_arch/cli/export_data.py`
 - `src/opencode_arch/cli/extract.py`
 - `src/opencode_arch/cli/gap_analyzer.py`
 - `src/opencode_arch/cli/generate.py`
@@ -521,7 +524,54 @@ For each component, the following files and dependencies must be considered:
 **Files:**
 - `src/opencode_arch/regen/self_heal.py`
 - `src/opencode_arch/regen/spot_check.py`
-
 ## Known Constraints
-
 *No constraint allocations defined.*
+
+---
+
+---
+
+## LLM Review
+
+*Reviewed: 2026-08-18T23:32:27.941778+00:00 | Duration: 6348ms*
+
+**Summary:** This maintenance manual is essentially a skeleton with 0% model completeness—all 57 components lack behavioral specifications, interfaces, signatures, and test contracts, rendering it unusable for actual maintenance guidance.
+
+- The "Quality" and "Infrastructure" components are flagged HIGH impact risk yet have zero signatures or test contracts, meaning maintainers have no documented contract to verify correctness after changes.
+- The CLI subsystem (Bench, Extract, Generate, Regen Loop) exhibits circular dependencies in the dependency impact table, suggesting either a modeling error or a tightly coupled design that needs refactoring.
+
+<details>
+<summary>Review details</summary>
+
+**Prompt sent (truncated):**
+```
+Review the following architecture artifact 'docs/se/maintenance-manual.md'.
+Respond ONLY in this format:
+SUMMARY: <one paragraph overall assessment>
+COMMENT: <specific observation>
+COMMENT: <another observation>
+
+---
+---
+document: Maintenance Manual
+system: System
+system_id: SYS-unknown
+generated_at: 2026-08-18T23:31:29Z
+generator_version: 0.3.0
+model_hash: efca59bc201d
+edition: 7
+---
+
+> **Model Completeness: F (0%)**
+> Some sections may be empty due to missing model entities.
+> - 57/57 componen
+```
+
+**Full LLM response:**
+```
+SUMMARY: This maintenance manual is essentially a skeleton with 0% model completeness—all 57 components lack behavioral specifications, interfaces, signatures, and test contracts, rendering it unusable for actual maintenance guidance.
+COMMENT: The "Quality" and "Infrastructure" components are flagged HIGH impact risk yet have zero signatures or test contracts, meaning maintainers have no documented contract to verify correctness after changes.
+COMMENT: The CLI subsystem (Bench, Extract, Generate, Regen Loop) exhibits circular dependencies in the dependency impact table, suggesting either a modeling error or a tightly coupled design that needs refactoring.
+```
+
+</details>

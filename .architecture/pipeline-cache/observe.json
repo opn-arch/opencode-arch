@@ -1193,6 +1193,287 @@
       {
         "__dataclass__": "ModuleRecord",
         "__module__": "architecture_model.pipeline.observe_types",
+        "path": "tests/test_relay.py",
+        "language": "python",
+        "functions": [
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_make_sse_response",
+            "signature": "def _make_sse_response() -> io.BytesIO",
+            "body_hint": "lines = []; for ev in events:\n    lines.append(f'data: {json.dumps(ev)}\\n'.encode()); return io.BytesIO(b''.join(lines))",
+            "calls": [
+              "BytesIO",
+              "append",
+              "join",
+              "encode",
+              "dumps"
+            ],
+            "decorators": [],
+            "docstring": "Build a fake SSE response body.",
+            "line_number": 15
+          }
+        ],
+        "classes": [
+          {
+            "__dataclass__": "ClassRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "TestChatSync",
+            "bases": [],
+            "methods": [
+              "test_basic_chunks",
+              "test_done_stops_reading",
+              "test_malformed_json_skipped",
+              "test_non_data_lines_skipped",
+              "test_network_error_returns_empty",
+              "test_timeout_returns_empty",
+              "test_system_prompt_included_in_body"
+            ],
+            "method_details": [
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_basic_chunks",
+                "signature": "def test_basic_chunks(self)",
+                "body_hint": "[4 statements]",
+                "calls": [
+                  "_make_sse_response",
+                  "patch",
+                  "_chat_sync"
+                ],
+                "decorators": [],
+                "docstring": null,
+                "line_number": 24
+              },
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_done_stops_reading",
+                "signature": "def test_done_stops_reading(self)",
+                "body_hint": "[4 statements]",
+                "calls": [
+                  "_make_sse_response",
+                  "patch",
+                  "_chat_sync"
+                ],
+                "decorators": [],
+                "docstring": null,
+                "line_number": 35
+              },
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_malformed_json_skipped",
+                "signature": "def test_malformed_json_skipped(self)",
+                "body_hint": "[5 statements]",
+                "calls": [
+                  "BytesIO",
+                  "patch",
+                  "_chat_sync",
+                  "encode",
+                  "dumps"
+                ],
+                "decorators": [],
+                "docstring": null,
+                "line_number": 46
+              },
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_non_data_lines_skipped",
+                "signature": "def test_non_data_lines_skipped(self)",
+                "body_hint": "[5 statements]",
+                "calls": [
+                  "BytesIO",
+                  "patch",
+                  "_chat_sync",
+                  "encode",
+                  "dumps"
+                ],
+                "decorators": [],
+                "docstring": null,
+                "line_number": 58
+              },
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_network_error_returns_empty",
+                "signature": "def test_network_error_returns_empty(self)",
+                "body_hint": "from urllib.error import URLError; with patch('opencode_arch.llm.relay.urlopen', side_effect=URLError('fail')):\n    result = _chat_sync('test'); assert result == ''",
+                "calls": [
+                  "patch",
+                  "_chat_sync",
+                  "URLError"
+                ],
+                "decorators": [],
+                "docstring": null,
+                "line_number": 68
+              },
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_timeout_returns_empty",
+                "signature": "def test_timeout_returns_empty(self)",
+                "body_hint": "with patch('opencode_arch.llm.relay.urlopen', side_effect=TimeoutError()):\n    result = _chat_sync('test'); assert result == ''",
+                "calls": [
+                  "patch",
+                  "_chat_sync",
+                  "TimeoutError"
+                ],
+                "decorators": [],
+                "docstring": null,
+                "line_number": 75
+              },
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_system_prompt_included_in_body",
+                "signature": "def test_system_prompt_included_in_body(self)",
+                "body_hint": "resp = _make_sse_response({'type': 'done'}); resp.status = 200; with patch('opencode_arch.llm.relay.urlopen', return_value=resp) as mock_open:\n    _chat_sync('prompt', system_prompt='sys')\n    req = mock_open.call_args[0][0]\n    body = json.loads(req.data)\n    assert body['system_prompt'] == 'sys'\n    assert body['content'] == 'prompt'",
+                "calls": [
+                  "_make_sse_response",
+                  "patch",
+                  "_chat_sync",
+                  "loads"
+                ],
+                "decorators": [],
+                "docstring": null,
+                "line_number": 80
+              }
+            ],
+            "attributes": {},
+            "decorators": [],
+            "is_abstract": false
+          },
+          {
+            "__dataclass__": "ClassRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "TestRelayCallback",
+            "bases": [],
+            "methods": [
+              "test_returns_stripped_result",
+              "test_returns_none_on_empty"
+            ],
+            "method_details": [
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_returns_stripped_result",
+                "signature": "def test_returns_stripped_result(self)",
+                "body_hint": "[4 statements]",
+                "calls": [
+                  "_make_sse_response",
+                  "patch",
+                  "run",
+                  "relay_llm_callback"
+                ],
+                "decorators": [],
+                "docstring": null,
+                "line_number": 92
+              },
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_returns_none_on_empty",
+                "signature": "def test_returns_none_on_empty(self)",
+                "body_hint": "from urllib.error import URLError; with patch('opencode_arch.llm.relay.urlopen', side_effect=URLError('fail')):\n    result = asyncio.run(relay_llm_callback('infer', 'name this')); assert result is None",
+                "calls": [
+                  "patch",
+                  "run",
+                  "relay_llm_callback",
+                  "URLError"
+                ],
+                "decorators": [],
+                "docstring": null,
+                "line_number": 102
+              }
+            ],
+            "attributes": {},
+            "decorators": [],
+            "is_abstract": false
+          },
+          {
+            "__dataclass__": "ClassRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "TestIsRelayAvailable",
+            "bases": [],
+            "methods": [
+              "test_healthy",
+              "test_unhealthy_status",
+              "test_connection_error"
+            ],
+            "method_details": [
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_healthy",
+                "signature": "def test_healthy(self)",
+                "body_hint": "resp = io.BytesIO(json.dumps({'status': 'ok'}).encode()); resp.status = 200; with patch('opencode_arch.llm.relay.urlopen', return_value=resp):\n    assert is_relay_available() is True",
+                "calls": [
+                  "BytesIO",
+                  "encode",
+                  "patch",
+                  "is_relay_available",
+                  "dumps"
+                ],
+                "decorators": [],
+                "docstring": null,
+                "line_number": 111
+              },
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_unhealthy_status",
+                "signature": "def test_unhealthy_status(self)",
+                "body_hint": "resp = io.BytesIO(json.dumps({'status': 'error'}).encode()); resp.status = 200; with patch('opencode_arch.llm.relay.urlopen', return_value=resp):\n    assert is_relay_available() is False",
+                "calls": [
+                  "BytesIO",
+                  "encode",
+                  "patch",
+                  "is_relay_available",
+                  "dumps"
+                ],
+                "decorators": [],
+                "docstring": null,
+                "line_number": 117
+              },
+              {
+                "__dataclass__": "FunctionRecord",
+                "__module__": "architecture_model.pipeline.observe_types",
+                "name": "test_connection_error",
+                "signature": "def test_connection_error(self)",
+                "body_hint": "with patch('opencode_arch.llm.relay.urlopen', side_effect=ConnectionError()):\n    assert is_relay_available() is False",
+                "calls": [
+                  "patch",
+                  "is_relay_available",
+                  "ConnectionError"
+                ],
+                "decorators": [],
+                "docstring": null,
+                "line_number": 123
+              }
+            ],
+            "attributes": {},
+            "decorators": [],
+            "is_abstract": false
+          }
+        ],
+        "constants": [],
+        "imports": [
+          "__future__",
+          "asyncio",
+          "io",
+          "json",
+          "unittest.mock",
+          "pytest",
+          "opencode_arch.llm.relay"
+        ],
+        "line_count": 125,
+        "docstring": "Tests for the copilot-relay LLM client."
+      },
+      {
+        "__dataclass__": "ModuleRecord",
+        "__module__": "architecture_model.pipeline.observe_types",
         "path": "tests/test_docs_validator.py",
         "language": "python",
         "functions": [
@@ -14408,6 +14689,60 @@
       {
         "__dataclass__": "ModuleRecord",
         "__module__": "architecture_model.pipeline.observe_types",
+        "path": "src/opencode_arch/cli/export_data.py",
+        "language": "python",
+        "functions": [
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "run_export_data",
+            "signature": "def run_export_data(repos: list[str], output: str='corpus.jsonl', include_telemetry: bool=False) -> None",
+            "body_hint": "[8 statements]",
+            "calls": [
+              "Path",
+              "print",
+              "resolve",
+              "exists",
+              "append",
+              "exit",
+              "open",
+              "stat",
+              "is_dir",
+              "read_text",
+              "loads",
+              "sorted",
+              "write",
+              "iterdir",
+              "get",
+              "splitlines",
+              "TelemetryStore",
+              "query",
+              "len",
+              "safe_load",
+              "strip",
+              "dumps",
+              "hasattr",
+              "_asdict"
+            ],
+            "decorators": [],
+            "docstring": "Export .architecture/ artifacts from repos to JSONL.\n\nEach line is a JSON object with:\n  - repo: repository name\n  - model_yaml: raw YAML content of .architecture-model.yaml\n  - manifest: parsed manifest.json dict\n  - metrics: parsed metrics.json dict\n  - telemetry_records: (optional) list of telemetry DB records",
+            "line_number": 14
+          }
+        ],
+        "classes": [],
+        "constants": [],
+        "imports": [
+          "__future__",
+          "json",
+          "sys",
+          "pathlib"
+        ],
+        "line_count": 137,
+        "docstring": "Export training corpus from .architecture/ artifacts.\n\nCollects (model, manifest, metrics) triples from one or more repos\nand writes them as JSONL for LLM training."
+      },
+      {
+        "__dataclass__": "ModuleRecord",
+        "__module__": "architecture_model.pipeline.observe_types",
         "path": "src/opencode_arch/cli/confidence.py",
         "language": "python",
         "functions": [
@@ -17825,6 +18160,9 @@
               "is_relay_available",
               "run_to",
               "run_all",
+              "save_enrichment_log",
+              "hasattr",
+              "save_reviews",
               "extend",
               "append",
               "drain_and_store",
@@ -17832,6 +18170,7 @@
               "list",
               "str",
               "sum",
+              "len",
               "_slugify",
               "ObserveStage",
               "InferStage",
@@ -17845,7 +18184,6 @@
               "EmitStage",
               "Evidence",
               "save_stage",
-              "len",
               "from_diagnostics",
               "from_uncertainties",
               "from_llm_calls",
@@ -17858,6 +18196,7 @@
               "LLMCallRecord",
               "pop",
               "update",
+              "getattr",
               "log_entry",
               "strftime",
               "enrich_stage_output"
@@ -17879,7 +18218,7 @@
           "typing",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 375,
+        "line_count": 383,
         "docstring": "architect_pipeline MCP tool \u2014 run the 10-stage extraction pipeline.\n\nSupports stage-by-stage execution with file-based cache persistence.\nThe MCP orchestrator calls this tool once per stage, reviews uncertainties,\nresolves them via LLM, and passes resolutions on the next call.\n\nFor subsystem enrichment, use the `scope` parameter after decompose to run\nscoped pipelines on individual detected systems."
       },
       {
@@ -19041,6 +19380,15 @@
         "target": "src/opencode_arch/mcp/tools/validate.py",
         "symbols": [
           "validate"
+        ]
+      },
+      {
+        "__dataclass__": "ImportEdge",
+        "__module__": "architecture_model.pipeline.observe_types",
+        "source": "tests/test_relay.py",
+        "target": "src/opencode_arch/llm/relay.py",
+        "symbols": [
+          "relay"
         ]
       },
       {
@@ -20333,6 +20681,14 @@
       {
         "__dataclass__": "TestFileRecord",
         "__module__": "architecture_model.pipeline.observe_types",
+        "path": "tests/test_relay.py",
+        "targets": [
+          "relay"
+        ]
+      },
+      {
+        "__dataclass__": "TestFileRecord",
+        "__module__": "architecture_model.pipeline.observe_types",
         "path": "tests/test_docs_validator.py",
         "targets": [
           "docs_validator"
@@ -21059,29 +21415,20 @@
   "quality": {
     "__dataclass__": "QualityMetrics",
     "__module__": "architecture_model.pipeline.protocol",
-    "score": 99,
+    "score": 100,
     "sub_scores": {
-      "parse_success_rate": 99.39024390243902,
-      "symbol_density": 3.625766871165644,
-      "file_count": 164.0
+      "parse_success_rate": 100.0,
+      "symbol_density": 3.6121212121212123,
+      "file_count": 165.0
     },
     "thresholds": {
       "parse_success_rate": 90.0
     },
     "llm_prompt": ""
   },
-  "diagnostics": [
-    {
-      "__dataclass__": "Diagnostic",
-      "__module__": "architecture_model.pipeline.protocol",
-      "severity": "warning",
-      "code": "parse-failed",
-      "message": "Parse failed: src/opencode_arch/cli/export_data.py: unindent does not match any outer indentation level (export_data.py, line 74)",
-      "context": {}
-    }
-  ],
+  "diagnostics": [],
   "uncertainties": [],
-  "input_hash": "164",
-  "duration_ms": 498,
+  "input_hash": "165",
+  "duration_ms": 521,
   "version": "1.0"
 }

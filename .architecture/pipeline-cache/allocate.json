@@ -9,7 +9,7 @@
         "__dataclass__": "ComponentAllocation",
         "__module__": "architecture_model.pipeline.allocate_types",
         "id": "COMP-2",
-        "name": "Benchmark Execution Scripts",
+        "name": "Benchmark Scripts",
         "capability_id": "CAP-2",
         "files": [
           "scripts/benchmark_economy.py",
@@ -36,7 +36,7 @@
         "__dataclass__": "ComponentAllocation",
         "__module__": "architecture_model.pipeline.allocate_types",
         "id": "COMP-3-2",
-        "name": "LLM Prompt Relay",
+        "name": "LLM Integration Layer",
         "capability_id": "CAP-3",
         "files": [
           "src/opencode_arch/llm/cache.py",
@@ -166,6 +166,7 @@
           "src/opencode_arch/cli/confidence.py",
           "src/opencode_arch/cli/docs.py",
           "src/opencode_arch/cli/docs_validator.py",
+          "src/opencode_arch/cli/export_data.py",
           "src/opencode_arch/cli/extract.py",
           "src/opencode_arch/cli/gap_analyzer.py",
           "src/opencode_arch/cli/generate.py",
@@ -246,7 +247,7 @@
   },
   "diagnostics": [],
   "uncertainties": [],
-  "input_hash": "79",
+  "input_hash": "80",
   "duration_ms": 0,
   "version": "1.0"
 }

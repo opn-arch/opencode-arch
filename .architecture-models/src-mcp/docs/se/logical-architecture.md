@@ -2,10 +2,10 @@
 document: Logical Architecture
 system: Src (mcp)
 system_id: SYS-unknown
-generated_at: 2026-08-18T20:07:48Z
+generated_at: 2026-08-18T23:31:31Z
 generator_version: 0.3.0
 model_hash: 5baae539a353
-edition: 3
+edition: 5
 ---
 
 > **Model Completeness: F (0%)**
@@ -69,114 +69,114 @@ edition: 3
 
 ```mermaid
 graph TD
-    src-mcp-COMP-27["Trace Requirements"]
-    src-mcp-COMP-29["Infrastructure"]
-    src-mcp-COMP-27 --> src-mcp-COMP-29
     src-mcp-COMP-1["Quality"]
-    src-mcp-COMP-23["Scan"]
-    src-mcp-COMP-1 --> src-mcp-COMP-23
+    src-mcp-COMP-18["Llm Audit"]
+    src-mcp-COMP-1 --> src-mcp-COMP-18
     src-mcp-COMP-24["Slice"]
-    src-mcp-COMP-13["Gate"]
-    src-mcp-COMP-24 --> src-mcp-COMP-13
-    src-mcp-COMP-19["Log"]
-    src-mcp-COMP-24 --> src-mcp-COMP-19
-    src-mcp-COMP-25["Stats"]
-    src-mcp-COMP-1 --> src-mcp-COMP-25
-    src-mcp-COMP-6["Decompose"]
-    src-mcp-COMP-24 --> src-mcp-COMP-6
-    src-mcp-COMP-22["Require"]
-    src-mcp-COMP-27 --> src-mcp-COMP-22
-    src-mcp-COMP-9["Evaluate"]
-    src-mcp-COMP-1 --> src-mcp-COMP-9
-    src-mcp-COMP-1 --> src-mcp-COMP-22
-    src-mcp-COMP-14["Generate"]
-    src-mcp-COMP-14 --> src-mcp-COMP-29
-    src-mcp-COMP-27 --> src-mcp-COMP-1
+    src-mcp-COMP-1 --> src-mcp-COMP-24
+    src-mcp-COMP-16["Ingest"]
+    src-mcp-COMP-29["Infrastructure"]
+    src-mcp-COMP-16 --> src-mcp-COMP-29
+    src-mcp-COMP-1 --> src-mcp-COMP-16
     src-mcp-COMP-28["Validate"]
     src-mcp-COMP-1 --> src-mcp-COMP-28
-    src-mcp-COMP-11["Extract"]
-    src-mcp-COMP-24 --> src-mcp-COMP-11
-    src-mcp-COMP-11 --> src-mcp-COMP-29
-    src-mcp-COMP-1 --> src-mcp-COMP-14
-    src-mcp-COMP-24 --> src-mcp-COMP-27
-    src-mcp-COMP-4["Check"]
-    src-mcp-COMP-1 --> src-mcp-COMP-4
-    src-mcp-COMP-17["Learn"]
-    src-mcp-COMP-24 --> src-mcp-COMP-17
-    src-mcp-COMP-26["Sync"]
-    src-mcp-COMP-7["Diff"]
-    src-mcp-COMP-26 --> src-mcp-COMP-7
-    src-mcp-COMP-24 --> src-mcp-COMP-7
-    src-mcp-COMP-8["Docs"]
-    src-mcp-COMP-24 --> src-mcp-COMP-8
-    src-mcp-COMP-18["Llm Audit"]
-    src-mcp-COMP-24 --> src-mcp-COMP-18
-    src-mcp-COMP-29 --> src-mcp-COMP-1
-    src-mcp-COMP-3["Author"]
-    src-mcp-COMP-24 --> src-mcp-COMP-3
-    src-mcp-COMP-1 --> src-mcp-COMP-26
+    src-mcp-COMP-10["Export"]
+    src-mcp-COMP-10 --> src-mcp-COMP-1
+    src-mcp-COMP-23["Scan"]
     src-mcp-COMP-23 --> src-mcp-COMP-29
-    src-mcp-COMP-11 --> src-mcp-COMP-1
-    src-mcp-COMP-12["Feedback"]
-    src-mcp-COMP-24 --> src-mcp-COMP-12
-    src-mcp-COMP-8 --> src-mcp-COMP-29
-    src-mcp-COMP-24 --> src-mcp-COMP-23
     src-mcp-COMP-21["Regen Score"]
     src-mcp-COMP-1 --> src-mcp-COMP-21
-    src-mcp-COMP-2["Assess"]
-    src-mcp-COMP-1 --> src-mcp-COMP-2
-    src-mcp-COMP-16["Ingest"]
-    src-mcp-COMP-1 --> src-mcp-COMP-16
-    src-mcp-COMP-24 --> src-mcp-COMP-25
-    src-mcp-COMP-24 --> src-mcp-COMP-9
-    src-mcp-COMP-20["Pipeline"]
-    src-mcp-COMP-1 --> src-mcp-COMP-20
     src-mcp-COMP-23 --> src-mcp-COMP-1
-    src-mcp-COMP-24 --> src-mcp-COMP-22
-    src-mcp-COMP-8 --> src-mcp-COMP-1
-    src-mcp-COMP-14 --> src-mcp-COMP-1
-    src-mcp-COMP-6 --> src-mcp-COMP-29
-    src-mcp-COMP-15["Group"]
-    src-mcp-COMP-1 --> src-mcp-COMP-15
-    src-mcp-COMP-5["Correct"]
-    src-mcp-COMP-1 --> src-mcp-COMP-5
-    src-mcp-COMP-24 --> src-mcp-COMP-28
-    src-mcp-COMP-20 --> src-mcp-COMP-29
-    src-mcp-COMP-10["Export"]
-    src-mcp-COMP-10 --> src-mcp-COMP-29
-    src-mcp-COMP-24 --> src-mcp-COMP-14
+    src-mcp-COMP-4["Check"]
     src-mcp-COMP-24 --> src-mcp-COMP-4
-    src-mcp-COMP-6 --> src-mcp-COMP-1
-    src-mcp-COMP-1 --> src-mcp-COMP-24
-    src-mcp-COMP-1 --> src-mcp-COMP-10
-    src-mcp-COMP-15 --> src-mcp-COMP-29
-    src-mcp-COMP-24 --> src-mcp-COMP-26
-    src-mcp-COMP-4 --> src-mcp-COMP-29
-    src-mcp-COMP-16 --> src-mcp-COMP-29
-    src-mcp-COMP-18 --> src-mcp-COMP-29
-    src-mcp-COMP-1 --> src-mcp-COMP-13
+    src-mcp-COMP-20["Pipeline"]
     src-mcp-COMP-20 --> src-mcp-COMP-1
-    src-mcp-COMP-1 --> src-mcp-COMP-19
-    src-mcp-COMP-24 --> src-mcp-COMP-21
-    src-mcp-COMP-10 --> src-mcp-COMP-1
+    src-mcp-COMP-1 --> src-mcp-COMP-4
+    src-mcp-COMP-11["Extract"]
+    src-mcp-COMP-11 --> src-mcp-COMP-29
+    src-mcp-COMP-3["Author"]
+    src-mcp-COMP-24 --> src-mcp-COMP-3
+    src-mcp-COMP-14["Generate"]
+    src-mcp-COMP-1 --> src-mcp-COMP-14
+    src-mcp-COMP-11 --> src-mcp-COMP-1
+    src-mcp-COMP-2["Assess"]
     src-mcp-COMP-24 --> src-mcp-COMP-2
-    src-mcp-COMP-24 --> src-mcp-COMP-16
-    src-mcp-COMP-1 --> src-mcp-COMP-6
-    src-mcp-COMP-15 --> src-mcp-COMP-1
-    src-mcp-COMP-24 --> src-mcp-COMP-20
-    src-mcp-COMP-4 --> src-mcp-COMP-1
-    src-mcp-COMP-16 --> src-mcp-COMP-1
-    src-mcp-COMP-18 --> src-mcp-COMP-1
-    src-mcp-COMP-27 --> src-mcp-COMP-11
+    src-mcp-COMP-15["Group"]
     src-mcp-COMP-24 --> src-mcp-COMP-15
+    src-mcp-COMP-1 --> src-mcp-COMP-15
+    src-mcp-COMP-12["Feedback"]
+    src-mcp-COMP-24 --> src-mcp-COMP-12
+    src-mcp-COMP-5["Correct"]
     src-mcp-COMP-24 --> src-mcp-COMP-5
-    src-mcp-COMP-1 --> src-mcp-COMP-11
-    src-mcp-COMP-1 --> src-mcp-COMP-27
-    src-mcp-COMP-1 --> src-mcp-COMP-17
-    src-mcp-COMP-1 --> src-mcp-COMP-7
-    src-mcp-COMP-1 --> src-mcp-COMP-8
-    src-mcp-COMP-1 --> src-mcp-COMP-18
-    src-mcp-COMP-1 --> src-mcp-COMP-3
-    src-mcp-COMP-24 --> src-mcp-COMP-10
     src-mcp-COMP-1 --> src-mcp-COMP-12
+    src-mcp-COMP-4 --> src-mcp-COMP-29
+    src-mcp-COMP-1 --> src-mcp-COMP-5
+    src-mcp-COMP-14 --> src-mcp-COMP-29
+    src-mcp-COMP-16 --> src-mcp-COMP-1
+    src-mcp-COMP-27["Trace Requirements"]
+    src-mcp-COMP-27 --> src-mcp-COMP-11
+    src-mcp-COMP-22["Require"]
+    src-mcp-COMP-27 --> src-mcp-COMP-22
+    src-mcp-COMP-26["Sync"]
+    src-mcp-COMP-24 --> src-mcp-COMP-26
+    src-mcp-COMP-9["Evaluate"]
+    src-mcp-COMP-24 --> src-mcp-COMP-9
+    src-mcp-COMP-1 --> src-mcp-COMP-26
+    src-mcp-COMP-24 --> src-mcp-COMP-22
+    src-mcp-COMP-8["Docs"]
+    src-mcp-COMP-24 --> src-mcp-COMP-8
+    src-mcp-COMP-24 --> src-mcp-COMP-27
+    src-mcp-COMP-1 --> src-mcp-COMP-27
+    src-mcp-COMP-24 --> src-mcp-COMP-23
+    src-mcp-COMP-15 --> src-mcp-COMP-29
+    src-mcp-COMP-1 --> src-mcp-COMP-3
+    src-mcp-COMP-1 --> src-mcp-COMP-23
+    src-mcp-COMP-17["Learn"]
+    src-mcp-COMP-24 --> src-mcp-COMP-17
+    src-mcp-COMP-8 --> src-mcp-COMP-29
+    src-mcp-COMP-15 --> src-mcp-COMP-1
+    src-mcp-COMP-24 --> src-mcp-COMP-10
+    src-mcp-COMP-1 --> src-mcp-COMP-2
+    src-mcp-COMP-25["Stats"]
+    src-mcp-COMP-24 --> src-mcp-COMP-25
+    src-mcp-COMP-7["Diff"]
+    src-mcp-COMP-24 --> src-mcp-COMP-7
+    src-mcp-COMP-1 --> src-mcp-COMP-25
+    src-mcp-COMP-1 --> src-mcp-COMP-7
+    src-mcp-COMP-4 --> src-mcp-COMP-1
+    src-mcp-COMP-6["Decompose"]
+    src-mcp-COMP-24 --> src-mcp-COMP-6
+    src-mcp-COMP-1 --> src-mcp-COMP-6
+    src-mcp-COMP-18 --> src-mcp-COMP-29
+    src-mcp-COMP-14 --> src-mcp-COMP-1
+    src-mcp-COMP-18 --> src-mcp-COMP-1
+    src-mcp-COMP-24 --> src-mcp-COMP-11
+    src-mcp-COMP-1 --> src-mcp-COMP-9
+    src-mcp-COMP-1 --> src-mcp-COMP-11
+    src-mcp-COMP-1 --> src-mcp-COMP-22
+    src-mcp-COMP-24 --> src-mcp-COMP-18
+    src-mcp-COMP-1 --> src-mcp-COMP-8
+    src-mcp-COMP-24 --> src-mcp-COMP-20
+    src-mcp-COMP-24 --> src-mcp-COMP-16
+    src-mcp-COMP-1 --> src-mcp-COMP-20
+    src-mcp-COMP-24 --> src-mcp-COMP-28
+    src-mcp-COMP-6 --> src-mcp-COMP-29
+    src-mcp-COMP-1 --> src-mcp-COMP-17
+    src-mcp-COMP-8 --> src-mcp-COMP-1
+    src-mcp-COMP-1 --> src-mcp-COMP-10
+    src-mcp-COMP-13["Gate"]
+    src-mcp-COMP-24 --> src-mcp-COMP-13
+    src-mcp-COMP-27 --> src-mcp-COMP-29
+    src-mcp-COMP-6 --> src-mcp-COMP-1
+    src-mcp-COMP-29 --> src-mcp-COMP-1
+    src-mcp-COMP-1 --> src-mcp-COMP-13
+    src-mcp-COMP-27 --> src-mcp-COMP-1
+    src-mcp-COMP-10 --> src-mcp-COMP-29
+    src-mcp-COMP-24 --> src-mcp-COMP-21
+    src-mcp-COMP-26 --> src-mcp-COMP-7
+    src-mcp-COMP-19["Log"]
+    src-mcp-COMP-24 --> src-mcp-COMP-19
+    src-mcp-COMP-20 --> src-mcp-COMP-29
+    src-mcp-COMP-1 --> src-mcp-COMP-19
+    src-mcp-COMP-24 --> src-mcp-COMP-14
 ```

@@ -171,6 +171,7 @@
           "src/opencode_arch/cli/confidence.py",
           "src/opencode_arch/cli/docs.py",
           "src/opencode_arch/cli/docs_validator.py",
+          "src/opencode_arch/cli/export_data.py",
           "src/opencode_arch/cli/extract.py",
           "src/opencode_arch/cli/gap_analyzer.py",
           "src/opencode_arch/cli/generate.py",
@@ -180,7 +181,7 @@
           "src/opencode_arch/cli/prompts.py",
           "src/opencode_arch/cli/regen_loop.py"
         ],
-        "complexity": 13.0,
+        "complexity": 14.0,
         "is_full_system": true,
         "sub_components": []
       }
@@ -334,8 +335,103 @@
     ],
     "inter_system_edges": [
       [
+        "SYS-src-(learning)",
+        "SYS-src-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(context)",
+        "SYS-src-(requirements)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(cli)",
+        "SYS-src-(llm)",
+        "depends-on"
+      ],
+      [
         "SYS-src-(mcp)",
+        "SYS-src-(cli)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(requirements)",
+        "SYS-src-(llm)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(context)",
+        "SYS-src-(mcp)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(mcp)",
+        "SYS-src-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(requirements)",
+        "SYS-src-(mcp)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(cli)",
+        "SYS-src-(mcp)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(artifacts)",
+        "SYS-src-(context)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(agent)",
+        "SYS-src-(mcp)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(learning)",
+        "SYS-src-(mcp)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(cli)",
         "SYS-src-(extract)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(agent)",
+        "SYS-src-(learning)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(extract)",
+        "SYS-src-(mcp)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(mcp)",
+        "SYS-src-(requirements)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(llm)",
+        "SYS-src-(mcp)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(mcp)",
+        "SYS-src-(llm)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(context)",
+        "SYS-src-(artifacts)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(cli)",
+        "SYS-src-(regen)",
         "depends-on"
       ],
       [
@@ -344,98 +440,13 @@
         "depends-on"
       ],
       [
-        "SYS-src-(agent)",
-        "SYS-src-(mcp)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(learning)",
-        "SYS-src-(mcp)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(extract)",
-        "SYS-src-(mcp)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(mcp)",
-        "SYS-src-(llm)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(requirements)",
-        "SYS-src-(runner)",
-        "depends-on"
-      ],
-      [
         "SYS-src-(cli)",
-        "SYS-src-(artifacts)",
-        "depends-on"
-      ],
-      [
         "SYS-src-(telemetry)",
-        "SYS-src-(runner)",
         "depends-on"
       ],
       [
         "SYS-src-(cli)",
-        "SYS-src-(runner)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(cli)",
-        "SYS-src-(regen)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(requirements)",
-        "SYS-src-(prompts)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(cli)",
-        "SYS-src-(prompts)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(mcp)",
         "SYS-src-(artifacts)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(mcp)",
-        "SYS-src-(requirements)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(requirements)",
-        "SYS-src-(cli)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(context)",
-        "SYS-src-(artifacts)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(artifacts)",
-        "SYS-src-(context)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(artifacts)",
-        "SYS-src-(runner)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(mcp)",
-        "SYS-src-(context)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(context)",
-        "SYS-src-(requirements)",
         "depends-on"
       ],
       [
@@ -445,17 +456,22 @@
       ],
       [
         "SYS-src-(mcp)",
-        "SYS-src-(runner)",
+        "SYS-src-(extract)",
         "depends-on"
       ],
       [
+        "SYS-src-(mcp)",
         "SYS-src-(context)",
-        "SYS-src-(runner)",
         "depends-on"
       ],
       [
         "SYS-src-(requirements)",
-        "SYS-src-(mcp)",
+        "SYS-src-(prompts)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(cli)",
+        "SYS-src-(prompts)",
         "depends-on"
       ],
       [
@@ -464,8 +480,38 @@
         "depends-on"
       ],
       [
-        "SYS-src-(agent)",
+        "SYS-src-(artifacts)",
+        "SYS-src-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(mcp)",
+        "SYS-src-(artifacts)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(telemetry)",
+        "SYS-src-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(requirements)",
+        "SYS-src-(cli)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(context)",
+        "SYS-src-(runner)",
+        "depends-on"
+      ],
+      [
+        "SYS-src-(cli)",
+        "SYS-src-(runner)",
+        "depends-on"
+      ],
+      [
         "SYS-src-(learning)",
+        "SYS-src-(cli)",
         "depends-on"
       ],
       [
@@ -474,53 +520,8 @@
         "depends-on"
       ],
       [
-        "SYS-src-(learning)",
-        "SYS-src-(runner)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(cli)",
-        "SYS-src-(mcp)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(llm)",
-        "SYS-src-(mcp)",
-        "depends-on"
-      ],
-      [
         "SYS-src-(requirements)",
-        "SYS-src-(llm)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(cli)",
-        "SYS-src-(extract)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(cli)",
-        "SYS-src-(telemetry)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(mcp)",
-        "SYS-src-(cli)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(cli)",
-        "SYS-src-(llm)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(learning)",
-        "SYS-src-(cli)",
-        "depends-on"
-      ],
-      [
-        "SYS-src-(context)",
-        "SYS-src-(mcp)",
+        "SYS-src-(runner)",
         "depends-on"
       ],
       [

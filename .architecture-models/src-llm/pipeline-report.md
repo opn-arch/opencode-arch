@@ -1,7 +1,7 @@
 # Pipeline Report: Src (llm)
 
-**Generated:** 2026-08-18T20:07:46Z
-**Total Duration:** 185ms
+**Generated:** 2026-08-18T23:31:27Z
+**Total Duration:** 186ms
 **Stages:** 2
 
 ## LLM Summary
@@ -12,11 +12,11 @@ No LLM calls — deterministic pipeline run
 
 | Stage | Score | Duration | LLM Calls |
 |-------|-------|----------|-----------|
-| observe | 100 | 185ms | 0 |
+| observe | 100 | 186ms | 0 |
 | infer | 40 | 0ms | 0 |
 
 ## Stage: observe
-**Score:** 100 | **Duration:** 185ms
+**Score:** 100 | **Duration:** 186ms
 
 ### Deterministic Findings
 - Discovered 5 modules

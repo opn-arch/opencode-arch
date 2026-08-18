@@ -784,3 +784,21 @@ relationships:
 - from: COMP-9
   to: REQ-Q19
   type: satisfies
+- from: COMP-13
+  to: REQ-E1
+  type: satisfies
+- from: COMP-12
+  to: REQ-Q13
+  type: satisfies
+- from: COMP-1
+  to: REQ-Q16
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q17
+  type: satisfies
+- from: COMP-9
+  to: REQ-Q18
+  type: satisfies
+- from: COMP-15
+  to: REQ-Q19
+  type: satisfies

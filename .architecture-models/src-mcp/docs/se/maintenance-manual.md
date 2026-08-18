@@ -2,10 +2,10 @@
 document: Maintenance Manual
 system: Src (mcp)
 system_id: SYS-unknown
-generated_at: 2026-08-18T20:07:48Z
+generated_at: 2026-08-18T23:31:31Z
 generator_version: 0.3.0
 model_hash: 5baae539a353
-edition: 3
+edition: 5
 ---
 
 > **Model Completeness: F (0%)**
@@ -56,35 +56,35 @@ edition: 3
 
 | Component | Depends On (fan-out) | Depended By (fan-in) | Impact Risk |
 |-----------|---------------------|---------------------|-------------|
-| Quality | Scan, Stats, Evaluate, Require, Validate, Generate, Check, Sync, Regen Score, Assess, Ingest, Pipeline, Group, Correct, Slice, Export, Gate, Log, Decompose, Extract, Trace Requirements, Learn, Diff, Docs, Llm Audit, Author, Feedback | Trace Requirements, Infrastructure, Extract, Scan, Docs, Generate, Decompose, Pipeline, Export, Group, Check, Ingest, Llm Audit | HIGH |
-| Assess | — | Quality, Slice | MEDIUM |
+| Quality | Llm Audit, Slice, Ingest, Validate, Regen Score, Check, Generate, Group, Feedback, Correct, Sync, Trace Requirements, Author, Scan, Assess, Stats, Diff, Decompose, Evaluate, Extract, Require, Docs, Pipeline, Learn, Export, Gate, Log | Export, Scan, Pipeline, Extract, Ingest, Group, Check, Generate, Llm Audit, Docs, Decompose, Infrastructure, Trace Requirements | HIGH |
+| Assess | — | Slice, Quality | MEDIUM |
 | Author | — | Slice, Quality | MEDIUM |
-| Check | Infrastructure, Quality | Quality, Slice | MEDIUM |
-| Correct | — | Quality, Slice | MEDIUM |
+| Check | Infrastructure, Quality | Slice, Quality | MEDIUM |
+| Correct | — | Slice, Quality | MEDIUM |
 | Decompose | Infrastructure, Quality | Slice, Quality | MEDIUM |
-| Diff | — | Sync, Slice, Quality | MEDIUM |
+| Diff | — | Slice, Quality, Sync | MEDIUM |
 | Docs | Infrastructure, Quality | Slice, Quality | MEDIUM |
-| Evaluate | — | Quality, Slice | MEDIUM |
-| Export | Infrastructure, Quality | Quality, Slice | MEDIUM |
-| Extract | Infrastructure, Quality | Slice, Trace Requirements, Quality | MEDIUM |
+| Evaluate | — | Slice, Quality | MEDIUM |
+| Export | Quality, Infrastructure | Slice, Quality | MEDIUM |
+| Extract | Infrastructure, Quality | Trace Requirements, Slice, Quality | MEDIUM |
 | Feedback | — | Slice, Quality | MEDIUM |
 | Gate | — | Slice, Quality | MEDIUM |
 | Generate | Infrastructure, Quality | Quality, Slice | MEDIUM |
-| Group | Infrastructure, Quality | Quality, Slice | MEDIUM |
+| Group | Infrastructure, Quality | Slice, Quality | MEDIUM |
 | Ingest | Infrastructure, Quality | Quality, Slice | MEDIUM |
 | Learn | — | Slice, Quality | MEDIUM |
-| Llm Audit | Infrastructure, Quality | Slice, Quality | MEDIUM |
+| Llm Audit | Infrastructure, Quality | Quality, Slice | MEDIUM |
 | Log | — | Slice, Quality | MEDIUM |
-| Pipeline | Infrastructure, Quality | Quality, Slice | MEDIUM |
+| Pipeline | Quality, Infrastructure | Slice, Quality | MEDIUM |
 | Regen Score | — | Quality, Slice | MEDIUM |
-| Require | — | Trace Requirements, Quality, Slice | MEDIUM |
-| Scan | Infrastructure, Quality | Quality, Slice | MEDIUM |
-| Slice | Gate, Log, Decompose, Extract, Trace Requirements, Learn, Diff, Docs, Llm Audit, Author, Feedback, Scan, Stats, Evaluate, Require, Validate, Generate, Check, Sync, Regen Score, Assess, Ingest, Pipeline, Group, Correct, Export | Quality | LOW |
-| Stats | — | Quality, Slice | MEDIUM |
-| Sync | Diff | Quality, Slice | MEDIUM |
-| Trace Requirements | Infrastructure, Require, Quality, Extract | Slice, Quality | MEDIUM |
+| Require | — | Trace Requirements, Slice, Quality | MEDIUM |
+| Scan | Infrastructure, Quality | Slice, Quality | MEDIUM |
+| Slice | Check, Author, Assess, Group, Feedback, Correct, Sync, Evaluate, Require, Docs, Trace Requirements, Scan, Learn, Export, Stats, Diff, Decompose, Extract, Llm Audit, Pipeline, Ingest, Validate, Gate, Regen Score, Log, Generate | Quality | LOW |
+| Stats | — | Slice, Quality | MEDIUM |
+| Sync | Diff | Slice, Quality | MEDIUM |
+| Trace Requirements | Extract, Require, Infrastructure, Quality | Slice, Quality | MEDIUM |
 | Validate | — | Quality, Slice | MEDIUM |
-| Infrastructure | Quality | Trace Requirements, Generate, Extract, Scan, Docs, Decompose, Pipeline, Export, Group, Check, Ingest, Llm Audit | HIGH |
+| Infrastructure | Quality | Ingest, Scan, Extract, Check, Generate, Group, Docs, Llm Audit, Decompose, Trace Requirements, Export, Pipeline | HIGH |
 
 ## Modification Procedures
 
@@ -94,13 +94,13 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/quality.py`
-**Downstream dependents (must re-test):** Trace Requirements, Infrastructure, Extract, Scan, Docs, Generate, Decompose, Pipeline, Export, Group, Check, Ingest, Llm Audit
+**Downstream dependents (must re-test):** Export, Scan, Pipeline, Extract, Ingest, Group, Check, Generate, Llm Audit, Docs, Decompose, Infrastructure, Trace Requirements
 
 ### Assess (src-mcp-COMP-2)
 
 **Files:**
 - `src/opencode_arch/mcp/tools/assess.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Author (src-mcp-COMP-3)
 
@@ -112,13 +112,13 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/check.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Correct (src-mcp-COMP-5)
 
 **Files:**
 - `src/opencode_arch/mcp/tools/correct.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Decompose (src-mcp-COMP-6)
 
@@ -130,7 +130,7 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/diff.py`
-**Downstream dependents (must re-test):** Sync, Slice, Quality
+**Downstream dependents (must re-test):** Slice, Quality, Sync
 
 ### Docs (src-mcp-COMP-8)
 
@@ -142,19 +142,19 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/evaluate.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Export (src-mcp-COMP-10)
 
 **Files:**
 - `src/opencode_arch/mcp/tools/export.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Extract (src-mcp-COMP-11)
 
 **Files:**
 - `src/opencode_arch/mcp/tools/extract.py`
-**Downstream dependents (must re-test):** Slice, Trace Requirements, Quality
+**Downstream dependents (must re-test):** Trace Requirements, Slice, Quality
 
 ### Feedback (src-mcp-COMP-12)
 
@@ -178,7 +178,7 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/group.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Ingest (src-mcp-COMP-16)
 
@@ -196,7 +196,7 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/llm_audit.py`
-**Downstream dependents (must re-test):** Slice, Quality
+**Downstream dependents (must re-test):** Quality, Slice
 
 ### Log (src-mcp-COMP-19)
 
@@ -208,7 +208,7 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/pipeline.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Regen Score (src-mcp-COMP-21)
 
@@ -220,13 +220,13 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/require.py`
-**Downstream dependents (must re-test):** Trace Requirements, Quality, Slice
+**Downstream dependents (must re-test):** Trace Requirements, Slice, Quality
 
 ### Scan (src-mcp-COMP-23)
 
 **Files:**
 - `src/opencode_arch/mcp/tools/scan.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Slice (src-mcp-COMP-24)
 
@@ -238,13 +238,13 @@ For each component, the following files and dependencies must be considered:
 
 **Files:**
 - `src/opencode_arch/mcp/tools/stats.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Sync (src-mcp-COMP-26)
 
 **Files:**
 - `src/opencode_arch/mcp/tools/sync.py`
-**Downstream dependents (must re-test):** Quality, Slice
+**Downstream dependents (must re-test):** Slice, Quality
 
 ### Trace Requirements (src-mcp-COMP-27)
 
@@ -263,7 +263,7 @@ For each component, the following files and dependencies must be considered:
 **Files:**
 - `src/opencode_arch/mcp/__main__.py`
 - `src/opencode_arch/mcp/server.py`
-**Downstream dependents (must re-test):** Trace Requirements, Generate, Extract, Scan, Docs, Decompose, Pipeline, Export, Group, Check, Ingest, Llm Audit
+**Downstream dependents (must re-test):** Ingest, Scan, Extract, Check, Generate, Group, Docs, Llm Audit, Decompose, Trace Requirements, Export, Pipeline
 
 ## Known Constraints
 

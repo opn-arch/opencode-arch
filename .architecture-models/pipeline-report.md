@@ -1,8 +1,8 @@
 # Pipeline Report: opencode-arch
 
-**Generated:** 2026-08-18T20:07:46Z
-**Total Duration:** 1727ms
-**Stages:** 7
+**Generated:** 2026-08-18T23:31:28Z
+**Total Duration:** 1746ms
+**Stages:** 9
 
 ## LLM Summary
 
@@ -12,33 +12,35 @@
 | Total Tokens | 0 (prompt: 0, completion: 0) |
 | Models Used | unknown |
 | Cache Hits | 0/7 |
-| Total LLM Duration | 15,830ms |
+| Total LLM Duration | 14,521ms |
 
 ## Stage Scores
 
 | Stage | Score | Duration | LLM Calls |
 |-------|-------|----------|-----------|
-| observe | 99 | 498ms | 0 |
+| observe | 100 | 521ms | 0 |
 | infer | 58 | 1ms | 3 |
 | allocate | 83 | 0ms | 4 |
-| relate | 100 | 65ms | 0 |
+| contract | 71 | 0ms | 0 |
+| relate | 100 | 63ms | 0 |
 | specify | 50 | 0ms | 0 |
 | decompose | 100.0 | 0ms | 0 |
-| synthesize | 100.0 | 1163ms | 0 |
+| validate | 80 | 0ms | 0 |
+| synthesize | 100.0 | 1161ms | 0 |
 
 ## Stage: observe
-**Score:** 99 | **Duration:** 498ms
+**Score:** 100 | **Duration:** 521ms
 
 ### Deterministic Findings
-- Discovered 163 modules
-- 371 functions, 149 classes
-- 146 import edges
+- Discovered 165 modules
+- 373 functions, 152 classes
+- 147 import edges
 
 ### LLM Calls
 *(none)*
 
 ### Diagnostics
-- ⚠️ parse-failed: Parse failed: src/opencode_arch/cli/export_data.py: unindent does not match any outer indentation level (export_data.py, line 74)
+*(none)*
 
 ## Stage: infer
 **Score:** 58 | **Duration:** 1ms
@@ -50,15 +52,15 @@
 
 ### LLM Calls (3)
 
-#### 1. Given a software component with these files: package_group, suggest a specific, descriptive name (2- (2,253ms)
+#### 1. Given a software component with these files: package_group, suggest a specific, descriptive name (2- (2,036ms)
 - **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
 - **Result:** 1 items produced (confidence: 0.70)
 
-#### 2. Given a software component with these files: package_group, suggest a specific, descriptive name (2- (2,064ms)
+#### 2. Given a software component with these files: package_group, suggest a specific, descriptive name (2- (1,706ms)
 - **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
 - **Result:** 1 items produced (confidence: 0.70)
 
-#### 3. Given a software component with these files: cli_pattern, suggest a specific, descriptive name (2-4  (2,083ms)
+#### 3. Given a software component with these files: cli_pattern, suggest a specific, descriptive name (2-4  (2,133ms)
 - **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
 - **Result:** 1 items produced (confidence: 0.70)
 
@@ -91,6 +93,7 @@
 - ambiguous_module: src/opencode_arch/requirements/retroactive.py has no clear capability affiliation
 - ambiguous_module: src/opencode_arch/cli/metrics.py has no clear capability affiliation
 - ambiguous_module: src/opencode_arch/cli/regen_loop.py has no clear capability affiliation
+- ambiguous_module: src/opencode_arch/cli/export_data.py has no clear capability affiliation
 - ambiguous_module: src/opencode_arch/cli/confidence.py has no clear capability affiliation
 - ambiguous_module: src/opencode_arch/cli/generate.py has no clear capability affiliation
 - ambiguous_module: src/opencode_arch/cli/docs.py has no clear capability affiliation
@@ -146,27 +149,39 @@
 
 ### LLM Calls (4)
 
-#### 1. Given a software component containing files: [scripts/benchmark_economy.py, scripts/run_benchmark.py (3,324ms)
+#### 1. Given a software component containing files: [scripts/benchmark_economy.py, scripts/run_benchmark.py (2,137ms)
 - **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
 - **Result:** 1 items produced (confidence: 0.70)
 
-#### 2. Given a software component containing files: [src/opencode_arch/llm/cache.py, src/opencode_arch/llm/ (2,143ms)
+#### 2. Given a software component containing files: [src/opencode_arch/llm/cache.py, src/opencode_arch/llm/ (2,074ms)
 - **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
 - **Result:** 1 items produced (confidence: 0.70)
 
-#### 3. Given a software component containing files: [src/opencode_arch/mcp/__main__.py, src/opencode_arch/m (1,802ms)
+#### 3. Given a software component containing files: [src/opencode_arch/mcp/__main__.py, src/opencode_arch/m (2,032ms)
 - **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
 - **Result:** 1 items produced (confidence: 0.70)
 
-#### 4. Given a software component containing files: [src/opencode_arch/cli/bench.py, src/opencode_arch/cli/ (2,161ms)
+#### 4. Given a software component containing files: [src/opencode_arch/cli/bench.py, src/opencode_arch/cli/ (2,403ms)
 - **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
 - **Result:** 1 items produced (confidence: 0.70)
 
 ### Diagnostics
 *(none)*
 
+## Stage: contract
+**Score:** 71 | **Duration:** 0ms
+
+### Deterministic Findings
+- 61 contracts
+
+### LLM Calls
+*(none)*
+
+### Diagnostics
+*(none)*
+
 ## Stage: relate
-**Score:** 100 | **Duration:** 65ms
+**Score:** 100 | **Duration:** 63ms
 
 ### Deterministic Findings
 - 39 depends-on relationships
@@ -205,8 +220,21 @@
 ### Diagnostics
 - ℹ️ HIERARCHY_CREATED: Created 2 sub-components across 1 components
 
+## Stage: validate
+**Score:** 80 | **Duration:** 0ms
+
+### Deterministic Findings
+- Score: 80/100
+- 4 issues
+
+### LLM Calls
+*(none)*
+
+### Diagnostics
+*(none)*
+
 ## Stage: synthesize
-**Score:** 100.0 | **Duration:** 1163ms
+**Score:** 100.0 | **Duration:** 1161ms
 
 ### Deterministic Findings
 *(none)*

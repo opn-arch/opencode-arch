@@ -26,6 +26,11 @@
       "classes": 2
     },
     {
+      "file": "src/opencode_arch/cli/export_data.py",
+      "functions": 1,
+      "classes": 0
+    },
+    {
       "file": "src/opencode_arch/cli/extract.py",
       "functions": 2,
       "classes": 0

@@ -2,15 +2,15 @@
 document: Artifact Traceability Map
 system: Src (cli)
 system_id: SYS-unknown
-generated_at: 2026-08-18T20:07:49Z
+generated_at: 2026-08-18T23:31:32Z
 generator_version: 0.3.0
-model_hash: 4a18118f967e
-edition: 3
+model_hash: b65cb1b8e8a2
+edition: 5
 ---
 
-> **Model Completeness: F (2%)**
+> **Model Completeness: F (1%)**
 > Some sections may be empty due to missing model entities.
-> - 13/13 components have no behavioral specification
+> - 14/14 components have no behavioral specification
 > - No interfaces defined on components → interface-spec doc empty
 > - No requirements defined
 > - Actors defined but missing goals/descriptions
@@ -22,8 +22,8 @@ edition: 3
 
 | Entity Type | Count | Feeds SE Documents |
 |-------------|-------|--------------------|
-| Components | 13 | Logical Architecture, Maintenance Manual, Operations Manual, Interface Specification |
-| Capabilities | 13 | ConOps, Functional Analysis, Requirements Analysis |
+| Components | 14 | Logical Architecture, Maintenance Manual, Operations Manual, Interface Specification |
+| Capabilities | 14 | ConOps, Functional Analysis, Requirements Analysis |
 | Behaviors | 1 | Use Cases, Functional Analysis, Verification & Validation |
 | Interfaces | 1 | Interface Specification, Logical Architecture |
 | Constraints | 0 | Requirements Analysis, Risk Assessment |
@@ -58,13 +58,13 @@ graph TD
 
 | Artifact | Components | Capabilities | Behaviors | Interfaces | Constraints | Requirements | Actors | Layers |
 |---|---|---|---|---|---|---|---|---|
-| ConOps | | **13** | | | | | **1** | |
-| Functional Analysis | | **13** | **1** | | | | | |
-| Interface Specification | **13** | | | **1** | | | | |
-| Logical Architecture | **13** | | | **1** | | | | **1** |
-| Maintenance Manual | **13** | | | | | | | |
-| Operations Manual | **13** | | | | | | | |
-| Requirements Analysis | | **13** | | | — | — | | |
+| ConOps | | **14** | | | | | **1** | |
+| Functional Analysis | | **14** | **1** | | | | | |
+| Interface Specification | **14** | | | **1** | | | | |
+| Logical Architecture | **14** | | | **1** | | | | **1** |
+| Maintenance Manual | **14** | | | | | | | |
+| Operations Manual | **14** | | | | | | | |
+| Requirements Analysis | | **14** | | | — | — | | |
 | Risk Assessment | | | | | — | | | |
 | Use Cases | | | **1** | | | | **1** | |
 | Verification & Validation | | | **1** | | | — | | |
@@ -73,9 +73,9 @@ graph TD
 
 | Relationship Type | Count | Connects |
 |-------------------|-------|----------|
-| depends-on | 44 | Component → Component |
-| contains | 13 | Unknown → Component |
-| realizes | 12 | Component → Capability |
+| depends-on | 48 | Component → Component |
+| contains | 14 | Unknown → Component |
+| realizes | 13 | Component → Capability |
 | uses | 4 | Component → Component |
 
 ## 5. Traceability Gaps
@@ -98,3 +98,15 @@ graph TD
 | `.architecture/pipeline-cache/` | Cached intermediate pipeline stage results | Pipeline (all stages) |
 | `.architecture/docs/se/` | Generated SE documents | SE doc generator |
 | `.architecture/learning/` | Accumulated heuristics and learnings | Learning subsystem |
+
+## LLM Review Status
+
+No LLM reviews available.
+
+## LLM Enrichment Provenance
+
+No LLM enrichment records available.
+
+## Review Details
+
+No review details available.

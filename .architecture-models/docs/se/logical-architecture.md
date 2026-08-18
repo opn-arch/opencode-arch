@@ -2,15 +2,15 @@
 document: Logical Architecture
 system: System
 system_id: SYS-unknown
-generated_at: 2026-08-18T20:07:47Z
+generated_at: 2026-08-18T23:31:28Z
 generator_version: 0.3.0
-model_hash: ceee27c08922
-edition: 5
+model_hash: efca59bc201d
+edition: 7
 ---
 
 > **Model Completeness: F (0%)**
 > Some sections may be empty due to missing model entities.
-> - 56/56 components have no behavioral specification
+> - 57/57 components have no behavioral specification
 > - No interfaces defined on components → interface-spec doc empty
 > - No requirements defined
 > - Actors defined but missing goals/descriptions
@@ -32,14 +32,14 @@ edition: 5
 | Component | Kind | Files | Responsibilities |
 |-----------|------|-------|------------------|
 | Src (artifacts) (COMP-3-1) | service | 5 files | — |
-| LLM Prompt Relay (COMP-3-2) | service | 5 files | — |
+| LLM Integration Layer (COMP-3-2) | service | 5 files | — |
 | Src (context) (COMP-3-3) | service | 3 files | — |
 | Src (learning) (COMP-3-4) | service | 7 files | — |
 | Src (runner) (COMP-3-5) | service | 2 files | — |
 | Src (agent) (COMP-3-6) | service | 1 files | — |
 | MCP Quality Server (COMP-3-7) | service | 30 files | — |
 | Src (requirements) (COMP-3-8) | service | 4 files | — |
-| CLI Commands (COMP-3-9) | service | 13 files | — |
+| CLI Commands (COMP-3-9) | service | 14 files | — |
 | Src (prompts) (COMP-3-10) | service | 1 files | — |
 | Src (extract) (COMP-3-11) | service | 1 files | — |
 | Src (telemetry) (COMP-3-12) | service | 3 files | — |
@@ -49,7 +49,7 @@ edition: 5
 
 | Component | Kind | Files | Responsibilities |
 |-----------|------|-------|------------------|
-| Benchmark Execution Scripts (COMP-2) | service | 2 files | — |
+| Benchmark Scripts (COMP-2) | service | 2 files | — |
 
 ### unassigned
 
@@ -89,14 +89,15 @@ edition: 5
 | Confidence (src-cli-COMP-3) | service | 1 files | — |
 | Docs (src-cli-COMP-4) | service | 1 files | — |
 | Docs Validator (src-cli-COMP-5) | service | 1 files | — |
-| Extract (src-cli-COMP-6) | service | 1 files | — |
-| Gap Analyzer (src-cli-COMP-7) | service | 1 files | — |
-| Generate (src-cli-COMP-8) | service | 1 files | — |
-| Launch (src-cli-COMP-9) | service | 1 files | — |
-| Main (src-cli-COMP-10) | service | 1 files | — |
-| Metrics (src-cli-COMP-11) | service | 1 files | — |
-| Regen Loop (src-cli-COMP-12) | service | 1 files | — |
-| Infrastructure (src-cli-COMP-13) | service | 1 files | — |
+| Export Data (src-cli-COMP-6) | service | 1 files | — |
+| Extract (src-cli-COMP-7) | service | 1 files | — |
+| Gap Analyzer (src-cli-COMP-8) | service | 1 files | — |
+| Generate (src-cli-COMP-9) | service | 1 files | — |
+| Launch (src-cli-COMP-10) | service | 1 files | — |
+| Main (src-cli-COMP-11) | service | 1 files | — |
+| Metrics (src-cli-COMP-12) | service | 1 files | — |
+| Regen Loop (src-cli-COMP-13) | service | 1 files | — |
+| Infrastructure (src-cli-COMP-14) | service | 1 files | — |
 
 ## Inter-Component Interfaces
 
@@ -108,170 +109,230 @@ edition: 5
 
 ```mermaid
 graph TD
-    src-mcp-COMP-27["Trace Requirements"]
-    src-mcp-COMP-29["Infrastructure"]
-    src-mcp-COMP-27 --> src-mcp-COMP-29
     src-mcp-COMP-1["Quality"]
-    src-mcp-COMP-23["Scan"]
-    src-mcp-COMP-1 --> src-mcp-COMP-23
+    src-mcp-COMP-18["Llm Audit"]
+    src-mcp-COMP-1 --> src-mcp-COMP-18
     src-mcp-COMP-24["Slice"]
-    src-mcp-COMP-13["Gate"]
-    src-mcp-COMP-24 --> src-mcp-COMP-13
-    src-mcp-COMP-19["Log"]
-    src-mcp-COMP-24 --> src-mcp-COMP-19
-    src-mcp-COMP-25["Stats"]
-    src-mcp-COMP-1 --> src-mcp-COMP-25
-    src-mcp-COMP-6["Decompose"]
-    src-mcp-COMP-24 --> src-mcp-COMP-6
-    src-mcp-COMP-22["Require"]
-    src-mcp-COMP-27 --> src-mcp-COMP-22
-    src-mcp-COMP-9["Evaluate"]
-    src-mcp-COMP-1 --> src-mcp-COMP-9
-    src-mcp-COMP-1 --> src-mcp-COMP-22
-    src-mcp-COMP-14["Generate"]
-    src-mcp-COMP-14 --> src-mcp-COMP-29
-    src-mcp-COMP-27 --> src-mcp-COMP-1
+    src-mcp-COMP-1 --> src-mcp-COMP-24
+    src-mcp-COMP-16["Ingest"]
+    src-mcp-COMP-29["Infrastructure"]
+    src-mcp-COMP-16 --> src-mcp-COMP-29
+    src-mcp-COMP-1 --> src-mcp-COMP-16
     src-mcp-COMP-28["Validate"]
     src-mcp-COMP-1 --> src-mcp-COMP-28
-    src-mcp-COMP-11["Extract"]
-    src-mcp-COMP-24 --> src-mcp-COMP-11
-    src-mcp-COMP-11 --> src-mcp-COMP-29
-    src-mcp-COMP-1 --> src-mcp-COMP-14
-    src-mcp-COMP-24 --> src-mcp-COMP-27
-    src-mcp-COMP-4["Check"]
-    src-mcp-COMP-1 --> src-mcp-COMP-4
-    src-mcp-COMP-17["Learn"]
-    src-mcp-COMP-24 --> src-mcp-COMP-17
-    src-mcp-COMP-26["Sync"]
-    src-mcp-COMP-7["Diff"]
-    src-mcp-COMP-26 --> src-mcp-COMP-7
-    src-mcp-COMP-24 --> src-mcp-COMP-7
-    src-mcp-COMP-8["Docs"]
-    src-mcp-COMP-24 --> src-mcp-COMP-8
-    src-mcp-COMP-18["Llm Audit"]
-    src-mcp-COMP-24 --> src-mcp-COMP-18
-    src-mcp-COMP-29 --> src-mcp-COMP-1
-    src-mcp-COMP-3["Author"]
-    src-mcp-COMP-24 --> src-mcp-COMP-3
-    src-mcp-COMP-1 --> src-mcp-COMP-26
+    src-mcp-COMP-10["Export"]
+    src-mcp-COMP-10 --> src-mcp-COMP-1
+    src-mcp-COMP-23["Scan"]
     src-mcp-COMP-23 --> src-mcp-COMP-29
-    src-mcp-COMP-11 --> src-mcp-COMP-1
-    src-mcp-COMP-12["Feedback"]
-    src-mcp-COMP-24 --> src-mcp-COMP-12
-    src-mcp-COMP-8 --> src-mcp-COMP-29
-    src-mcp-COMP-24 --> src-mcp-COMP-23
     src-mcp-COMP-21["Regen Score"]
     src-mcp-COMP-1 --> src-mcp-COMP-21
-    src-mcp-COMP-2["Assess"]
-    src-mcp-COMP-1 --> src-mcp-COMP-2
-    src-mcp-COMP-16["Ingest"]
-    src-mcp-COMP-1 --> src-mcp-COMP-16
-    src-mcp-COMP-24 --> src-mcp-COMP-25
-    src-mcp-COMP-24 --> src-mcp-COMP-9
-    src-mcp-COMP-20["Pipeline"]
-    src-mcp-COMP-1 --> src-mcp-COMP-20
     src-mcp-COMP-23 --> src-mcp-COMP-1
-    src-mcp-COMP-24 --> src-mcp-COMP-22
-    src-mcp-COMP-8 --> src-mcp-COMP-1
-    src-mcp-COMP-14 --> src-mcp-COMP-1
-    src-mcp-COMP-6 --> src-mcp-COMP-29
-    src-mcp-COMP-15["Group"]
-    src-mcp-COMP-1 --> src-mcp-COMP-15
-    src-mcp-COMP-5["Correct"]
-    src-mcp-COMP-1 --> src-mcp-COMP-5
-    src-mcp-COMP-24 --> src-mcp-COMP-28
-    src-mcp-COMP-20 --> src-mcp-COMP-29
-    src-mcp-COMP-10["Export"]
-    src-mcp-COMP-10 --> src-mcp-COMP-29
-    src-mcp-COMP-24 --> src-mcp-COMP-14
+    src-mcp-COMP-4["Check"]
     src-mcp-COMP-24 --> src-mcp-COMP-4
-    src-mcp-COMP-6 --> src-mcp-COMP-1
-    src-mcp-COMP-1 --> src-mcp-COMP-24
-    src-mcp-COMP-1 --> src-mcp-COMP-10
-    src-mcp-COMP-15 --> src-mcp-COMP-29
-    src-mcp-COMP-24 --> src-mcp-COMP-26
-    src-mcp-COMP-4 --> src-mcp-COMP-29
-    src-mcp-COMP-16 --> src-mcp-COMP-29
-    src-mcp-COMP-18 --> src-mcp-COMP-29
-    src-mcp-COMP-1 --> src-mcp-COMP-13
+    src-mcp-COMP-20["Pipeline"]
     src-mcp-COMP-20 --> src-mcp-COMP-1
-    src-mcp-COMP-1 --> src-mcp-COMP-19
-    src-mcp-COMP-24 --> src-mcp-COMP-21
-    src-mcp-COMP-10 --> src-mcp-COMP-1
+    src-mcp-COMP-1 --> src-mcp-COMP-4
+    src-mcp-COMP-11["Extract"]
+    src-mcp-COMP-11 --> src-mcp-COMP-29
+    src-mcp-COMP-3["Author"]
+    src-mcp-COMP-24 --> src-mcp-COMP-3
+    src-mcp-COMP-14["Generate"]
+    src-mcp-COMP-1 --> src-mcp-COMP-14
+    src-mcp-COMP-11 --> src-mcp-COMP-1
+    src-mcp-COMP-2["Assess"]
     src-mcp-COMP-24 --> src-mcp-COMP-2
-    src-mcp-COMP-24 --> src-mcp-COMP-16
-    src-mcp-COMP-1 --> src-mcp-COMP-6
-    src-mcp-COMP-15 --> src-mcp-COMP-1
-    src-mcp-COMP-24 --> src-mcp-COMP-20
-    src-mcp-COMP-4 --> src-mcp-COMP-1
-    src-mcp-COMP-16 --> src-mcp-COMP-1
-    src-mcp-COMP-18 --> src-mcp-COMP-1
-    src-mcp-COMP-27 --> src-mcp-COMP-11
+    src-mcp-COMP-15["Group"]
     src-mcp-COMP-24 --> src-mcp-COMP-15
+    src-mcp-COMP-1 --> src-mcp-COMP-15
+    src-mcp-COMP-12["Feedback"]
+    src-mcp-COMP-24 --> src-mcp-COMP-12
+    src-mcp-COMP-5["Correct"]
     src-mcp-COMP-24 --> src-mcp-COMP-5
-    src-mcp-COMP-1 --> src-mcp-COMP-11
-    src-mcp-COMP-1 --> src-mcp-COMP-27
-    src-mcp-COMP-1 --> src-mcp-COMP-17
-    src-mcp-COMP-1 --> src-mcp-COMP-7
-    src-mcp-COMP-1 --> src-mcp-COMP-8
-    src-mcp-COMP-1 --> src-mcp-COMP-18
-    src-mcp-COMP-1 --> src-mcp-COMP-3
-    src-mcp-COMP-24 --> src-mcp-COMP-10
     src-mcp-COMP-1 --> src-mcp-COMP-12
-    src-cli-COMP-8["Generate"]
-    src-cli-COMP-13["Infrastructure"]
-    src-cli-COMP-8 --> src-cli-COMP-13
-    src-cli-COMP-12["Regen Loop"]
-    src-cli-COMP-6["Extract"]
-    src-cli-COMP-12 --> src-cli-COMP-6
-    src-cli-COMP-7["Gap Analyzer"]
-    src-cli-COMP-8 --> src-cli-COMP-7
+    src-mcp-COMP-4 --> src-mcp-COMP-29
+    src-mcp-COMP-1 --> src-mcp-COMP-5
+    src-mcp-COMP-14 --> src-mcp-COMP-29
+    src-mcp-COMP-16 --> src-mcp-COMP-1
+    src-mcp-COMP-27["Trace Requirements"]
+    src-mcp-COMP-27 --> src-mcp-COMP-11
+    src-mcp-COMP-22["Require"]
+    src-mcp-COMP-27 --> src-mcp-COMP-22
+    src-mcp-COMP-26["Sync"]
+    src-mcp-COMP-24 --> src-mcp-COMP-26
+    src-mcp-COMP-9["Evaluate"]
+    src-mcp-COMP-24 --> src-mcp-COMP-9
+    src-mcp-COMP-1 --> src-mcp-COMP-26
+    src-mcp-COMP-24 --> src-mcp-COMP-22
+    src-mcp-COMP-8["Docs"]
+    src-mcp-COMP-24 --> src-mcp-COMP-8
+    src-mcp-COMP-24 --> src-mcp-COMP-27
+    src-mcp-COMP-1 --> src-mcp-COMP-27
+    src-mcp-COMP-24 --> src-mcp-COMP-23
+    src-mcp-COMP-15 --> src-mcp-COMP-29
+    src-mcp-COMP-1 --> src-mcp-COMP-3
+    src-mcp-COMP-1 --> src-mcp-COMP-23
+    src-mcp-COMP-17["Learn"]
+    src-mcp-COMP-24 --> src-mcp-COMP-17
+    src-mcp-COMP-8 --> src-mcp-COMP-29
+    src-mcp-COMP-15 --> src-mcp-COMP-1
+    src-mcp-COMP-24 --> src-mcp-COMP-10
+    src-mcp-COMP-1 --> src-mcp-COMP-2
+    src-mcp-COMP-25["Stats"]
+    src-mcp-COMP-24 --> src-mcp-COMP-25
+    src-mcp-COMP-7["Diff"]
+    src-mcp-COMP-24 --> src-mcp-COMP-7
+    src-mcp-COMP-1 --> src-mcp-COMP-25
+    src-mcp-COMP-1 --> src-mcp-COMP-7
+    src-mcp-COMP-4 --> src-mcp-COMP-1
+    src-mcp-COMP-6["Decompose"]
+    src-mcp-COMP-24 --> src-mcp-COMP-6
+    src-mcp-COMP-1 --> src-mcp-COMP-6
+    src-mcp-COMP-18 --> src-mcp-COMP-29
+    src-mcp-COMP-14 --> src-mcp-COMP-1
+    src-mcp-COMP-18 --> src-mcp-COMP-1
+    src-mcp-COMP-24 --> src-mcp-COMP-11
+    src-mcp-COMP-1 --> src-mcp-COMP-9
+    src-mcp-COMP-1 --> src-mcp-COMP-11
+    src-mcp-COMP-1 --> src-mcp-COMP-22
+    src-mcp-COMP-24 --> src-mcp-COMP-18
+    src-mcp-COMP-1 --> src-mcp-COMP-8
+    src-mcp-COMP-24 --> src-mcp-COMP-20
+    src-mcp-COMP-24 --> src-mcp-COMP-16
+    src-mcp-COMP-1 --> src-mcp-COMP-20
+    src-mcp-COMP-24 --> src-mcp-COMP-28
+    src-mcp-COMP-6 --> src-mcp-COMP-29
+    src-mcp-COMP-1 --> src-mcp-COMP-17
+    src-mcp-COMP-8 --> src-mcp-COMP-1
+    src-mcp-COMP-1 --> src-mcp-COMP-10
+    src-mcp-COMP-13["Gate"]
+    src-mcp-COMP-24 --> src-mcp-COMP-13
+    src-mcp-COMP-27 --> src-mcp-COMP-29
+    src-mcp-COMP-6 --> src-mcp-COMP-1
+    src-mcp-COMP-29 --> src-mcp-COMP-1
+    src-mcp-COMP-1 --> src-mcp-COMP-13
+    src-mcp-COMP-27 --> src-mcp-COMP-1
+    src-mcp-COMP-10 --> src-mcp-COMP-29
+    src-mcp-COMP-24 --> src-mcp-COMP-21
+    src-mcp-COMP-26 --> src-mcp-COMP-7
+    src-mcp-COMP-19["Log"]
+    src-mcp-COMP-24 --> src-mcp-COMP-19
+    src-mcp-COMP-20 --> src-mcp-COMP-29
+    src-mcp-COMP-1 --> src-mcp-COMP-19
+    src-mcp-COMP-24 --> src-mcp-COMP-14
+    src-cli-COMP-7["Extract"]
     src-cli-COMP-5["Docs Validator"]
-    src-cli-COMP-12 --> src-cli-COMP-5
-    src-cli-COMP-3["Confidence"]
-    src-cli-COMP-8 --> src-cli-COMP-3
-    src-cli-COMP-4["Docs"]
-    src-cli-COMP-12 --> src-cli-COMP-4
-    src-cli-COMP-9["Launch"]
-    src-cli-COMP-6 --> src-cli-COMP-9
-    src-cli-COMP-8 --> src-cli-COMP-6
-    src-cli-COMP-11["Metrics"]
-    src-cli-COMP-6 --> src-cli-COMP-11
-    src-cli-COMP-8 --> src-cli-COMP-12
-    src-cli-COMP-8 --> src-cli-COMP-5
-    src-cli-COMP-8 --> src-cli-COMP-4
+    src-cli-COMP-7 --> src-cli-COMP-5
+    src-cli-COMP-13["Regen Loop"]
     src-cli-COMP-1["Bench"]
-    src-cli-COMP-1 --> src-cli-COMP-9
-    src-cli-COMP-1 --> src-cli-COMP-11
-    src-cli-COMP-6 --> src-cli-COMP-1
-    src-cli-COMP-12 --> src-cli-COMP-9
-    src-cli-COMP-10["Main"]
-    src-cli-COMP-6 --> src-cli-COMP-10
-    src-cli-COMP-12 --> src-cli-COMP-11
-    src-cli-COMP-1 --> src-cli-COMP-10
-    src-cli-COMP-6 --> src-cli-COMP-13
-    src-cli-COMP-8 --> src-cli-COMP-9
-    src-cli-COMP-6 --> src-cli-COMP-8
-    src-cli-COMP-8 --> src-cli-COMP-11
-    src-cli-COMP-12 --> src-cli-COMP-1
-    src-cli-COMP-6 --> src-cli-COMP-3
-    src-cli-COMP-6 --> src-cli-COMP-7
-    src-cli-COMP-12 --> src-cli-COMP-10
-    src-cli-COMP-1 --> src-cli-COMP-13
-    src-cli-COMP-12 --> src-cli-COMP-8
-    src-cli-COMP-1 --> src-cli-COMP-7
+    src-cli-COMP-13 --> src-cli-COMP-1
+    src-cli-COMP-11["Main"]
+    src-cli-COMP-13 --> src-cli-COMP-11
+    src-cli-COMP-7 --> src-cli-COMP-13
+    src-cli-COMP-14["Infrastructure"]
+    src-cli-COMP-1 --> src-cli-COMP-14
+    src-cli-COMP-8["Gap Analyzer"]
     src-cli-COMP-1 --> src-cli-COMP-8
-    src-cli-COMP-8 --> src-cli-COMP-10
-    src-cli-COMP-6 --> src-cli-COMP-12
+    src-cli-COMP-4["Docs"]
+    src-cli-COMP-13 --> src-cli-COMP-4
+    src-cli-COMP-9["Generate"]
+    src-cli-COMP-12["Metrics"]
+    src-cli-COMP-9 --> src-cli-COMP-12
+    src-cli-COMP-13 --> src-cli-COMP-14
+    src-cli-COMP-6["Export Data"]
+    src-cli-COMP-7 --> src-cli-COMP-6
+    src-cli-COMP-3["Confidence"]
     src-cli-COMP-1 --> src-cli-COMP-3
-    src-cli-COMP-6 --> src-cli-COMP-5
-    src-cli-COMP-8 --> src-cli-COMP-1
-    src-cli-COMP-12 --> src-cli-COMP-13
-    src-cli-COMP-6 --> src-cli-COMP-4
-    src-cli-COMP-1 --> src-cli-COMP-6
-    src-cli-COMP-12 --> src-cli-COMP-3
-    src-cli-COMP-12 --> src-cli-COMP-7
-    src-cli-COMP-1 --> src-cli-COMP-4
+    src-cli-COMP-9 --> src-cli-COMP-5
+    src-cli-COMP-13 --> src-cli-COMP-8
+    src-cli-COMP-10["Launch"]
+    src-cli-COMP-9 --> src-cli-COMP-10
+    src-cli-COMP-9 --> src-cli-COMP-7
+    src-cli-COMP-9 --> src-cli-COMP-13
+    src-cli-COMP-13 --> src-cli-COMP-3
+    src-cli-COMP-7 --> src-cli-COMP-9
     src-cli-COMP-1 --> src-cli-COMP-12
     src-cli-COMP-1 --> src-cli-COMP-5
+    src-cli-COMP-1 --> src-cli-COMP-10
+    src-cli-COMP-7 --> src-cli-COMP-11
+    src-cli-COMP-7 --> src-cli-COMP-1
+    src-cli-COMP-9 --> src-cli-COMP-6
+    src-cli-COMP-1 --> src-cli-COMP-7
+    src-cli-COMP-1 --> src-cli-COMP-13
+    src-cli-COMP-13 --> src-cli-COMP-12
+    src-cli-COMP-13 --> src-cli-COMP-5
+    src-cli-COMP-13 --> src-cli-COMP-10
+    src-cli-COMP-7 --> src-cli-COMP-4
+    src-cli-COMP-1 --> src-cli-COMP-6
+    src-cli-COMP-7 --> src-cli-COMP-14
+    src-cli-COMP-9 --> src-cli-COMP-1
+    src-cli-COMP-7 --> src-cli-COMP-8
+    src-cli-COMP-13 --> src-cli-COMP-7
+    src-cli-COMP-9 --> src-cli-COMP-11
+    src-cli-COMP-7 --> src-cli-COMP-3
+    src-cli-COMP-9 --> src-cli-COMP-4
+    src-cli-COMP-13 --> src-cli-COMP-6
+    src-cli-COMP-1 --> src-cli-COMP-9
+    src-cli-COMP-9 --> src-cli-COMP-14
+    src-cli-COMP-1 --> src-cli-COMP-11
+    src-cli-COMP-9 --> src-cli-COMP-8
+    src-cli-COMP-13 --> src-cli-COMP-9
+    src-cli-COMP-7 --> src-cli-COMP-12
+    src-cli-COMP-9 --> src-cli-COMP-3
+    src-cli-COMP-1 --> src-cli-COMP-4
+    src-cli-COMP-7 --> src-cli-COMP-10
 ```
+
+---
+
+## LLM Review
+
+*Reviewed: 2026-08-18T23:32:21.592576+00:00 | Duration: 9929ms*
+
+**Summary:** This logical architecture document is essentially a skeleton with 0% model completeness—no behavioral specifications, no interfaces, no requirements, and no responsibilities defined for any of the 57 components. The layer structure is minimal and most components are unassigned, indicating the extraction pipeline has not been meaningfully run or curated.
+
+- The "Quality" (src-mcp-COMP-1) and "Slice" (src-mcp-COMP-24) components are massive dependency hubs connecting to nearly every other component, suggesting a god-object anti-pattern or, more likely, that the automated extraction failed to differentiate true architectural boundaries from file-level imports.
+- 43 of 57 components are in the "unassigned" category with only two layers defined (infra and data), both at order 0 with no technologies or directories specified—this renders the layer structure meaningless as an architectural guide.
+- The dependency graph contains circular dependencies (e.g., Quality ↔ Check, Quality ↔ Ingest, Quality ↔ Generate) which either reflect actual coupling problems or inaccurate static analysis results that need manual review.
+- The document appears truncated at the end (`src-mcp-COMP-27 --> src-mcp-COMP-`) indicating a generation error that should be fixed before this artifact is used for any architectural decision-making.
+
+<details>
+<summary>Review details</summary>
+
+**Prompt sent (truncated):**
+```
+Review the following architecture artifact 'docs/se/logical-architecture.md'.
+Respond ONLY in this format:
+SUMMARY: <one paragraph overall assessment>
+COMMENT: <specific observation>
+COMMENT: <another observation>
+
+---
+---
+document: Logical Architecture
+system: System
+system_id: SYS-unknown
+generated_at: 2026-08-18T23:31:28Z
+generator_version: 0.3.0
+model_hash: efca59bc201d
+edition: 7
+---
+
+> **Model Completeness: F (0%)**
+> Some sections may be empty due to missing model entities.
+> - 57/57 comp
+```
+
+**Full LLM response:**
+```
+SUMMARY: This logical architecture document is essentially a skeleton with 0% model completeness—no behavioral specifications, no interfaces, no requirements, and no responsibilities defined for any of the 57 components. The layer structure is minimal and most components are unassigned, indicating the extraction pipeline has not been meaningfully run or curated.
+
+COMMENT: The "Quality" (src-mcp-COMP-1) and "Slice" (src-mcp-COMP-24) components are massive dependency hubs connecting to nearly every other component, suggesting a god-object anti-pattern or, more likely, that the automated extraction failed to differentiate true architectural boundaries from file-level imports.
+
+COMMENT: 43 of 57 components are in the "unassigned" category with only two layers defined (infra and data), both at order 0 with no technologies or directories specified—this renders the layer structure meaningless as an architectural guide.
+
+COMMENT: The dependency graph contains circular dependencies (e.g., Quality ↔ Check, Quality ↔ Ingest, Quality ↔ Generate) which either reflect actual coupling problems or inaccurate static analysis results that need manual review.
+
+COMMENT: The document appears truncated at the end (`src-mcp-COMP-27 --> src-mcp-COMP-`) indicating a generation error that should be fixed before this artifact is used for any architectural decision-making.
+```
+
+</details>
