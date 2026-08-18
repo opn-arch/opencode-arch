@@ -587,6 +587,10 @@ entities:
     name: Component COMP-3-13 has 2 test file(s) covering its source
     category: quality
     priority: should
+  - id: REQ-T6
+    name: 'Python >=3.11: Project requires Python >=3.11'
+    category: technology
+    priority: must
 relationships:
 - source: COMP-1
   target: COMP-13
@@ -759,3 +763,24 @@ relationships:
 - from: COMP-3
   to: IF-3
   type: exposes
+- from: COMP-12
+  to: REQ-E1
+  type: satisfies
+- from: COMP-4
+  to: REQ-Q12
+  type: satisfies
+- from: COMP-1
+  to: REQ-Q15
+  type: satisfies
+- from: COMP-3
+  to: REQ-Q16
+  type: satisfies
+- from: COMP-8
+  to: REQ-Q17
+  type: satisfies
+- from: COMP-15
+  to: REQ-Q18
+  type: satisfies
+- from: COMP-9
+  to: REQ-Q19
+  type: satisfies

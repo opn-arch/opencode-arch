@@ -1,0 +1,182 @@
+{
+  "src/opencode_arch/agent/resolution.py": [
+    "tests/test_uncertainty_resolver.py"
+  ],
+  "src/opencode_arch/artifacts/context.py": [
+    "tests/test_artifact_context.py"
+  ],
+  "src/opencode_arch/artifacts/diagrams.py": [
+    "tests/test_artifact_diagrams.py"
+  ],
+  "src/opencode_arch/artifacts/selector.py": [
+    "tests/test_artifact_selector.py",
+    "tests/test_artifact_templates.py"
+  ],
+  "src/opencode_arch/artifacts/templates.py": [
+    "tests/test_artifact_context.py",
+    "tests/test_artifact_templates.py"
+  ],
+  "src/opencode_arch/cli/bench.py": [
+    "tests/test_cli_bench.py"
+  ],
+  "src/opencode_arch/cli/calibrate.py": [
+    "tests/test_regeneration_proof.py",
+    "tests/test_calibration_suite.py",
+    "tests/test_cli_calibrate.py"
+  ],
+  "src/opencode_arch/cli/confidence.py": [
+    "tests/test_cli_confidence.py"
+  ],
+  "src/opencode_arch/cli/extract.py": [
+    "tests/test_cli_extract.py"
+  ],
+  "src/opencode_arch/cli/gap_analyzer.py": [
+    "tests/test_gap_analyzer.py"
+  ],
+  "src/opencode_arch/cli/generate.py": [
+    "tests/test_cli_generate.py"
+  ],
+  "src/opencode_arch/cli/launch.py": [
+    "tests/test_launch.py"
+  ],
+  "src/opencode_arch/cli/metrics.py": [
+    "tests/test_cli_metrics.py"
+  ],
+  "src/opencode_arch/cli/regen_loop.py": [
+    "tests/test_regen_loop.py",
+    "tests/test_regen_blind.py"
+  ],
+  "src/opencode_arch/learning/adapter.py": [
+    "tests/test_learning_adapter.py"
+  ],
+  "src/opencode_arch/learning/assessor.py": [
+    "tests/test_learning_assessor.py"
+  ],
+  "src/opencode_arch/learning/classifier.py": [
+    "tests/test_learning_classifier.py"
+  ],
+  "src/opencode_arch/learning/lessons.py": [
+    "tests/test_learning_lessons.py"
+  ],
+  "src/opencode_arch/learning/maintainer.py": [
+    "tests/test_learning_maintainer.py"
+  ],
+  "src/opencode_arch/learning/patterns.py": [
+    "tests/test_learning_classifier.py",
+    "tests/test_learning_adapter.py"
+  ],
+  "src/opencode_arch/llm/cache.py": [
+    "tests/test_req_retroactive.py",
+    "tests/test_req_llm.py",
+    "tests/test_llm_cache.py"
+  ],
+  "src/opencode_arch/mcp/quality.py": [
+    "tests/test_quality.py"
+  ],
+  "src/opencode_arch/mcp/tools/author.py": [
+    "tests/test_gate_tool.py",
+    "tests/test_author_tool.py"
+  ],
+  "src/opencode_arch/mcp/tools/check.py": [
+    "tests/test_check_hierarchical.py",
+    "tests/test_check_tool.py"
+  ],
+  "src/opencode_arch/mcp/tools/extract.py": [
+    "tests/test_extract_pipeline.py",
+    "tests/test_interface_extraction.py",
+    "tests/test_mcp_extract.py",
+    "tests/test_integration.py"
+  ],
+  "src/opencode_arch/mcp/tools/feedback.py": [
+    "tests/test_feedback.py"
+  ],
+  "src/opencode_arch/mcp/tools/gate.py": [
+    "tests/test_gate_tool.py"
+  ],
+  "src/opencode_arch/mcp/tools/generate.py": [
+    "tests/test_generate.py"
+  ],
+  "src/opencode_arch/mcp/tools/group.py": [
+    "tests/test_group_tool.py"
+  ],
+  "src/opencode_arch/mcp/tools/ingest.py": [
+    "tests/test_ingest.py"
+  ],
+  "src/opencode_arch/mcp/tools/learn.py": [
+    "tests/test_learn_tool.py"
+  ],
+  "src/opencode_arch/mcp/tools/pipeline.py": [
+    "tests/test_pipeline_tool.py"
+  ],
+  "src/opencode_arch/mcp/tools/require.py": [
+    "tests/test_require.py"
+  ],
+  "src/opencode_arch/mcp/tools/scan.py": [
+    "tests/test_scan.py",
+    "tests/test_integration.py"
+  ],
+  "src/opencode_arch/mcp/tools/slice.py": [
+    "tests/test_adaptive_budget.py",
+    "tests/test_slice.py",
+    "tests/test_integration.py"
+  ],
+  "src/opencode_arch/mcp/tools/trace_requirements.py": [
+    "tests/test_trace_req_tool.py"
+  ],
+  "src/opencode_arch/mcp/tools/validate.py": [
+    "tests/test_mcp_validate.py",
+    "tests/test_integration.py"
+  ],
+  "src/opencode_arch/prompts/regen.py": [
+    "tests/test_regen_prompts.py"
+  ],
+  "src/opencode_arch/regen/self_heal.py": [
+    "tests/test_spot_check.py"
+  ],
+  "src/opencode_arch/regen/spot_check.py": [
+    "tests/test_spot_check.py"
+  ],
+  "src/opencode_arch/requirements/llm_extractor.py": [
+    "tests/test_req_llm.py"
+  ],
+  "src/opencode_arch/requirements/matcher.py": [
+    "tests/test_req_matcher.py"
+  ],
+  "src/opencode_arch/requirements/parser.py": [
+    "tests/test_req_parser.py",
+    "tests/test_req_matcher.py"
+  ],
+  "src/opencode_arch/requirements/retroactive.py": [
+    "tests/test_req_retroactive.py"
+  ],
+  "src/opencode_arch/runner/base.py": [
+    "tests/test_cli_generate.py",
+    "tests/test_req_retroactive.py",
+    "tests/test_cli_extract.py",
+    "tests/test_trace_req_tool.py",
+    "tests/test_docs_cli.py",
+    "tests/test_req_matcher.py",
+    "tests/test_llm_audit.py",
+    "tests/test_runner.py",
+    "tests/test_cli_bench.py",
+    "tests/test_req_llm.py",
+    "tests/test_regen_loop.py",
+    "tests/test_llm_cache.py",
+    "tests/test_regen_blind.py"
+  ],
+  "src/opencode_arch/runner/opencode.py": [
+    "tests/test_runner.py"
+  ],
+  "src/opencode_arch/telemetry/collector.py": [
+    "tests/test_collector_integration.py"
+  ],
+  "src/opencode_arch/telemetry/recorder.py": [
+    "tests/test_telemetry.py"
+  ],
+  "src/opencode_arch/telemetry/store.py": [
+    "tests/test_regen_telemetry.py",
+    "tests/test_function_metrics_table.py",
+    "tests/test_cli_metrics.py",
+    "tests/test_telemetry.py"
+  ]
+}

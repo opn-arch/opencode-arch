@@ -1,0 +1,16 @@
+meta:
+  schema_version: '2.0'
+  system: Src (llm)
+  system_id: SYS-src-(llm)
+entities:
+  capabilities:
+  - id: CAP-1
+    name: Cache
+  - id: CAP-2
+    name: Relay
+  actors:
+  - id: ACT-1
+    name: User
+    actor_type: human
+    evidence_source: default
+relationships: []

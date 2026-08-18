@@ -1,0 +1,94 @@
+{
+  "COMP-3-1": [
+    "tests/test_artifact_context.py",
+    "tests/test_artifact_diagrams.py",
+    "tests/test_artifact_selector.py",
+    "tests/test_artifact_templates.py"
+  ],
+  "COMP-3-10": [
+    "tests/test_regen_prompts.py"
+  ],
+  "COMP-3-12": [
+    "tests/test_cli_metrics.py",
+    "tests/test_collector_integration.py",
+    "tests/test_function_metrics_table.py",
+    "tests/test_regen_telemetry.py",
+    "tests/test_telemetry.py"
+  ],
+  "COMP-3-13": [
+    "tests/test_spot_check.py"
+  ],
+  "COMP-3-2": [
+    "tests/test_llm_cache.py",
+    "tests/test_req_llm.py",
+    "tests/test_req_retroactive.py"
+  ],
+  "COMP-3-4": [
+    "tests/test_learning_adapter.py",
+    "tests/test_learning_assessor.py",
+    "tests/test_learning_classifier.py",
+    "tests/test_learning_lessons.py",
+    "tests/test_learning_maintainer.py"
+  ],
+  "COMP-3-5": [
+    "tests/test_cli_bench.py",
+    "tests/test_cli_extract.py",
+    "tests/test_cli_generate.py",
+    "tests/test_docs_cli.py",
+    "tests/test_llm_audit.py",
+    "tests/test_llm_cache.py",
+    "tests/test_regen_blind.py",
+    "tests/test_regen_loop.py",
+    "tests/test_req_llm.py",
+    "tests/test_req_matcher.py",
+    "tests/test_req_retroactive.py",
+    "tests/test_runner.py",
+    "tests/test_trace_req_tool.py"
+  ],
+  "COMP-3-6": [
+    "tests/test_uncertainty_resolver.py"
+  ],
+  "COMP-3-7": [
+    "tests/test_adaptive_budget.py",
+    "tests/test_author_tool.py",
+    "tests/test_check_hierarchical.py",
+    "tests/test_check_tool.py",
+    "tests/test_extract_pipeline.py",
+    "tests/test_feedback.py",
+    "tests/test_gate_tool.py",
+    "tests/test_generate.py",
+    "tests/test_group_tool.py",
+    "tests/test_ingest.py",
+    "tests/test_integration.py",
+    "tests/test_interface_extraction.py",
+    "tests/test_learn_tool.py",
+    "tests/test_mcp_extract.py",
+    "tests/test_mcp_validate.py",
+    "tests/test_pipeline_tool.py",
+    "tests/test_quality.py",
+    "tests/test_require.py",
+    "tests/test_scan.py",
+    "tests/test_slice.py",
+    "tests/test_trace_req_tool.py"
+  ],
+  "COMP-3-8": [
+    "tests/test_req_llm.py",
+    "tests/test_req_matcher.py",
+    "tests/test_req_parser.py",
+    "tests/test_req_retroactive.py"
+  ],
+  "COMP-3-9": [
+    "tests/test_calibration_suite.py",
+    "tests/test_cli_bench.py",
+    "tests/test_cli_calibrate.py",
+    "tests/test_cli_confidence.py",
+    "tests/test_cli_extract.py",
+    "tests/test_cli_generate.py",
+    "tests/test_cli_metrics.py",
+    "tests/test_gap_analyzer.py",
+    "tests/test_launch.py",
+    "tests/test_regen_blind.py",
+    "tests/test_regen_loop.py",
+    "tests/test_regeneration_proof.py"
+  ]
+}

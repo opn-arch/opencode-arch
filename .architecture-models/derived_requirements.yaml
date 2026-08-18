@@ -1,0 +1,189 @@
+derived_requirements:
+- id: REQ-I1
+  name: 'RunnerBackend protocol requires: run'
+  category: interface
+  priority: must
+  source_file: src/opencode_arch/runner/base.py
+  source_signal: abstract_class:RunnerBackend
+  component_id: COMP-3-5
+  evidence: Abstract/Protocol class with 1 required methods
+- id: REQ-T5
+  name: 'Python >=3.11: Project requires Python >=3.11'
+  category: technology
+  priority: must
+  source_file: config
+  source_signal: constraint::Python >=3.11
+  component_id: ''
+  evidence: Detected  constraint
+- id: REQ-Q1
+  name: Component COMP-3-7 has 25 test file(s) covering its source
+  category: quality
+  priority: should
+  source_file: ''
+  source_signal: test_coverage:COMP-3-7:25
+  component_id: COMP-3-7
+  evidence: 25 test files import this component's source
+- id: REQ-Q10
+  name: Component COMP-3-6 has 1 test file(s) covering its source
+  category: quality
+  priority: should
+  source_file: ''
+  source_signal: test_coverage:COMP-3-6:1
+  component_id: COMP-3-6
+  evidence: 1 test files import this component's source
+- id: REQ-Q11
+  name: Component COMP-3-10 has 1 test file(s) covering its source
+  category: quality
+  priority: should
+  source_file: ''
+  source_signal: test_coverage:COMP-3-10:1
+  component_id: COMP-3-10
+  evidence: 1 test files import this component's source
+- id: REQ-Q2
+  name: Component COMP-3-5 has 14 test file(s) covering its source
+  category: quality
+  priority: should
+  source_file: ''
+  source_signal: test_coverage:COMP-3-5:14
+  component_id: COMP-3-5
+  evidence: 14 test files import this component's source
+- id: REQ-Q3
+  name: Component COMP-3-9 has 12 test file(s) covering its source
+  category: quality
+  priority: should
+  source_file: ''
+  source_signal: test_coverage:COMP-3-9:12
+  component_id: COMP-3-9
+  evidence: 12 test files import this component's source
+- id: REQ-Q4
+  name: Component COMP-3-4 has 7 test file(s) covering its source
+  category: quality
+  priority: should
+  source_file: ''
+  source_signal: test_coverage:COMP-3-4:7
+  component_id: COMP-3-4
+  evidence: 7 test files import this component's source
+- id: REQ-Q5
+  name: Component COMP-3-12 has 6 test file(s) covering its source
+  category: quality
+  priority: should
+  source_file: ''
+  source_signal: test_coverage:COMP-3-12:6
+  component_id: COMP-3-12
+  evidence: 6 test files import this component's source
+- id: REQ-Q6
+  name: Component COMP-3-1 has 6 test file(s) covering its source
+  category: quality
+  priority: should
+  source_file: ''
+  source_signal: test_coverage:COMP-3-1:6
+  component_id: COMP-3-1
+  evidence: 6 test files import this component's source
+- id: REQ-Q7
+  name: Component COMP-3-8 has 5 test file(s) covering its source
+  category: quality
+  priority: should
+  source_file: ''
+  source_signal: test_coverage:COMP-3-8:5
+  component_id: COMP-3-8
+  evidence: 5 test files import this component's source
+- id: REQ-Q8
+  name: Component COMP-3-2 has 3 test file(s) covering its source
+  category: quality
+  priority: should
+  source_file: ''
+  source_signal: test_coverage:COMP-3-2:3
+  component_id: COMP-3-2
+  evidence: 3 test files import this component's source
+- id: REQ-Q9
+  name: Component COMP-3-13 has 2 test file(s) covering its source
+  category: quality
+  priority: should
+  source_file: ''
+  source_signal: test_coverage:COMP-3-13:2
+  component_id: COMP-3-13
+  evidence: 2 test files import this component's source
+- id: REQ-T1
+  name: DEFAULT_API_URL = 'http://localhost:8000'
+  category: technology
+  priority: should
+  source_file: src/opencode_arch/mcp/tools/sync.py
+  source_signal: constant:DEFAULT_API_URL='http://localhost:8000'
+  component_id: COMP-3-7
+  evidence: UPPER_CASE constant in sync.py
+- id: REQ-T2
+  name: _CACHE_MAX = 32
+  category: technology
+  priority: should
+  source_file: src/opencode_arch/mcp/tools/slice.py
+  source_signal: constant:_CACHE_MAX=32
+  component_id: COMP-3-7
+  evidence: UPPER_CASE constant in slice.py
+- id: REQ-T3
+  name: COMPRESSION_WARN_THRESHOLD = 50
+  category: technology
+  priority: should
+  source_file: src/opencode_arch/mcp/tools/slice.py
+  source_signal: constant:COMPRESSION_WARN_THRESHOLD=50
+  component_id: COMP-3-7
+  evidence: UPPER_CASE constant in slice.py
+- id: REQ-T4
+  name: COMPRESSION_CRITICAL_THRESHOLD = 200
+  category: technology
+  priority: should
+  source_file: src/opencode_arch/mcp/tools/slice.py
+  source_signal: constant:COMPRESSION_CRITICAL_THRESHOLD=200
+  component_id: COMP-3-7
+  evidence: UPPER_CASE constant in slice.py
+- id: REQ-T6
+  name: 'CI/CD: GitHub Actions: Project uses GitHub Actions for CI/CD'
+  category: technology
+  priority: should
+  source_file: config
+  source_signal: 'constraint::CI/CD: GitHub Actions'
+  component_id: ''
+  evidence: Detected  constraint
+- id: REQ-E1
+  name: regen_loop.py has 4 error-handling functions
+  category: error_handling
+  priority: could
+  source_file: src/opencode_arch/cli/regen_loop.py
+  source_signal: error_handling:4_functions
+  component_id: COMP-3-9
+  evidence: 4 functions with try/except/raise patterns
+- id: REQ-E2
+  name: check.py has 3 error-handling functions
+  category: error_handling
+  priority: could
+  source_file: src/opencode_arch/mcp/tools/check.py
+  source_signal: error_handling:3_functions
+  component_id: COMP-3-7
+  evidence: 3 functions with try/except/raise patterns
+- id: REQ-E3
+  name: slice.py has 3 error-handling functions
+  category: error_handling
+  priority: could
+  source_file: src/opencode_arch/mcp/tools/slice.py
+  source_signal: error_handling:3_functions
+  component_id: COMP-3-7
+  evidence: 3 functions with try/except/raise patterns
+- id: REQ-O1
+  name: Component COMP-3-9 has logging instrumentation
+  category: observability
+  priority: could
+  source_file: src/opencode_arch/cli/launch.py
+  source_signal: import:logging
+  component_id: COMP-3-9
+  evidence: Imports logging/structlog in launch.py
+summary:
+  total: 22
+  by_priority:
+    must: 2
+    should: 16
+    could: 4
+  by_category:
+    error_handling: 3
+    interface: 1
+    observability: 1
+    quality: 11
+    technology: 6

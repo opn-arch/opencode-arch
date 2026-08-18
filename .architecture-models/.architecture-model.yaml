@@ -1,0 +1,1225 @@
+meta:
+  schema_version: '2.0'
+  system_of_systems: true
+entities:
+  systems:
+  - id: SYS-src-(artifacts)
+    name: Src (artifacts)
+    model_path: src-artifacts/.architecture-model.yaml
+  - id: SYS-src-(llm)
+    name: Src (llm)
+    model_path: src-llm/.architecture-model.yaml
+  - id: SYS-src-(learning)
+    name: Src (learning)
+    model_path: src-learning/.architecture-model.yaml
+  - id: SYS-src-(mcp)
+    name: Src (mcp)
+    model_path: src-mcp/.architecture-model.yaml
+  - id: SYS-src-(cli)
+    name: Src (cli)
+    model_path: src-cli/.architecture-model.yaml
+  - id: SYS-scripts
+    name: Scripts
+    model_path: scripts/.architecture-model.yaml
+  - id: SYS-src-(context)
+    name: Src (context)
+    model_path: src-context/.architecture-model.yaml
+  - id: SYS-src-(runner)
+    name: Src (runner)
+    model_path: src-runner/.architecture-model.yaml
+  - id: SYS-src-(agent)
+    name: Src (agent)
+    model_path: src-agent/.architecture-model.yaml
+  - id: SYS-src-(requirements)
+    name: Src (requirements)
+    model_path: src-requirements/.architecture-model.yaml
+  - id: SYS-src-(prompts)
+    name: Src (prompts)
+    model_path: src-prompts/.architecture-model.yaml
+  - id: SYS-src-(extract)
+    name: Src (extract)
+    model_path: src-extract/.architecture-model.yaml
+  - id: SYS-src-(telemetry)
+    name: Src (telemetry)
+    model_path: src-telemetry/.architecture-model.yaml
+  - id: SYS-src-(regen)
+    name: Src (regen)
+    model_path: src-regen/.architecture-model.yaml
+  actors:
+  - id: ACT-1
+    name: CLI User
+  capabilities:
+  - id: CAP-1
+    name: gRPC Services
+  - id: CAP-2
+    name: Package Group Management
+  - id: CAP-3
+    name: Package Group Management
+  - id: CAP-4
+    name: CLI Run Benchmark
+  - id: CAP-5
+    name: CLI Benchmark Economy
+  - id: CAP-6
+    name: Command Line Interface Handler
+  behaviors:
+  - id: BEH-1
+    name: 'CLI: Run Benchmark'
+  - id: BEH-2
+    name: 'CLI: Benchmark Economy'
+  - id: BEH-3
+    name: 'CLI: Main'
+  components:
+  - id: src-mcp-COMP-1
+    name: Quality
+    files:
+    - src/opencode_arch/mcp/quality.py
+  - id: src-mcp-COMP-2
+    name: Assess
+    files:
+    - src/opencode_arch/mcp/tools/assess.py
+  - id: src-mcp-COMP-3
+    name: Author
+    files:
+    - src/opencode_arch/mcp/tools/author.py
+  - id: src-mcp-COMP-4
+    name: Check
+    files:
+    - src/opencode_arch/mcp/tools/check.py
+  - id: src-mcp-COMP-5
+    name: Correct
+    files:
+    - src/opencode_arch/mcp/tools/correct.py
+  - id: src-mcp-COMP-6
+    name: Decompose
+    files:
+    - src/opencode_arch/mcp/tools/decompose.py
+  - id: src-mcp-COMP-7
+    name: Diff
+    files:
+    - src/opencode_arch/mcp/tools/diff.py
+  - id: src-mcp-COMP-8
+    name: Docs
+    files:
+    - src/opencode_arch/mcp/tools/docs.py
+  - id: src-mcp-COMP-9
+    name: Evaluate
+    files:
+    - src/opencode_arch/mcp/tools/evaluate.py
+  - id: src-mcp-COMP-10
+    name: Export
+    files:
+    - src/opencode_arch/mcp/tools/export.py
+  - id: src-mcp-COMP-11
+    name: Extract
+    files:
+    - src/opencode_arch/mcp/tools/extract.py
+  - id: src-mcp-COMP-12
+    name: Feedback
+    files:
+    - src/opencode_arch/mcp/tools/feedback.py
+  - id: src-mcp-COMP-13
+    name: Gate
+    files:
+    - src/opencode_arch/mcp/tools/gate.py
+  - id: src-mcp-COMP-14
+    name: Generate
+    files:
+    - src/opencode_arch/mcp/tools/generate.py
+  - id: src-mcp-COMP-15
+    name: Group
+    files:
+    - src/opencode_arch/mcp/tools/group.py
+  - id: src-mcp-COMP-16
+    name: Ingest
+    files:
+    - src/opencode_arch/mcp/tools/ingest.py
+  - id: src-mcp-COMP-17
+    name: Learn
+    files:
+    - src/opencode_arch/mcp/tools/learn.py
+  - id: src-mcp-COMP-18
+    name: Llm Audit
+    files:
+    - src/opencode_arch/mcp/tools/llm_audit.py
+  - id: src-mcp-COMP-19
+    name: Log
+    files:
+    - src/opencode_arch/mcp/tools/log.py
+  - id: src-mcp-COMP-20
+    name: Pipeline
+    files:
+    - src/opencode_arch/mcp/tools/pipeline.py
+  - id: src-mcp-COMP-21
+    name: Regen Score
+    files:
+    - src/opencode_arch/mcp/tools/regen_score.py
+  - id: src-mcp-COMP-22
+    name: Require
+    files:
+    - src/opencode_arch/mcp/tools/require.py
+  - id: src-mcp-COMP-23
+    name: Scan
+    files:
+    - src/opencode_arch/mcp/tools/scan.py
+  - id: src-mcp-COMP-24
+    name: Slice
+    files:
+    - src/opencode_arch/mcp/tools/slice.py
+  - id: src-mcp-COMP-25
+    name: Stats
+    files:
+    - src/opencode_arch/mcp/tools/stats.py
+  - id: src-mcp-COMP-26
+    name: Sync
+    files:
+    - src/opencode_arch/mcp/tools/sync.py
+  - id: src-mcp-COMP-27
+    name: Trace Requirements
+    files:
+    - src/opencode_arch/mcp/tools/trace_requirements.py
+  - id: src-mcp-COMP-28
+    name: Validate
+    files:
+    - src/opencode_arch/mcp/tools/validate.py
+  - id: src-mcp-COMP-29
+    name: Infrastructure
+    files:
+    - src/opencode_arch/mcp/__main__.py
+    - src/opencode_arch/mcp/server.py
+  - id: src-cli-COMP-1
+    name: Bench
+    files:
+    - src/opencode_arch/cli/bench.py
+  - id: src-cli-COMP-2
+    name: Calibrate
+    files:
+    - src/opencode_arch/cli/calibrate.py
+  - id: src-cli-COMP-3
+    name: Confidence
+    files:
+    - src/opencode_arch/cli/confidence.py
+  - id: src-cli-COMP-4
+    name: Docs
+    files:
+    - src/opencode_arch/cli/docs.py
+  - id: src-cli-COMP-5
+    name: Docs Validator
+    files:
+    - src/opencode_arch/cli/docs_validator.py
+  - id: src-cli-COMP-6
+    name: Extract
+    files:
+    - src/opencode_arch/cli/extract.py
+  - id: src-cli-COMP-7
+    name: Gap Analyzer
+    files:
+    - src/opencode_arch/cli/gap_analyzer.py
+  - id: src-cli-COMP-8
+    name: Generate
+    files:
+    - src/opencode_arch/cli/generate.py
+  - id: src-cli-COMP-9
+    name: Launch
+    files:
+    - src/opencode_arch/cli/launch.py
+  - id: src-cli-COMP-10
+    name: Main
+    files:
+    - src/opencode_arch/cli/main.py
+  - id: src-cli-COMP-11
+    name: Metrics
+    files:
+    - src/opencode_arch/cli/metrics.py
+  - id: src-cli-COMP-12
+    name: Regen Loop
+    files:
+    - src/opencode_arch/cli/regen_loop.py
+  - id: src-cli-COMP-13
+    name: Infrastructure
+    files:
+    - src/opencode_arch/cli/prompts.py
+  - id: COMP-2
+    name: Benchmark Execution Scripts
+    files:
+    - scripts/benchmark_economy.py
+    - scripts/run_benchmark.py
+    layer: infra
+  - id: COMP-3-1
+    name: Src (artifacts)
+    files:
+    - src/opencode_arch/artifacts/__init__.py
+    - src/opencode_arch/artifacts/context.py
+    - src/opencode_arch/artifacts/diagrams.py
+    - src/opencode_arch/artifacts/selector.py
+    - src/opencode_arch/artifacts/templates.py
+    layer: data
+  - id: COMP-3-2
+    name: LLM Prompt Relay
+    files:
+    - src/opencode_arch/llm/cache.py
+    - src/opencode_arch/llm/prompts/audit.py
+    - src/opencode_arch/llm/prompts/matching.py
+    - src/opencode_arch/llm/prompts/requirements.py
+    - src/opencode_arch/llm/relay.py
+    layer: data
+  - id: COMP-3-3
+    name: Src (context)
+    files:
+    - src/opencode_arch/context/__init__.py
+    - src/opencode_arch/context/formatter.py
+    - src/opencode_arch/context/pipeline_bridge.py
+    layer: data
+  - id: COMP-3-4
+    name: Src (learning)
+    files:
+    - src/opencode_arch/learning/__init__.py
+    - src/opencode_arch/learning/adapter.py
+    - src/opencode_arch/learning/assessor.py
+    - src/opencode_arch/learning/classifier.py
+    - src/opencode_arch/learning/lessons.py
+    - src/opencode_arch/learning/maintainer.py
+    - src/opencode_arch/learning/patterns.py
+    layer: data
+  - id: COMP-3-5
+    name: Src (runner)
+    files:
+    - src/opencode_arch/runner/base.py
+    - src/opencode_arch/runner/opencode.py
+    layer: data
+  - id: COMP-3-6
+    name: Src (agent)
+    files:
+    - src/opencode_arch/agent/resolution.py
+    layer: data
+  - id: COMP-3-7
+    name: MCP Quality Server
+    files:
+    - src/opencode_arch/mcp/__main__.py
+    - src/opencode_arch/mcp/quality.py
+    - src/opencode_arch/mcp/server.py
+    - src/opencode_arch/mcp/tools/assess.py
+    - src/opencode_arch/mcp/tools/author.py
+    - src/opencode_arch/mcp/tools/check.py
+    - src/opencode_arch/mcp/tools/correct.py
+    - src/opencode_arch/mcp/tools/decompose.py
+    - src/opencode_arch/mcp/tools/diff.py
+    - src/opencode_arch/mcp/tools/docs.py
+    - src/opencode_arch/mcp/tools/evaluate.py
+    - src/opencode_arch/mcp/tools/export.py
+    - src/opencode_arch/mcp/tools/extract.py
+    - src/opencode_arch/mcp/tools/feedback.py
+    - src/opencode_arch/mcp/tools/gate.py
+    - src/opencode_arch/mcp/tools/generate.py
+    - src/opencode_arch/mcp/tools/group.py
+    - src/opencode_arch/mcp/tools/ingest.py
+    - src/opencode_arch/mcp/tools/learn.py
+    - src/opencode_arch/mcp/tools/llm_audit.py
+    - src/opencode_arch/mcp/tools/log.py
+    - src/opencode_arch/mcp/tools/pipeline.py
+    - src/opencode_arch/mcp/tools/regen_score.py
+    - src/opencode_arch/mcp/tools/require.py
+    - src/opencode_arch/mcp/tools/scan.py
+    - src/opencode_arch/mcp/tools/slice.py
+    - src/opencode_arch/mcp/tools/stats.py
+    - src/opencode_arch/mcp/tools/sync.py
+    - src/opencode_arch/mcp/tools/trace_requirements.py
+    - src/opencode_arch/mcp/tools/validate.py
+    layer: data
+  - id: COMP-3-8
+    name: Src (requirements)
+    files:
+    - src/opencode_arch/requirements/llm_extractor.py
+    - src/opencode_arch/requirements/matcher.py
+    - src/opencode_arch/requirements/parser.py
+    - src/opencode_arch/requirements/retroactive.py
+    layer: data
+  - id: COMP-3-9
+    name: CLI Commands
+    files:
+    - src/opencode_arch/cli/bench.py
+    - src/opencode_arch/cli/calibrate.py
+    - src/opencode_arch/cli/confidence.py
+    - src/opencode_arch/cli/docs.py
+    - src/opencode_arch/cli/docs_validator.py
+    - src/opencode_arch/cli/extract.py
+    - src/opencode_arch/cli/gap_analyzer.py
+    - src/opencode_arch/cli/generate.py
+    - src/opencode_arch/cli/launch.py
+    - src/opencode_arch/cli/main.py
+    - src/opencode_arch/cli/metrics.py
+    - src/opencode_arch/cli/prompts.py
+    - src/opencode_arch/cli/regen_loop.py
+    layer: data
+  - id: COMP-3-10
+    name: Src (prompts)
+    files:
+    - src/opencode_arch/prompts/regen.py
+    layer: data
+  - id: COMP-3-11
+    name: Src (extract)
+    files:
+    - src/opencode_arch/extract/__init__.py
+    layer: data
+  - id: COMP-3-12
+    name: Src (telemetry)
+    files:
+    - src/opencode_arch/telemetry/collector.py
+    - src/opencode_arch/telemetry/recorder.py
+    - src/opencode_arch/telemetry/store.py
+    layer: data
+  - id: COMP-3-13
+    name: Src (regen)
+    files:
+    - src/opencode_arch/regen/self_heal.py
+    - src/opencode_arch/regen/spot_check.py
+    layer: data
+  interfaces:
+  - id: IF-1
+    name: main CLI
+    interface_type: cli
+    component_id: src-cli-COMP-10
+  layers:
+  - id: LAYER-infra
+    name: infra
+  - id: LAYER-data
+    name: data
+  inline_components:
+  - id: SYS-scripts
+    name: Scripts
+    files:
+    - scripts/benchmark_economy.py
+    - scripts/run_benchmark.py
+  - id: SYS-src-(context)
+    name: Src (context)
+    files:
+    - src/opencode_arch/context/__init__.py
+    - src/opencode_arch/context/formatter.py
+    - src/opencode_arch/context/pipeline_bridge.py
+  - id: SYS-src-(runner)
+    name: Src (runner)
+    files:
+    - src/opencode_arch/runner/base.py
+    - src/opencode_arch/runner/opencode.py
+  - id: SYS-src-(agent)
+    name: Src (agent)
+    files:
+    - src/opencode_arch/agent/resolution.py
+  - id: SYS-src-(requirements)
+    name: Src (requirements)
+    files:
+    - src/opencode_arch/requirements/llm_extractor.py
+    - src/opencode_arch/requirements/matcher.py
+    - src/opencode_arch/requirements/parser.py
+    - src/opencode_arch/requirements/retroactive.py
+  - id: SYS-src-(prompts)
+    name: Src (prompts)
+    files:
+    - src/opencode_arch/prompts/regen.py
+  - id: SYS-src-(extract)
+    name: Src (extract)
+    files:
+    - src/opencode_arch/extract/__init__.py
+  - id: SYS-src-(telemetry)
+    name: Src (telemetry)
+    files:
+    - src/opencode_arch/telemetry/collector.py
+    - src/opencode_arch/telemetry/recorder.py
+    - src/opencode_arch/telemetry/store.py
+  - id: SYS-src-(regen)
+    name: Src (regen)
+    files:
+    - src/opencode_arch/regen/self_heal.py
+    - src/opencode_arch/regen/spot_check.py
+relationships:
+- from: SYS-src-(mcp)
+  to: SYS-src-(extract)
+  type: depends-on
+- from: SYS-scripts
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(agent)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(learning)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(extract)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(mcp)
+  to: SYS-src-(llm)
+  type: depends-on
+- from: SYS-src-(requirements)
+  to: SYS-src-(runner)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(artifacts)
+  type: depends-on
+- from: SYS-src-(telemetry)
+  to: SYS-src-(runner)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(runner)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(regen)
+  type: depends-on
+- from: SYS-src-(requirements)
+  to: SYS-src-(prompts)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(prompts)
+  type: depends-on
+- from: SYS-src-(mcp)
+  to: SYS-src-(artifacts)
+  type: depends-on
+- from: SYS-src-(mcp)
+  to: SYS-src-(requirements)
+  type: depends-on
+- from: SYS-src-(requirements)
+  to: SYS-src-(cli)
+  type: depends-on
+- from: SYS-src-(context)
+  to: SYS-src-(artifacts)
+  type: depends-on
+- from: SYS-src-(artifacts)
+  to: SYS-src-(context)
+  type: depends-on
+- from: SYS-src-(artifacts)
+  to: SYS-src-(runner)
+  type: depends-on
+- from: SYS-src-(mcp)
+  to: SYS-src-(context)
+  type: depends-on
+- from: SYS-src-(context)
+  to: SYS-src-(requirements)
+  type: depends-on
+- from: SYS-src-(regen)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(mcp)
+  to: SYS-src-(runner)
+  type: depends-on
+- from: SYS-src-(context)
+  to: SYS-src-(runner)
+  type: depends-on
+- from: SYS-src-(requirements)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(extract)
+  to: SYS-src-(artifacts)
+  type: depends-on
+- from: SYS-src-(agent)
+  to: SYS-src-(learning)
+  type: depends-on
+- from: SYS-src-(mcp)
+  to: SYS-src-(prompts)
+  type: depends-on
+- from: SYS-src-(learning)
+  to: SYS-src-(runner)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(llm)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(requirements)
+  to: SYS-src-(llm)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(extract)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(telemetry)
+  type: depends-on
+- from: SYS-src-(mcp)
+  to: SYS-src-(cli)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(llm)
+  type: depends-on
+- from: SYS-src-(learning)
+  to: SYS-src-(cli)
+  type: depends-on
+- from: SYS-src-(context)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(extract)
+  to: SYS-src-(cli)
+  type: depends-on
+- from: SYS-scripts
+  to: CAP-2
+  type: realizes
+- from: SYS-src-(artifacts)
+  to: CAP-3
+  type: realizes
+- from: SYS-src-(llm)
+  to: CAP-3
+  type: realizes
+- from: SYS-src-(context)
+  to: CAP-3
+  type: realizes
+- from: SYS-src-(learning)
+  to: CAP-3
+  type: realizes
+- from: SYS-src-(runner)
+  to: CAP-3
+  type: realizes
+- from: SYS-src-(agent)
+  to: CAP-3
+  type: realizes
+- from: SYS-src-(mcp)
+  to: CAP-3
+  type: realizes
+- from: SYS-src-(requirements)
+  to: CAP-3
+  type: realizes
+- from: SYS-src-(cli)
+  to: CAP-3
+  type: realizes
+- from: SYS-src-(prompts)
+  to: CAP-3
+  type: realizes
+- from: SYS-src-(extract)
+  to: CAP-3
+  type: realizes
+- from: SYS-src-(telemetry)
+  to: CAP-3
+  type: realizes
+- from: SYS-src-(regen)
+  to: CAP-3
+  type: realizes
+- from: src-mcp-COMP-1
+  to: CAP-1
+  type: realizes
+- from: src-mcp-COMP-2
+  to: CAP-2
+  type: realizes
+- from: src-mcp-COMP-3
+  to: CAP-3
+  type: realizes
+- from: src-mcp-COMP-4
+  to: CAP-4
+  type: realizes
+- from: src-mcp-COMP-5
+  to: CAP-5
+  type: realizes
+- from: src-mcp-COMP-6
+  to: CAP-6
+  type: realizes
+- from: src-mcp-COMP-7
+  to: CAP-7
+  type: realizes
+- from: src-mcp-COMP-8
+  to: CAP-8
+  type: realizes
+- from: src-mcp-COMP-9
+  to: CAP-9
+  type: realizes
+- from: src-mcp-COMP-10
+  to: CAP-10
+  type: realizes
+- from: src-mcp-COMP-11
+  to: CAP-11
+  type: realizes
+- from: src-mcp-COMP-12
+  to: CAP-12
+  type: realizes
+- from: src-mcp-COMP-13
+  to: CAP-13
+  type: realizes
+- from: src-mcp-COMP-14
+  to: CAP-14
+  type: realizes
+- from: src-mcp-COMP-15
+  to: CAP-15
+  type: realizes
+- from: src-mcp-COMP-16
+  to: CAP-16
+  type: realizes
+- from: src-mcp-COMP-17
+  to: CAP-17
+  type: realizes
+- from: src-mcp-COMP-18
+  to: CAP-18
+  type: realizes
+- from: src-mcp-COMP-19
+  to: CAP-19
+  type: realizes
+- from: src-mcp-COMP-20
+  to: CAP-20
+  type: realizes
+- from: src-mcp-COMP-21
+  to: CAP-21
+  type: realizes
+- from: src-mcp-COMP-22
+  to: CAP-22
+  type: realizes
+- from: src-mcp-COMP-23
+  to: CAP-23
+  type: realizes
+- from: src-mcp-COMP-24
+  to: CAP-24
+  type: realizes
+- from: src-mcp-COMP-25
+  to: CAP-25
+  type: realizes
+- from: src-mcp-COMP-26
+  to: CAP-26
+  type: realizes
+- from: src-mcp-COMP-27
+  to: CAP-27
+  type: realizes
+- from: src-mcp-COMP-28
+  to: CAP-28
+  type: realizes
+- from: src-mcp-COMP-27
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-23
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-13
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-19
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-25
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-6
+  type: depends-on
+- from: src-mcp-COMP-27
+  to: src-mcp-COMP-22
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-9
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-22
+  type: depends-on
+- from: src-mcp-COMP-14
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-27
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-28
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-11
+  type: depends-on
+- from: src-mcp-COMP-11
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-14
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-27
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-4
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-17
+  type: depends-on
+- from: src-mcp-COMP-26
+  to: src-mcp-COMP-7
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-7
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-8
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-18
+  type: depends-on
+- from: src-mcp-COMP-29
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-3
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-26
+  type: depends-on
+- from: src-mcp-COMP-23
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-11
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-12
+  type: depends-on
+- from: src-mcp-COMP-8
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-23
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-21
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-2
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-16
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-25
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-9
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-20
+  type: depends-on
+- from: src-mcp-COMP-23
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-22
+  type: depends-on
+- from: src-mcp-COMP-8
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-14
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-6
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-15
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-5
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-28
+  type: depends-on
+- from: src-mcp-COMP-20
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-10
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-14
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-4
+  type: depends-on
+- from: src-mcp-COMP-6
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-24
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-10
+  type: depends-on
+- from: src-mcp-COMP-15
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-26
+  type: depends-on
+- from: src-mcp-COMP-4
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-16
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-18
+  to: src-mcp-COMP-29
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-13
+  type: depends-on
+- from: src-mcp-COMP-20
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-19
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-21
+  type: depends-on
+- from: src-mcp-COMP-10
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-2
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-16
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-6
+  type: depends-on
+- from: src-mcp-COMP-15
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-20
+  type: depends-on
+- from: src-mcp-COMP-4
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-16
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-18
+  to: src-mcp-COMP-1
+  type: depends-on
+- from: src-mcp-COMP-27
+  to: src-mcp-COMP-11
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-15
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-5
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-11
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-27
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-17
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-7
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-8
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-18
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-3
+  type: depends-on
+- from: src-mcp-COMP-24
+  to: src-mcp-COMP-10
+  type: depends-on
+- from: src-mcp-COMP-1
+  to: src-mcp-COMP-12
+  type: depends-on
+- from: LAYER-INFRA
+  to: src-mcp-COMP-1
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-2
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-3
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-4
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-5
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-6
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-7
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-8
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-9
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-10
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-11
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-13
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-14
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-15
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-16
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-17
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-18
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-19
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-20
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-21
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-22
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-23
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-24
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-25
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-26
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-27
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-28
+  type: contains
+- from: LAYER-INFRA
+  to: src-mcp-COMP-29
+  type: contains
+- from: LAYER-DATA
+  to: src-mcp-COMP-12
+  type: contains
+- from: src-cli-COMP-1
+  to: CAP-1
+  type: realizes
+- from: src-cli-COMP-2
+  to: CAP-2
+  type: realizes
+- from: src-cli-COMP-3
+  to: CAP-3
+  type: realizes
+- from: src-cli-COMP-4
+  to: CAP-5
+  type: realizes
+- from: src-cli-COMP-5
+  to: CAP-5
+  type: realizes
+- from: src-cli-COMP-6
+  to: CAP-6
+  type: realizes
+- from: src-cli-COMP-7
+  to: CAP-7
+  type: realizes
+- from: src-cli-COMP-8
+  to: CAP-8
+  type: realizes
+- from: src-cli-COMP-9
+  to: CAP-9
+  type: realizes
+- from: src-cli-COMP-10
+  to: CAP-13
+  type: realizes
+- from: src-cli-COMP-11
+  to: CAP-11
+  type: realizes
+- from: src-cli-COMP-12
+  to: CAP-12
+  type: realizes
+- from: src-cli-COMP-8
+  to: src-cli-COMP-13
+  type: depends-on
+- from: src-cli-COMP-12
+  to: src-cli-COMP-6
+  type: depends-on
+- from: src-cli-COMP-8
+  to: src-cli-COMP-7
+  type: depends-on
+- from: src-cli-COMP-12
+  to: src-cli-COMP-5
+  type: depends-on
+- from: src-cli-COMP-8
+  to: src-cli-COMP-3
+  type: depends-on
+- from: src-cli-COMP-12
+  to: src-cli-COMP-4
+  type: depends-on
+- from: src-cli-COMP-6
+  to: src-cli-COMP-9
+  type: depends-on
+- from: src-cli-COMP-8
+  to: src-cli-COMP-6
+  type: depends-on
+- from: src-cli-COMP-6
+  to: src-cli-COMP-11
+  type: depends-on
+- from: src-cli-COMP-8
+  to: src-cli-COMP-12
+  type: depends-on
+- from: src-cli-COMP-8
+  to: src-cli-COMP-5
+  type: depends-on
+- from: src-cli-COMP-8
+  to: src-cli-COMP-4
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-9
+  type: depends-on
+- from: src-cli-COMP-6
+  to: src-cli-COMP-2
+  type: uses
+- from: src-cli-COMP-1
+  to: src-cli-COMP-11
+  type: depends-on
+- from: src-cli-COMP-6
+  to: src-cli-COMP-1
+  type: depends-on
+- from: src-cli-COMP-12
+  to: src-cli-COMP-9
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-2
+  type: uses
+- from: src-cli-COMP-6
+  to: src-cli-COMP-10
+  type: depends-on
+- from: src-cli-COMP-12
+  to: src-cli-COMP-11
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-10
+  type: depends-on
+- from: src-cli-COMP-6
+  to: src-cli-COMP-13
+  type: depends-on
+- from: src-cli-COMP-12
+  to: src-cli-COMP-2
+  type: uses
+- from: src-cli-COMP-8
+  to: src-cli-COMP-9
+  type: depends-on
+- from: src-cli-COMP-6
+  to: src-cli-COMP-8
+  type: depends-on
+- from: src-cli-COMP-8
+  to: src-cli-COMP-11
+  type: depends-on
+- from: src-cli-COMP-12
+  to: src-cli-COMP-1
+  type: depends-on
+- from: src-cli-COMP-6
+  to: src-cli-COMP-3
+  type: depends-on
+- from: src-cli-COMP-6
+  to: src-cli-COMP-7
+  type: depends-on
+- from: src-cli-COMP-12
+  to: src-cli-COMP-10
+  type: depends-on
+- from: src-cli-COMP-8
+  to: src-cli-COMP-2
+  type: uses
+- from: src-cli-COMP-1
+  to: src-cli-COMP-13
+  type: depends-on
+- from: src-cli-COMP-12
+  to: src-cli-COMP-8
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-7
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-8
+  type: depends-on
+- from: src-cli-COMP-8
+  to: src-cli-COMP-10
+  type: depends-on
+- from: src-cli-COMP-6
+  to: src-cli-COMP-12
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-3
+  type: depends-on
+- from: src-cli-COMP-6
+  to: src-cli-COMP-5
+  type: depends-on
+- from: src-cli-COMP-8
+  to: src-cli-COMP-1
+  type: depends-on
+- from: src-cli-COMP-12
+  to: src-cli-COMP-13
+  type: depends-on
+- from: src-cli-COMP-6
+  to: src-cli-COMP-4
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-6
+  type: depends-on
+- from: src-cli-COMP-12
+  to: src-cli-COMP-3
+  type: depends-on
+- from: src-cli-COMP-12
+  to: src-cli-COMP-7
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-4
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-12
+  type: depends-on
+- from: src-cli-COMP-1
+  to: src-cli-COMP-5
+  type: depends-on
+- from: LAYER-INFRA
+  to: src-cli-COMP-1
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-2
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-3
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-4
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-5
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-6
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-7
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-8
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-9
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-10
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-11
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-12
+  type: contains
+- from: LAYER-INFRA
+  to: src-cli-COMP-13
+  type: contains

@@ -284,8 +284,8 @@ try:
         Produces component specs, ICDs, dependency matrix, health report,
         and SE documents (ConOps, Functional Analysis, Logical Architecture,
         Requirements Analysis, V&V, Operations Manual, Maintenance Manual,
-        Use Cases, Risk Assessment, Interface Specification) from
-        .architecture-model.yaml. Run after extraction.
+        Use Cases, Risk Assessment, Interface Specification, Artifact
+        Traceability Map) from .architecture-model.yaml. Run after extraction.
 
         Args:
             repo_path: Absolute path to the repository.
@@ -293,7 +293,7 @@ try:
                 dependency_matrix, health, drift, index, se_all, conops,
                 functional_analysis, logical_architecture, requirements_analysis,
                 verification_validation, operations_manual, maintenance_manual,
-                use_cases, risk_assessment, interface_spec.
+                use_cases, risk_assessment, interface_spec, artifact_traceability.
         """
         return await generate_docs(repo_path=repo_path, formats=formats)
 

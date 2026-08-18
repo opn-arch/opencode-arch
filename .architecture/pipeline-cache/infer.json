@@ -9,124 +9,52 @@
         "__dataclass__": "InferredCapability",
         "__module__": "architecture_model.pipeline.infer_types",
         "id": "CAP-1",
-        "name": "Selector",
-        "description": "Domain logic in src/opencode_arch/artifacts/selector.py",
-        "evidence_source": "domain_module",
+        "name": "gRPC Services",
+        "description": "gRPC service definitions and handlers",
+        "evidence_source": "grpc_pattern",
         "sub_capabilities": []
       },
       {
         "__dataclass__": "InferredCapability",
         "__module__": "architecture_model.pipeline.infer_types",
         "id": "CAP-2",
-        "name": "Templates",
-        "description": "Domain logic in src/opencode_arch/artifacts/templates.py",
-        "evidence_source": "domain_module",
+        "name": "Package Group Management",
+        "description": "Package group with 2 modules",
+        "evidence_source": "package_group",
         "sub_capabilities": []
       },
       {
         "__dataclass__": "InferredCapability",
         "__module__": "architecture_model.pipeline.infer_types",
         "id": "CAP-3",
-        "name": "Diagrams",
-        "description": "Domain logic in src/opencode_arch/artifacts/diagrams.py",
-        "evidence_source": "domain_module",
+        "name": "Package Group Management",
+        "description": "Package group with 76 modules",
+        "evidence_source": "package_group",
         "sub_capabilities": []
       },
       {
         "__dataclass__": "InferredCapability",
         "__module__": "architecture_model.pipeline.infer_types",
         "id": "CAP-4",
-        "name": "Cache",
-        "description": "Domain logic in src/opencode_arch/llm/cache.py",
-        "evidence_source": "domain_module",
+        "name": "CLI Run Benchmark",
+        "description": "CLI commands in scripts/run_benchmark.py",
+        "evidence_source": "cli_pattern",
         "sub_capabilities": []
       },
       {
         "__dataclass__": "InferredCapability",
         "__module__": "architecture_model.pipeline.infer_types",
         "id": "CAP-5",
-        "name": "Formatter",
-        "description": "Domain logic in src/opencode_arch/context/formatter.py",
-        "evidence_source": "domain_module",
+        "name": "CLI Benchmark Economy",
+        "description": "CLI commands in scripts/benchmark_economy.py",
+        "evidence_source": "cli_pattern",
         "sub_capabilities": []
       },
       {
         "__dataclass__": "InferredCapability",
         "__module__": "architecture_model.pipeline.infer_types",
         "id": "CAP-6",
-        "name": "Pipeline Bridge",
-        "description": "Domain logic in src/opencode_arch/context/pipeline_bridge.py",
-        "evidence_source": "domain_module",
-        "sub_capabilities": []
-      },
-      {
-        "__dataclass__": "InferredCapability",
-        "__module__": "architecture_model.pipeline.infer_types",
-        "id": "CAP-7",
-        "name": "Patterns",
-        "description": "Domain logic in src/opencode_arch/learning/patterns.py",
-        "evidence_source": "domain_module",
-        "sub_capabilities": []
-      },
-      {
-        "__dataclass__": "InferredCapability",
-        "__module__": "architecture_model.pipeline.infer_types",
-        "id": "CAP-8",
-        "name": "Resolution",
-        "description": "Domain logic in src/opencode_arch/agent/resolution.py",
-        "evidence_source": "domain_module",
-        "sub_capabilities": []
-      },
-      {
-        "__dataclass__": "InferredCapability",
-        "__module__": "architecture_model.pipeline.infer_types",
-        "id": "CAP-9",
-        "name": "Quality",
-        "description": "Domain logic in src/opencode_arch/mcp/quality.py",
-        "evidence_source": "domain_module",
-        "sub_capabilities": []
-      },
-      {
-        "__dataclass__": "InferredCapability",
-        "__module__": "architecture_model.pipeline.infer_types",
-        "id": "CAP-10",
-        "name": "Metrics",
-        "description": "Domain logic in src/opencode_arch/cli/metrics.py",
-        "evidence_source": "domain_module",
-        "sub_capabilities": []
-      },
-      {
-        "__dataclass__": "InferredCapability",
-        "__module__": "architecture_model.pipeline.infer_types",
-        "id": "CAP-11",
-        "name": "Docs Validator",
-        "description": "Domain logic in src/opencode_arch/cli/docs_validator.py",
-        "evidence_source": "domain_module",
-        "sub_capabilities": []
-      },
-      {
-        "__dataclass__": "InferredCapability",
-        "__module__": "architecture_model.pipeline.infer_types",
-        "id": "CAP-12",
-        "name": "Calibrate",
-        "description": "Domain logic in src/opencode_arch/cli/calibrate.py",
-        "evidence_source": "domain_module",
-        "sub_capabilities": []
-      },
-      {
-        "__dataclass__": "InferredCapability",
-        "__module__": "architecture_model.pipeline.infer_types",
-        "id": "CAP-13",
-        "name": "Spot Check",
-        "description": "Domain logic in src/opencode_arch/regen/spot_check.py",
-        "evidence_source": "domain_module",
-        "sub_capabilities": []
-      },
-      {
-        "__dataclass__": "InferredCapability",
-        "__module__": "architecture_model.pipeline.infer_types",
-        "id": "CAP-14",
-        "name": "CLI Main",
+        "name": "Command Line Interface Handler",
         "description": "CLI commands in src/opencode_arch/cli/main.py",
         "evidence_source": "cli_pattern",
         "sub_capabilities": []
@@ -199,11 +127,11 @@
   "quality": {
     "__dataclass__": "QualityMetrics",
     "__module__": "architecture_model.pipeline.protocol",
-    "score": 83,
+    "score": 58,
     "sub_scores": {
-      "capability_coverage": 83.9506172839506,
+      "capability_coverage": 58.282208588957054,
       "actor_completeness": 100.0,
-      "capability_count": 14.0
+      "capability_count": 6.0
     },
     "thresholds": {
       "capability_coverage": 60.0
@@ -249,6 +177,78 @@
       "__dataclass__": "Uncertainty",
       "__module__": "architecture_model.pipeline.protocol",
       "category": "ambiguous_module",
+      "description": "src/opencode_arch/artifacts/selector.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/artifacts/templates.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/artifacts/context.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/artifacts/diagrams.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/llm/cache.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/llm/relay.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/context/formatter.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/context/pipeline_bridge.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
       "description": "src/opencode_arch/learning/assessor.py has no clear capability affiliation",
       "context": {},
       "suggested_fallback": "llm_analysis",
@@ -276,6 +276,15 @@
       "__dataclass__": "Uncertainty",
       "__module__": "architecture_model.pipeline.protocol",
       "category": "ambiguous_module",
+      "description": "src/opencode_arch/learning/patterns.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
       "description": "src/opencode_arch/learning/adapter.py has no clear capability affiliation",
       "context": {},
       "suggested_fallback": "llm_analysis",
@@ -294,7 +303,25 @@
       "__dataclass__": "Uncertainty",
       "__module__": "architecture_model.pipeline.protocol",
       "category": "ambiguous_module",
+      "description": "src/opencode_arch/agent/resolution.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
       "description": "src/opencode_arch/mcp/server.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/quality.py has no clear capability affiliation",
       "context": {},
       "suggested_fallback": "llm_analysis",
       "priority": "informational"
@@ -348,6 +375,15 @@
       "__dataclass__": "Uncertainty",
       "__module__": "architecture_model.pipeline.protocol",
       "category": "ambiguous_module",
+      "description": "src/opencode_arch/cli/metrics.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
       "description": "src/opencode_arch/cli/regen_loop.py has no clear capability affiliation",
       "context": {},
       "suggested_fallback": "llm_analysis",
@@ -375,7 +411,7 @@
       "__dataclass__": "Uncertainty",
       "__module__": "architecture_model.pipeline.protocol",
       "category": "ambiguous_module",
-      "description": "src/opencode_arch/cli/prompts.py has no clear capability affiliation",
+      "description": "src/opencode_arch/cli/docs.py has no clear capability affiliation",
       "context": {},
       "suggested_fallback": "llm_analysis",
       "priority": "informational"
@@ -384,7 +420,7 @@
       "__dataclass__": "Uncertainty",
       "__module__": "architecture_model.pipeline.protocol",
       "category": "ambiguous_module",
-      "description": "src/opencode_arch/cli/bench.py has no clear capability affiliation",
+      "description": "src/opencode_arch/cli/prompts.py has no clear capability affiliation",
       "context": {},
       "suggested_fallback": "llm_analysis",
       "priority": "informational"
@@ -411,7 +447,34 @@
       "__dataclass__": "Uncertainty",
       "__module__": "architecture_model.pipeline.protocol",
       "category": "ambiguous_module",
+      "description": "src/opencode_arch/cli/docs_validator.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/cli/calibrate.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
       "description": "src/opencode_arch/cli/extract.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/prompts/regen.py has no clear capability affiliation",
       "context": {},
       "suggested_fallback": "llm_analysis",
       "priority": "informational"
@@ -447,7 +510,250 @@
       "__dataclass__": "Uncertainty",
       "__module__": "architecture_model.pipeline.protocol",
       "category": "ambiguous_module",
+      "description": "src/opencode_arch/regen/spot_check.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
       "description": "src/opencode_arch/regen/self_heal.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/sync.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/ingest.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/llm_audit.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/check.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/correct.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/slice.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/decompose.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/log.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/generate.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/feedback.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/trace_requirements.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/regen_score.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/author.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/docs.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/export.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/assess.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/validate.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/pipeline.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/stats.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/gate.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/learn.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/scan.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/diff.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/evaluate.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/require.py has no clear capability affiliation",
+      "context": {},
+      "suggested_fallback": "llm_analysis",
+      "priority": "informational"
+    },
+    {
+      "__dataclass__": "Uncertainty",
+      "__module__": "architecture_model.pipeline.protocol",
+      "category": "ambiguous_module",
+      "description": "src/opencode_arch/mcp/tools/extract.py has no clear capability affiliation",
       "context": {},
       "suggested_fallback": "llm_analysis",
       "priority": "informational"
@@ -480,7 +786,7 @@
       "priority": "informational"
     }
   ],
-  "input_hash": "162",
+  "input_hash": "163",
   "duration_ms": 1,
   "version": "1.0"
 }

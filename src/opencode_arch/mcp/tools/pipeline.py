@@ -67,7 +67,7 @@ async def run_pipeline(
     if not root.exists():
         return {"error": f"Repository path does not exist: {repo_path}"}
 
-    output_dir = root / ".architecture-models"
+    output_dir = root
     learning_path = root / ".architecture" / "learning"
 
     try:
@@ -163,6 +163,15 @@ async def run_pipeline(
         ctx = PipelineContext(repo_path=root, output_dir=output_dir)
         ctx.config["coordinator"] = coord
 
+        # Wire up LLM enrichment via copilot-relay if available
+        try:
+            from opencode_arch.llm.relay import relay_llm_callback, is_relay_available
+
+            if is_relay_available():
+                ctx.llm_callback = relay_llm_callback
+        except Exception:
+            pass  # No relay available — deterministic mode
+
         # Set scope if scoped run
         if scope:
             ctx.scope = boundary.system_id
@@ -207,14 +216,37 @@ async def run_pipeline(
         else:
             results = coord.run_all(ctx)
 
-        # LLM enrichment: if llm_callback is set, enrich the target stage output
+        # LLM enrichment: enrich all enrichable stages, then re-run downstream
         enrichment_changes: list[str] = []
         if ctx.llm_callback is not None:
-            target = stage or list(results.keys())[-1]
-            try:
-                enrichment_changes = await coord.enrich_stage_output(target, ctx)
-            except Exception:
-                pass
+            enrichable = ["infer", "allocate"]
+            any_enriched = False
+            for enrich_stage in enrichable:
+                if enrich_stage in results:
+                    try:
+                        changes = await coord.enrich_stage_output(enrich_stage, ctx)
+                        enrichment_changes.extend(changes)
+                        if changes:
+                            any_enriched = True
+                            # Save enriched result to cache
+                            cache.save_stage(enrich_stage, results[enrich_stage])
+                    except Exception:
+                        pass
+
+            # If enrichment changed anything and we ran past synthesize,
+            # re-run synthesize+emit with the enriched data
+            if any_enriched and not stage:
+                # Invalidate downstream stages so they re-run
+                for downstream in ["synthesize", "emit"]:
+                    ctx.cache.pop(downstream, None)
+                    results.pop(downstream, None)
+                try:
+                    re_results = coord.run_to("emit", ctx)
+                    results.update(re_results)
+                    for name, r in re_results.items():
+                        cache.save_stage(name, r)
+                except Exception:
+                    pass
 
         # Persist newly computed stages to cache
         for name, result in results.items():

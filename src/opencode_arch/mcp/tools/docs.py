@@ -272,6 +272,7 @@ async def generate_docs(
             "security_analysis",
             "cli_reference",
             "plugin_guide",
+            "artifact_traceability",
         }
         if requested & se_keys or "all" in requested or "se_all" in requested:
             try:

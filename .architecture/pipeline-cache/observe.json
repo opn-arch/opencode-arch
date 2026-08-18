@@ -12104,6 +12104,91 @@
       {
         "__dataclass__": "ModuleRecord",
         "__module__": "architecture_model.pipeline.observe_types",
+        "path": "src/opencode_arch/llm/relay.py",
+        "language": "python",
+        "functions": [
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "_chat_sync",
+            "signature": "def _chat_sync(content: str, system_prompt: str | None=None, relay_url: str=DEFAULT_RELAY_URL, timeout: int=30) -> str",
+            "body_hint": "[5 statements]",
+            "calls": [
+              "encode",
+              "Request",
+              "dumps",
+              "urlopen",
+              "join",
+              "warning",
+              "strip",
+              "startswith",
+              "loads",
+              "get",
+              "append",
+              "decode"
+            ],
+            "decorators": [],
+            "docstring": "Synchronous call to copilot-relay /chat endpoint.\n\nParses SSE stream and returns concatenated content chunks.",
+            "line_number": 20
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "relay_llm_callback",
+            "signature": "async def relay_llm_callback(stage: str, prompt: str, context: dict | None=None) -> str | None",
+            "body_hint": "[4 statements]",
+            "calls": [
+              "_chat_sync",
+              "strip",
+              "info"
+            ],
+            "decorators": [],
+            "docstring": "Async LLM callback compatible with PipelineContext.llm_callback.\n\nSignature: async (stage: str, prompt: str, context: dict) -> str\nWraps the synchronous relay call.",
+            "line_number": 64
+          },
+          {
+            "__dataclass__": "FunctionRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "is_relay_available",
+            "signature": "def is_relay_available(relay_url: str=DEFAULT_RELAY_URL) -> bool",
+            "body_hint": "try:\n    req = Request(f'{relay_url}/health', method='GET')\n    with urlopen(req, timeout=3) as resp:\n        data = json.loads(resp.read())\n        return data.get('status') == 'ok'\nexcept Exception:\n    return False",
+            "calls": [
+              "Request",
+              "urlopen",
+              "loads",
+              "read",
+              "get"
+            ],
+            "decorators": [],
+            "docstring": "Check if the copilot-relay is running and healthy.",
+            "line_number": 82
+          }
+        ],
+        "classes": [],
+        "constants": [
+          {
+            "__dataclass__": "ConstantRecord",
+            "__module__": "architecture_model.pipeline.observe_types",
+            "name": "DEFAULT_RELAY_URL",
+            "value": "os.environ.get('COPILOT_RELAY_URL', 'http://localhost:8400')",
+            "type": "",
+            "context": ""
+          }
+        ],
+        "imports": [
+          "__future__",
+          "json",
+          "logging",
+          "os",
+          "urllib.request",
+          "urllib.error"
+        ],
+        "line_count": 90,
+        "docstring": "Copilot-relay LLM client for pipeline enrichment.\n\nCalls the copilot-relay SSE endpoint (POST /chat) and collects\nstreamed chunks into a complete response string."
+      },
+      {
+        "__dataclass__": "ModuleRecord",
+        "__module__": "architecture_model.pipeline.observe_types",
         "path": "src/opencode_arch/context/formatter.py",
         "language": "python",
         "functions": [
@@ -17527,7 +17612,7 @@
           "typing",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 317,
+        "line_count": 318,
         "docstring": "architect_docs MCP tool \u2014 generate SE documentation from architecture model."
       },
       {
@@ -17737,6 +17822,7 @@
               "Path",
               "load_stage",
               "clear",
+              "is_relay_available",
               "run_to",
               "run_all",
               "extend",
@@ -17770,9 +17856,11 @@
               "keys",
               "format_exc",
               "LLMCallRecord",
-              "enrich_stage_output",
+              "pop",
+              "update",
               "log_entry",
-              "strftime"
+              "strftime",
+              "enrich_stage_output"
             ],
             "decorators": [
               "with_quality"
@@ -17791,7 +17879,7 @@
           "typing",
           "opencode_arch.mcp.quality"
         ],
-        "line_count": 343,
+        "line_count": 375,
         "docstring": "architect_pipeline MCP tool \u2014 run the 10-stage extraction pipeline.\n\nSupports stage-by-stage execution with file-based cache persistence.\nThe MCP orchestrator calls this tool once per stage, reviews uncertainties,\nresolves them via LLM, and passes resolutions on the next call.\n\nFor subsystem enrichment, use the `scope` parameter after decompose to run\nscoped pipelines on individual detected systems."
       },
       {
@@ -20973,9 +21061,9 @@
     "__module__": "architecture_model.pipeline.protocol",
     "score": 99,
     "sub_scores": {
-      "parse_success_rate": 99.38650306748467,
-      "symbol_density": 3.623456790123457,
-      "file_count": 163.0
+      "parse_success_rate": 99.39024390243902,
+      "symbol_density": 3.625766871165644,
+      "file_count": 164.0
     },
     "thresholds": {
       "parse_success_rate": 90.0
@@ -20993,7 +21081,7 @@
     }
   ],
   "uncertainties": [],
-  "input_hash": "163",
-  "duration_ms": 454,
+  "input_hash": "164",
+  "duration_ms": 498,
   "version": "1.0"
 }

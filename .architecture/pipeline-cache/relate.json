@@ -8,15 +8,6 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-1",
-        "to_id": "CAP-1",
-        "rel_type": "realizes",
-        "evidence_source": "allocation",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
         "from_id": "COMP-2",
         "to_id": "CAP-2",
         "rel_type": "realizes",
@@ -26,7 +17,7 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-3",
+        "from_id": "COMP-3-1",
         "to_id": "CAP-3",
         "rel_type": "realizes",
         "evidence_source": "allocation",
@@ -35,8 +26,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-4",
-        "to_id": "CAP-4",
+        "from_id": "COMP-3-2",
+        "to_id": "CAP-3",
         "rel_type": "realizes",
         "evidence_source": "allocation",
         "confidence": 1.0
@@ -44,8 +35,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-5",
-        "to_id": "CAP-5",
+        "from_id": "COMP-3-3",
+        "to_id": "CAP-3",
         "rel_type": "realizes",
         "evidence_source": "allocation",
         "confidence": 1.0
@@ -53,8 +44,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-6",
-        "to_id": "CAP-6",
+        "from_id": "COMP-3-4",
+        "to_id": "CAP-3",
         "rel_type": "realizes",
         "evidence_source": "allocation",
         "confidence": 1.0
@@ -62,8 +53,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-7",
-        "to_id": "CAP-7",
+        "from_id": "COMP-3-5",
+        "to_id": "CAP-3",
         "rel_type": "realizes",
         "evidence_source": "allocation",
         "confidence": 1.0
@@ -71,8 +62,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-8",
-        "to_id": "CAP-8",
+        "from_id": "COMP-3-6",
+        "to_id": "CAP-3",
         "rel_type": "realizes",
         "evidence_source": "allocation",
         "confidence": 1.0
@@ -80,8 +71,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-9",
-        "to_id": "CAP-9",
+        "from_id": "COMP-3-7",
+        "to_id": "CAP-3",
         "rel_type": "realizes",
         "evidence_source": "allocation",
         "confidence": 1.0
@@ -89,8 +80,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-10",
-        "to_id": "CAP-10",
+        "from_id": "COMP-3-8",
+        "to_id": "CAP-3",
         "rel_type": "realizes",
         "evidence_source": "allocation",
         "confidence": 1.0
@@ -98,8 +89,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-11",
-        "to_id": "CAP-11",
+        "from_id": "COMP-3-9",
+        "to_id": "CAP-3",
         "rel_type": "realizes",
         "evidence_source": "allocation",
         "confidence": 1.0
@@ -107,8 +98,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-12",
-        "to_id": "CAP-12",
+        "from_id": "COMP-3-10",
+        "to_id": "CAP-3",
         "rel_type": "realizes",
         "evidence_source": "allocation",
         "confidence": 1.0
@@ -116,8 +107,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-13",
-        "to_id": "CAP-13",
+        "from_id": "COMP-3-11",
+        "to_id": "CAP-3",
         "rel_type": "realizes",
         "evidence_source": "allocation",
         "confidence": 1.0
@@ -125,8 +116,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-14",
-        "to_id": "CAP-14",
+        "from_id": "COMP-3-12",
+        "to_id": "CAP-3",
         "rel_type": "realizes",
         "evidence_source": "allocation",
         "confidence": 1.0
@@ -134,8 +125,17 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-6",
-        "to_id": "COMP-15-4",
+        "from_id": "COMP-3-13",
+        "to_id": "CAP-3",
+        "rel_type": "realizes",
+        "evidence_source": "allocation",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-7",
+        "to_id": "COMP-3-11",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -143,8 +143,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-6",
-        "to_id": "COMP-15-2",
+        "from_id": "COMP-2",
+        "to_id": "COMP-3-7",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -152,8 +152,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-10",
-        "to_id": "COMP-15-2",
+        "from_id": "COMP-3-6",
+        "to_id": "COMP-3-7",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -161,8 +161,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-9",
-        "to_id": "COMP-1",
+        "from_id": "COMP-3-4",
+        "to_id": "COMP-3-7",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -170,8 +170,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-9",
-        "to_id": "COMP-5",
+        "from_id": "COMP-3-11",
+        "to_id": "COMP-3-7",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -179,8 +179,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-11",
-        "to_id": "COMP-15-6",
+        "from_id": "COMP-3-7",
+        "to_id": "COMP-3-2",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -188,8 +188,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-11",
-        "to_id": "COMP-13",
+        "from_id": "COMP-3-8",
+        "to_id": "COMP-3-5",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -197,8 +197,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-10",
-        "to_id": "COMP-15-7",
+        "from_id": "COMP-3-9",
+        "to_id": "COMP-3-1",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -206,8 +206,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-11",
-        "to_id": "COMP-1",
+        "from_id": "COMP-3-12",
+        "to_id": "COMP-3-5",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -215,8 +215,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-15-7",
-        "to_id": "COMP-15-2",
+        "from_id": "COMP-3-9",
+        "to_id": "COMP-3-5",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -224,8 +224,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-4",
-        "to_id": "COMP-15-8",
+        "from_id": "COMP-3-9",
+        "to_id": "COMP-3-13",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -233,8 +233,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-8",
-        "to_id": "COMP-15-1",
+        "from_id": "COMP-3-8",
+        "to_id": "COMP-3-10",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -242,8 +242,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-11",
-        "to_id": "COMP-15-2",
+        "from_id": "COMP-3-9",
+        "to_id": "COMP-3-10",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -251,8 +251,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-11",
-        "to_id": "COMP-12",
+        "from_id": "COMP-3-7",
+        "to_id": "COMP-3-1",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -260,8 +260,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-11",
-        "to_id": "COMP-15-5",
+        "from_id": "COMP-3-7",
+        "to_id": "COMP-3-8",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -269,8 +269,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-7",
-        "to_id": "COMP-15-2",
+        "from_id": "COMP-3-8",
+        "to_id": "COMP-3-9",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -278,8 +278,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-1",
-        "to_id": "COMP-3",
+        "from_id": "COMP-3-3",
+        "to_id": "COMP-3-1",
         "rel_type": "depends-on",
         "evidence_source": "import",
         "confidence": 1.0
@@ -287,179 +287,206 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-1",
+        "from_id": "COMP-3-1",
+        "to_id": "COMP-3-3",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-1",
+        "to_id": "COMP-3-5",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-7",
+        "to_id": "COMP-3-3",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-3",
+        "to_id": "COMP-3-8",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-13",
+        "to_id": "COMP-3-7",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-7",
+        "to_id": "COMP-3-5",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-3",
+        "to_id": "COMP-3-5",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-8",
+        "to_id": "COMP-3-7",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-11",
+        "to_id": "COMP-3-1",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-6",
+        "to_id": "COMP-3-4",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-7",
+        "to_id": "COMP-3-10",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-4",
+        "to_id": "COMP-3-5",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-9",
+        "to_id": "COMP-3-7",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-2",
+        "to_id": "COMP-3-7",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-8",
+        "to_id": "COMP-3-2",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-9",
+        "to_id": "COMP-3-11",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-9",
+        "to_id": "COMP-3-12",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-7",
+        "to_id": "COMP-3-9",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-9",
+        "to_id": "COMP-3-2",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-4",
+        "to_id": "COMP-3-9",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-3",
+        "to_id": "COMP-3-7",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "COMP-3-11",
+        "to_id": "COMP-3-9",
+        "rel_type": "depends-on",
+        "evidence_source": "import",
+        "confidence": 1.0
+      },
+      {
+        "__dataclass__": "DerivedRelationship",
+        "__module__": "architecture_model.pipeline.relate_types",
+        "from_id": "LAYER-INFRA",
         "to_id": "COMP-2",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-11",
-        "to_id": "COMP-15-8",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-4",
-        "to_id": "COMP-15-6",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-14",
-        "to_id": "COMP-15-2",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-9",
-        "to_id": "COMP-6",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-11",
-        "to_id": "COMP-3",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-14",
-        "to_id": "COMP-15-3",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-14",
-        "to_id": "COMP-9",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-8",
-        "to_id": "COMP-7",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-4",
-        "to_id": "COMP-15-2",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-4",
-        "to_id": "COMP-15-4",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-11",
-        "to_id": "COMP-2",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-7",
-        "to_id": "COMP-15-1",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-11",
-        "to_id": "COMP-10",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-6",
-        "to_id": "COMP-1",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-4",
-        "to_id": "COMP-15-5",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-6",
-        "to_id": "COMP-5",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-1",
-        "to_id": "COMP-15-2",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "COMP-11",
-        "to_id": "COMP-14",
-        "rel_type": "depends-on",
-        "evidence_source": "import",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-1",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -467,8 +494,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-2",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-1",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -476,8 +503,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-3",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-2",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -485,8 +512,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-4",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-3",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -494,8 +521,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-5",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-4",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -503,8 +530,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-6",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-5",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -512,8 +539,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-7",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-6",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -521,8 +548,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-8",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-7",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -530,8 +557,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-9",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-8",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -539,8 +566,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-10",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-9",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -548,8 +575,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-11",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-10",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -557,8 +584,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-12",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-11",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -566,8 +593,8 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-13",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-12",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
@@ -575,86 +602,19 @@
       {
         "__dataclass__": "DerivedRelationship",
         "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-14",
-        "rel_type": "contains",
-        "evidence_source": "layer_inference",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-15-1",
-        "rel_type": "contains",
-        "evidence_source": "layer_inference",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-15-2",
-        "rel_type": "contains",
-        "evidence_source": "layer_inference",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-15-3",
-        "rel_type": "contains",
-        "evidence_source": "layer_inference",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-15-4",
-        "rel_type": "contains",
-        "evidence_source": "layer_inference",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-15-5",
-        "rel_type": "contains",
-        "evidence_source": "layer_inference",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-15-6",
-        "rel_type": "contains",
-        "evidence_source": "layer_inference",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-15-7",
-        "rel_type": "contains",
-        "evidence_source": "layer_inference",
-        "confidence": 1.0
-      },
-      {
-        "__dataclass__": "DerivedRelationship",
-        "__module__": "architecture_model.pipeline.relate_types",
-        "from_id": "LAYER-INFRA",
-        "to_id": "COMP-15-8",
+        "from_id": "LAYER-DATA",
+        "to_id": "COMP-3-13",
         "rel_type": "contains",
         "evidence_source": "layer_inference",
         "confidence": 1.0
       }
     ],
     "layers": [
+      {
+        "id": "LAYER-DATA",
+        "name": "Data",
+        "description": "Components in the data architectural tier"
+      },
       {
         "id": "LAYER-INFRA",
         "name": "Infra",
@@ -665,20 +625,20 @@
   "quality": {
     "__dataclass__": "QualityMetrics",
     "__module__": "architecture_model.pipeline.protocol",
-    "score": 81,
+    "score": 100,
     "sub_scores": {
-      "relationship_count": 72.0,
+      "relationship_count": 67.0,
       "realizes_count": 14.0,
-      "depends_on_count": 36.0,
+      "depends_on_count": 39.0,
       "constrained_by_count": 0.0,
-      "layer_count": 1.0
+      "layer_count": 2.0
     },
     "thresholds": {},
     "llm_prompt": ""
   },
   "diagnostics": [],
   "uncertainties": [],
-  "input_hash": "22",
-  "duration_ms": 33,
+  "input_hash": "14",
+  "duration_ms": 65,
   "version": "1.0"
 }

@@ -1,0 +1,29 @@
+{
+  "modules": [
+    {
+      "file": "src/opencode_arch/llm/cache.py",
+      "functions": 2,
+      "classes": 2
+    },
+    {
+      "file": "src/opencode_arch/llm/prompts/audit.py",
+      "functions": 0,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/llm/prompts/matching.py",
+      "functions": 0,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/llm/prompts/requirements.py",
+      "functions": 0,
+      "classes": 0
+    },
+    {
+      "file": "src/opencode_arch/llm/relay.py",
+      "functions": 3,
+      "classes": 0
+    }
+  ]
+}

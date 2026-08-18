@@ -1,50 +1,36 @@
 ---
 document: Interface Specification
-system: opencode-arch
+system: System
 system_id: SYS-unknown
-generated_at: 2026-08-17T18:14:32Z
+generated_at: 2026-08-18T20:07:47Z
 generator_version: 0.3.0
-model_hash: b8b11e54f9db
-edition: 1
+model_hash: ceee27c08922
+edition: 5
 ---
 
-# Interface Specification: opencode-arch
+> **Model Completeness: F (0%)**
+> Some sections may be empty due to missing model entities.
+> - 56/56 components have no behavioral specification
+> - No interfaces defined on components → interface-spec doc empty
+> - No requirements defined
+> - Actors defined but missing goals/descriptions
+> Run the extraction pipeline or manually add behaviors/interfaces/constraints.
+
+# Interface Specification: System
 
 ## Interface Inventory
 
-*No interfaces defined in the model.*
+| ID | Interface | Type | Protocol | Provider | Consumer |
+|----|-----------|------|----------|----------|----------|
+| IF-1 | main CLI | internal | — | — | — |
 
 ## Interface Details
 
-*No interfaces to detail.*
+### main CLI
+
+- **ID:** IF-1
+- **Type:** internal
 
 ## Component-Level Interfaces
 
-### Extraction Tools (COMP-1)
-
-| Name | Kind | Target | Signature |
-|------|------|--------|-----------|
-| exposes_to_Cli | provides | COMP-3 | `` |
-| uses_Resolution | requires | COMP-5 | `` |
-| uses_Cli | requires | COMP-3 | `` |
-| uses_Requirements | requires | COMP-4 | `` |
-
-### CLI Commands (COMP-3)
-
-| Name | Kind | Target | Signature |
-|------|------|--------|-----------|
-| uses_Tools | requires | COMP-1 | `` |
-| exposes_to_Tools | provides | COMP-1 | `` |
-
-### Requirements (COMP-4)
-
-| Name | Kind | Target | Signature |
-|------|------|--------|-----------|
-| exposes_to_Tools | provides | COMP-1 | `` |
-
-### Resolution (COMP-5)
-
-| Name | Kind | Target | Signature |
-|------|------|--------|-----------|
-| exposes_to_Tools | provides | COMP-1 | `` |
-
+*No component-level interfaces defined.*

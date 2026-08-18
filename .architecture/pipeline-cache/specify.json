@@ -9,8 +9,28 @@
         "__dataclass__": "InterfaceSpec",
         "__module__": "architecture_model.pipeline.specify_types",
         "id": "IF-1",
+        "name": "run_benchmark CLI",
+        "component_id": "COMP-2",
+        "interface_type": "cli",
+        "methods": [],
+        "description": ""
+      },
+      {
+        "__dataclass__": "InterfaceSpec",
+        "__module__": "architecture_model.pipeline.specify_types",
+        "id": "IF-2",
+        "name": "benchmark_economy CLI",
+        "component_id": "COMP-2",
+        "interface_type": "cli",
+        "methods": [],
+        "description": ""
+      },
+      {
+        "__dataclass__": "InterfaceSpec",
+        "__module__": "architecture_model.pipeline.specify_types",
+        "id": "IF-3",
         "name": "main CLI",
-        "component_id": "COMP-14",
+        "component_id": "COMP-3-9",
         "interface_type": "cli",
         "methods": [],
         "description": ""
@@ -22,11 +42,11 @@
     "__module__": "architecture_model.pipeline.protocol",
     "score": 50,
     "sub_scores": {
-      "interface_count": 1.0,
+      "interface_count": 3.0,
       "rest_count": 0.0,
-      "cli_count": 1.0,
+      "cli_count": 3.0,
       "library_count": 0.0,
-      "component_coverage": 0.05
+      "component_coverage": 0.14
     },
     "thresholds": {},
     "llm_prompt": ""
