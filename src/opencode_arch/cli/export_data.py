@@ -3,6 +3,7 @@
 Collects (model, manifest, metrics) triples from one or more repos
 and writes them as JSONL for LLM training.
 """
+
 from __future__ import annotations
 
 import json
@@ -36,8 +37,10 @@ def run_export_data(
         arch_dir = repo / ".architecture"
 
         if not model_path.exists() and not arch_dir.exists():
-            print(f"Warning: No .architecture-model.yaml or .architecture/ in {repo}, skipping",
-                  file=sys.stderr)
+            print(
+                f"Warning: No .architecture-model.yaml or .architecture/ in {repo}, skipping",
+                file=sys.stderr,
+            )
             continue
 
         record: dict = {"repo": repo.name}
@@ -71,7 +74,7 @@ def run_export_data(
                     block_metrics = block_dir / "metrics.json"
                     if block_metrics.exists():
                         block["metrics"] = json.loads(block_metrics.read_text())
-                     if block:
+                    if block:
                         blocks[block_dir.name] = block
             if blocks:
                 record["blocks"] = blocks
@@ -81,6 +84,7 @@ def run_export_data(
         if req_path and req_path.exists():
             try:
                 import yaml
+
                 req_data = yaml.safe_load(req_path.read_text()) or {}
                 record["requirements"] = req_data.get("requirements", [])
             except Exception:
@@ -103,12 +107,12 @@ def run_export_data(
         if include_telemetry:
             try:
                 from opencode_arch.telemetry.store import TelemetryStore
+
                 store = TelemetryStore()
                 all_records = store.query(repo=repo.name)
                 if all_records:
                     record["telemetry_records"] = [
-                        r._asdict() if hasattr(r, '_asdict') else r
-                        for r in all_records
+                        r._asdict() if hasattr(r, "_asdict") else r for r in all_records
                     ]
             except Exception:
                 pass

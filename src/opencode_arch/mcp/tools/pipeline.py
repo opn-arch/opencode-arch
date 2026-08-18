@@ -254,6 +254,12 @@ async def run_pipeline(
                 cache.save_stage(name, result)
         cache.save_llm_calls(ctx.llm_calls)
 
+        # Persist enrichment log and artifact reviews
+        if ctx.enrichment_log:
+            cache.save_enrichment_log(ctx.enrichment_log)
+        if hasattr(ctx, "_artifact_reviews") and ctx._artifact_reviews:
+            cache.save_reviews(ctx._artifact_reviews)
+
         # Build stage summaries
         stage_summaries = {}
         for name, result in results.items():
@@ -359,6 +365,8 @@ async def run_pipeline(
             "llm_calls": llm_summaries,
             "total_llm_tokens": sum(c.total_tokens for c in ctx.llm_calls),
             "enrichment_changes": enrichment_changes,
+            "artifact_reviews": len(getattr(ctx, "_artifact_reviews", []) or []),
+            "enrichment_records": len(ctx.enrichment_log),
             "hint": "Use architect_log to record decisions made during this stage.",
         }
 
