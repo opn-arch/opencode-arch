@@ -1,112 +1,66 @@
 ---
 document: Logical Architecture
-system: System
+system: opencode-arch
 system_id: SYS-unknown
-generated_at: 2026-08-18T23:31:28Z
+generated_at: 2026-08-19T16:59:40Z
 generator_version: 0.3.0
-model_hash: efca59bc201d
-edition: 7
+model_hash: f2b902537f3a
+edition: 8
 ---
 
-> **Model Completeness: F (0%)**
-> Some sections may be empty due to missing model entities.
-> - 57/57 components have no behavioral specification
-> - No interfaces defined on components → interface-spec doc empty
-> - No requirements defined
-> - Actors defined but missing goals/descriptions
-> Run the extraction pipeline or manually add behaviors/interfaces/constraints.
-
-# Logical Architecture: System
-
+# Logical Architecture: opencode-arch
 ## Layer Structure
-
-| Order | Layer | Technologies | Directories |
-|-------|-------|-------------|-------------|
-| 0 | infra | — | — |
-| 0 | data | — | — |
-
+*No layers defined.*
 ## Component Allocation
-
-### data
-
-| Component | Kind | Files | Responsibilities |
-|-----------|------|-------|------------------|
-| Src (artifacts) (COMP-3-1) | service | 5 files | — |
-| LLM Integration Layer (COMP-3-2) | service | 5 files | — |
-| Src (context) (COMP-3-3) | service | 3 files | — |
-| Src (learning) (COMP-3-4) | service | 7 files | — |
-| Src (runner) (COMP-3-5) | service | 2 files | — |
-| Src (agent) (COMP-3-6) | service | 1 files | — |
-| MCP Quality Server (COMP-3-7) | service | 30 files | — |
-| Src (requirements) (COMP-3-8) | service | 4 files | — |
-| CLI Commands (COMP-3-9) | service | 14 files | — |
-| Src (prompts) (COMP-3-10) | service | 1 files | — |
-| Src (extract) (COMP-3-11) | service | 1 files | — |
-| Src (telemetry) (COMP-3-12) | service | 3 files | — |
-| Src (regen) (COMP-3-13) | service | 2 files | — |
-
-### infra
-
-| Component | Kind | Files | Responsibilities |
-|-----------|------|-------|------------------|
-| Benchmark Scripts (COMP-2) | service | 2 files | — |
-
 ### unassigned
 
 | Component | Kind | Files | Responsibilities |
 |-----------|------|-------|------------------|
-| Quality (src-mcp-COMP-1) | service | 1 files | — |
-| Assess (src-mcp-COMP-2) | service | 1 files | — |
-| Author (src-mcp-COMP-3) | service | 1 files | — |
-| Check (src-mcp-COMP-4) | service | 1 files | — |
-| Correct (src-mcp-COMP-5) | service | 1 files | — |
-| Decompose (src-mcp-COMP-6) | service | 1 files | — |
-| Diff (src-mcp-COMP-7) | service | 1 files | — |
-| Docs (src-mcp-COMP-8) | service | 1 files | — |
-| Evaluate (src-mcp-COMP-9) | service | 1 files | — |
-| Export (src-mcp-COMP-10) | service | 1 files | — |
-| Extract (src-mcp-COMP-11) | service | 1 files | — |
-| Feedback (src-mcp-COMP-12) | service | 1 files | — |
-| Gate (src-mcp-COMP-13) | service | 1 files | — |
-| Generate (src-mcp-COMP-14) | service | 1 files | — |
-| Group (src-mcp-COMP-15) | service | 1 files | — |
-| Ingest (src-mcp-COMP-16) | service | 1 files | — |
-| Learn (src-mcp-COMP-17) | service | 1 files | — |
-| Llm Audit (src-mcp-COMP-18) | service | 1 files | — |
-| Log (src-mcp-COMP-19) | service | 1 files | — |
-| Pipeline (src-mcp-COMP-20) | service | 1 files | — |
-| Regen Score (src-mcp-COMP-21) | service | 1 files | — |
-| Require (src-mcp-COMP-22) | service | 1 files | — |
-| Scan (src-mcp-COMP-23) | service | 1 files | — |
-| Slice (src-mcp-COMP-24) | service | 1 files | — |
-| Stats (src-mcp-COMP-25) | service | 1 files | — |
-| Sync (src-mcp-COMP-26) | service | 1 files | — |
-| Trace Requirements (src-mcp-COMP-27) | service | 1 files | — |
-| Validate (src-mcp-COMP-28) | service | 1 files | — |
-| Infrastructure (src-mcp-COMP-29) | service | 2 files | — |
-| Bench (src-cli-COMP-1) | service | 1 files | — |
-| Calibrate (src-cli-COMP-2) | service | 1 files | — |
-| Confidence (src-cli-COMP-3) | service | 1 files | — |
-| Docs (src-cli-COMP-4) | service | 1 files | — |
-| Docs Validator (src-cli-COMP-5) | service | 1 files | — |
-| Export Data (src-cli-COMP-6) | service | 1 files | — |
-| Extract (src-cli-COMP-7) | service | 1 files | — |
-| Gap Analyzer (src-cli-COMP-8) | service | 1 files | — |
-| Generate (src-cli-COMP-9) | service | 1 files | — |
-| Launch (src-cli-COMP-10) | service | 1 files | — |
-| Main (src-cli-COMP-11) | service | 1 files | — |
-| Metrics (src-cli-COMP-12) | service | 1 files | — |
-| Regen Loop (src-cli-COMP-13) | service | 1 files | — |
-| Infrastructure (src-cli-COMP-14) | service | 1 files | — |
-
+| Extraction Tools (COMP-1) | service | 5 files | — |
+| Artifacts (COMP-2) | service | 4 files | — |
+| CLI Commands (COMP-3) | service | 13 files | — |
+| Requirements (COMP-4) | service | 5 files | — |
+| Resolution (COMP-5) | service | 6 files | — |
+| Context Tools (COMP-6) | service | 3 files | — |
+| Model Management Tools (COMP-7) | service | 4 files | — |
+| Documentation Tools (COMP-8) | service | 3 files | — |
+| Quality Gate Tools (COMP-9) | service | 4 files | — |
+| Requirements Tools (COMP-10) | service | 3 files | — |
+| Live Analysis Tools (COMP-11) | service | 5 files | — |
+| Runner (COMP-12) | service | 2 files | — |
+| Telemetry (COMP-13) | service | 3 files | — |
+| Learning (COMP-14) | service | 6 files | — |
+| MCP Server (COMP-15) | service | 3 files | — |
 ## Inter-Component Interfaces
-
 | Interface | Type | Protocol | Provider | Consumer |
 |-----------|------|----------|----------|----------|
+| run_benchmark CLI | internal | — | — | — |
+| benchmark_economy CLI | internal | — | — | — |
 | main CLI | internal | — | — | — |
-
+| COMP-3-1 Library API | internal | — | — | — |
+| COMP-3-2 Library API | internal | — | — | — |
+| COMP-3-3 Library API | internal | — | — | — |
+| COMP-3-4 Library API | internal | — | — | — |
+| COMP-3-5 Library API | internal | — | — | — |
+| COMP-3-6 Library API | internal | — | — | — |
+| COMP-3-7 Library API | internal | — | — | — |
+| COMP-3-8 Library API | internal | — | — | — |
+| COMP-3-12 Library API | internal | — | — | — |
+| COMP-3-13 Library API | internal | — | — | — |
+| Extraction Tools API | internal | — | — | — |
+| Requirements API | internal | — | — | — |
+| Resolution API | internal | — | — | — |
+| Context Tools API | internal | — | — | — |
+| Model Management Tools API | internal | — | — | — |
+| Documentation Tools API | internal | — | — | — |
+| Quality Gate Tools API | internal | — | — | — |
+| Requirements Tools API | internal | — | — | — |
+| Live Analysis Tools API | internal | — | — | — |
+| Runner API | internal | — | — | — |
+| Telemetry API | internal | — | — | — |
+| Learning API | internal | — | — | — |
+| MCP Server API | internal | — | — | — |
 ## Dependency Graph
-
 ```mermaid
 graph TD
     src-mcp-COMP-1["Quality"]
@@ -283,56 +237,3 @@ graph TD
 ```
 
 ---
-
-## LLM Review
-
-*Reviewed: 2026-08-18T23:32:21.592576+00:00 | Duration: 9929ms*
-
-**Summary:** This logical architecture document is essentially a skeleton with 0% model completeness—no behavioral specifications, no interfaces, no requirements, and no responsibilities defined for any of the 57 components. The layer structure is minimal and most components are unassigned, indicating the extraction pipeline has not been meaningfully run or curated.
-
-- The "Quality" (src-mcp-COMP-1) and "Slice" (src-mcp-COMP-24) components are massive dependency hubs connecting to nearly every other component, suggesting a god-object anti-pattern or, more likely, that the automated extraction failed to differentiate true architectural boundaries from file-level imports.
-- 43 of 57 components are in the "unassigned" category with only two layers defined (infra and data), both at order 0 with no technologies or directories specified—this renders the layer structure meaningless as an architectural guide.
-- The dependency graph contains circular dependencies (e.g., Quality ↔ Check, Quality ↔ Ingest, Quality ↔ Generate) which either reflect actual coupling problems or inaccurate static analysis results that need manual review.
-- The document appears truncated at the end (`src-mcp-COMP-27 --> src-mcp-COMP-`) indicating a generation error that should be fixed before this artifact is used for any architectural decision-making.
-
-<details>
-<summary>Review details</summary>
-
-**Prompt sent (truncated):**
-```
-Review the following architecture artifact 'docs/se/logical-architecture.md'.
-Respond ONLY in this format:
-SUMMARY: <one paragraph overall assessment>
-COMMENT: <specific observation>
-COMMENT: <another observation>
-
----
----
-document: Logical Architecture
-system: System
-system_id: SYS-unknown
-generated_at: 2026-08-18T23:31:28Z
-generator_version: 0.3.0
-model_hash: efca59bc201d
-edition: 7
----
-
-> **Model Completeness: F (0%)**
-> Some sections may be empty due to missing model entities.
-> - 57/57 comp
-```
-
-**Full LLM response:**
-```
-SUMMARY: This logical architecture document is essentially a skeleton with 0% model completeness—no behavioral specifications, no interfaces, no requirements, and no responsibilities defined for any of the 57 components. The layer structure is minimal and most components are unassigned, indicating the extraction pipeline has not been meaningfully run or curated.
-
-COMMENT: The "Quality" (src-mcp-COMP-1) and "Slice" (src-mcp-COMP-24) components are massive dependency hubs connecting to nearly every other component, suggesting a god-object anti-pattern or, more likely, that the automated extraction failed to differentiate true architectural boundaries from file-level imports.
-
-COMMENT: 43 of 57 components are in the "unassigned" category with only two layers defined (infra and data), both at order 0 with no technologies or directories specified—this renders the layer structure meaningless as an architectural guide.
-
-COMMENT: The dependency graph contains circular dependencies (e.g., Quality ↔ Check, Quality ↔ Ingest, Quality ↔ Generate) which either reflect actual coupling problems or inaccurate static analysis results that need manual review.
-
-COMMENT: The document appears truncated at the end (`src-mcp-COMP-27 --> src-mcp-COMP-`) indicating a generation error that should be fixed before this artifact is used for any architectural decision-making.
-```
-
-</details>

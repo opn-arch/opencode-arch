@@ -2,10 +2,10 @@
 document: Logical Architecture
 system: Src (llm)
 system_id: SYS-unknown
-generated_at: 2026-08-18T23:31:30Z
+generated_at: 2026-08-19T16:59:41Z
 generator_version: 0.3.0
 model_hash: 2dd6b4185ffa
-edition: 5
+edition: 6
 ---
 
 > **Model Completeness: F (0%)**

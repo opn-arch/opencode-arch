@@ -1,54 +1,62 @@
 ---
 document: ConOps
-system: System
+system: opencode-arch
 system_id: SYS-unknown
-generated_at: 2026-08-18T23:31:28Z
+generated_at: 2026-08-19T16:59:40Z
 generator_version: 0.3.0
-model_hash: efca59bc201d
-edition: 7
+model_hash: f2b902537f3a
+edition: 8
 ---
 
-> **Model Completeness: F (0%)**
-> Some sections may be empty due to missing model entities.
-> - 57/57 components have no behavioral specification
-> - No interfaces defined on components → interface-spec doc empty
-> - No requirements defined
-> - Actors defined but missing goals/descriptions
-> Run the extraction pipeline or manually add behaviors/interfaces/constraints.
-
-# Concept of Operations: System
+# Concept of Operations: opencode-arch
 ## System Overview
-System provides 6 capabilities implemented across 57 components.
-
-**Core Capabilities:**
-
-- **gRPC Services**
-- **Build Configuration Scripts**
-- **Package Group Management**
-- **CLI Run Benchmark**
-- **CLI Benchmark Economy**
-- **Command Line Interface Entry Point**
+opencode-arch provides 0 capabilities implemented across 15 components.
 ## Stakeholders
 | Actor | Type | Goals |
 |-------|------|-------|
-| CLI User | human | — |
+| CLI User | human | Use opencode-arch effectively |
 ## Operational Scenarios
 ### System Workflows
 
-- **CLI: Run Benchmark**: —
-- **CLI: Benchmark Economy**: —
-- **CLI: Main**: —
+- **CLI: Run Benchmark**: ArgumentParser -> add_argument -> parse_args -> print -> run_benchmark
+- **CLI: Benchmark Economy**: ArgumentParser -> add_argument -> parse_args -> run -> print_report
+- **CLI: Main**: ArgumentParser -> add_subparsers -> add_parser -> add_argument -> parse_args
 ## System Context
 ### External Interfaces
 
 | Interface | Type | Provider | Consumer |
 |-----------|------|----------|----------|
+| run_benchmark CLI | internal | — | — |
+| benchmark_economy CLI | internal | — | — |
 | main CLI | internal | — | — |
+| COMP-3-1 Library API | internal | — | — |
+| COMP-3-2 Library API | internal | — | — |
+| COMP-3-3 Library API | internal | — | — |
+| COMP-3-4 Library API | internal | — | — |
+| COMP-3-5 Library API | internal | — | — |
+| COMP-3-6 Library API | internal | — | — |
+| COMP-3-7 Library API | internal | — | — |
+| COMP-3-8 Library API | internal | — | — |
+| COMP-3-12 Library API | internal | — | — |
+| COMP-3-13 Library API | internal | — | — |
+| Extraction Tools API | internal | — | — |
+| Requirements API | internal | — | — |
+| Resolution API | internal | — | — |
+| Context Tools API | internal | — | — |
+| Model Management Tools API | internal | — | — |
+| Documentation Tools API | internal | — | — |
+| Quality Gate Tools API | internal | — | — |
+| Requirements Tools API | internal | — | — |
+| Live Analysis Tools API | internal | — | — |
+| Runner API | internal | — | — |
+| Telemetry API | internal | — | — |
+| Learning API | internal | — | — |
+| MCP Server API | internal | — | — |
 
 ```mermaid
 graph LR
     ACT-1["CLI User"]
-    SYS["System"]
+    SYS["opencode-arch"]
 ```
 ## Operational Constraints
 *No constraints defined in the model.*
@@ -56,48 +64,3 @@ graph LR
 ---
 
 ---
-
-## LLM Review
-
-*Reviewed: 2026-08-18T23:31:51.385068+00:00 | Duration: 5288ms*
-
-**Summary:** This ConOps is essentially empty — it was auto-generated from a model with 0% completeness, containing no behavioral specifications, no interfaces, no requirements, and no actor goals, making it useless as an architecture artifact in its current state.
-
-- All 57 components lack behavioral specifications, meaning this document communicates nothing about what the system actually does or how it operates.
-- The mermaid context diagram shows no connections between the CLI User and the System, indicating even the most basic interaction modeling is missing.
-
-<details>
-<summary>Review details</summary>
-
-**Prompt sent (truncated):**
-```
-Review the following architecture artifact 'docs/se/conops.md'.
-Respond ONLY in this format:
-SUMMARY: <one paragraph overall assessment>
-COMMENT: <specific observation>
-COMMENT: <another observation>
-
----
----
-document: ConOps
-system: System
-system_id: SYS-unknown
-generated_at: 2026-08-18T23:31:28Z
-generator_version: 0.3.0
-model_hash: efca59bc201d
-edition: 7
----
-
-> **Model Completeness: F (0%)**
-> Some sections may be empty due to missing model entities.
-> - 57/57 components have no behavioral sp
-```
-
-**Full LLM response:**
-```
-SUMMARY: This ConOps is essentially empty — it was auto-generated from a model with 0% completeness, containing no behavioral specifications, no interfaces, no requirements, and no actor goals, making it useless as an architecture artifact in its current state.
-COMMENT: All 57 components lack behavioral specifications, meaning this document communicates nothing about what the system actually does or how it operates.
-COMMENT: The mermaid context diagram shows no connections between the CLI User and the System, indicating even the most basic interaction modeling is missing.
-```
-
-</details>

@@ -38,6 +38,12 @@ documents:
       summary: Model updated
       preserved_sections: []
       conflicts: []
+    - timestamp: '2026-08-19T16:59:42Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
   functional-analysis.md:
     created: '2026-08-18T20:03:03Z'
     created_by: architect_pipeline
@@ -76,6 +82,12 @@ documents:
       summary: Model updated
       preserved_sections: []
       conflicts: []
+    - timestamp: '2026-08-19T16:59:43Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
   logical-architecture.md:
     created: '2026-08-18T20:03:03Z'
     created_by: architect_pipeline
@@ -109,6 +121,12 @@ documents:
       preserved_sections: []
       conflicts: []
     - timestamp: '2026-08-18T23:31:31Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
+    - timestamp: '2026-08-19T16:59:43Z'
       author: architect_pipeline
       type: regenerated
       summary: Model updated
@@ -153,6 +171,12 @@ documents:
       summary: Model updated
       preserved_sections: []
       conflicts: []
+    - timestamp: '2026-08-19T16:59:43Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
   verification-validation.md:
     created: '2026-08-18T20:03:03Z'
     created_by: architect_pipeline
@@ -186,6 +210,12 @@ documents:
       preserved_sections: []
       conflicts: []
     - timestamp: '2026-08-18T23:31:31Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
+    - timestamp: '2026-08-19T16:59:43Z'
       author: architect_pipeline
       type: regenerated
       summary: Model updated
@@ -229,6 +259,12 @@ documents:
       summary: Model updated
       preserved_sections: []
       conflicts: []
+    - timestamp: '2026-08-19T16:59:43Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
   maintenance-manual.md:
     created: '2026-08-18T20:03:03Z'
     created_by: architect_pipeline
@@ -262,6 +298,12 @@ documents:
       preserved_sections: []
       conflicts: []
     - timestamp: '2026-08-18T23:31:31Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
+    - timestamp: '2026-08-19T16:59:43Z'
       author: architect_pipeline
       type: regenerated
       summary: Model updated
@@ -304,6 +346,12 @@ documents:
       summary: Model updated
       preserved_sections: []
       conflicts: []
+    - timestamp: '2026-08-19T16:59:43Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
   risk-assessment.md:
     created: '2026-08-18T20:03:03Z'
     created_by: architect_pipeline
@@ -336,6 +384,12 @@ documents:
       preserved_sections: []
       conflicts: []
     - timestamp: '2026-08-18T23:31:31Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
+    - timestamp: '2026-08-19T16:59:43Z'
       author: architect_pipeline
       type: regenerated
       summary: Model updated
@@ -378,6 +432,12 @@ documents:
       summary: Model updated
       preserved_sections: []
       conflicts: []
+    - timestamp: '2026-08-19T16:59:43Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
   artifact-traceability.md:
     created: '2026-08-18T20:03:03Z'
     created_by: architect_pipeline
@@ -388,7 +448,7 @@ documents:
       3. Entity-to-Artifact Traceability Matrix: 13f5e4fd5f9074bafaa86708e55c4265
       4. Relationship Distribution: 451a2c9b67052c05c3d2b62889758681
       5. Traceability Gaps: 3091fdf8f5de12384db50831ca08f2cb
-      6. Architecture File Map: 5d6f9964c4b0c1513e89e3084a890a31
+      6. Architecture Artifact Inventory: e36bb05f39a52eb998f1f0791c9136cb
       LLM Review Status: a9515666abfc62ba7457085183c516fd
       LLM Enrichment Provenance: 67e6f20cd2f443eeb432cf76edecef7e
       Review Details: da7342beb6395b70076b757affd78c93
@@ -416,6 +476,12 @@ documents:
       preserved_sections: []
       conflicts: []
     - timestamp: '2026-08-18T23:31:31Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
+    - timestamp: '2026-08-19T16:59:43Z'
       author: architect_pipeline
       type: regenerated
       summary: Model updated
@@ -456,6 +522,12 @@ documents:
       summary: Model updated
       preserved_sections: []
       conflicts: []
+    - timestamp: '2026-08-19T16:59:43Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
   security-analysis.md:
     created: '2026-08-18T20:03:03Z'
     created_by: architect_pipeline
@@ -487,6 +559,12 @@ documents:
       preserved_sections: []
       conflicts: []
     - timestamp: '2026-08-18T23:31:31Z'
+      author: architect_pipeline
+      type: regenerated
+      summary: Model updated
+      preserved_sections: []
+      conflicts: []
+    - timestamp: '2026-08-19T16:59:43Z'
       author: architect_pipeline
       type: regenerated
       summary: Model updated

@@ -370,6 +370,35 @@ async def run_pipeline(
             "hint": "Use architect_log to record decisions made during this stage.",
         }
 
+        # Compute and include completeness grade
+        try:
+            from architecture_model.core.completeness import compute_completeness
+            from architecture_model.core.parser import load_model as _load_comp
+
+            model_file = root / ".architecture-model.yaml"
+            if model_file.exists():
+                comp_model = _load_comp(model_file)
+                comp_result = compute_completeness(comp_model)
+                response["completeness"] = {
+                    "score": comp_result.score,
+                    "grade": comp_result.grade,
+                    "dimensions": comp_result.dimensions,
+                    "gaps": comp_result.gaps,
+                }
+            # Also check SoS model
+            sos_file = root / ".architecture-models" / ".architecture-model.yaml"
+            if sos_file.exists():
+                sos_model = _load_comp(sos_file)
+                sos_result = compute_completeness(sos_model)
+                response["sos_completeness"] = {
+                    "score": sos_result.score,
+                    "grade": sos_result.grade,
+                    "dimensions": sos_result.dimensions,
+                    "gaps": sos_result.gaps,
+                }
+        except Exception:
+            pass  # non-fatal
+
         # Add scope info if scoped run
         if scope:
             response["scope"] = boundary.system_id

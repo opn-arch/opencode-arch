@@ -20,6 +20,7 @@
   ],
   "COMP-3-2": [
     "tests/test_llm_cache.py",
+    "tests/test_relay.py",
     "tests/test_req_llm.py",
     "tests/test_req_retroactive.py"
   ],

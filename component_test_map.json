@@ -1,70 +1,4 @@
 {
-  "COMP-1": [
-    "tests/test_cli_bench.py",
-    "tests/test_quality.py"
-  ],
-  "COMP-10": [
-    "tests/test_launch.py"
-  ],
-  "COMP-11": [
-    "tests/test_extract_pipeline.py",
-    "tests/test_integration.py",
-    "tests/test_interface_extraction.py",
-    "tests/test_mcp_extract.py"
-  ],
-  "COMP-12": [
-    "tests/test_cli_metrics.py",
-    "tests/test_feedback.py"
-  ],
-  "COMP-13": [
-    "tests/test_gate_tool.py",
-    "tests/test_regen_blind.py",
-    "tests/test_regen_loop.py"
-  ],
-  "COMP-14": [
-    "tests/test_generate.py"
-  ],
-  "COMP-15": [
-    "tests/test_group_tool.py"
-  ],
-  "COMP-16": [
-    "tests/test_ingest.py"
-  ],
-  "COMP-17": [
-    "tests/test_learn_tool.py"
-  ],
-  "COMP-2": [
-    "tests/test_calibration_suite.py",
-    "tests/test_cli_calibrate.py",
-    "tests/test_regeneration_proof.py"
-  ],
-  "COMP-20": [
-    "tests/test_pipeline_tool.py"
-  ],
-  "COMP-22": [
-    "tests/test_require.py"
-  ],
-  "COMP-23": [
-    "tests/test_integration.py",
-    "tests/test_scan.py"
-  ],
-  "COMP-24": [
-    "tests/test_adaptive_budget.py",
-    "tests/test_integration.py",
-    "tests/test_slice.py"
-  ],
-  "COMP-27": [
-    "tests/test_trace_req_tool.py"
-  ],
-  "COMP-28": [
-    "tests/test_integration.py",
-    "tests/test_mcp_validate.py"
-  ],
-  "COMP-3": [
-    "tests/test_author_tool.py",
-    "tests/test_cli_confidence.py",
-    "tests/test_gate_tool.py"
-  ],
   "COMP-3-1": [
     "tests/test_artifact_context.py",
     "tests/test_artifact_diagrams.py",
@@ -115,23 +49,47 @@
   "COMP-3-6": [
     "tests/test_uncertainty_resolver.py"
   ],
+  "COMP-3-7": [
+    "tests/test_adaptive_budget.py",
+    "tests/test_author_tool.py",
+    "tests/test_check_hierarchical.py",
+    "tests/test_check_tool.py",
+    "tests/test_extract_pipeline.py",
+    "tests/test_feedback.py",
+    "tests/test_gate_tool.py",
+    "tests/test_generate.py",
+    "tests/test_group_tool.py",
+    "tests/test_ingest.py",
+    "tests/test_integration.py",
+    "tests/test_interface_extraction.py",
+    "tests/test_learn_tool.py",
+    "tests/test_mcp_extract.py",
+    "tests/test_mcp_validate.py",
+    "tests/test_pipeline_tool.py",
+    "tests/test_quality.py",
+    "tests/test_require.py",
+    "tests/test_scan.py",
+    "tests/test_slice.py",
+    "tests/test_trace_req_tool.py"
+  ],
   "COMP-3-8": [
     "tests/test_req_llm.py",
     "tests/test_req_matcher.py",
     "tests/test_req_parser.py",
     "tests/test_req_retroactive.py"
   ],
-  "COMP-4": [
-    "tests/test_check_hierarchical.py",
-    "tests/test_check_tool.py"
-  ],
-  "COMP-7": [
-    "tests/test_cli_extract.py"
-  ],
-  "COMP-8": [
-    "tests/test_gap_analyzer.py"
-  ],
-  "COMP-9": [
-    "tests/test_cli_generate.py"
+  "COMP-3-9": [
+    "tests/test_calibration_suite.py",
+    "tests/test_cli_bench.py",
+    "tests/test_cli_calibrate.py",
+    "tests/test_cli_confidence.py",
+    "tests/test_cli_extract.py",
+    "tests/test_cli_generate.py",
+    "tests/test_cli_metrics.py",
+    "tests/test_gap_analyzer.py",
+    "tests/test_launch.py",
+    "tests/test_regen_blind.py",
+    "tests/test_regen_loop.py",
+    "tests/test_regeneration_proof.py"
   ]
 }

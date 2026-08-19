@@ -48,19 +48,21 @@ entities:
   actors:
   - id: ACT-1
     name: CLI User
+    goals:
+    - Interact with opencode-arch
   capabilities:
   - id: CAP-1
     name: gRPC Services
   - id: CAP-2
-    name: Build Configuration Scripts
+    name: Scripts
   - id: CAP-3
-    name: Package Group Management
+    name: Src
   - id: CAP-4
     name: CLI Run Benchmark
   - id: CAP-5
     name: CLI Benchmark Economy
   - id: CAP-6
-    name: Command Line Interface Entry Point
+    name: CLI Main
   behaviors:
   - id: BEH-1
     name: 'CLI: Run Benchmark'
@@ -69,185 +71,13 @@ entities:
   - id: BEH-3
     name: 'CLI: Main'
   components:
-  - id: src-mcp-COMP-1
-    name: Quality
-    files:
-    - src/opencode_arch/mcp/quality.py
-  - id: src-mcp-COMP-2
-    name: Assess
-    files:
-    - src/opencode_arch/mcp/tools/assess.py
-  - id: src-mcp-COMP-3
-    name: Author
-    files:
-    - src/opencode_arch/mcp/tools/author.py
-  - id: src-mcp-COMP-4
-    name: Check
-    files:
-    - src/opencode_arch/mcp/tools/check.py
-  - id: src-mcp-COMP-5
-    name: Correct
-    files:
-    - src/opencode_arch/mcp/tools/correct.py
-  - id: src-mcp-COMP-6
-    name: Decompose
-    files:
-    - src/opencode_arch/mcp/tools/decompose.py
-  - id: src-mcp-COMP-7
-    name: Diff
-    files:
-    - src/opencode_arch/mcp/tools/diff.py
-  - id: src-mcp-COMP-8
-    name: Docs
-    files:
-    - src/opencode_arch/mcp/tools/docs.py
-  - id: src-mcp-COMP-9
-    name: Evaluate
-    files:
-    - src/opencode_arch/mcp/tools/evaluate.py
-  - id: src-mcp-COMP-10
-    name: Export
-    files:
-    - src/opencode_arch/mcp/tools/export.py
-  - id: src-mcp-COMP-11
-    name: Extract
-    files:
-    - src/opencode_arch/mcp/tools/extract.py
-  - id: src-mcp-COMP-12
-    name: Feedback
-    files:
-    - src/opencode_arch/mcp/tools/feedback.py
-  - id: src-mcp-COMP-13
-    name: Gate
-    files:
-    - src/opencode_arch/mcp/tools/gate.py
-  - id: src-mcp-COMP-14
-    name: Generate
-    files:
-    - src/opencode_arch/mcp/tools/generate.py
-  - id: src-mcp-COMP-15
-    name: Group
-    files:
-    - src/opencode_arch/mcp/tools/group.py
-  - id: src-mcp-COMP-16
-    name: Ingest
-    files:
-    - src/opencode_arch/mcp/tools/ingest.py
-  - id: src-mcp-COMP-17
-    name: Learn
-    files:
-    - src/opencode_arch/mcp/tools/learn.py
-  - id: src-mcp-COMP-18
-    name: Llm Audit
-    files:
-    - src/opencode_arch/mcp/tools/llm_audit.py
-  - id: src-mcp-COMP-19
-    name: Log
-    files:
-    - src/opencode_arch/mcp/tools/log.py
-  - id: src-mcp-COMP-20
-    name: Pipeline
-    files:
-    - src/opencode_arch/mcp/tools/pipeline.py
-  - id: src-mcp-COMP-21
-    name: Regen Score
-    files:
-    - src/opencode_arch/mcp/tools/regen_score.py
-  - id: src-mcp-COMP-22
-    name: Require
-    files:
-    - src/opencode_arch/mcp/tools/require.py
-  - id: src-mcp-COMP-23
-    name: Scan
-    files:
-    - src/opencode_arch/mcp/tools/scan.py
-  - id: src-mcp-COMP-24
-    name: Slice
-    files:
-    - src/opencode_arch/mcp/tools/slice.py
-  - id: src-mcp-COMP-25
-    name: Stats
-    files:
-    - src/opencode_arch/mcp/tools/stats.py
-  - id: src-mcp-COMP-26
-    name: Sync
-    files:
-    - src/opencode_arch/mcp/tools/sync.py
-  - id: src-mcp-COMP-27
-    name: Trace Requirements
-    files:
-    - src/opencode_arch/mcp/tools/trace_requirements.py
-  - id: src-mcp-COMP-28
-    name: Validate
-    files:
-    - src/opencode_arch/mcp/tools/validate.py
-  - id: src-mcp-COMP-29
-    name: Infrastructure
-    files:
-    - src/opencode_arch/mcp/__main__.py
-    - src/opencode_arch/mcp/server.py
-  - id: src-cli-COMP-1
-    name: Bench
-    files:
-    - src/opencode_arch/cli/bench.py
-  - id: src-cli-COMP-2
-    name: Calibrate
-    files:
-    - src/opencode_arch/cli/calibrate.py
-  - id: src-cli-COMP-3
-    name: Confidence
-    files:
-    - src/opencode_arch/cli/confidence.py
-  - id: src-cli-COMP-4
-    name: Docs
-    files:
-    - src/opencode_arch/cli/docs.py
-  - id: src-cli-COMP-5
-    name: Docs Validator
-    files:
-    - src/opencode_arch/cli/docs_validator.py
-  - id: src-cli-COMP-6
-    name: Export Data
-    files:
-    - src/opencode_arch/cli/export_data.py
-  - id: src-cli-COMP-7
-    name: Extract
-    files:
-    - src/opencode_arch/cli/extract.py
-  - id: src-cli-COMP-8
-    name: Gap Analyzer
-    files:
-    - src/opencode_arch/cli/gap_analyzer.py
-  - id: src-cli-COMP-9
-    name: Generate
-    files:
-    - src/opencode_arch/cli/generate.py
-  - id: src-cli-COMP-10
-    name: Launch
-    files:
-    - src/opencode_arch/cli/launch.py
-  - id: src-cli-COMP-11
-    name: Main
-    files:
-    - src/opencode_arch/cli/main.py
-  - id: src-cli-COMP-12
-    name: Metrics
-    files:
-    - src/opencode_arch/cli/metrics.py
-  - id: src-cli-COMP-13
-    name: Regen Loop
-    files:
-    - src/opencode_arch/cli/regen_loop.py
-  - id: src-cli-COMP-14
-    name: Infrastructure
-    files:
-    - src/opencode_arch/cli/prompts.py
   - id: COMP-2
-    name: Benchmark Scripts
+    name: Scripts
     files:
     - scripts/benchmark_economy.py
     - scripts/run_benchmark.py
     layer: infra
+    description: Source in scripts (2 files)
   - id: COMP-3-1
     name: Src (artifacts)
     files:
@@ -257,8 +87,9 @@ entities:
     - src/opencode_arch/artifacts/selector.py
     - src/opencode_arch/artifacts/templates.py
     layer: data
+    description: Source in src/opencode_arch/artifacts (5 files)
   - id: COMP-3-2
-    name: LLM Integration Layer
+    name: Src (llm)
     files:
     - src/opencode_arch/llm/cache.py
     - src/opencode_arch/llm/prompts/audit.py
@@ -266,6 +97,8 @@ entities:
     - src/opencode_arch/llm/prompts/requirements.py
     - src/opencode_arch/llm/relay.py
     layer: data
+    description: Source in src/opencode_arch/llm, src/opencode_arch/llm/prompts (5
+      files)
   - id: COMP-3-3
     name: Src (context)
     files:
@@ -273,6 +106,7 @@ entities:
     - src/opencode_arch/context/formatter.py
     - src/opencode_arch/context/pipeline_bridge.py
     layer: data
+    description: Source in src/opencode_arch/context (3 files)
   - id: COMP-3-4
     name: Src (learning)
     files:
@@ -284,19 +118,22 @@ entities:
     - src/opencode_arch/learning/maintainer.py
     - src/opencode_arch/learning/patterns.py
     layer: data
+    description: Source in src/opencode_arch/learning (7 files)
   - id: COMP-3-5
     name: Src (runner)
     files:
     - src/opencode_arch/runner/base.py
     - src/opencode_arch/runner/opencode.py
     layer: data
+    description: Source in src/opencode_arch/runner (2 files)
   - id: COMP-3-6
     name: Src (agent)
     files:
     - src/opencode_arch/agent/resolution.py
     layer: data
+    description: Source in src/opencode_arch/agent (1 files)
   - id: COMP-3-7
-    name: MCP Quality Server
+    name: Src (mcp)
     files:
     - src/opencode_arch/mcp/__main__.py
     - src/opencode_arch/mcp/quality.py
@@ -329,6 +166,8 @@ entities:
     - src/opencode_arch/mcp/tools/trace_requirements.py
     - src/opencode_arch/mcp/tools/validate.py
     layer: data
+    description: Source in src/opencode_arch/mcp, src/opencode_arch/mcp/tools (30
+      files)
   - id: COMP-3-8
     name: Src (requirements)
     files:
@@ -337,8 +176,9 @@ entities:
     - src/opencode_arch/requirements/parser.py
     - src/opencode_arch/requirements/retroactive.py
     layer: data
+    description: Source in src/opencode_arch/requirements (4 files)
   - id: COMP-3-9
-    name: CLI Commands
+    name: Src (cli)
     files:
     - src/opencode_arch/cli/bench.py
     - src/opencode_arch/cli/calibrate.py
@@ -355,16 +195,19 @@ entities:
     - src/opencode_arch/cli/prompts.py
     - src/opencode_arch/cli/regen_loop.py
     layer: data
+    description: Source in src/opencode_arch/cli (14 files)
   - id: COMP-3-10
     name: Src (prompts)
     files:
     - src/opencode_arch/prompts/regen.py
     layer: data
+    description: Source in src/opencode_arch/prompts (1 files)
   - id: COMP-3-11
     name: Src (extract)
     files:
     - src/opencode_arch/extract/__init__.py
     layer: data
+    description: Source in src/opencode_arch/extract (1 files)
   - id: COMP-3-12
     name: Src (telemetry)
     files:
@@ -372,22 +215,14 @@ entities:
     - src/opencode_arch/telemetry/recorder.py
     - src/opencode_arch/telemetry/store.py
     layer: data
+    description: Source in src/opencode_arch/telemetry (3 files)
   - id: COMP-3-13
     name: Src (regen)
     files:
     - src/opencode_arch/regen/self_heal.py
     - src/opencode_arch/regen/spot_check.py
     layer: data
-  interfaces:
-  - id: IF-1
-    name: main CLI
-    interface_type: cli
-    component_id: src-cli-COMP-11
-  layers:
-  - id: LAYER-infra
-    name: infra
-  - id: LAYER-data
-    name: data
+    description: Source in src/opencode_arch/regen (2 files)
   inline_components:
   - id: SYS-scripts
     name: Scripts
@@ -435,123 +270,388 @@ entities:
     files:
     - src/opencode_arch/regen/self_heal.py
     - src/opencode_arch/regen/spot_check.py
+  interfaces:
+  - id: IF-1
+    name: run_benchmark CLI
+    interface_type: cli
+    component_id: COMP-2
+  - id: IF-2
+    name: benchmark_economy CLI
+    interface_type: cli
+    component_id: COMP-2
+  - id: IF-3
+    name: main CLI
+    interface_type: cli
+    component_id: COMP-3-9
+  - id: IF-4
+    name: COMP-3-1 Library API
+    interface_type: library
+    component_id: COMP-3-1
+    methods:
+    - 'ArtifactSpec: class ArtifactSpec'
+    - 'ArtifactTemplate: class ArtifactTemplate'
+    - 'SubsystemInfo: class SubsystemInfo'
+    - 'TemplateSection: class TemplateSection'
+    - 'get_artifact_spec: def get_artifact_spec(artifact_id: str) -> ArtifactSpec
+      | None'
+    - 'get_template: def get_template(artifact_id: str) -> ArtifactTemplate | None'
+    - 'select_artifacts: def select_artifacts(model: ArchitectureModel, manifest:
+      dict | None=None, include_capability_details: bool=True) -> list[ArtifactSpec]'
+    - 'select_capability_detail_artifacts: def select_capability_detail_artifacts(model:
+      ArchitectureModel) -> list[ArtifactSpec]'
+    - 'select_subsystem_artifacts: def select_subsystem_artifacts(subsystem: SubsystemInfo,
+      model: ArchitectureModel, manifest: dict | None=None) -> list[ArtifactSpec]'
+    - 'should_decompose: def should_decompose(model: ArchitectureModel, manifest:
+      dict | None=None) -> bool'
+    description: 18 public symbols exported
+  - id: IF-5
+    name: COMP-3-2 Library API
+    interface_type: library
+    component_id: COMP-3-2
+    methods:
+    - 'CachedResult: class CachedResult'
+    - 'LLMCache: class LLMCache'
+    - 'cached_llm_call: async def cached_llm_call(runner, prompt: str, content_hash:
+      str, prompt_template_hash: str, repo_path: str, cache: LLMCache | None=None)
+      -> CachedResult'
+    - 'hash_content: def hash_content(content: str) -> str'
+    - 'is_relay_available: def is_relay_available(relay_url: str=DEFAULT_RELAY_URL)
+      -> bool'
+    - 'relay_llm_callback: async def relay_llm_callback(stage: str, prompt: str, context:
+      dict | None=None) -> str | None'
+    description: 6 public symbols exported
+  - id: IF-6
+    name: COMP-3-3 Library API
+    interface_type: library
+    component_id: COMP-3-3
+    methods:
+    - 'enrich_manifest_slice: def enrich_manifest_slice(manifest_slice: str, project_root:
+      str | Path, artifact_name: str, max_model_tokens: int=2000) -> str'
+    - 'format_artifact_context: def format_artifact_context(model: ArchitectureModel,
+      artifact_name: str, max_tokens: int=3000) -> str'
+    - 'format_model_context: def format_model_context(model: ArchitectureModel, max_tokens:
+      int=4000, detail_level: str=''standard'') -> str'
+    - 'format_source_block_context: def format_source_block_context(model: ArchitectureModel,
+      source_block: str, max_tokens: int=2000, project_root: ''Path | None''=None)
+      -> str'
+    - 'get_artifact_context: def get_artifact_context(project_root: str | Path, artifact_name:
+      str, max_tokens: int=3000) -> str'
+    - 'get_model: def get_model(project_root: str | Path, force_refresh: bool=False)
+      -> ArchitectureModel'
+    - 'get_model_summary: def get_model_summary(project_root: str | Path) -> dict[str,
+      Any]'
+    - 'get_source_block_context: def get_source_block_context(project_root: str |
+      Path, source_block: str, max_tokens: int=2000) -> str'
+    - 'impact_analysis: def impact_analysis(model: ArchitectureModel, entity_id: str,
+      depth: int=2) -> str'
+    - 'query_model: def query_model(model: ArchitectureModel, question: str) -> str'
+    description: 10 public symbols exported
+  - id: IF-7
+    name: COMP-3-4 Library API
+    interface_type: library
+    component_id: COMP-3-4
+    methods:
+    - 'FailureClassification: class FailureClassification'
+    - 'Lesson: class Lesson'
+    - 'PatternType: class PatternType'
+    - 'ReportCard: class ReportCard'
+    - 'Strategy: class Strategy'
+    - 'apply_adaptations: def apply_adaptations(adaptations: list[PromptAdaptation],
+      contract_cap: int=50, include_dep_body_hints: bool=False) -> dict[str, Any]'
+    - 'classify_failures: def classify_failures(test_output: str, pass_rate: float=0.0,
+      total_tests: int=0, failed_tests: int=0) -> list[FailureClassification]'
+    - 'extract_lessons: def extract_lessons(repo: str, mode: str, subsystem_results:
+      dict[str, dict[str, Any]]) -> list[Lesson]'
+    - 'generate_report_card: def generate_report_card(repo: str, mode: str, subsystem_results:
+      dict[str, dict[str, Any]], previous_fidelity: float | None=None, previous_compression:
+      float | None=None) -> ReportCard'
+    - 'get_adaptations: def get_adaptations(subsystem_name: str, dependency_count:
+      int, signature_count: int, contract_count: int, body_hint_coverage: float, historical_patterns:
+      list[dict[str, Any]] | None=None) -> list[PromptAdaptation]'
+    description: 14 public symbols exported
+  - id: IF-8
+    name: COMP-3-5 Library API
+    interface_type: library
+    component_id: COMP-3-5
+    methods:
+    - 'OpencodeRunner: class OpencodeRunner'
+    - 'RunResult: class RunResult'
+    - 'RunnerBackend: class RunnerBackend'
+    description: 3 public symbols exported
+  - id: IF-9
+    name: COMP-3-6 Library API
+    interface_type: library
+    component_id: COMP-3-6
+    methods:
+    - 'ResolutionStrategy: class ResolutionStrategy'
+    - 'UncertaintyResolver: class UncertaintyResolver'
+    description: 2 public symbols exported
+  - id: IF-10
+    name: COMP-3-7 Library API
+    interface_type: library
+    component_id: COMP-3-7
+    methods:
+    - 'SessionAccumulator: class SessionAccumulator'
+    - 'check_fidelity: def check_fidelity(input_data: Any, output_data: Any) -> dict'
+    - 'check_representativeness: async def check_representativeness(repo_path: str,
+      model_yaml: str='''') -> dict[str, Any]'
+    - 'compute_adaptive_budget: def compute_adaptive_budget(module_count: int, base:
+      int=4000) -> int'
+    - 'estimate_regenerability: def estimate_regenerability(compression_ratio: float,
+      confidence: float, n_components: int, n_contracts: int) -> float'
+    - 'ingest_source_graph: async def ingest_source_graph(repo_path: str, source_graph_json:
+      str) -> dict'
+    - 'run_llm_audit: async def run_llm_audit(repo_path: str, model_yaml: str='''',
+      _runner=None, _cache: LLMCache | None=None) -> dict[str, Any]'
+    - 'store_correction: async def store_correction(repo_path: str, correction_type:
+      str, target: str, reason: str, suggestion: dict | None=None) -> dict[str, Any]'
+    - 'sync_findings: async def sync_findings(repo_path: str, api_url: str=DEFAULT_API_URL,
+      dry_run: bool=False) -> dict[str, Any]'
+    - 'with_quality: def with_quality(func)'
+    description: 33 public symbols exported
+  - id: IF-11
+    name: COMP-3-8 Library API
+    interface_type: library
+    component_id: COMP-3-8
+    methods:
+    - 'ExtractedRequirement: class ExtractedRequirement'
+    - 'RequirementMatch: class RequirementMatch'
+    - 'derive_requirements_retroactive: async def derive_requirements_retroactive(model_yaml:
+      str, runner, cache: LLMCache | None=None, repo_path: str='''') -> list[ExtractedRequirement]'
+    - 'extract_requirements_llm: async def extract_requirements_llm(doc_path: Path,
+      runner, cache: LLMCache | None=None, repo_path: str='''') -> list[ExtractedRequirement]'
+    - 'match_functions_to_requirements: async def match_functions_to_requirements(requirements:
+      list[ExtractedRequirement], model_yaml: str, runner, cache: LLMCache | None=None,
+      repo_path: str='''') -> list[RequirementMatch]'
+    - 'parse_requirements_doc: def parse_requirements_doc(doc_path: Path) -> list[ExtractedRequirement]'
+    description: 6 public symbols exported
+  - id: IF-12
+    name: COMP-3-12 Library API
+    interface_type: library
+    component_id: COMP-3-12
+    methods:
+    - 'TelemetryStore: class TelemetryStore'
+    - 'drain_and_store: def drain_and_store(tool: str, repo: str='''', db_path: str
+      | None=None) -> int'
+    - 'record_invocation: async def record_invocation(store: TelemetryStore, tool:
+      str, repo: str='''', context_tokens: int=0, output_quality: int=0, iterations:
+      int=1, metadata: str='''')'
+    description: 3 public symbols exported
+  - id: IF-13
+    name: COMP-3-13 Library API
+    interface_type: library
+    component_id: COMP-3-13
+    methods:
+    - 'HealAction: class HealAction'
+    - 'SpotCheckDiagnostic: class SpotCheckDiagnostic'
+    - 'SpotCheckResult: class SpotCheckResult'
+    - 'SpotCheckTarget: class SpotCheckTarget'
+    - 'classify_failure: def classify_failure(diagnostics: list[SpotCheckDiagnostic])
+      -> list[HealAction]'
+    - 'run_spot_check: async def run_spot_check(target: SpotCheckTarget, repo_path:
+      Path, *, max_iterations: int=3, llm_backend: Any=None) -> SpotCheckResult'
+    - 'select_target: async def select_target(repo_path: Path, component_id: str |
+      None=None, subsystem_id: str | None=None) -> SpotCheckTarget'
+    - 'self_heal: async def self_heal(result: SpotCheckResult, repo_path: Path, *,
+      learning_store: Any=None) -> list[HealAction]'
+    description: 8 public symbols exported
+  - id: IF-auto-COMP-3-10
+    name: Src (prompts) API
+    interface_type: library
+    component_id: COMP-3-10
+    methods:
+    - src_(prompts)_api
+  - id: IF-auto-COMP-3-11
+    name: Src (extract) API
+    interface_type: library
+    component_id: COMP-3-11
+    methods:
+    - src_(extract)_api
+  constraints:
+  - id: CON-1
+    name: Python >=3.11
+    value: Project requires Python >=3.11
+  - id: CON-2
+    name: 'CI/CD: GitHub Actions'
+    value: Project uses GitHub Actions for CI/CD
+  requirements:
+  - id: REQ-E1
+    name: regen_loop.py has 4 error-handling functions
+    category: error_handling
+    priority: could
+  - id: REQ-I1
+    name: 'RunnerBackend protocol requires: run'
+    category: interface
+    priority: must
+  - id: REQ-O1
+    name: Component COMP-3-2 has logging instrumentation
+    category: observability
+    priority: could
+  - id: REQ-Q1
+    name: Component COMP-3-7 has 25 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-T6
+    name: 'Python >=3.11: Project requires Python >=3.11'
+    category: technology
+    priority: must
+  - id: REQ-Q10
+    name: Component COMP-3-6 has 1 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q11
+    name: Component COMP-3-10 has 1 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q2
+    name: Component COMP-3-5 has 14 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q3
+    name: Component COMP-3-9 has 12 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q4
+    name: Component COMP-3-4 has 7 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q5
+    name: Component COMP-3-12 has 6 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q6
+    name: Component COMP-3-1 has 6 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q7
+    name: Component COMP-3-8 has 5 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q8
+    name: Component COMP-3-2 has 4 test file(s) covering its source
+    category: quality
+    priority: should
+  - id: REQ-Q9
+    name: Component COMP-3-13 has 2 test file(s) covering its source
+    category: quality
+    priority: should
 relationships:
-- from: SYS-src-(learning)
-  to: SYS-src-(runner)
-  type: depends-on
-- from: SYS-src-(context)
-  to: SYS-src-(requirements)
-  type: depends-on
-- from: SYS-src-(cli)
-  to: SYS-src-(llm)
-  type: depends-on
-- from: SYS-src-(mcp)
+- from: SYS-src-(requirements)
   to: SYS-src-(cli)
   type: depends-on
-- from: SYS-src-(requirements)
-  to: SYS-src-(llm)
-  type: depends-on
-- from: SYS-src-(context)
-  to: SYS-src-(mcp)
-  type: depends-on
 - from: SYS-src-(mcp)
-  to: SYS-src-(runner)
-  type: depends-on
-- from: SYS-src-(requirements)
-  to: SYS-src-(mcp)
-  type: depends-on
-- from: SYS-src-(cli)
-  to: SYS-src-(mcp)
-  type: depends-on
-- from: SYS-src-(artifacts)
-  to: SYS-src-(context)
-  type: depends-on
-- from: SYS-src-(agent)
-  to: SYS-src-(mcp)
-  type: depends-on
-- from: SYS-src-(learning)
-  to: SYS-src-(mcp)
-  type: depends-on
-- from: SYS-src-(cli)
   to: SYS-src-(extract)
-  type: depends-on
-- from: SYS-src-(agent)
-  to: SYS-src-(learning)
-  type: depends-on
-- from: SYS-src-(extract)
-  to: SYS-src-(mcp)
-  type: depends-on
-- from: SYS-src-(mcp)
-  to: SYS-src-(requirements)
   type: depends-on
 - from: SYS-src-(llm)
   to: SYS-src-(mcp)
   type: depends-on
-- from: SYS-src-(mcp)
-  to: SYS-src-(llm)
-  type: depends-on
-- from: SYS-src-(context)
-  to: SYS-src-(artifacts)
-  type: depends-on
-- from: SYS-src-(cli)
-  to: SYS-src-(regen)
+- from: SYS-src-(learning)
+  to: SYS-src-(cli)
   type: depends-on
 - from: SYS-scripts
   to: SYS-src-(mcp)
   type: depends-on
-- from: SYS-src-(cli)
-  to: SYS-src-(telemetry)
-  type: depends-on
-- from: SYS-src-(cli)
-  to: SYS-src-(artifacts)
-  type: depends-on
-- from: SYS-src-(regen)
-  to: SYS-src-(mcp)
-  type: depends-on
-- from: SYS-src-(mcp)
-  to: SYS-src-(extract)
-  type: depends-on
 - from: SYS-src-(mcp)
   to: SYS-src-(context)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(runner)
   type: depends-on
 - from: SYS-src-(requirements)
   to: SYS-src-(prompts)
   type: depends-on
+- from: SYS-src-(mcp)
+  to: SYS-src-(requirements)
+  type: depends-on
+- from: SYS-src-(agent)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(context)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(context)
+  to: SYS-src-(requirements)
+  type: depends-on
+- from: SYS-src-(artifacts)
+  to: SYS-src-(context)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(artifacts)
+  type: depends-on
+- from: SYS-src-(mcp)
+  to: SYS-src-(runner)
+  type: depends-on
 - from: SYS-src-(cli)
   to: SYS-src-(prompts)
   type: depends-on
-- from: SYS-src-(extract)
-  to: SYS-src-(artifacts)
-  type: depends-on
-- from: SYS-src-(artifacts)
-  to: SYS-src-(runner)
-  type: depends-on
 - from: SYS-src-(mcp)
-  to: SYS-src-(artifacts)
+  to: SYS-src-(cli)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(regen)
+  type: depends-on
+- from: SYS-src-(context)
+  to: SYS-src-(runner)
   type: depends-on
 - from: SYS-src-(telemetry)
   to: SYS-src-(runner)
   type: depends-on
 - from: SYS-src-(requirements)
-  to: SYS-src-(cli)
+  to: SYS-src-(llm)
   type: depends-on
-- from: SYS-src-(context)
+- from: SYS-src-(extract)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(mcp)
+  to: SYS-src-(artifacts)
+  type: depends-on
+- from: SYS-src-(artifacts)
   to: SYS-src-(runner)
   type: depends-on
-- from: SYS-src-(cli)
-  to: SYS-src-(runner)
-  type: depends-on
-- from: SYS-src-(learning)
-  to: SYS-src-(cli)
+- from: SYS-src-(agent)
+  to: SYS-src-(learning)
   type: depends-on
 - from: SYS-src-(mcp)
   to: SYS-src-(prompts)
   type: depends-on
 - from: SYS-src-(requirements)
-  to: SYS-src-(runner)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(telemetry)
+  type: depends-on
+- from: SYS-src-(learning)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(context)
+  to: SYS-src-(artifacts)
+  type: depends-on
+- from: SYS-src-(regen)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(llm)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(extract)
   type: depends-on
 - from: SYS-src-(extract)
   to: SYS-src-(cli)
+  type: depends-on
+- from: SYS-src-(requirements)
+  to: SYS-src-(runner)
+  type: depends-on
+- from: SYS-src-(cli)
+  to: SYS-src-(mcp)
+  type: depends-on
+- from: SYS-src-(extract)
+  to: SYS-src-(artifacts)
+  type: depends-on
+- from: SYS-src-(learning)
+  to: SYS-src-(runner)
+  type: depends-on
+- from: SYS-src-(mcp)
+  to: SYS-src-(llm)
   type: depends-on
 - from: SYS-scripts
   to: CAP-2
@@ -595,654 +695,90 @@ relationships:
 - from: SYS-src-(regen)
   to: CAP-3
   type: realizes
-- from: src-mcp-COMP-1
-  to: CAP-1
-  type: realizes
-- from: src-mcp-COMP-2
-  to: CAP-2
-  type: realizes
-- from: src-mcp-COMP-3
-  to: CAP-3
-  type: realizes
-- from: src-mcp-COMP-4
-  to: CAP-4
-  type: realizes
-- from: src-mcp-COMP-5
-  to: CAP-5
-  type: realizes
-- from: src-mcp-COMP-6
-  to: CAP-6
-  type: realizes
-- from: src-mcp-COMP-7
-  to: CAP-7
-  type: realizes
-- from: src-mcp-COMP-8
-  to: CAP-8
-  type: realizes
-- from: src-mcp-COMP-9
-  to: CAP-9
-  type: realizes
-- from: src-mcp-COMP-10
-  to: CAP-10
-  type: realizes
-- from: src-mcp-COMP-11
-  to: CAP-11
-  type: realizes
-- from: src-mcp-COMP-12
-  to: CAP-12
-  type: realizes
-- from: src-mcp-COMP-13
-  to: CAP-13
-  type: realizes
-- from: src-mcp-COMP-14
-  to: CAP-14
-  type: realizes
-- from: src-mcp-COMP-15
-  to: CAP-15
-  type: realizes
-- from: src-mcp-COMP-16
-  to: CAP-16
-  type: realizes
-- from: src-mcp-COMP-17
-  to: CAP-17
-  type: realizes
-- from: src-mcp-COMP-18
-  to: CAP-18
-  type: realizes
-- from: src-mcp-COMP-19
-  to: CAP-19
-  type: realizes
-- from: src-mcp-COMP-20
-  to: CAP-20
-  type: realizes
-- from: src-mcp-COMP-21
-  to: CAP-21
-  type: realizes
-- from: src-mcp-COMP-22
-  to: CAP-22
-  type: realizes
-- from: src-mcp-COMP-23
-  to: CAP-23
-  type: realizes
-- from: src-mcp-COMP-24
-  to: CAP-24
-  type: realizes
-- from: src-mcp-COMP-25
-  to: CAP-25
-  type: realizes
-- from: src-mcp-COMP-26
-  to: CAP-26
-  type: realizes
-- from: src-mcp-COMP-27
-  to: CAP-27
-  type: realizes
-- from: src-mcp-COMP-28
-  to: CAP-28
-  type: realizes
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-18
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-24
-  type: depends-on
-- from: src-mcp-COMP-16
-  to: src-mcp-COMP-29
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-16
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-28
-  type: depends-on
-- from: src-mcp-COMP-10
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-23
-  to: src-mcp-COMP-29
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-21
-  type: depends-on
-- from: src-mcp-COMP-23
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-4
-  type: depends-on
-- from: src-mcp-COMP-20
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-4
-  type: depends-on
-- from: src-mcp-COMP-11
-  to: src-mcp-COMP-29
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-3
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-14
-  type: depends-on
-- from: src-mcp-COMP-11
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-2
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-15
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-15
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-12
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-5
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-12
-  type: depends-on
-- from: src-mcp-COMP-4
-  to: src-mcp-COMP-29
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-5
-  type: depends-on
-- from: src-mcp-COMP-14
-  to: src-mcp-COMP-29
-  type: depends-on
-- from: src-mcp-COMP-16
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-27
-  to: src-mcp-COMP-11
-  type: depends-on
-- from: src-mcp-COMP-27
-  to: src-mcp-COMP-22
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-26
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-9
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-26
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-22
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-8
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-27
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-27
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-23
-  type: depends-on
-- from: src-mcp-COMP-15
-  to: src-mcp-COMP-29
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-3
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-23
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-17
-  type: depends-on
-- from: src-mcp-COMP-8
-  to: src-mcp-COMP-29
-  type: depends-on
-- from: src-mcp-COMP-15
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-10
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-2
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-25
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-7
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-25
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-7
-  type: depends-on
-- from: src-mcp-COMP-4
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-6
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-6
-  type: depends-on
-- from: src-mcp-COMP-18
-  to: src-mcp-COMP-29
-  type: depends-on
-- from: src-mcp-COMP-14
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-18
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-11
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-9
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-11
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-22
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-18
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-8
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-20
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-16
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-20
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-28
-  type: depends-on
-- from: src-mcp-COMP-6
-  to: src-mcp-COMP-29
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-17
-  type: depends-on
-- from: src-mcp-COMP-8
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-10
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-13
-  type: depends-on
-- from: src-mcp-COMP-27
-  to: src-mcp-COMP-29
-  type: depends-on
-- from: src-mcp-COMP-6
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-29
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-13
-  type: depends-on
-- from: src-mcp-COMP-27
-  to: src-mcp-COMP-1
-  type: depends-on
-- from: src-mcp-COMP-10
-  to: src-mcp-COMP-29
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-21
-  type: depends-on
-- from: src-mcp-COMP-26
-  to: src-mcp-COMP-7
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-19
-  type: depends-on
-- from: src-mcp-COMP-20
-  to: src-mcp-COMP-29
-  type: depends-on
-- from: src-mcp-COMP-1
-  to: src-mcp-COMP-19
-  type: depends-on
-- from: src-mcp-COMP-24
-  to: src-mcp-COMP-14
-  type: depends-on
-- from: LAYER-INFRA
-  to: src-mcp-COMP-1
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-2
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-3
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-4
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-5
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-6
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-7
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-8
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-9
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-10
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-11
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-13
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-14
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-15
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-16
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-17
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-18
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-19
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-20
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-21
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-22
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-23
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-24
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-25
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-26
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-27
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-28
-  type: contains
-- from: LAYER-INFRA
-  to: src-mcp-COMP-29
-  type: contains
-- from: LAYER-DATA
-  to: src-mcp-COMP-12
-  type: contains
-- from: src-cli-COMP-1
-  to: CAP-1
-  type: realizes
-- from: src-cli-COMP-2
-  to: CAP-2
-  type: realizes
-- from: src-cli-COMP-3
-  to: CAP-3
-  type: realizes
-- from: src-cli-COMP-4
-  to: CAP-5
-  type: realizes
-- from: src-cli-COMP-5
-  to: CAP-5
-  type: realizes
-- from: src-cli-COMP-6
-  to: CAP-6
-  type: realizes
-- from: src-cli-COMP-7
-  to: CAP-7
-  type: realizes
-- from: src-cli-COMP-8
-  to: CAP-8
-  type: realizes
-- from: src-cli-COMP-9
-  to: CAP-9
-  type: realizes
-- from: src-cli-COMP-10
-  to: CAP-10
-  type: realizes
-- from: src-cli-COMP-11
-  to: CAP-14
-  type: realizes
-- from: src-cli-COMP-12
-  to: CAP-12
-  type: realizes
-- from: src-cli-COMP-13
-  to: CAP-13
-  type: realizes
-- from: src-cli-COMP-7
-  to: src-cli-COMP-5
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-1
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-11
-  type: depends-on
-- from: src-cli-COMP-9
-  to: src-cli-COMP-2
-  type: uses
-- from: src-cli-COMP-7
-  to: src-cli-COMP-13
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-14
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-8
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-4
-  type: depends-on
-- from: src-cli-COMP-9
-  to: src-cli-COMP-12
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-14
-  type: depends-on
-- from: src-cli-COMP-7
-  to: src-cli-COMP-6
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-3
-  type: depends-on
-- from: src-cli-COMP-9
-  to: src-cli-COMP-5
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-8
-  type: depends-on
-- from: src-cli-COMP-9
-  to: src-cli-COMP-10
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-2
-  type: uses
-- from: src-cli-COMP-9
-  to: src-cli-COMP-7
-  type: depends-on
-- from: src-cli-COMP-9
-  to: src-cli-COMP-13
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-3
-  type: depends-on
-- from: src-cli-COMP-7
-  to: src-cli-COMP-9
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-12
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-5
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-2
-  type: uses
-- from: src-cli-COMP-1
-  to: src-cli-COMP-10
-  type: depends-on
-- from: src-cli-COMP-7
-  to: src-cli-COMP-11
-  type: depends-on
-- from: src-cli-COMP-7
-  to: src-cli-COMP-1
-  type: depends-on
-- from: src-cli-COMP-9
-  to: src-cli-COMP-6
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-7
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-13
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-12
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-5
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-10
-  type: depends-on
-- from: src-cli-COMP-7
-  to: src-cli-COMP-4
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-6
-  type: depends-on
-- from: src-cli-COMP-7
-  to: src-cli-COMP-14
-  type: depends-on
-- from: src-cli-COMP-9
-  to: src-cli-COMP-1
-  type: depends-on
-- from: src-cli-COMP-7
-  to: src-cli-COMP-8
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-7
-  type: depends-on
-- from: src-cli-COMP-9
-  to: src-cli-COMP-11
-  type: depends-on
-- from: src-cli-COMP-7
-  to: src-cli-COMP-3
-  type: depends-on
-- from: src-cli-COMP-9
-  to: src-cli-COMP-4
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-6
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-9
-  type: depends-on
-- from: src-cli-COMP-9
-  to: src-cli-COMP-14
-  type: depends-on
-- from: src-cli-COMP-7
-  to: src-cli-COMP-2
-  type: uses
-- from: src-cli-COMP-1
-  to: src-cli-COMP-11
-  type: depends-on
-- from: src-cli-COMP-9
-  to: src-cli-COMP-8
-  type: depends-on
-- from: src-cli-COMP-13
-  to: src-cli-COMP-9
-  type: depends-on
-- from: src-cli-COMP-7
-  to: src-cli-COMP-12
-  type: depends-on
-- from: src-cli-COMP-9
-  to: src-cli-COMP-3
-  type: depends-on
-- from: src-cli-COMP-1
-  to: src-cli-COMP-4
-  type: depends-on
-- from: src-cli-COMP-7
-  to: src-cli-COMP-10
-  type: depends-on
-- from: LAYER-INFRA
-  to: src-cli-COMP-1
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-2
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-3
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-4
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-5
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-6
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-7
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-8
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-9
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-10
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-11
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-12
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-13
-  type: contains
-- from: LAYER-INFRA
-  to: src-cli-COMP-14
-  type: contains
+- from: COMP-3-9
+  to: REQ-E1
+  type: satisfies
+- from: COMP-3-5
+  to: REQ-I1
+  type: satisfies
+- from: COMP-3-2
+  to: REQ-O1
+  type: satisfies
+- from: COMP-3-7
+  to: REQ-Q1
+  type: satisfies
+- from: COMP-3-6
+  to: REQ-Q10
+  type: satisfies
+- from: COMP-3-10
+  to: REQ-Q11
+  type: satisfies
+- from: COMP-3-5
+  to: REQ-Q2
+  type: satisfies
+- from: COMP-3-9
+  to: REQ-Q3
+  type: satisfies
+- from: COMP-3-4
+  to: REQ-Q4
+  type: satisfies
+- from: COMP-3-12
+  to: REQ-Q5
+  type: satisfies
+- from: COMP-3-1
+  to: REQ-Q6
+  type: satisfies
+- from: COMP-3-8
+  to: REQ-Q7
+  type: satisfies
+- from: COMP-3-2
+  to: REQ-Q8
+  type: satisfies
+- from: COMP-3-13
+  to: REQ-Q9
+  type: satisfies
+- from: COMP-2
+  to: IF-1
+  type: exposes
+- from: COMP-2
+  to: IF-2
+  type: exposes
+- from: COMP-3-9
+  to: IF-3
+  type: exposes
+- from: COMP-3-1
+  to: IF-4
+  type: exposes
+- from: COMP-3-2
+  to: IF-5
+  type: exposes
+- from: COMP-3-3
+  to: IF-6
+  type: exposes
+- from: COMP-3-4
+  to: IF-7
+  type: exposes
+- from: COMP-3-5
+  to: IF-8
+  type: exposes
+- from: COMP-3-6
+  to: IF-9
+  type: exposes
+- from: COMP-3-7
+  to: IF-10
+  type: exposes
+- from: COMP-3-8
+  to: IF-11
+  type: exposes
+- from: COMP-3-12
+  to: IF-12
+  type: exposes
+- from: COMP-3-13
+  to: IF-13
+  type: exposes
+- from: COMP-3-10
+  to: IF-auto-COMP-3-10
+  type: exposes
+- from: COMP-3-11
+  to: IF-auto-COMP-3-11
+  type: exposes

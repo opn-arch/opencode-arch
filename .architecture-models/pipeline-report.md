@@ -1,35 +1,28 @@
-# Pipeline Report: opencode-arch
+# Pipeline Report: System-of-Systems
 
-**Generated:** 2026-08-18T23:31:28Z
-**Total Duration:** 1746ms
-**Stages:** 9
+**Generated:** 2026-08-19T16:59:39Z
+**Total Duration:** 521ms
+**Stages:** 8
 
 ## LLM Summary
 
-| Metric | Value |
-|--------|-------|
-| Total Calls | 7 |
-| Total Tokens | 0 (prompt: 0, completion: 0) |
-| Models Used | unknown |
-| Cache Hits | 0/7 |
-| Total LLM Duration | 14,521ms |
+No LLM calls — deterministic pipeline run
 
 ## Stage Scores
 
 | Stage | Score | Duration | LLM Calls |
 |-------|-------|----------|-----------|
-| observe | 100 | 521ms | 0 |
-| infer | 58 | 1ms | 3 |
-| allocate | 83 | 0ms | 4 |
+| observe | 100 | 457ms | 0 |
+| infer | 58 | 1ms | 0 |
+| allocate | 83 | 0ms | 0 |
 | contract | 71 | 0ms | 0 |
 | relate | 100 | 63ms | 0 |
-| specify | 50 | 0ms | 0 |
+| specify | 85 | 0ms | 0 |
 | decompose | 100.0 | 0ms | 0 |
 | validate | 80 | 0ms | 0 |
-| synthesize | 100.0 | 1161ms | 0 |
 
 ## Stage: observe
-**Score:** 100 | **Duration:** 521ms
+**Score:** 100 | **Duration:** 457ms
 
 ### Deterministic Findings
 - Discovered 165 modules
@@ -50,19 +43,8 @@
 - 1 actors
 - 3 behaviors
 
-### LLM Calls (3)
-
-#### 1. Given a software component with these files: package_group, suggest a specific, descriptive name (2- (2,036ms)
-- **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
-- **Result:** 1 items produced (confidence: 0.70)
-
-#### 2. Given a software component with these files: package_group, suggest a specific, descriptive name (2- (1,706ms)
-- **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
-- **Result:** 1 items produced (confidence: 0.70)
-
-#### 3. Given a software component with these files: cli_pattern, suggest a specific, descriptive name (2-4  (2,133ms)
-- **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
-- **Result:** 1 items produced (confidence: 0.70)
+### LLM Calls
+*(none)*
 
 ### Diagnostics
 *(none)*
@@ -147,23 +129,8 @@
 - File coverage: 10000%
 - 0 unallocated files
 
-### LLM Calls (4)
-
-#### 1. Given a software component containing files: [scripts/benchmark_economy.py, scripts/run_benchmark.py (2,137ms)
-- **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
-- **Result:** 1 items produced (confidence: 0.70)
-
-#### 2. Given a software component containing files: [src/opencode_arch/llm/cache.py, src/opencode_arch/llm/ (2,074ms)
-- **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
-- **Result:** 1 items produced (confidence: 0.70)
-
-#### 3. Given a software component containing files: [src/opencode_arch/mcp/__main__.py, src/opencode_arch/m (2,032ms)
-- **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
-- **Result:** 1 items produced (confidence: 0.70)
-
-#### 4. Given a software component containing files: [src/opencode_arch/cli/bench.py, src/opencode_arch/cli/ (2,403ms)
-- **Tokens:** 0 prompt (0 context) → 0 completion = 0 total
-- **Result:** 1 items produced (confidence: 0.70)
+### LLM Calls
+*(none)*
 
 ### Diagnostics
 *(none)*
@@ -195,10 +162,10 @@
 *(none)*
 
 ## Stage: specify
-**Score:** 50 | **Duration:** 0ms
+**Score:** 85 | **Duration:** 0ms
 
 ### Deterministic Findings
-- 3 interfaces
+- 13 interfaces
 
 ### LLM Calls
 *(none)*
@@ -226,18 +193,6 @@
 ### Deterministic Findings
 - Score: 80/100
 - 4 issues
-
-### LLM Calls
-*(none)*
-
-### Diagnostics
-*(none)*
-
-## Stage: synthesize
-**Score:** 100.0 | **Duration:** 1161ms
-
-### Deterministic Findings
-*(none)*
 
 ### LLM Calls
 *(none)*

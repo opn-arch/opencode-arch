@@ -487,6 +487,256 @@ entities:
     name: main CLI
     interface_type: cli
     component_id: COMP-3-9
+  - id: IF-4
+    name: COMP-3-1 Library API
+    interface_type: library
+    component_id: COMP-3-1
+    methods:
+    - 'ArtifactSpec: class ArtifactSpec'
+    - 'ArtifactTemplate: class ArtifactTemplate'
+    - 'SubsystemInfo: class SubsystemInfo'
+    - 'TemplateSection: class TemplateSection'
+    - 'get_artifact_spec: def get_artifact_spec(artifact_id: str) -> ArtifactSpec
+      | None'
+    - 'get_template: def get_template(artifact_id: str) -> ArtifactTemplate | None'
+    - 'select_artifacts: def select_artifacts(model: ArchitectureModel, manifest:
+      dict | None=None, include_capability_details: bool=True) -> list[ArtifactSpec]'
+    - 'select_capability_detail_artifacts: def select_capability_detail_artifacts(model:
+      ArchitectureModel) -> list[ArtifactSpec]'
+    - 'select_subsystem_artifacts: def select_subsystem_artifacts(subsystem: SubsystemInfo,
+      model: ArchitectureModel, manifest: dict | None=None) -> list[ArtifactSpec]'
+    - 'should_decompose: def should_decompose(model: ArchitectureModel, manifest:
+      dict | None=None) -> bool'
+    description: 18 public symbols exported
+  - id: IF-5
+    name: COMP-3-2 Library API
+    interface_type: library
+    component_id: COMP-3-2
+    methods:
+    - 'CachedResult: class CachedResult'
+    - 'LLMCache: class LLMCache'
+    - 'cached_llm_call: async def cached_llm_call(runner, prompt: str, content_hash:
+      str, prompt_template_hash: str, repo_path: str, cache: LLMCache | None=None)
+      -> CachedResult'
+    - 'hash_content: def hash_content(content: str) -> str'
+    - 'is_relay_available: def is_relay_available(relay_url: str=DEFAULT_RELAY_URL)
+      -> bool'
+    - 'relay_llm_callback: async def relay_llm_callback(stage: str, prompt: str, context:
+      dict | None=None) -> str | None'
+    description: 6 public symbols exported
+  - id: IF-6
+    name: COMP-3-3 Library API
+    interface_type: library
+    component_id: COMP-3-3
+    methods:
+    - 'enrich_manifest_slice: def enrich_manifest_slice(manifest_slice: str, project_root:
+      str | Path, artifact_name: str, max_model_tokens: int=2000) -> str'
+    - 'format_artifact_context: def format_artifact_context(model: ArchitectureModel,
+      artifact_name: str, max_tokens: int=3000) -> str'
+    - 'format_model_context: def format_model_context(model: ArchitectureModel, max_tokens:
+      int=4000, detail_level: str=''standard'') -> str'
+    - 'format_source_block_context: def format_source_block_context(model: ArchitectureModel,
+      source_block: str, max_tokens: int=2000, project_root: ''Path | None''=None)
+      -> str'
+    - 'get_artifact_context: def get_artifact_context(project_root: str | Path, artifact_name:
+      str, max_tokens: int=3000) -> str'
+    - 'get_model: def get_model(project_root: str | Path, force_refresh: bool=False)
+      -> ArchitectureModel'
+    - 'get_model_summary: def get_model_summary(project_root: str | Path) -> dict[str,
+      Any]'
+    - 'get_source_block_context: def get_source_block_context(project_root: str |
+      Path, source_block: str, max_tokens: int=2000) -> str'
+    - 'impact_analysis: def impact_analysis(model: ArchitectureModel, entity_id: str,
+      depth: int=2) -> str'
+    - 'query_model: def query_model(model: ArchitectureModel, question: str) -> str'
+    description: 10 public symbols exported
+  - id: IF-7
+    name: COMP-3-4 Library API
+    interface_type: library
+    component_id: COMP-3-4
+    methods:
+    - 'FailureClassification: class FailureClassification'
+    - 'Lesson: class Lesson'
+    - 'PatternType: class PatternType'
+    - 'ReportCard: class ReportCard'
+    - 'Strategy: class Strategy'
+    - 'apply_adaptations: def apply_adaptations(adaptations: list[PromptAdaptation],
+      contract_cap: int=50, include_dep_body_hints: bool=False) -> dict[str, Any]'
+    - 'classify_failures: def classify_failures(test_output: str, pass_rate: float=0.0,
+      total_tests: int=0, failed_tests: int=0) -> list[FailureClassification]'
+    - 'extract_lessons: def extract_lessons(repo: str, mode: str, subsystem_results:
+      dict[str, dict[str, Any]]) -> list[Lesson]'
+    - 'generate_report_card: def generate_report_card(repo: str, mode: str, subsystem_results:
+      dict[str, dict[str, Any]], previous_fidelity: float | None=None, previous_compression:
+      float | None=None) -> ReportCard'
+    - 'get_adaptations: def get_adaptations(subsystem_name: str, dependency_count:
+      int, signature_count: int, contract_count: int, body_hint_coverage: float, historical_patterns:
+      list[dict[str, Any]] | None=None) -> list[PromptAdaptation]'
+    description: 14 public symbols exported
+  - id: IF-8
+    name: COMP-3-5 Library API
+    interface_type: library
+    component_id: COMP-3-5
+    methods:
+    - 'OpencodeRunner: class OpencodeRunner'
+    - 'RunResult: class RunResult'
+    - 'RunnerBackend: class RunnerBackend'
+    description: 3 public symbols exported
+  - id: IF-9
+    name: COMP-3-6 Library API
+    interface_type: library
+    component_id: COMP-3-6
+    methods:
+    - 'ResolutionStrategy: class ResolutionStrategy'
+    - 'UncertaintyResolver: class UncertaintyResolver'
+    description: 2 public symbols exported
+  - id: IF-10
+    name: COMP-3-7 Library API
+    interface_type: library
+    component_id: COMP-3-7
+    methods:
+    - 'SessionAccumulator: class SessionAccumulator'
+    - 'check_fidelity: def check_fidelity(input_data: Any, output_data: Any) -> dict'
+    - 'check_representativeness: async def check_representativeness(repo_path: str,
+      model_yaml: str='''') -> dict[str, Any]'
+    - 'compute_adaptive_budget: def compute_adaptive_budget(module_count: int, base:
+      int=4000) -> int'
+    - 'estimate_regenerability: def estimate_regenerability(compression_ratio: float,
+      confidence: float, n_components: int, n_contracts: int) -> float'
+    - 'ingest_source_graph: async def ingest_source_graph(repo_path: str, source_graph_json:
+      str) -> dict'
+    - 'run_llm_audit: async def run_llm_audit(repo_path: str, model_yaml: str='''',
+      _runner=None, _cache: LLMCache | None=None) -> dict[str, Any]'
+    - 'store_correction: async def store_correction(repo_path: str, correction_type:
+      str, target: str, reason: str, suggestion: dict | None=None) -> dict[str, Any]'
+    - 'sync_findings: async def sync_findings(repo_path: str, api_url: str=DEFAULT_API_URL,
+      dry_run: bool=False) -> dict[str, Any]'
+    - 'with_quality: def with_quality(func)'
+    description: 33 public symbols exported
+  - id: IF-11
+    name: COMP-3-8 Library API
+    interface_type: library
+    component_id: COMP-3-8
+    methods:
+    - 'ExtractedRequirement: class ExtractedRequirement'
+    - 'RequirementMatch: class RequirementMatch'
+    - 'derive_requirements_retroactive: async def derive_requirements_retroactive(model_yaml:
+      str, runner, cache: LLMCache | None=None, repo_path: str='''') -> list[ExtractedRequirement]'
+    - 'extract_requirements_llm: async def extract_requirements_llm(doc_path: Path,
+      runner, cache: LLMCache | None=None, repo_path: str='''') -> list[ExtractedRequirement]'
+    - 'match_functions_to_requirements: async def match_functions_to_requirements(requirements:
+      list[ExtractedRequirement], model_yaml: str, runner, cache: LLMCache | None=None,
+      repo_path: str='''') -> list[RequirementMatch]'
+    - 'parse_requirements_doc: def parse_requirements_doc(doc_path: Path) -> list[ExtractedRequirement]'
+    description: 6 public symbols exported
+  - id: IF-12
+    name: COMP-3-12 Library API
+    interface_type: library
+    component_id: COMP-3-12
+    methods:
+    - 'TelemetryStore: class TelemetryStore'
+    - 'drain_and_store: def drain_and_store(tool: str, repo: str='''', db_path: str
+      | None=None) -> int'
+    - 'record_invocation: async def record_invocation(store: TelemetryStore, tool:
+      str, repo: str='''', context_tokens: int=0, output_quality: int=0, iterations:
+      int=1, metadata: str='''')'
+    description: 3 public symbols exported
+  - id: IF-13
+    name: COMP-3-13 Library API
+    interface_type: library
+    component_id: COMP-3-13
+    methods:
+    - 'HealAction: class HealAction'
+    - 'SpotCheckDiagnostic: class SpotCheckDiagnostic'
+    - 'SpotCheckResult: class SpotCheckResult'
+    - 'SpotCheckTarget: class SpotCheckTarget'
+    - 'classify_failure: def classify_failure(diagnostics: list[SpotCheckDiagnostic])
+      -> list[HealAction]'
+    - 'run_spot_check: async def run_spot_check(target: SpotCheckTarget, repo_path:
+      Path, *, max_iterations: int=3, llm_backend: Any=None) -> SpotCheckResult'
+    - 'select_target: async def select_target(repo_path: Path, component_id: str |
+      None=None, subsystem_id: str | None=None) -> SpotCheckTarget'
+    - 'self_heal: async def self_heal(result: SpotCheckResult, repo_path: Path, *,
+      learning_store: Any=None) -> list[HealAction]'
+    description: 8 public symbols exported
+  - id: IF-auto-COMP-1
+    name: Extraction Tools API
+    interface_type: library
+    component_id: COMP-1
+    methods:
+    - extraction_tools_api
+  - id: IF-auto-COMP-4
+    name: Requirements API
+    interface_type: library
+    component_id: COMP-4
+    methods:
+    - requirements_api
+  - id: IF-auto-COMP-5
+    name: Resolution API
+    interface_type: library
+    component_id: COMP-5
+    methods:
+    - resolution_api
+  - id: IF-auto-COMP-6
+    name: Context Tools API
+    interface_type: library
+    component_id: COMP-6
+    methods:
+    - context_tools_api
+  - id: IF-auto-COMP-7
+    name: Model Management Tools API
+    interface_type: library
+    component_id: COMP-7
+    methods:
+    - model_management_tools_api
+  - id: IF-auto-COMP-8
+    name: Documentation Tools API
+    interface_type: library
+    component_id: COMP-8
+    methods:
+    - documentation_tools_api
+  - id: IF-auto-COMP-9
+    name: Quality Gate Tools API
+    interface_type: library
+    component_id: COMP-9
+    methods:
+    - quality_gate_tools_api
+  - id: IF-auto-COMP-10
+    name: Requirements Tools API
+    interface_type: library
+    component_id: COMP-10
+    methods:
+    - requirements_tools_api
+  - id: IF-auto-COMP-11
+    name: Live Analysis Tools API
+    interface_type: library
+    component_id: COMP-11
+    methods:
+    - live_analysis_tools_api
+  - id: IF-auto-COMP-12
+    name: Runner API
+    interface_type: library
+    component_id: COMP-12
+    methods:
+    - runner_api
+  - id: IF-auto-COMP-13
+    name: Telemetry API
+    interface_type: library
+    component_id: COMP-13
+    methods:
+    - telemetry_api
+  - id: IF-auto-COMP-14
+    name: Learning API
+    interface_type: library
+    component_id: COMP-14
+    methods:
+    - learning_api
+  - id: IF-auto-COMP-15
+    name: MCP Server API
+    interface_type: library
+    component_id: COMP-15
+    methods:
+    - mcp_server_api
   constraints:
   - id: CON-1
     name: Python >=3.11
@@ -802,3 +1052,72 @@ relationships:
 - from: COMP-15
   to: REQ-Q19
   type: satisfies
+- from: COMP-3
+  to: IF-4
+  type: exposes
+- from: COMP-3
+  to: IF-5
+  type: exposes
+- from: COMP-3
+  to: IF-6
+  type: exposes
+- from: COMP-3
+  to: IF-7
+  type: exposes
+- from: COMP-3
+  to: IF-8
+  type: exposes
+- from: COMP-3
+  to: IF-9
+  type: exposes
+- from: COMP-3
+  to: IF-10
+  type: exposes
+- from: COMP-3
+  to: IF-11
+  type: exposes
+- from: COMP-3
+  to: IF-12
+  type: exposes
+- from: COMP-3
+  to: IF-13
+  type: exposes
+- from: COMP-1
+  to: IF-auto-COMP-1
+  type: exposes
+- from: COMP-4
+  to: IF-auto-COMP-4
+  type: exposes
+- from: COMP-5
+  to: IF-auto-COMP-5
+  type: exposes
+- from: COMP-6
+  to: IF-auto-COMP-6
+  type: exposes
+- from: COMP-7
+  to: IF-auto-COMP-7
+  type: exposes
+- from: COMP-8
+  to: IF-auto-COMP-8
+  type: exposes
+- from: COMP-9
+  to: IF-auto-COMP-9
+  type: exposes
+- from: COMP-10
+  to: IF-auto-COMP-10
+  type: exposes
+- from: COMP-11
+  to: IF-auto-COMP-11
+  type: exposes
+- from: COMP-12
+  to: IF-auto-COMP-12
+  type: exposes
+- from: COMP-13
+  to: IF-auto-COMP-13
+  type: exposes
+- from: COMP-14
+  to: IF-auto-COMP-14
+  type: exposes
+- from: COMP-15
+  to: IF-auto-COMP-15
+  type: exposes

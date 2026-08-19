@@ -7,7 +7,7 @@ derived_requirements:
   source_signal: abstract_class:RunnerBackend
   component_id: COMP-3-5
   evidence: Abstract/Protocol class with 1 required methods
-- id: REQ-T5
+- id: REQ-T6
   name: 'Python >=3.11: Project requires Python >=3.11'
   category: technology
   priority: must
@@ -88,13 +88,13 @@ derived_requirements:
   component_id: COMP-3-8
   evidence: 5 test files import this component's source
 - id: REQ-Q8
-  name: Component COMP-3-2 has 3 test file(s) covering its source
+  name: Component COMP-3-2 has 4 test file(s) covering its source
   category: quality
   priority: should
   source_file: ''
-  source_signal: test_coverage:COMP-3-2:3
+  source_signal: test_coverage:COMP-3-2:4
   component_id: COMP-3-2
-  evidence: 3 test files import this component's source
+  evidence: 4 test files import this component's source
 - id: REQ-Q9
   name: Component COMP-3-13 has 2 test file(s) covering its source
   category: quality
@@ -104,6 +104,14 @@ derived_requirements:
   component_id: COMP-3-13
   evidence: 2 test files import this component's source
 - id: REQ-T1
+  name: DEFAULT_RELAY_URL = os.environ.get('COPILOT_RELAY_URL', 'http://localhost:8400')
+  category: technology
+  priority: should
+  source_file: src/opencode_arch/llm/relay.py
+  source_signal: constant:DEFAULT_RELAY_URL=os.environ.get('COPILOT_RELAY_URL', 'http://localhost:8400')
+  component_id: COMP-3-2
+  evidence: UPPER_CASE constant in relay.py
+- id: REQ-T2
   name: DEFAULT_API_URL = 'http://localhost:8000'
   category: technology
   priority: should
@@ -111,7 +119,7 @@ derived_requirements:
   source_signal: constant:DEFAULT_API_URL='http://localhost:8000'
   component_id: COMP-3-7
   evidence: UPPER_CASE constant in sync.py
-- id: REQ-T2
+- id: REQ-T3
   name: _CACHE_MAX = 32
   category: technology
   priority: should
@@ -119,7 +127,7 @@ derived_requirements:
   source_signal: constant:_CACHE_MAX=32
   component_id: COMP-3-7
   evidence: UPPER_CASE constant in slice.py
-- id: REQ-T3
+- id: REQ-T4
   name: COMPRESSION_WARN_THRESHOLD = 50
   category: technology
   priority: should
@@ -127,7 +135,7 @@ derived_requirements:
   source_signal: constant:COMPRESSION_WARN_THRESHOLD=50
   component_id: COMP-3-7
   evidence: UPPER_CASE constant in slice.py
-- id: REQ-T4
+- id: REQ-T5
   name: COMPRESSION_CRITICAL_THRESHOLD = 200
   category: technology
   priority: should
@@ -135,7 +143,7 @@ derived_requirements:
   source_signal: constant:COMPRESSION_CRITICAL_THRESHOLD=200
   component_id: COMP-3-7
   evidence: UPPER_CASE constant in slice.py
-- id: REQ-T6
+- id: REQ-T7
   name: 'CI/CD: GitHub Actions: Project uses GitHub Actions for CI/CD'
   category: technology
   priority: should
@@ -168,6 +176,14 @@ derived_requirements:
   component_id: COMP-3-7
   evidence: 3 functions with try/except/raise patterns
 - id: REQ-O1
+  name: Component COMP-3-2 has logging instrumentation
+  category: observability
+  priority: could
+  source_file: src/opencode_arch/llm/relay.py
+  source_signal: import:logging
+  component_id: COMP-3-2
+  evidence: Imports logging/structlog in relay.py
+- id: REQ-O2
   name: Component COMP-3-9 has logging instrumentation
   category: observability
   priority: could
@@ -176,14 +192,14 @@ derived_requirements:
   component_id: COMP-3-9
   evidence: Imports logging/structlog in launch.py
 summary:
-  total: 22
+  total: 24
   by_priority:
     must: 2
-    should: 16
-    could: 4
+    should: 17
+    could: 5
   by_category:
     error_handling: 3
     interface: 1
-    observability: 1
+    observability: 2
     quality: 11
-    technology: 6
+    technology: 7
