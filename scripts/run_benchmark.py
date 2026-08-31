@@ -26,6 +26,11 @@ RESULTS_DIR = Path(__file__).parent.parent / "results"
 # confuses the agent into reading tool source instead of calling MCP tools)
 PROJECT_DIR = Path(__file__).parent.parent.parent / "architecture-model-standard"
 
+# Local repos that don't need cloning — resolved at runtime
+LOCAL_REPOS: dict[str, Path] = {
+    "logs_db": Path.home() / "Documents" / "Projects" / "logs_db",
+}
+
 DEFAULT_REPOS = [
     {"name": "python-dotenv", "subdir": "src/dotenv"},
     {"name": "colorama", "subdir": "colorama"},
@@ -50,10 +55,18 @@ ALL_REPOS = DEFAULT_REPOS + [
     {"name": "jinja", "subdir": "src/jinja2"},
     {"name": "starlette", "subdir": "starlette"},
     {"name": "arrow", "subdir": "arrow"},
+    {"name": "logs_db", "subdir": "app"},
 ]
 
 
-def run_extraction(repo_path: Path, name: str) -> dict:
+def _resolve_repo_path(name: str) -> Path:
+    """Resolve repo path — check LOCAL_REPOS first, then CLONE_DIR."""
+    if name in LOCAL_REPOS and LOCAL_REPOS[name].exists():
+        return LOCAL_REPOS[name]
+    return CLONE_DIR / name
+
+
+def run_extraction(repo_path: Path, name: str, timeout: int = 600) -> dict:
     """Run extraction on a single repo via opencode run."""
     prompt = (
         f"Use architect_scan to scan the repository at {repo_path}, then produce a valid "
@@ -67,7 +80,7 @@ def run_extraction(repo_path: Path, name: str) -> dict:
         result = subprocess.run(
             ["opencode", "run", prompt, "--dir", str(PROJECT_DIR),
              "--dangerously-skip-permissions"],
-            capture_output=True, text=True, timeout=600,
+            capture_output=True, text=True, timeout=timeout,
         )
         elapsed = time.time() - start
 
@@ -95,7 +108,7 @@ def run_extraction(repo_path: Path, name: str) -> dict:
             }
         return {"success": False, "error": "No model produced", "time_seconds": elapsed}
     except subprocess.TimeoutExpired:
-        return {"success": False, "error": "Timeout (600s)", "time_seconds": 600}
+        return {"success": False, "error": f"Timeout ({timeout}s)", "time_seconds": timeout}
     except Exception as e:
         return {"success": False, "error": str(e), "time_seconds": time.time() - start}
 
@@ -232,16 +245,19 @@ def run_benchmark(repos: list[dict], extract: bool = True, regen: bool = True) -
 
     for repo in repos:
         name = repo["name"]
-        repo_path = CLONE_DIR / name
+        repo_path = _resolve_repo_path(name)
         if not repo_path.exists():
-            print(f"  SKIP {name} (not cloned at {repo_path})")
+            print(f"  SKIP {name} (not found at {repo_path})")
             continue
+
+        # Larger timeout for local/large repos
+        timeout = 1200 if name in LOCAL_REPOS else 600
 
         result = {"repo": name, "subdir": repo["subdir"]}
 
         if extract:
             print(f"  EXTRACT {name}...", end=" ", flush=True)
-            ext_result = run_extraction(repo_path, name)
+            ext_result = run_extraction(repo_path, name, timeout=timeout)
             result["extraction"] = ext_result
             if ext_result.get("success"):
                 print(f"score={ext_result['score']} entities={ext_result['entities']} "
@@ -272,6 +288,8 @@ def main():
     parser.add_argument("--all", action="store_true", help="Run all 19 repos")
     parser.add_argument("--extract-only", action="store_true", help="Skip regeneration")
     parser.add_argument("--regen-only", action="store_true", help="Skip extraction")
+    parser.add_argument("--viewer", action="store_true", help="Generate HTML viewer after extraction")
+    parser.add_argument("--timeout", type=int, help="Override extraction timeout (seconds)")
     args = parser.parse_args()
 
     if args.repos:
@@ -333,6 +351,26 @@ def main():
         "results": results,
     }, indent=2))
     print(f"\n  Saved to: {out_file}")
+
+    # Generate viewer for successful extractions if requested
+    if args.viewer:
+        for r in results:
+            if r.get("extraction", {}).get("success"):
+                name = r["repo"]
+                repo_path = _resolve_repo_path(name)
+                print(f"\n  VIEWER {name}...", end=" ", flush=True)
+                try:
+                    viewer_result = subprocess.run(
+                        [sys.executable, "-m", "architecture_model.cli.main",
+                         "viewer", str(repo_path), "--zip"],
+                        capture_output=True, text=True, timeout=120,
+                    )
+                    if viewer_result.returncode == 0:
+                        print(viewer_result.stdout.strip())
+                    else:
+                        print(f"FAIL: {viewer_result.stderr[:100]}")
+                except Exception as e:
+                    print(f"FAIL: {e}")
 
 
 if __name__ == "__main__":
