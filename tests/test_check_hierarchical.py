@@ -1,6 +1,7 @@
 """Tests for architect_check hierarchical auto-F-block mode."""
 import pytest
 import asyncio
+from types import SimpleNamespace
 
 from opencode_arch.mcp.tools.check import check_representativeness
 
@@ -104,3 +105,135 @@ class TestCheckAutoHierarchical:
 
         assert "error" not in result
         assert result.get("mode") == "flat"
+
+
+def _write_hierarchy(tmp_path, child_refs):
+    import yaml
+
+    (tmp_path / "one.py").write_text("def one(): return 1\n")
+    (tmp_path / "two.py").write_text("def two(): return 2\n")
+    systems = []
+    for block_id, ref in child_refs.items():
+        systems.append({
+            "id": f"SYS-{block_id}", "name": block_id, "status": "ACTIVE",
+            "source_block": block_id, "sub_model_ref": ref,
+        })
+        if ref.startswith("models/") and "/missing/" not in ref:
+            child_path = tmp_path / ref
+            child_path.parent.mkdir(parents=True, exist_ok=True)
+            filename = "one.py" if block_id == "S1" else "two.py"
+            child_path.write_text(yaml.safe_dump({
+                "meta": {"project": block_id, "schema_version": "1.3"},
+                "entities": {"components": [{
+                    "id": f"COMP-{block_id}", "name": block_id, "status": "ACTIVE", "files": [filename],
+                }]},
+                "relationships": [],
+            }))
+    root = {
+        "meta": {"project": "root", "schema_version": "1.3"},
+        "entities": {"systems": systems},
+        "relationships": [],
+    }
+    (tmp_path / ".architecture-model.yaml").write_text(yaml.safe_dump(root))
+
+
+def _recursive_manifests(tmp_path):
+    from architecture_model.manifest.recursive import generate_block_manifest
+
+    return {
+        block_id: SimpleNamespace(manifest=generate_block_manifest(
+            tmp_path, block_id, {"files": [filename]},
+        ))
+        for block_id, filename in {"S1": "one.py", "S2": "two.py"}.items()
+    }
+
+
+@pytest.mark.asyncio
+async def test_hierarchical_check_populates_child_blocks_and_recursive_overall(tmp_path, monkeypatch):
+    _write_hierarchy(tmp_path, {
+        "S1": "models/one/.architecture-model.yaml",
+        "S2": "models/two/.architecture-model.yaml",
+    })
+    manifests = _recursive_manifests(tmp_path)
+    monkeypatch.setattr(
+        "architecture_model.config.loader.get_config",
+        lambda path: SimpleNamespace(source_block_dict={"S1": {}, "S2": {}}),
+    )
+    monkeypatch.setattr(
+        "architecture_model.manifest.recursive.generate_recursive_manifests",
+        lambda path: manifests,
+    )
+
+    result = await check_representativeness(str(tmp_path))
+
+    assert set(result["blocks"]) == {"S1", "S2"}
+    assert result["overall"] == 100.0
+
+
+@pytest.mark.asyncio
+async def test_hierarchical_check_surfaces_missing_child_and_lowers_score(tmp_path, monkeypatch):
+    _write_hierarchy(tmp_path, {
+        "S1": "models/one/.architecture-model.yaml",
+        "S2": "models/missing/.architecture-model.yaml",
+    })
+    manifests = _recursive_manifests(tmp_path)
+    monkeypatch.setattr(
+        "architecture_model.config.loader.get_config",
+        lambda path: SimpleNamespace(source_block_dict={"S1": {}, "S2": {}}),
+    )
+    monkeypatch.setattr(
+        "architecture_model.manifest.recursive.generate_recursive_manifests",
+        lambda path: manifests,
+    )
+
+    result = await check_representativeness(str(tmp_path))
+
+    assert result["overall"] <= 75.0
+    assert any("Missing sub-model" in issue for issue in result["hierarchy_issues"])
+
+
+@pytest.mark.asyncio
+async def test_hierarchical_check_rejects_traversal_reference(tmp_path, monkeypatch):
+    _write_hierarchy(tmp_path, {"S1": "../outside.yaml", "S2": "models/two/.architecture-model.yaml"})
+    manifests = _recursive_manifests(tmp_path)
+    monkeypatch.setattr(
+        "architecture_model.config.loader.get_config",
+        lambda path: SimpleNamespace(source_block_dict={"S1": {}, "S2": {}}),
+    )
+    monkeypatch.setattr(
+        "architecture_model.manifest.recursive.generate_recursive_manifests",
+        lambda path: manifests,
+    )
+
+    result = await check_representativeness(str(tmp_path))
+
+    assert result["overall"] <= 75.0
+    assert any("Path traversal" in issue for issue in result["hierarchy_issues"])
+
+
+@pytest.mark.asyncio
+async def test_hierarchical_check_surfaces_cycle(tmp_path, monkeypatch):
+    import yaml
+
+    _write_hierarchy(tmp_path, {"S1": "models/one/.architecture-model.yaml", "S2": "models/two/.architecture-model.yaml"})
+    child_path = tmp_path / "models" / "one" / ".architecture-model.yaml"
+    child = yaml.safe_load(child_path.read_text())
+    child["entities"]["systems"] = [{
+        "id": "SYS-ROOT", "name": "Root", "status": "ACTIVE",
+        "source_block": "ROOT", "sub_model_ref": "../../.architecture-model.yaml",
+    }]
+    child_path.write_text(yaml.safe_dump(child))
+    manifests = _recursive_manifests(tmp_path)
+    monkeypatch.setattr(
+        "architecture_model.config.loader.get_config",
+        lambda path: SimpleNamespace(source_block_dict={"S1": {}, "S2": {}}),
+    )
+    monkeypatch.setattr(
+        "architecture_model.manifest.recursive.generate_recursive_manifests",
+        lambda path: manifests,
+    )
+
+    result = await check_representativeness(str(tmp_path))
+
+    assert result["overall"] <= 75.0
+    assert any("cycle" in issue.lower() for issue in result["hierarchy_issues"])

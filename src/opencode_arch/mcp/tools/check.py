@@ -128,9 +128,12 @@ def _try_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
         if not recursive_manifests:
             return None
 
-        result = compute_hierarchical_representativeness(root_model, {}, recursive_manifests)
+        sub_models, hierarchy_issues = _resolve_sub_models(path, root_model)
+        result = compute_hierarchical_representativeness(
+            root_model, sub_models, recursive_manifests
+        )
 
-        return _format_hierarchical_output(result)
+        return _format_hierarchical_output(result, hierarchy_issues)
 
     except Exception:
         return None
@@ -159,9 +162,12 @@ def _try_auto_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
         if not recursive_manifests:
             return None
 
-        result = compute_hierarchical_representativeness(root_model, {}, recursive_manifests)
+        sub_models, hierarchy_issues = _resolve_sub_models(path, root_model)
+        result = compute_hierarchical_representativeness(
+            root_model, sub_models, recursive_manifests
+        )
 
-        output = _format_hierarchical_output(result)
+        output = _format_hierarchical_output(result, hierarchy_issues)
         output["mode"] = "hierarchical_auto"
         output["source_block_count"] = len(source_block_config)
         return output
@@ -170,8 +176,42 @@ def _try_auto_hierarchical(path: Path, root_model) -> dict[str, Any] | None:
         return None
 
 
-def _format_hierarchical_output(result) -> dict[str, Any]:
+def _resolve_sub_models(path: Path, root_model) -> tuple[dict[str, Any], list[str]]:
+    """Safely load descendants and index them by their declared source block."""
+    from architecture_model.core.hierarchy import load_model_hierarchy
+
+    models, issues = load_model_hierarchy(root_model, path)
+    loaded_by_path = {
+        Path(model._source_path).resolve(): model
+        for model in models[1:]
+        if getattr(model, "_source_path", None)
+    }
+    sub_models: dict[str, Any] = {}
+    root = path.resolve()
+
+    for parent in models:
+        parent_path = Path(
+            getattr(parent, "_source_path", root / ".architecture-model.yaml")
+        ).resolve()
+        for system in parent.entities.systems:
+            if not system.sub_model_ref or not system.source_block:
+                continue
+            local_candidate = (parent_path.parent / system.sub_model_ref).resolve()
+            root_candidate = (root / system.sub_model_ref).resolve()
+            candidate = local_candidate if local_candidate.is_file() else root_candidate
+            child = loaded_by_path.get(candidate)
+            if child is not None:
+                sub_models[system.source_block] = child
+
+    return sub_models, issues
+
+
+def _format_hierarchical_output(
+    result, hierarchy_issues: list[str] | None = None
+) -> dict[str, Any]:
     """Format a hierarchical representativeness result into output dict."""
+    hierarchy_issues = hierarchy_issues or []
+    overall = min(result.overall, 75.0) if hierarchy_issues else result.overall
     output: dict[str, Any] = {
         "mode": "hierarchical",
         "root": {
@@ -181,7 +221,8 @@ def _format_hierarchical_output(result) -> dict[str, Any]:
             "overall": round(result.root.overall, 1),
         },
         "blocks": {},
-        "overall": round(result.overall, 1),
+        "overall": round(overall, 1),
+        "hierarchy_issues": hierarchy_issues,
         "uncovered_files": result.root.uncovered_files,
         "unverified_relationships": result.root.unverified_relationships,
         "low_coherence_components": result.root.low_coherence_components,
