@@ -50,7 +50,9 @@ async def run_pipeline(
         recursive: If True, synthesize stage runs scoped sub-pipelines
             for each detected system.
         resolutions: List of resolved uncertainties from the previous stage.
-            Each dict: {category, resolution, confidence, source}.
+            Each dict: {category, resolution, confidence, source}. Optional
+            deterministic metadata: target_name, target_kind, files_sent,
+            file_allocations, and for_stage.
             These are converted to Evidence and applied before running.
         clear_cache: If True, clear cached results before running.
         scope: System ID to run a scoped sub-pipeline on (e.g., "SYS-1").
@@ -182,12 +184,33 @@ async def run_pipeline(
 
         # Apply resolutions as evidence + LLM call records
         if resolutions:
+            stage_order = list(stages)
+            rerun_from = min(
+                (
+                    stage_order.index(res.get("for_stage", stage or "unknown"))
+                    for res in resolutions
+                    if res.get("for_stage", stage or "unknown") in stage_order
+                ),
+                default=len(stage_order),
+            )
+            for affected_stage in stage_order[rerun_from:]:
+                ctx.cache.pop(affected_stage, None)
+                if affected_stage in cached_stages:
+                    cached_stages.remove(affected_stage)
             for res in resolutions:
                 ev = Evidence(
                     source=res.get("source", "llm_analysis"),
                     confidence=res.get("confidence", 0.8),
                     raw=res.get("resolution", ""),
                     location=res.get("category", ""),
+                    metadata={
+                        key: res[key]
+                        for key in (
+                            "for_stage", "files_sent", "target_name",
+                            "target_kind", "file_allocations",
+                        )
+                        if key in res
+                    },
                 )
                 ctx.prior_corrections.append(ev)
 

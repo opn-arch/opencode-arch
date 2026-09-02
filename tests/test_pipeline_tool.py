@@ -129,6 +129,56 @@ async def test_resolutions_applied(sample_repo):
 
 
 @pytest.mark.asyncio
+async def test_structured_resolutions_change_infer_and_allocation_output(sample_repo, monkeypatch):
+    monkeypatch.setattr("opencode_arch.llm.relay.is_relay_available", lambda: False)
+    workflow = sample_repo / "src" / "myapp" / "workflow.py"
+    workflow.write_text("def run():\n    pass\n")
+    resolutions = [
+        {
+            "category": "complex_behavior",
+            "resolution": "load input -> transform record -> save result",
+            "confidence": 0.9,
+            "for_stage": "infer",
+            "files_sent": [str(workflow.relative_to(sample_repo))],
+            "target_name": "Import workflow",
+            "target_kind": "behavior",
+        },
+        {
+            "category": "ambiguous_module",
+            "resolution": "Confirmed workflow boundary",
+            "confidence": 0.9,
+            "for_stage": "allocate",
+            "files_sent": [str(workflow.relative_to(sample_repo))],
+            "target_name": "Workflow Boundary",
+            "target_kind": "component",
+        },
+    ]
+
+    first = await run_pipeline(str(sample_repo), stage="infer", clear_cache=True)
+    assert "infer" in first["from_cache"] or "infer" in first["stages_completed"]
+
+    result = await run_pipeline(str(sample_repo), stage="allocate", resolutions=resolutions)
+    assert result["stages"]["infer"]["from_cache"] is False
+
+    from architecture_model.pipeline import PipelineCache
+
+    infer_output = PipelineCache(
+        sample_repo / ".architecture" / "pipeline-cache"
+    ).load_stage("infer").output
+    assert any(
+        behavior.name == "Import workflow" and behavior.source_file.endswith("workflow.py")
+        for behavior in infer_output.behaviors
+    )
+    allocation = PipelineCache(
+        sample_repo / ".architecture" / "pipeline-cache"
+    ).load_stage("allocate").output
+    assert any(
+        component.name == "Workflow Boundary" and workflow.relative_to(sample_repo) in component.files
+        for component in allocation.components
+    )
+
+
+@pytest.mark.asyncio
 async def test_uncertainties_to_resolve(sample_repo):
     """Result includes uncertainties_to_resolve from target stage."""
     result = await run_pipeline(str(sample_repo), stage="infer")
