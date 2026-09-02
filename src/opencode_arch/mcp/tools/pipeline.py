@@ -51,8 +51,9 @@ async def run_pipeline(
             for each detected system.
         resolutions: List of resolved uncertainties from the previous stage.
             Each dict: {category, resolution, confidence, source}. Optional
-            deterministic metadata: target_name, target_kind, files_sent,
-            file_allocations, and for_stage.
+            deterministic metadata: resolution_id, for_stage, files_sent,
+            file_allocations ({target_name: [files]} or records with target_name,
+            files, and target_kind), behavior_name, steps, source_files, and intent.
             These are converted to Evidence and applied before running.
         clear_cache: If True, clear cached results before running.
         scope: System ID to run a scoped sub-pipeline on (e.g., "SYS-1").
@@ -197,6 +198,7 @@ async def run_pipeline(
                 ctx.cache.pop(affected_stage, None)
                 if affected_stage in cached_stages:
                     cached_stages.remove(affected_stage)
+            cache.invalidate(stage_order[rerun_from:])
             for res in resolutions:
                 ev = Evidence(
                     source=res.get("source", "llm_analysis"),
@@ -206,8 +208,9 @@ async def run_pipeline(
                     metadata={
                         key: res[key]
                         for key in (
-                            "for_stage", "files_sent", "target_name",
-                            "target_kind", "file_allocations",
+                            "resolution_id", "for_stage", "files_sent", "target_name",
+                            "target_kind", "file_allocations", "behavior_name",
+                            "steps", "source_files", "intent",
                         )
                         if key in res
                     },
@@ -219,6 +222,7 @@ async def run_pipeline(
                     LLMCallRecord(
                         stage=res.get("for_stage", stage or "unknown"),
                         purpose=f"resolve uncertainty: {res.get('category', 'unknown')}",
+                        resolution_id=res.get("resolution_id", ""),
                         timestamp=time.strftime("%Y-%m-%dT%H:%M:%S"),
                         model=res.get("model", ""),
                         prompt_tokens=res.get("prompt_tokens", 0),

@@ -136,11 +136,14 @@ async def test_structured_resolutions_change_infer_and_allocation_output(sample_
     resolutions = [
         {
             "category": "complex_behavior",
-            "resolution": "load input -> transform record -> save result",
+            "resolution": "Confirmed import workflow",
             "confidence": 0.9,
             "for_stage": "infer",
-            "files_sent": [str(workflow.relative_to(sample_repo))],
-            "target_name": "Import workflow",
+            "resolution_id": "workflow-resolution",
+            "behavior_name": "Import workflow",
+            "steps": ["load input", "transform record", "save result"],
+            "source_files": [str(workflow.relative_to(sample_repo))],
+            "intent": "import records",
             "target_kind": "behavior",
         },
         {
@@ -176,6 +179,73 @@ async def test_structured_resolutions_change_infer_and_allocation_output(sample_
         component.name == "Workflow Boundary" and workflow.relative_to(sample_repo) in component.files
         for component in allocation.components
     )
+
+
+@pytest.mark.asyncio
+async def test_earlier_resolution_invalidates_persisted_downstream_cache(sample_repo, monkeypatch):
+    monkeypatch.setattr("opencode_arch.llm.relay.is_relay_available", lambda: False)
+    first = await run_pipeline(str(sample_repo), stage="validate", clear_cache=True)
+    assert first["stages"]["validate"]["from_cache"] is False
+
+    await run_pipeline(
+        str(sample_repo),
+        stage="infer",
+        resolutions=[{
+            "resolution_id": "infer-1",
+            "category": "complex_behavior",
+            "resolution": "No workflow change",
+            "confidence": 1.0,
+            "for_stage": "infer",
+        }],
+    )
+    rerun = await run_pipeline(str(sample_repo), stage="validate")
+
+    assert all(
+        rerun["stages"][name]["from_cache"] is False
+        for name in ("allocate", "relate", "specify", "contract", "validate")
+    )
+
+
+@pytest.mark.asyncio
+async def test_resolution_identity_and_structured_metadata_survive_bridge(sample_repo, monkeypatch):
+    monkeypatch.setattr("opencode_arch.llm.relay.is_relay_available", lambda: False)
+    await run_pipeline(
+        str(sample_repo),
+        stage="infer",
+        clear_cache=True,
+        resolutions=[
+            {
+                "resolution_id": "same-category-1",
+                "category": "complex_behavior",
+                "resolution": "first",
+                "confidence": 1.0,
+                "for_stage": "infer",
+                "files_sent": ["first.py"],
+                "behavior_name": "First flow",
+                "steps": ["first step"],
+                "source_files": ["first.py"],
+            },
+            {
+                "resolution_id": "same-category-2",
+                "category": "complex_behavior",
+                "resolution": "second",
+                "confidence": 1.0,
+                "for_stage": "infer",
+                "files_sent": ["second.py"],
+                "behavior_name": "Second flow",
+                "steps": ["second step"],
+                "source_files": ["second.py"],
+            },
+        ],
+    )
+
+    from architecture_model.pipeline import PipelineCache
+
+    calls = PipelineCache(sample_repo / ".architecture" / "pipeline-cache").load_llm_calls()
+    assert [(call.resolution_id, call.files_sent) for call in calls] == [
+        ("same-category-1", ["first.py"]),
+        ("same-category-2", ["second.py"]),
+    ]
 
 
 @pytest.mark.asyncio

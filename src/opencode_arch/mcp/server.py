@@ -453,9 +453,11 @@ try:
             resolutions: JSON string of resolved uncertainties from previous stage.
                 Simplified format (only 3 fields required):
                 [{"category": "...", "resolution": "...", "confidence": 0.9}]
-                Optional fields: source, for_stage, model, total_tokens,
+                Optional fields: resolution_id, source, for_stage, model, total_tokens,
                 files_sent, slices_sent, prompt_tokens, completion_tokens,
-                target_name, target_kind, file_allocations.
+                target_name, target_kind, file_allocations ({target: [files]} or
+                records), behavior_name, steps, source_files, and intent. Free-text
+                resolution is evidence only and is never parsed into workflow steps.
             clear_cache: If true, discard cached stage results and re-run from scratch.
             scope: System ID/name/slug to run a scoped sub-pipeline on (after decompose).
                 When set, only runs observe→validate for that system's files.
