@@ -69,6 +69,14 @@ async def run_pipeline(
     root = Path(repo_path).resolve()
     if not root.exists():
         return {"error": f"Repository path does not exist: {repo_path}"}
+    resolution_ids = [
+        str(item.get("resolution_id"))
+        for item in resolutions or []
+        if item.get("resolution_id")
+    ]
+    duplicate_ids = sorted({item for item in resolution_ids if resolution_ids.count(item) > 1})
+    if duplicate_ids:
+        return {"error": f"Duplicate resolution_id values: {', '.join(duplicate_ids)}"}
 
     output_dir = root
     learning_path = root / ".architecture" / "learning"

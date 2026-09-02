@@ -249,6 +249,23 @@ async def test_resolution_identity_and_structured_metadata_survive_bridge(sample
 
 
 @pytest.mark.asyncio
+async def test_duplicate_resolution_ids_return_clear_error(sample_repo, monkeypatch):
+    monkeypatch.setattr("opencode_arch.llm.relay.is_relay_available", lambda: False)
+
+    result = await run_pipeline(
+        str(sample_repo),
+        stage="infer",
+        clear_cache=True,
+        resolutions=[
+            {"resolution_id": "duplicate", "category": "complex_behavior", "resolution": "first"},
+            {"resolution_id": "duplicate", "category": "complex_behavior", "resolution": "second"},
+        ],
+    )
+
+    assert result["error"] == "Duplicate resolution_id values: duplicate"
+
+
+@pytest.mark.asyncio
 async def test_uncertainties_to_resolve(sample_repo):
     """Result includes uncertainties_to_resolve from target stage."""
     result = await run_pipeline(str(sample_repo), stage="infer")
