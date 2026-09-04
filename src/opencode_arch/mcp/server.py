@@ -921,6 +921,45 @@ try:
             job_id=job_id,
         )
 
+    from opencode_arch.mcp.tools.ai.proposal_validate import (
+        architect_proposal_validate_tool,
+    )
+
+    @mcp.tool()
+    async def architect_proposal_validate(
+        repo_path: str,
+        proposal: dict,
+        work_order_id: str,
+        slice_ids: list[str],
+    ) -> dict:
+        """Validate an AI Proposal against its WorkOrder and input slices.
+
+        Loads the persisted WorkOrder from
+        ``.architecture/ai/workorders/<work_order_id>.yaml`` and each
+        input slice from ``.architecture/lifecycle/slices/<slice_id>.yaml``,
+        then dispatches to
+        :func:`architecture_model.ai.validators.validate`. Success
+        envelope: ``{"ok": True, "report": {"passed": bool,
+        "findings": [{"severity", "message", "path", "code?"}, ...]}}``.
+        An empty ``slice_ids`` list is allowed and simply skips the
+        cross-revision drift check.
+
+        Errors: INVALID_ARGUMENT (``proposal`` not a dict; empty /
+        non-string ``work_order_id``; ``slice_ids`` not a list; any
+        ``slice_id`` empty / non-string), NOT_FOUND
+        (``details.reason`` in ``{"workorder_missing",
+        "slice_missing"}``; also raised when ``repo_path`` does not
+        exist), SCHEMA_VIOLATION (proposal parse error with
+        ``details.errors``; or ``details.reason`` in
+        ``{"workorder_malformed", "slice_malformed"}``), INTERNAL.
+        """
+        return await architect_proposal_validate_tool(
+            repo_path=repo_path,
+            proposal=proposal,
+            work_order_id=work_order_id,
+            slice_ids=slice_ids,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
