@@ -207,17 +207,32 @@ Register thin MCP endpoints wrapping every `architecture_model.lifecycle.*` and 
 
 ---
 
-#### T9: `architect_view_render` + `architect_view_project`
+#### T9: `architect_view_project` + `architect_view_render`
+
+**AMENDED.** Phase 1's `project(view, materialized_slice)` needs a `MaterializedSlice`, not a raw `slice_id`. Renderers need an `ArtifactSpec`, not a bare `format` string. T9 loads a persisted slice from T8's `slices/<id>.yaml` directory, re-materializes it, then projects/renders.
 
 **Files:**
-- Create `src/opencode_arch/mcp/tools/lifecycle/view_render.py`
 - Create `src/opencode_arch/mcp/tools/lifecycle/view_project.py`
+- Create `src/opencode_arch/mcp/tools/lifecycle/view_render.py`
+- Create `src/opencode_arch/mcp/tools/lifecycle/_view_common.py` — shared slice-load + materialize + parse helpers.
 - Update server.py.
-- Create `tests/mcp/tools/lifecycle/test_view_render.py`, `test_view_project.py`.
+- Create `tests/mcp/tools/lifecycle/test_view_project.py`, `test_view_render.py`.
 
 **Spec:**
-- `architect_view_project(repo_path, view_spec:dict, slice_id:str) -> {ok, projection:{diagram_spec}}` — runs Phase 1 projector registry over materialized slice, returns the DiagramSpec dict (not rendered).
-- `architect_view_render(repo_path, view_spec:dict, slice_id:str, format:str) -> {ok, artifact:{content_type, body_base64|body_utf8, digest}}` — projector + renderer chain; `format` in `svg|markdown|html|ai-context|zip`.
+- `architect_view_project(repo_path, view_spec: dict, slice_id: str) -> dict`.
+  - Load persisted slice from `<lifecycle>/slices/<slice_id>.yaml`; missing → `err("NOT_FOUND", "slice not found", slice_id=...)`.
+  - Parse `slice_spec` via `ModelSlice(**loaded)`; materialize via `materialize(slice, resolve_current_pkg(pkg))`.
+  - Parse `ViewSpec(**view_spec)` → `SCHEMA_VIOLATION` on `ValidationError`.
+  - Call `project(view, ms)`. On `ProjectorNotFound` → `err("NOT_FOUND", "projector not registered", projector=view.projector)`. On `SliceMismatch` → `err("PRECONDITION_FAILED", "slice_ref does not match materialized slice")`.
+  - Return `ok({"view_id": pv.view_id, "slice_id": pv.slice_id, "model_revision": pv.model_revision, "diagram_spec": <serialized DiagramSpec>, "provenance": pv.provenance, "warnings": list(pv.warnings)})`.
+- `architect_view_render(repo_path, view_spec: dict, slice_id: str, artifact_spec: dict) -> dict`.
+  - Same slice-load + materialize + project chain.
+  - Parse `ArtifactSpec(**artifact_spec)` → `SCHEMA_VIOLATION` on `ValidationError`.
+  - If `artifact.renderer == "zip"` → `err("PRECONDITION_FAILED", "zip renderer requires bundle resolver, not yet supported")`.
+  - Look up renderer via `get_renderer(artifact.renderer)`; call `renderer(pv, artifact) -> bytes`.
+  - Content-type map: `svg`→`image/svg+xml`, `markdown`→`text/markdown`, `html`→`text/html`, `ai-context`→`text/plain`.
+  - All current Phase 1 renderers return text; return `body_utf8: str`, `body_base64: None`.
+  - Return `ok({"artifact_id": artifact.id, "content_type": <str>, "body_utf8": <str>, "body_base64": None, "digest": <sha256 hex of bytes>, "warnings": list(pv.warnings)})`.
 
 **Commit:** `feat(mcp): add view projection and render tools`
 
