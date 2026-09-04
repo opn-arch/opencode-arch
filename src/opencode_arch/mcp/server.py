@@ -549,6 +549,27 @@ try:
             threshold_value=threshold_value,
         )
 
+    from opencode_arch.mcp.tools.lifecycle.package_publish import publish_package_tool
+
+    @mcp.tool()
+    async def architect_package_publish(
+        repo_path: str,
+        model_yaml: str,
+        manifest_json: str | None = None,
+        parent_package_id: str | None = None,
+    ) -> dict:
+        """Publish an architecture package (model + optional manifest) to the repo's lifecycle store.
+
+        Returns an envelope with {package_id, revision, digest, index_path}.
+        Wraps architecture_model.lifecycle.publication.
+        """
+        return await publish_package_tool(
+            repo_path=repo_path,
+            model_yaml=model_yaml,
+            manifest_json=manifest_json,
+            parent_package_id=parent_package_id,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
