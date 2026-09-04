@@ -183,16 +183,25 @@ Register thin MCP endpoints wrapping every `architecture_model.lifecycle.*` and 
 
 #### T8: `architect_slice_materialize`
 
+**AMENDED.** Phase 1's `ModelSlice` is a full Pydantic contract requiring `id`, `contract_version`, `architecture_id`, `model_revision`, `scope`, `closure`, `shared_refs`, `selectors` (min one dimension), plus optional `curation`/`parameters`/`generated_at`/`signatures`. `curation` alone is insufficient input. The tool takes the full slice spec dict.
+
 **Files:**
 - Create `src/opencode_arch/mcp/tools/lifecycle/slice_materialize.py`
 - Update server.py.
 - Create `tests/mcp/tools/lifecycle/test_slice_materialize.py`
 
 **Spec:**
-- `architect_slice_materialize(repo_path, slice_id, curation:dict) -> {ok, slice:{contract_version, slice_id, model_revision, fragment, digest}}`.
-- Uses `ModelSliceMaterializer`.
-- `curation` schema-checked against `spec/model-slice.schema.json` before materialization.
-- Optional `persist: bool = True` — writes to `<repo>/.architecture/lifecycle/slices/<slice_id>.yaml`.
+- `architect_slice_materialize(repo_path, slice_spec: dict, persist: bool = True) -> dict`.
+- Behavior:
+  1. `resolve_repo(repo_path)`.
+  2. Load root package from `<repo>/.architecture/lifecycle/package.yaml`.
+  3. Parse `slice_spec` via `ModelSlice(**slice_spec)`. `ValidationError` → `err("SCHEMA_VIOLATION", "invalid slice spec", detail=str(e))`. `ModelSlice.contract_version` is auto-defaulted; if caller supplies a mismatched version Phase 1 raises → surfaces as SCHEMA_VIOLATION.
+  4. If `slice.scope == "federated"` → `err("PRECONDITION_FAILED", "federated scope not supported without registry resolver")` for now (T21 wires the federated resolver).
+  5. Call `materialize(slice, pkg)`. Any `FileNotFoundError` from missing model → `err("NOT_FOUND", "package model not found")`.
+  6. Compute `digest = compute_slice_digest(slice)`.
+  7. If `persist=True`, write the input `slice_spec` (with `generated_at` timestamp injected if absent) to `<repo>/.architecture/lifecycle/slices/<slice_id>.yaml` via `write_atomic`.
+  8. Return `ok({"slice_id": ms.slice_id, "architecture_id": ms.architecture_id, "model_revision": ms.model_revision, "digest": digest, "stub_entity_ids": list(ms.stub_entity_ids), "warnings": [{"code": w.code, "message": w.message, "entity_id": w.entity_id} for w in ms.warnings], "fragment": ms.model_fragment.model_dump(mode="json"), "persisted_path": <relative-str or None>})`.
+- If root `package.yaml` missing → `err("NOT_FOUND", "package.yaml not found")`.
 
 **Commit:** `feat(mcp): add slice materialize tool`
 
