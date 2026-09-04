@@ -99,25 +99,34 @@ Register thin MCP endpoints wrapping every `architecture_model.lifecycle.*` and 
 
 ---
 
-#### T5: `architect_package_load` + `architect_package_index_list`
+#### T5: `architect_package_load` + `architect_package_list_generations`
+
+**AMENDED 2026-09-03 after T4 discovery.** Phase 1 exposes `list_generations(pkg) -> list[int]`, `read_current_generation(pkg) -> int|None`, but NO public `read_generation(pkg, n)` reader — the generation directory at `<pkg.root>/generations/<7-digit>/` contains model + manifest files that the tool reads directly.
 
 **Files:**
 - Create `src/opencode_arch/mcp/tools/lifecycle/package_load.py`
-- Create `src/opencode_arch/mcp/tools/lifecycle/package_index_list.py`
+- Create `src/opencode_arch/mcp/tools/lifecycle/package_list_generations.py`
 - Update server.py.
-- Create `tests/mcp/tools/lifecycle/test_package_load.py`, `test_package_index_list.py`.
+- Create `tests/mcp/tools/lifecycle/test_package_load.py`, `test_package_list_generations.py`.
 
 **Spec:**
-- `architect_package_load(repo_path, package_id, revision=None) -> {ok, descriptor, model_digest, manifest_digest}`.
-- `architect_package_index_list(repo_path) -> {ok, packages: [{id, revision, path, parent, children[]}]}`.
-- Both use `PackageLoader` from bridge.
-- `revision=None` returns latest.
+- `architect_package_load(repo_path, revision=None) -> {ok, package_id, revision, model_yaml, manifest_json, root_digest, generation_dir}`.
+  - Loads the root `package.yaml` via `load_package(<repo>/.architecture/lifecycle/package.yaml)`.
+  - If `revision=None`, calls `read_current_generation(pkg)`; if None returned → `err(NOT_FOUND, "no published generation")`.
+  - If `revision` given, parses as `int(revision)` (7-digit form accepted); validates it exists in `list_generations(pkg)`.
+  - Reads the generation dir directly: `<generation_dir>/architecture-model.yaml` and `<generation_dir>/manifest.json` (verify exact file names during implementation from `publish()` `bundle.files` dict keys).
+  - `model_yaml` returned as string; `manifest_json` as string (or None if no manifest in bundle).
+- `architect_package_list_generations(repo_path) -> {ok, package_id, current: str|None, generations: [str]}`.
+  - `current` is the 7-digit string form of `read_current_generation` (or None).
+  - `generations` is a list of 7-digit strings for all committed generations.
 
-**Commit:** `feat(mcp): add package load and index list tools`
+**Commit:** `feat(mcp): add package load and list-generations tools`
 
 ---
 
 #### T6: `architect_package_diff`
+
+**AMENDED.** Diff is computed between two generations of the same on-disk package (not between separate `package_id`s — there is only ONE root package per repo in Phase 1).
 
 **Files:**
 - Create `src/opencode_arch/mcp/tools/lifecycle/package_diff.py`
@@ -125,27 +134,37 @@ Register thin MCP endpoints wrapping every `architecture_model.lifecycle.*` and 
 - Create `tests/mcp/tools/lifecycle/test_package_diff.py`
 
 **Spec:**
-- `architect_package_diff(repo_path, package_id, from_revision, to_revision) -> {ok, added:[], removed:[], changed:[]}`.
-- Uses `architecture_model.lifecycle.diff.semantic_diff`.
-- Emits entity-level + relationship-level diff (all 17 relationship kinds).
+- `architect_package_diff(repo_path, from_revision, to_revision) -> {ok, from_revision, to_revision, added, removed, changed}`.
+- Loads the two generation models from `<pkg.root>/generations/<rev>/` directly, feeds both to `architecture_model.lifecycle.diff.semantic_diff`.
+- Returns entity-level + relationship-level diff (all 17 relationship kinds).
+- If `from_revision` or `to_revision` is not a committed generation → `err(NOT_FOUND, "generation not found", revision=...)`.
 
 **Commit:** `feat(mcp): add semantic package diff tool`
 
 ---
 
-#### T7: `architect_package_stale`
+#### T7: `architect_package_children_add` + `architect_package_stale`
+
+**AMENDED.** Phase 1 stores parent/child linkage STATICALLY in `package.yaml.children:` — not via a publish-time API. T7 splits into two tools: a descriptor editor for child linkage, and the stale-graph query.
 
 **Files:**
+- Create `src/opencode_arch/mcp/tools/lifecycle/package_children_add.py`
 - Create `src/opencode_arch/mcp/tools/lifecycle/package_stale.py`
 - Update server.py.
-- Create `tests/mcp/tools/lifecycle/test_package_stale.py`
+- Create `tests/mcp/tools/lifecycle/test_package_children_add.py`, `test_package_stale.py`.
 
 **Spec:**
+- `architect_package_children_add(repo_path, child_package_yaml) -> {ok, parent_package_id, children: [str]}`.
+  - Reads root `package.yaml`, appends `child_package_yaml` (a dict per the Phase 1 child schema) to `children`, re-writes atomically via `AtomicStore.write_atomic`, re-parses via `load_package` to validate the resulting descriptor.
+  - Returns updated children list.
+  - On duplicate child id → `err(PRECONDITION_FAILED, "child already present")`.
 - `architect_package_stale(repo_path) -> {ok, stale_packages:[{id, reason, upstream_revision}], graph:{...}}`.
-- Uses `architecture_model.lifecycle.stale.build_stale_graph`.
-- Reason enum: `manifest-drift`, `upstream-revision-changed`, `schema-migration-pending`.
+  - If Phase 1 exposes `build_stale_graph`, use it directly. If not, this tool returns `err(PRECONDITION_FAILED, "stale analysis not yet implemented in Phase 1")` and its implementation body is a stub. Discover the actual API during implementation.
+  - Reason enum: `manifest-drift`, `upstream-revision-changed`, `schema-migration-pending`.
 
-**Commit:** `feat(mcp): add stale package graph tool`
+**Commit:** `feat(mcp): add package children-add and stale tools`
+
+**Follow-up (non-blocking):** Rename T4's `parent_package_id` parameter to `expected_root_id` in a small hygiene commit before Group C begins, per T4 reviewer's directive. Not tracked as a separate task; batch into T22 (CLI) or a standalone `chore(mcp)` commit.
 
 ---
 
