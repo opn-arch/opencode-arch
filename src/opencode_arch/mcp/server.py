@@ -737,6 +737,30 @@ try:
             artifact_spec=artifact_spec,
         )
 
+    from opencode_arch.mcp.tools.lifecycle.artifact_plan import artifact_plan_tool
+
+    @mcp.tool()
+    async def architect_artifact_plan(
+        repo_path: str,
+        artifact_specs: list[dict],
+    ) -> dict:
+        """Build the topological rebuild plan for a set of ArtifactSpecs.
+
+        ``artifact_specs`` is a non-empty list of JSON-shaped ArtifactSpec
+        payloads (id, renderer, view_ref | bundle_refs, ...). Returns an
+        envelope ``{"plan": {"nodes": [{"spec_id", "depends_on"}, ...],
+        "order": [spec_id, ...]}}``. ``depends_on`` lists inbound edges
+        (a zip's bundle_refs) sorted asc; ``nodes`` is sorted by
+        spec_id; ``order`` is a deterministic Kahn topological sort.
+
+        Errors: INVALID_ARGUMENT (empty/malformed input, duplicate ids),
+        PRECONDITION_FAILED (DAG cycle, unknown bundle_ref).
+        """
+        return await artifact_plan_tool(
+            repo_path=repo_path,
+            artifact_specs=artifact_specs,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
