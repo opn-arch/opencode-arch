@@ -622,6 +622,47 @@ try:
             to_revision=to_revision,
         )
 
+    from opencode_arch.mcp.tools.lifecycle.package_children_add import (
+        package_children_add_tool,
+    )
+
+    @mcp.tool()
+    async def architect_package_children_add(
+        repo_path: str,
+        child_path: str,
+    ) -> dict:
+        """Append a child package.yaml to the root package's children list.
+
+        ``child_path`` is a POSIX-relative path (relative to the root
+        package directory ``<repo>/.architecture/lifecycle/``) pointing
+        to an existing child ``package.yaml``. Returns an envelope with
+        ``parent_architecture_id`` and the updated ``children`` list.
+        """
+        return await package_children_add_tool(
+            repo_path=repo_path,
+            child_path=child_path,
+        )
+
+    from opencode_arch.mcp.tools.lifecycle.package_stale import package_stale_tool
+
+    @mcp.tool()
+    async def architect_package_stale(
+        repo_path: str,
+        changed_paths: list[str],
+    ) -> dict:
+        """Report lifecycle nodes made stale by a set of changed paths.
+
+        ``changed_paths`` is a list of POSIX-relative paths (relative to
+        the root package directory). Returns an envelope with a
+        ``stale`` list of records ``{node_id, kind, owned_paths, inputs,
+        digest, reason}``, sorted by ``(kind, node_id)``. Does not write
+        the ``.architecture/stale.yaml`` cache.
+        """
+        return await package_stale_tool(
+            repo_path=repo_path,
+            changed_paths=changed_paths,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
