@@ -689,6 +689,54 @@ try:
             persist=persist,
         )
 
+    from opencode_arch.mcp.tools.lifecycle.view_project import view_project_tool
+
+    @mcp.tool()
+    async def architect_view_project(
+        repo_path: str,
+        view_spec: dict,
+        slice_id: str,
+    ) -> dict:
+        """Project a ViewSpec over a persisted, materialized ModelSlice.
+
+        ``view_spec`` is the JSON-shaped ViewSpec payload (id, slice_ref,
+        projector, output_content_kind, ...). ``slice_id`` identifies a
+        previously persisted slice at
+        ``<repo>/.architecture/lifecycle/slices/<slice_id>.yaml``.
+        Returns an envelope with {view_id, slice_id, model_revision,
+        diagram_spec, provenance, warnings}.
+        """
+        return await view_project_tool(
+            repo_path=repo_path,
+            view_spec=view_spec,
+            slice_id=slice_id,
+        )
+
+    from opencode_arch.mcp.tools.lifecycle.view_render import view_render_tool
+
+    @mcp.tool()
+    async def architect_view_render(
+        repo_path: str,
+        view_spec: dict,
+        slice_id: str,
+        artifact_spec: dict,
+    ) -> dict:
+        """Render a projected view via the named renderer.
+
+        Projects ``view_spec`` over the persisted slice ``slice_id``, then
+        invokes the renderer named by ``artifact_spec.renderer``
+        (svg/markdown/html/ai-context). The ``zip`` renderer is rejected
+        with PRECONDITION_FAILED — it requires a bundle resolver not
+        exposed by this tool. Returns an envelope with {artifact_id,
+        content_type, body_utf8, body_base64, digest, warnings}.
+        """
+        return await view_render_tool(
+            repo_path=repo_path,
+            view_spec=view_spec,
+            slice_id=slice_id,
+            artifact_spec=artifact_spec,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
