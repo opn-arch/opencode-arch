@@ -663,6 +663,32 @@ try:
             changed_paths=changed_paths,
         )
 
+    from opencode_arch.mcp.tools.lifecycle.slice_materialize import (
+        slice_materialize_tool,
+    )
+
+    @mcp.tool()
+    async def architect_slice_materialize(
+        repo_path: str,
+        slice_spec: dict,
+        persist: bool = True,
+    ) -> dict:
+        """Materialize a ModelSlice contract against the root package.
+
+        ``slice_spec`` is the JSON-shaped ModelSlice payload (id,
+        architecture_id, model_revision, scope, closure, shared_refs,
+        selectors, and optional curation/parameters/generated_at).
+        Returns an envelope with {slice_id, architecture_id,
+        model_revision, digest, stub_entity_ids, warnings, fragment,
+        persisted_path}. When ``persist=True``, writes the spec to
+        ``<repo>/.architecture/lifecycle/slices/<slice_id>.yaml``.
+        """
+        return await slice_materialize_tool(
+            repo_path=repo_path,
+            slice_spec=slice_spec,
+            persist=persist,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
