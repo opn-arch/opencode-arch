@@ -601,6 +601,27 @@ try:
         """
         return await package_list_generations_tool(repo_path=repo_path)
 
+    from opencode_arch.mcp.tools.lifecycle.package_diff import package_diff_tool
+
+    @mcp.tool()
+    async def architect_package_diff(
+        repo_path: str,
+        from_revision: str,
+        to_revision: str,
+    ) -> dict:
+        """Semantic diff between two published generations of the root package.
+
+        Both revisions must be 7-digit zero-padded generation ids
+        (e.g. "0000001"). Returns an envelope with {from_revision,
+        to_revision, diff}, where ``diff`` is the JSON-serialized
+        ``SemanticDiff`` (entities, relationships, manifest, children, git).
+        """
+        return await package_diff_tool(
+            repo_path=repo_path,
+            from_revision=from_revision,
+            to_revision=to_revision,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
