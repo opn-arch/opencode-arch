@@ -761,6 +761,41 @@ try:
             artifact_specs=artifact_specs,
         )
 
+    from opencode_arch.mcp.tools.lifecycle.artifact_rebuild import (
+        architect_artifact_rebuild_tool,
+    )
+
+    @mcp.tool()
+    async def architect_artifact_rebuild(
+        repo_path: str,
+        artifact_specs: list[dict],
+        view_specs: list[dict],
+        slice_specs: list[dict],
+        force: bool = False,
+    ) -> dict:
+        """Rebuild artifacts from ArtifactSpec/ViewSpec/ModelSlice inputs.
+
+        Executes the T11 rebuild pipeline: parses each artifact spec,
+        resolves its view + slice from the parallel input lists,
+        materializes the slice against the published architecture
+        package, projects the view, renders bytes via the registered
+        renderer, and atomically writes to
+        ``.architecture/lifecycle/artifacts/<id>.<ext>``. Per-artifact
+        failures are surfaced inside ``failed`` — the envelope still
+        reports ``ok: True`` as long as the pipeline ran. Set
+        ``force=True`` to rebuild even when ``expected_digest`` matches.
+
+        Errors: INVALID_ARGUMENT (empty/non-list inputs, non-bool force),
+        NOT_FOUND (missing repo_path).
+        """
+        return await architect_artifact_rebuild_tool(
+            repo_path=repo_path,
+            artifact_specs=artifact_specs,
+            view_specs=view_specs,
+            slice_specs=slice_specs,
+            force=force,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
