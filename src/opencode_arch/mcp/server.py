@@ -891,6 +891,36 @@ try:
             error=error,
         )
 
+    from opencode_arch.mcp.tools.ai.job_run import architect_job_run_tool
+
+    @mcp.tool()
+    async def architect_job_run(repo_path: str, job_id: str) -> dict:
+        """Execute a queued AI Job through the configured proposer plugin.
+
+        Reads ``.architecture/ai/proposer_config.yaml`` (keys: ``plugin``
+        as ``module.path:function_name``, optional ``enabled`` bool),
+        resolves the callable via :mod:`importlib`, then delegates to
+        :func:`opencode_arch.lifecycle_exec.worker.run_job`. Success
+        envelope: ``{"ok": True, "job": {...}, "proposal_ref": <str|None>}``.
+        When the worker marks the job ``failed`` (proposer error,
+        non-Proposal return, or validation failure) the envelope still
+        reports ``ok: True`` with ``proposal_ref: None`` and echoes the
+        job's ``error`` at the envelope top level.
+
+        Errors: INVALID_ARGUMENT (empty ``job_id``), NOT_FOUND
+        (``details.reason`` in ``{"repo_missing", "job_missing",
+        "workorder_missing"}``), PRECONDITION_FAILED
+        (``details.reason`` in ``{"no_proposer_configured",
+        "proposer_disabled", "proposer_config_malformed",
+        "proposer_plugin_not_loadable", "proposer_plugin_not_callable",
+        "job_not_queued"}``; ``job_not_queued`` includes
+        ``details.state``), INTERNAL (unexpected worker failure).
+        """
+        return await architect_job_run_tool(
+            repo_path=repo_path,
+            job_id=job_id,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
