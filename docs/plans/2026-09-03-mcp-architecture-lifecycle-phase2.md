@@ -259,13 +259,26 @@ Register thin MCP endpoints wrapping every `architecture_model.lifecycle.*` and 
 - Create `src/opencode_arch/lifecycle_exec/rebuild.py`
 - Create `tests/lifecycle_exec/test_rebuild.py`
 
-**Spec:**
-- `rebuild_artifacts(repo_path, artifact_specs, *, force=False) -> RebuildReport{built:[], skipped:[], failed:[], journal_events:[]}`.
-- For each node in `ArtifactDAG.topological_order()`:
-  - If output already exists and its digest matches `ArtifactSpec.expected_digest` and `force=False`: skip.
-  - Else: materialize input slice → project via view → render via artifact format → atomic-write to `<repo>/.architecture/lifecycle/artifacts/<spec_id>.<ext>` → verify emitted digest.
-- Journal event per outcome: `artifact.built`, `artifact.skipped`, `artifact.failed`.
+**Spec (AMENDED 2026-09-04):** Phase 1 has no view/slice persistence store, so the executor accepts parallel inputs for view + slice resolution.
+
+- `rebuild_artifacts(repo_path, artifact_specs, view_specs, slice_specs, *, force=False) -> RebuildReport{built:[dict], skipped:[dict], failed:[dict], journal_events:[dict]}`.
+  - `view_specs`: list of ViewSpec dicts. Every `ArtifactSpec.view_ref (view_id, model_revision)` referenced by a non-zip artifact must resolve to exactly one ViewSpec whose `id == view_id` and `slice_ref.model_revision == model_revision`. Otherwise → `failed` entry with reason `unresolved_view_ref`.
+  - `slice_specs`: list of `ModelSlice` spec dicts. Every ViewSpec's `slice_ref (slice_id, model_revision)` must resolve to exactly one ModelSlice matching both. Otherwise → `failed` entry with reason `unresolved_slice_ref`.
+- For each node in `build_artifact_dag(artifact_specs).topological_order()`:
+  - **zip renderer**: reject at boundary — return `failed` entry with `reason="zip_renderer_unsupported"` (deferred to a later task; matches T9's `render_zip` rejection).
+  - **non-zip**:
+    1. Resolve ViewSpec (as above).
+    2. Resolve ModelSlice (as above), materialize via `materialize(slice, resolve_ref=None)` (federated slices → `failed` with `reason="federated_slice_unsupported"`).
+    3. Project via `project(view, materialized_slice)`.
+    4. Render via `get_renderer(view.output_content_kind or artifact.renderer)` → bytes.
+    5. Compute sha256 of bytes → emitted_digest.
+    6. If output file exists AND its sha256 matches `artifact.expected_digest` AND `force=False`: `skipped` with `reason="up_to_date"`.
+    7. Else: `write_atomic(<repo>/.architecture/lifecycle/artifacts/<spec_id>.<ext>, bytes)` → `built` entry with `emitted_digest`, `output_path`.
+    8. If `artifact.expected_digest` is set AND `emitted_digest != expected_digest`: `failed` with `reason="digest_mismatch"`, and DO NOT flip file (write to temp path only; use `write_tree_atomic` semantics or write to `<path>.pending`).
+- Journal event per outcome: `artifact.built`, `artifact.skipped`, `artifact.failed` (records include `spec_id`, `output_path`, `emitted_digest`, `reason`).
+- Extension `<ext>` derived from renderer: svg→`svg`, markdown→`md`, html→`html`, ai-context→`txt`.
 - No MCP registration in this task (T12 registers).
+- No exception ever escapes: catches wrap per-artifact and record as `failed` entries. Aggregate result always returns.
 
 **Commit:** `feat(lifecycle_exec): add artifact rebuild runner`
 
