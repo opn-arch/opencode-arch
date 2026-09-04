@@ -145,7 +145,10 @@ Register thin MCP endpoints wrapping every `architecture_model.lifecycle.*` and 
 
 #### T7: `architect_package_children_add` + `architect_package_stale`
 
-**AMENDED.** Phase 1 stores parent/child linkage STATICALLY in `package.yaml.children:` — not via a publish-time API. T7 splits into two tools: a descriptor editor for child linkage, and the stale-graph query.
+**AMENDED (second revision).** Phase 1 discoveries corrected two spec errors:
+
+1. `ArchitecturePackage.children` is `list[str]` — a list of **POSIX-relative paths** to child `package.yaml` files (e.g. `"subsystems/core/package.yaml"`), NOT dicts. The child's own descriptor lives at that path and is loaded via `load_package` during recursive resolution.
+2. Phase 1 exposes `stale_report(root_pkg, changed_paths) -> list[StaleNode]` and `mark_stale(graph, changed_paths, package_root) -> StaleSet` (has `reasons: dict[node_id -> str]`). There is no `build_stale_graph` and no reason enum — reasons are free-form strings like `"owned path matched: X"` or `"upstream stale: Y"`.
 
 **Files:**
 - Create `src/opencode_arch/mcp/tools/lifecycle/package_children_add.py`
@@ -154,13 +157,21 @@ Register thin MCP endpoints wrapping every `architecture_model.lifecycle.*` and 
 - Create `tests/mcp/tools/lifecycle/test_package_children_add.py`, `test_package_stale.py`.
 
 **Spec:**
-- `architect_package_children_add(repo_path, child_package_yaml) -> {ok, parent_package_id, children: [str]}`.
-  - Reads root `package.yaml`, appends `child_package_yaml` (a dict per the Phase 1 child schema) to `children`, re-writes atomically via `AtomicStore.write_atomic`, re-parses via `load_package` to validate the resulting descriptor.
-  - Returns updated children list.
-  - On duplicate child id → `err(PRECONDITION_FAILED, "child already present")`.
-- `architect_package_stale(repo_path) -> {ok, stale_packages:[{id, reason, upstream_revision}], graph:{...}}`.
-  - If Phase 1 exposes `build_stale_graph`, use it directly. If not, this tool returns `err(PRECONDITION_FAILED, "stale analysis not yet implemented in Phase 1")` and its implementation body is a stub. Discover the actual API during implementation.
-  - Reason enum: `manifest-drift`, `upstream-revision-changed`, `schema-migration-pending`.
+- `architect_package_children_add(repo_path, child_path) -> {ok, parent_architecture_id, children: [str]}`.
+  - `child_path` is a POSIX-relative path string (relative to the root package's directory) pointing to an existing `package.yaml`.
+  - Reads root `package.yaml` (raw YAML text), appends `child_path` to the `children:` list, writes atomically via `architecture_model.lifecycle.atomic_store.write_atomic`, then re-loads via `load_package` to validate the resulting descriptor tree.
+  - Returns updated children list and the root `architecture_id`.
+  - Idempotence: If `child_path` already present → `err("PRECONDITION_FAILED", "child already present", child_path=...)`.
+  - If child file does not exist → `err("NOT_FOUND", "child package.yaml not found", child_path=...)`.
+  - If root `package.yaml` missing → `err("NOT_FOUND", "package.yaml not found")`.
+  - If re-load after write raises `ValidationError` → `err("SCHEMA_VIOLATION", "resulting descriptor invalid", detail=str(e))` (write should ideally roll back; document if it doesn't).
+- `architect_package_stale(repo_path, changed_paths: list[str]) -> {ok, stale: [{node_id, kind, owned_paths, inputs, digest, reason}]}`.
+  - `changed_paths` are POSIX-relative to the root package. Required (may be empty list → empty stale list).
+  - Internally: `graph = build_graph(root_pkg); ss = mark_stale(graph, [Path(root_pkg.root)/p for p in changed_paths], package_root=root_pkg.root)`.
+  - Then join `ss.nodes` × `ss.reasons` × `graph.nodes()` to emit records with `reason` field (free-form string from Phase 1).
+  - Sort deterministically by `(kind, node_id)`.
+  - No cache file usage from this tool (avoid mutating `.architecture/stale.yaml`; that's `stale_report`'s side effect). If we want caching, we can call `stale_report` in a later hardening pass.
+  - If root `package.yaml` missing → `err("NOT_FOUND", "package.yaml not found")`.
 
 **Commit:** `feat(mcp): add package children-add and stale tools`
 
