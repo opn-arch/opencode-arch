@@ -570,6 +570,37 @@ try:
             parent_package_id=parent_package_id,
         )
 
+    from opencode_arch.mcp.tools.lifecycle.package_load import package_load_tool
+    from opencode_arch.mcp.tools.lifecycle.package_list_generations import (
+        package_list_generations_tool,
+    )
+
+    @mcp.tool()
+    async def architect_package_load(
+        repo_path: str,
+        revision: str | None = None,
+    ) -> dict:
+        """Load an architecture package generation (model + optional manifest).
+
+        If ``revision`` is None, loads the CURRENT generation. Otherwise
+        expects a 1-7 digit generation number (e.g. "0000001" or "1").
+        Returns an envelope with {package_id, revision, model_yaml,
+        manifest_json, root_digest, generation_dir}.
+        """
+        return await package_load_tool(
+            repo_path=repo_path, revision=revision,
+        )
+
+    @mcp.tool()
+    async def architect_package_list_generations(repo_path: str) -> dict:
+        """List all committed generations of the root package.
+
+        Returns an envelope with {package_id, current, generations}.
+        ``current`` is the zero-padded revision pointed at by CURRENT,
+        or None if no publication exists yet.
+        """
+        return await package_list_generations_tool(repo_path=repo_path)
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
