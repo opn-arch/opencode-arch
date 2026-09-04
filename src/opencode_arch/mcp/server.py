@@ -796,6 +796,39 @@ try:
             force=force,
         )
 
+    from opencode_arch.mcp.tools.ai.workorder_submit import (
+        architect_workorder_submit_tool,
+    )
+
+    @mcp.tool()
+    async def architect_workorder_submit(
+        repo_path: str,
+        work_order: dict,
+    ) -> dict:
+        """Submit an AI WorkOrder and create its tracking Job.
+
+        Parses ``work_order`` via
+        :meth:`architecture_model.ai.work_order.WorkOrder.from_dict`,
+        runs JSON-Schema validation, persists the WorkOrder atomically
+        to ``.architecture/ai/workorders/<id>.yaml`` (idempotency guard:
+        a second submission of the same id returns
+        ``PRECONDITION_FAILED``), creates a ``draft``
+        :class:`~architecture_model.ai.jobs.Job` via
+        :class:`~architecture_model.ai.jobs.JobStore`, and appends an
+        ``ai.workorder.submit`` event to
+        ``.architecture/ai/workorders.journal.jsonl``. Success envelope:
+        ``{"ok": True, "work_order_id", "job_id"}``.
+
+        Errors: INVALID_ARGUMENT (non-dict ``work_order``), NOT_FOUND
+        (missing ``repo_path``), SCHEMA_VIOLATION (parse or schema
+        errors; ``details.errors: list[str]``), PRECONDITION_FAILED
+        (duplicate id; ``details.work_order_id``, ``details.reason``).
+        """
+        return await architect_workorder_submit_tool(
+            repo_path=repo_path,
+            work_order=work_order,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
