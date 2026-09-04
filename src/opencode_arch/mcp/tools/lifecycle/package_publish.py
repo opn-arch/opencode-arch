@@ -96,8 +96,13 @@ async def publish_package_tool(
     model_bytes = model_yaml.encode("utf-8")
 
     # 5. Validate manifest_json (optional).
+    # Phase 1 ``publish()`` always writes ``manifest/manifest.json`` from
+    # ``bundle.manifest_bytes``. There is no way to omit the file. To
+    # disambiguate "no manifest supplied" from a legitimate ``'{}'``
+    # payload we use empty bytes (0-byte file) as the sentinel — this is
+    # unambiguous with ``b"{}"`` (2 bytes) on the load side.
     if manifest_json is None:
-        manifest_bytes = b"{}"
+        manifest_bytes = b""
     else:
         if not isinstance(manifest_json, str):
             raise ValueError("manifest_json must be a JSON string or None")

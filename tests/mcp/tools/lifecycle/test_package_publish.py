@@ -175,3 +175,16 @@ def test_publish_second_call_advances_revision(tmp_path):
     e2 = _publish(tmp_path, model_yaml=VALID_MODEL_YAML)
     assert e1["ok"] and e2["ok"]
     assert int(e1["revision"]) + 1 == int(e2["revision"])
+
+
+# 15 — regression: publish without manifest must NOT write b"{}" on disk.
+# Empty (0-byte) file is the unambiguous "no manifest" marker.
+def test_publish_without_manifest_does_not_write_empty_json_object(tmp_path):
+    env = _publish(tmp_path, model_yaml=VALID_MODEL_YAML, manifest_json=None)
+    assert env["ok"], env
+    manifest_path = (
+        Path(env["index_path"]) / "manifest" / "manifest.json"
+    )
+    # File exists (Phase 1 always writes it) but must be empty, not "{}".
+    assert manifest_path.is_file()
+    assert manifest_path.read_bytes() == b""

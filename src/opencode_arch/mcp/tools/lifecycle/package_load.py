@@ -13,9 +13,11 @@ Deviation notes vs. the plan
     - ``model/.architecture-model.yaml``
     - ``manifest/manifest.json``
     - ``digest.json``
-* A published-without-manifest bundle is stored as ``b"{}"`` (see
-  T4 ``package_publish``). We treat that exact byte-sequence as "no
-  manifest" and return ``manifest_json: None`` in that case.
+* A published-without-manifest bundle is stored as a 0-byte
+  ``manifest/manifest.json`` file (see T4 ``package_publish``). We
+  treat empty bytes (size 0) as "no manifest" and return
+  ``manifest_json: None``. This is unambiguous with a legitimate
+  ``'{}'`` payload (2 bytes), which round-trips exactly.
 * Short-form revisions (e.g. ``"1"``) are accepted as long as they match
   ``^\\d{1,7}$``; anything else -> ``INVALID_ARGUMENT``.
 * If no root ``package.yaml`` exists, this tool does NOT auto-create one
@@ -34,7 +36,6 @@ _REV_RE = re.compile(r"^\d{1,7}$")
 _MODEL_REL = Path("model") / ".architecture-model.yaml"
 _MANIFEST_REL = Path("manifest") / "manifest.json"
 _DIGEST_REL = Path("digest.json")
-_EMPTY_MANIFEST = b"{}"
 
 
 @tool_result
@@ -101,7 +102,10 @@ async def package_load_tool(
     manifest_path = gen_dir / _MANIFEST_REL
     if manifest_path.is_file():
         manifest_bytes = manifest_path.read_bytes()
-        if manifest_bytes.strip() != _EMPTY_MANIFEST:
+        # Empty (0-byte) file is the "no manifest" sentinel written by
+        # publish when ``manifest_json=None``. Any non-empty payload —
+        # including a legitimate ``b"{}"`` — round-trips as-is.
+        if manifest_bytes != b"":
             manifest_json = manifest_bytes.decode("utf-8")
 
     root_digest: str | None = None

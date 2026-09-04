@@ -133,6 +133,23 @@ def test_load_returns_none_manifest_when_published_without(tmp_path):
     assert env["manifest_json"] is None
 
 
+# 10a — regression: manifest_json='{}' must round-trip, not collapse to None
+def test_load_preserves_empty_object_manifest(tmp_path):
+    _publish(tmp_path, model_yaml=VALID_MODEL_YAML, manifest_json="{}")
+    env = _load(tmp_path)
+    assert env["ok"], env
+    assert env["manifest_json"] == "{}"
+
+
+# 10b — populated manifest round-trips exactly
+def test_load_preserves_populated_manifest(tmp_path):
+    payload = '{"modules": []}'
+    _publish(tmp_path, model_yaml=VALID_MODEL_YAML, manifest_json=payload)
+    env = _load(tmp_path)
+    assert env["ok"], env
+    assert env["manifest_json"] == payload
+
+
 # 11
 def test_load_revision_normalizes_short_form(tmp_path):
     _publish(tmp_path, model_yaml=VALID_MODEL_YAML)
