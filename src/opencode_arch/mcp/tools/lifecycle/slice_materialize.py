@@ -43,6 +43,8 @@ async def slice_materialize_tool(
     from architecture_model.lifecycle.model_slice_materializer import materialize
     from architecture_model.lifecycle.package import load_package
 
+    from opencode_arch.lifecycle_bridge import resolve_current_pkg
+
     # 1. Resolve repo.
     repo = resolve_repo(repo_path)
 
@@ -55,17 +57,9 @@ async def slice_materialize_tool(
 
     pkg = load_package(lifecycle_root)
 
-    # Rebase pkg root at CURRENT generation so materializer can locate
-    # the published model file (Phase 1 publish writes it at
-    # ``generations/<n>/model/.architecture-model.yaml``).
-    current_link = lifecycle_root / "CURRENT"
-    if current_link.exists():
-        pkg = pkg.model_copy(
-            update={
-                "root": current_link.resolve(),
-                "model_ref": "model/.architecture-model.yaml",
-            }
-        )
+    # Rebase pkg.root to CURRENT generation so materializer can locate the
+    # published model at ``generations/<n>/model/.architecture-model.yaml``.
+    pkg = resolve_current_pkg(pkg)
 
     # 3. Parse ModelSlice.
     if not isinstance(slice_spec, dict):

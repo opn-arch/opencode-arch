@@ -34,14 +34,32 @@ from opencode_arch.lifecycle_exec import paths
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
 
 _ROOT_ARCH_ID = "root-pkg"
-_PACKAGE_YAML_TEMPLATE = {
-    "architecture_id": _ROOT_ARCH_ID,
-    "name": "Root Package",
-    "slug": _ROOT_ARCH_ID,
-    "contract_version": "1.0.0",
-    "model_ref": ".architecture-model.yaml",
-    "manifest_ref": "manifest.json",
-}
+
+
+def _package_yaml_template() -> dict:
+    """Root package descriptor template.
+
+    ``model_ref`` / ``manifest_ref`` point at paths INSIDE a generation
+    directory (Phase 1 ``publish`` writes to
+    ``generations/<n>/model/.architecture-model.yaml`` and
+    ``generations/<n>/manifest/manifest.json``). Consumers of the model
+    must rebase ``pkg.root`` to the current generation (see
+    ``opencode_arch.lifecycle_bridge.resolve_current_pkg``) before
+    ``pkg.root / pkg.model_ref`` resolves to a real file.
+
+    ``contract_version`` is sourced from Phase 1's ``SchemaVersions.PACKAGE``
+    to avoid drift when the schema bumps.
+    """
+    from architecture_model.lifecycle.versions import SchemaVersions
+
+    return {
+        "architecture_id": _ROOT_ARCH_ID,
+        "name": "Root Package",
+        "slug": _ROOT_ARCH_ID,
+        "contract_version": SchemaVersions.PACKAGE,
+        "model_ref": "model/.architecture-model.yaml",
+        "manifest_ref": "manifest/manifest.json",
+    }
 
 
 def _ensure_root_package(lifecycle_root: Path):
@@ -51,7 +69,7 @@ def _ensure_root_package(lifecycle_root: Path):
     pkg_yaml = lifecycle_root / "package.yaml"
     if not pkg_yaml.exists():
         pkg_yaml.write_text(
-            yaml.safe_dump(_PACKAGE_YAML_TEMPLATE, sort_keys=True),
+            yaml.safe_dump(_package_yaml_template(), sort_keys=True),
             encoding="utf-8",
         )
     return load_package(lifecycle_root)

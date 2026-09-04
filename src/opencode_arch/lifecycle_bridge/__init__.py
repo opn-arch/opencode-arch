@@ -38,6 +38,41 @@ from architecture_model.lifecycle.view_spec import ViewSpec  # noqa: E402
 from architecture_model.lifecycle.artifact_spec import ArtifactSpec  # noqa: E402
 from architecture_model.lifecycle.artifact_dag import ArtifactDAG  # noqa: E402
 
+
+def resolve_current_pkg(pkg: PackageDescriptor) -> PackageDescriptor:
+    """Return ``pkg`` rebased onto the CURRENT generation directory.
+
+    Phase 1 ``publish()`` writes model + manifest inside
+    ``<pkg.root>/generations/<n>/{model,manifest}/...`` and flips a
+    ``<pkg.root>/CURRENT`` pointer to that generation. Consumers that
+    call :func:`architecture_model.lifecycle.model_slice_materializer.materialize`
+    (or any code doing ``pkg.root / pkg.model_ref``) must first swap
+    ``pkg.root`` to ``pkg.root / "CURRENT"`` so the descriptor's
+    generation-relative ``model_ref`` / ``manifest_ref`` resolve.
+
+    Behavior
+    --------
+    * If ``pkg.root`` is ``None`` -> ``ValueError`` (descriptor must be
+      loaded via ``load_package`` first).
+    * If ``<pkg.root>/CURRENT`` does not exist (i.e. nothing has been
+      published yet) -> returns ``pkg`` unchanged so callers can surface
+      a ``NOT_FOUND`` when they try to read the model.
+    * Uses ``model_copy(update=...)`` which bypasses field validators;
+      that is intentional because ``root`` is a runtime-only field
+      (``Field(default=None, exclude=True, repr=False)``) and the values
+      of ``model_ref`` / ``manifest_ref`` on the descriptor already
+      passed validation at load time.
+    """
+    if pkg.root is None:
+        raise ValueError(
+            "resolve_current_pkg: pkg.root is None (load via load_package first)"
+        )
+    current = pkg.root / "CURRENT"
+    if not current.exists():
+        return pkg
+    return pkg.model_copy(update={"root": current.resolve()})
+
+
 # AI.
 from architecture_model.ai.work_order import WorkOrder  # noqa: E402
 from architecture_model.ai.proposals import (  # noqa: E402
@@ -67,6 +102,7 @@ __all__ = [
     "ViewSpec",
     "ArtifactSpec",
     "ArtifactDAG",
+    "resolve_current_pkg",
     "WorkOrder",
     "Proposal",
     "PROPOSAL_TYPES",
