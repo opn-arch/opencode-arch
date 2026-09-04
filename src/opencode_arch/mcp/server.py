@@ -829,6 +829,68 @@ try:
             work_order=work_order,
         )
 
+    from opencode_arch.mcp.tools.ai.job_get import architect_job_get_tool
+
+    @mcp.tool()
+    async def architect_job_get(repo_path: str, job_id: str) -> dict:
+        """Fetch an AI Job by ``job_id``.
+
+        Reads the per-job YAML persisted under
+        ``.architecture/ai/jobs/<job_id>.yaml`` via
+        :class:`~architecture_model.ai.jobs.JobStore` and returns the
+        job as a dict. Success envelope: ``{"ok": True, "job": {...}}``.
+
+        Errors: INVALID_ARGUMENT (empty/non-string ``job_id``),
+        NOT_FOUND (``details.reason`` is ``"repo_missing"`` when
+        ``repo_path`` does not exist, or ``"job_missing"`` when the job
+        file is absent).
+        """
+        return await architect_job_get_tool(repo_path=repo_path, job_id=job_id)
+
+    from opencode_arch.mcp.tools.ai.job_transition import (
+        architect_job_transition_tool,
+    )
+
+    @mcp.tool()
+    async def architect_job_transition(
+        repo_path: str,
+        job_id: str,
+        new_state: str,
+        reason: str | None = None,
+        actor: str | None = None,
+        result_ref: str | None = None,
+        error: str | None = None,
+    ) -> dict:
+        """Transition an AI Job to ``new_state``.
+
+        Delegates to
+        :meth:`architecture_model.ai.jobs.JobStore.transition`, which
+        appends a :class:`~architecture_model.ai.jobs.JobEvent` to the
+        job history, updates the persisted YAML atomically, and journals
+        an ``ai.job.transition`` event. ``actor`` defaults to
+        ``"system"`` when ``None``. Transitioning to ``completed``
+        requires ``result_ref``; transitioning to ``failed`` requires
+        ``error``. Success envelope: ``{"ok": True, "job": {...}}``.
+
+        Errors: INVALID_ARGUMENT (empty ``job_id``, unknown
+        ``new_state`` — ``details.valid_states`` lists all
+        :class:`~architecture_model.ai.jobs.JobState` values —, or
+        missing accompanying field for a terminal transition),
+        NOT_FOUND (``details.reason`` is ``"repo_missing"`` or
+        ``"job_missing"``), PRECONDITION_FAILED (disallowed transition;
+        ``details.from_state``, ``details.to_state``, ``details.allowed``
+        as a sorted ``list[str]``).
+        """
+        return await architect_job_transition_tool(
+            repo_path=repo_path,
+            job_id=job_id,
+            new_state=new_state,
+            reason=reason,
+            actor=actor,
+            result_ref=result_ref,
+            error=error,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
