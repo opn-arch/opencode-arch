@@ -39,3 +39,26 @@ def _load_and_resolve(repo_path: Path, client: LogsDBClient, issue_id: int | str
         "actor": "architect_work_issue",
     })
     return _WorkContext(repo_path=repo_path, issue=issue, stub=stub)
+
+
+from architecture_model.ai.work_order import WorkOrder, SliceRef
+from opencode_arch.session import resolve_session_id
+
+
+def _workorder_from_stub(*, stub: CommentStub, issue_id: int | str, issue_url: str) -> WorkOrder:
+    intent = (stub.body[:200] + ("..." if len(stub.body) > 200 else "")) \
+        + f"\n\nSource: {issue_url}"
+    return WorkOrder.build(
+        intent=intent,
+        slices=[SliceRef(slice_id=stub.slice_id, model_revision=stub.revision)],
+        accepts=["model-patch"],
+        max_tokens=200_000,
+        max_wall_seconds=3600,
+        requested_by=f"logs-db#{issue_id}",
+        parameters={
+            "issue_id": issue_id, "comment_id": stub.comment_id,
+            "session_id": resolve_session_id(),
+            "artifact_id": stub.artifact_id, "view_id": stub.view_id,
+            "package_id": stub.package_id, "revision": stub.revision,
+        },
+    )

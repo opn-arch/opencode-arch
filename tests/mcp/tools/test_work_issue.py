@@ -39,3 +39,15 @@ def test_load_and_resolve_missing_stub_raises(tmp_path):
             assert "stub" in str(e).lower()
         else:
             raise AssertionError("expected WorkIssueError")
+
+
+def test_workorder_from_stub_populates_parameters(tmp_path, monkeypatch):
+    from opencode_arch.mcp.tools.work_issue import _workorder_from_stub
+    monkeypatch.setenv("OPENCODE_SESSION_ID", "ses_xyz")
+    stub = _stub()
+    wo = _workorder_from_stub(stub=stub, issue_id=42, issue_url="http://x/42")
+    assert wo.requested_by == "logs-db#42"
+    assert wo.parameters["issue_id"] == 42
+    assert wo.parameters["comment_id"] == "c-1"
+    assert wo.parameters["session_id"] == "ses_xyz"
+    assert wo.input_slice_refs and wo.input_slice_refs[0].slice_id == "s"
