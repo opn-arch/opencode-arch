@@ -320,9 +320,17 @@ class MyRunner:
 
 | Repo | Purpose | Status |
 |------|---------|--------|
-| `architecture-model-standard` | Schema, validator, CLI, manifest generator | v0.3.0, 271 tests |
-| `opencode-arch` | MCP extension (this repo) | v0.4.0, 278 tests |
+| `architecture-model-standard` | Schema, validator, CLI, manifest generator | v0.3.0, 2918 tests (Phase 1 escalations landed on `feat/curated-se-views`) |
+| `opencode-arch` | MCP extension (this repo) | v0.4.0, 917 tests (2 pre-existing failures documented) |
 | `arch-agent` | Training pipeline + surrogate model | v0.1.0, 574 tests |
+
+**AMS API adoption (2026-09-05, branch `feat/ams-api-adoption`):** consumed new public APIs from architecture-model-standard Phase 1 escalations:
+- `generation_dir` (public replacement for `_generation_dir`) — adopted at 4 call sites across `mcp/tools/lifecycle/` and `cli/lifecycle.py`.
+- `current_root_digest(pkg)` — adopted in `lifecycle_exec/apply.py` for CURRENT-generation digest reads.
+- `apply_model_patch` (in `architecture_model.ai`) — evaluated; local `_apply_model_patch` retained (divergent contracts: dict vs dataclass, InvalidProposalError vs ParseError, dry-run wrapper). Documented in-file.
+- `MaterializedSlice.to_dict()` — evaluated; local `slice_materialize.py` response contract adds `digest`/`persisted_path` fields, so adoption would change the MCP response shape. Retained.
+- `WorkOrder.build(...)` — not applicable; opencode-arch only uses `WorkOrder.from_dict(...)`, never direct construction.
+- `Provenance.proposal_id` auto-derive — already effectively in use; all 5 sites omit `proposal_id`.
 
 ## Instructions for Development
 

@@ -231,9 +231,9 @@ def cmd_lifecycle_load(args, *, _registry=None) -> int:
         return 0
 
     # In-repo resolution.
+    from architecture_model.lifecycle import generation_dir
     from architecture_model.lifecycle.package import load_package
     from architecture_model.lifecycle.publication import (
-        _generation_dir,
         list_generations,
         read_current_generation,
     )
@@ -269,7 +269,7 @@ def cmd_lifecycle_load(args, *, _registry=None) -> int:
             print(f"Generation {rev} not found", file=sys.stderr)
             return 1
 
-    gen_dir = _generation_dir(pkg, n)
+    gen_dir = generation_dir(pkg, n)
     payload = {
         "package_id": pkg.architecture_id,
         "revision": f"{n:07d}",
@@ -449,10 +449,10 @@ def cmd_lifecycle_merge(args, *, _merge=None, _publish=None) -> int:
             return 2
 
     from architecture_model.core.parser import load_model
+    from architecture_model.lifecycle import generation_dir
     from architecture_model.lifecycle.package import load_package
     from architecture_model.lifecycle.publication import (
         PackageBundle,
-        _generation_dir,
         list_generations,
     )
     from architecture_model.lifecycle.publication import publish as _real_publish
@@ -489,7 +489,7 @@ def cmd_lifecycle_merge(args, *, _merge=None, _publish=None) -> int:
     ):
         try:
             loaded[label] = load_model(
-                _generation_dir(pkg, int(rev)) / "model" / ".architecture-model.yaml"
+                generation_dir(pkg, int(rev)) / "model" / ".architecture-model.yaml"
             )
         except Exception as exc:  # noqa: BLE001
             print(f"Malformed model in {label} revision {rev}: {exc}", file=sys.stderr)
@@ -532,7 +532,7 @@ def cmd_lifecycle_merge(args, *, _merge=None, _publish=None) -> int:
     # Publish merged model.
     merged_bytes = result.merged_model.to_yaml().encode("utf-8")
     manifest_path = (
-        _generation_dir(pkg, int(args.local)) / "manifest" / "manifest.json"
+        generation_dir(pkg, int(args.local)) / "manifest" / "manifest.json"
     )
     manifest_bytes = manifest_path.read_bytes() if manifest_path.is_file() else b""
     fn = _publish or _real_publish

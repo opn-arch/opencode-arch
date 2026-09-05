@@ -45,10 +45,10 @@ async def package_load_tool(
 ) -> dict:
     """Load a published architecture package generation."""
     from architecture_model.lifecycle.package import load_package
+    from architecture_model.lifecycle import generation_dir
     from architecture_model.lifecycle.publication import (
         list_generations,
         read_current_generation,
-        _generation_dir,
     )
 
     repo = resolve_repo(repo_path)
@@ -82,7 +82,7 @@ async def package_load_tool(
                 revision=revision,
             )
 
-    gen_dir = _generation_dir(pkg, n)
+    gen_dir = generation_dir(pkg, n)
     if not gen_dir.is_dir():
         return err(
             "NOT_FOUND",
