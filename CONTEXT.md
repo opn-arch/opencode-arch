@@ -343,6 +343,33 @@ class MyRunner:
 - Integration tests simulate the agent's role (produce YAML, then store/validate)
 - CLI tests mock the runner (don't actually call `opencode run`)
 
+## Comment→Issue→Dev Loop (Plan A)
+
+Closes the loop from a user comment on a rendered lifecycle artifact all the way to a committed model change and a closed logs-db Issue.
+
+**Flow:**
+1. **Capture** — `architecture-model comment <artifact-id> --view-id ... --slice-id ... --package-id ... --revision ... --body ... --author ...` writes a `CommentStub` to `.architecture/comments/` and appends a `comment.capture` journal event. (CLI lives in `architecture-model-standard`.)
+2. **Sync** — `architect_sync` now pushes captured comments to logs-db, creating Issues (idempotent via `external_key=comment_id`). Implemented by `opencode_arch.mcp.tools.sync._push_comments` and wired into the existing `sync_findings` under key `"comments_pushed"`. Journals `comment.sync`.
+3. **Work** — `architect_work_issue(repo_path, *, issue_id, dry_run=False, force=False, proposer=None)` MCP tool:
+   - Pulls Issue from logs-db, loads local stub (journals `issue.pull`).
+   - Short-circuits if a completed Job already exists for the same `comment_id` (idempotent).
+   - Builds a WorkOrder (journals `workorder.from_issue`), runs the configured proposer, validates + applies the resulting `ModelPatch` (publishes a new generation).
+   - On non-dry-run success: soft-gates via progress comment, commits the change with trailers `Issue:`, `Comment:`, `Session:`, `Model-Revision-From/To:`, `Model-Diff-Digest:`, and closes the Issue (journals `issue.close`).
+4. **Proposer resolution** — `.architecture/ai/proposer_config.yaml` with `plugin: module.path:function_name` selects the callable. Plan A ships a fake proposer for tests; Plan B replaces it with a real `LLMProvider` adapter.
+
+**Minimal usage:**
+```bash
+architecture-model comment art-1 --view-id v-1 --slice-id s-1 \
+    --package-id p-1 --revision 0000001 \
+    --body "COMP-2.5 missing constraint" --author reviewer
+# → prints comment_id, e.g. cmt_...
+# Then, from an OCA-aware MCP client:
+architect_sync(repo_path=".")               # pushes comments → creates Issue
+architect_work_issue(repo_path=".", issue_id=<n>)  # closes the loop
+```
+
+The `LOGS_DB_URL` env var overrides the default logs-db endpoint. `OPENCODE_SESSION_ID` (set by OpenCode) is captured into the WorkOrder and commit trailers for traceability.
+
 <!-- opencode-arch:start -->
 # Architecture (auto-managed by opencode-arch)
 
