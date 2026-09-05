@@ -1045,6 +1045,32 @@ try:
             remote_revision=remote_revision,
         )
 
+    from opencode_arch.mcp.tools.component_health import component_health_tool
+
+    @mcp.tool()
+    async def architect_component_health(
+        repo_path: str,
+        component_id: str,
+    ) -> dict:
+        """Return the SI&L record + 7-day trend for a single component.
+
+        Reads ``<repo_path>/.architecture/sil.sqlite`` (the shared SI&L
+        event store populated by instrumented pipeline stages / MCP tools).
+
+        Returns an envelope ``{ok: True, record: {...}, trend: {...}}`` where
+        ``record`` mirrors the SILRecord serialization used by the snapshot
+        writer (``component_id``, ``kind``, ``name``, ``metrics``,
+        ``recent_events``) and ``trend`` is a distinct short summary
+        ``{invocations_7d, failure_rate_7d, avg_duration_ms}``.
+
+        Errors: INVALID_ARGUMENT (empty ``component_id``), NOT_FOUND
+        (repo missing, SI&L store missing, or no events for the component).
+        """
+        return await component_health_tool(
+            repo_path=repo_path,
+            component_id=component_id,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
