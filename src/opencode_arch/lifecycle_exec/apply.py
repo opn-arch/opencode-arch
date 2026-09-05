@@ -198,20 +198,14 @@ def _load_root_pkg(repo: Path):
 
 def _current_state(pkg) -> tuple[str | None, str | None]:
     """Return (current_root_digest, current_revision) or (None, None)."""
+    from architecture_model.lifecycle import current_root_digest
     from architecture_model.lifecycle.publication import read_current_generation
 
     gen = read_current_generation(pkg)
     if gen is None:
         return None, None
     revision = f"{gen:07d}"
-    digest_path = pkg.root / "CURRENT" / "digest.json"
-    digest: str | None = None
-    if digest_path.exists():
-        try:
-            data = json.loads(digest_path.read_text(encoding="utf-8"))
-            digest = data.get("root_digest")
-        except (json.JSONDecodeError, OSError):
-            digest = None
+    digest = current_root_digest(pkg)
     return digest, revision
 
 
