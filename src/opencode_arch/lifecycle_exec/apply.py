@@ -249,6 +249,27 @@ def _apply_ops(model_data: dict, operations: list[dict]) -> dict:
         {"op": "replace", "target_id": "<id>", "value": {<field>: <value>}}
         {"op": "add",     "collection": "components",
          "value": {"id": "<id>", ...}}
+
+    Note (N52): ``architecture_model.ai.apply_model_patch`` is the public
+    helper for applying a ``ModelPatch`` to an ``ArchitectureModel``. We
+    intentionally do NOT delegate to it here because the contracts diverge:
+
+    * data shape — this runner mutates the raw YAML dict in place; the
+      public helper operates on a parsed ``ArchitectureModel`` dataclass.
+    * missing-target semantics — this runner raises
+      :class:`InvalidProposalError` when a ``remove``/``replace`` target
+      is not found; the public helper is a silent no-op.
+    * ``add`` payload — this runner uses ``collection`` and rejects
+      duplicate ids; the public helper uses ``target_kind`` and re-parses
+      the value through ``_parse_raw`` without deduplication.
+    * ``replace`` payload — this runner merges a dict via
+      ``entity.update(value)``; the public helper expects a ``field``
+      key and applies ``setattr(entity, field, value)``.
+    * error type — ``InvalidProposalError`` vs ``ParseError``.
+
+    Adopting the public helper would either change externally-observable
+    error contracts that tests depend on or require a compat shim thicker
+    than this inline implementation.
     """
     entities = model_data.get("entities")
     if entities is None:
