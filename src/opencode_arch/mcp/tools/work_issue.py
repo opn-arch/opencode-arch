@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -164,3 +165,69 @@ def _submit_run_validate_apply(
         "commit_sha": None,
         "dry_run": dry_run,
     }
+
+
+def _resolve_logs_db_url(repo_path: Path) -> str:
+    from opencode_arch.mcp.tools.sync import DEFAULT_API_URL
+    return os.environ.get("LOGS_DB_URL", DEFAULT_API_URL)
+
+
+def _resolve_proposer(repo_path: Path):
+    """Load proposer plugin from .architecture/ai/proposer_config.yaml."""
+    import importlib
+    import yaml as _yaml
+    cfg_path = repo_path / ".architecture" / "ai" / "proposer_config.yaml"
+    if not cfg_path.exists():
+        raise WorkIssueError("no proposer configured (.architecture/ai/proposer_config.yaml missing)")
+    cfg = _yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {}
+    plugin = cfg.get("plugin")
+    if not plugin or ":" not in plugin:
+        raise WorkIssueError("proposer_config.yaml missing 'plugin: module.path:function_name'")
+    mod_path, fn_name = plugin.split(":", 1)
+    module = importlib.import_module(mod_path)
+    fn = getattr(module, fn_name, None)
+    if not callable(fn):
+        raise WorkIssueError(f"proposer plugin {plugin!r} is not callable")
+    return fn
+
+
+def architect_work_issue(
+    repo_path: str,
+    *,
+    issue_id: int | str,
+    dry_run: bool = False,
+    force: bool = False,
+    proposer=None,
+) -> dict:
+    """Execute the comment→issue→dev loop for a single logs-db issue.
+
+    Steps 1-9 (Phase A3). Steps 10-13 (rebuild/commit/close) land in Phase A4.
+    """
+    repo = Path(repo_path).resolve()
+    client = LogsDBClient(_resolve_logs_db_url(repo))
+
+    ctx = _load_and_resolve(repo, client, issue_id)
+
+    if not force:
+        prior = _existing_completed_job(repo, comment_id=ctx.stub.comment_id)
+        if prior is not None:
+            return {
+                "ok": True,
+                "reused": True,
+                "work_order_id": prior.work_order_id,
+                "job_id": prior.id,
+                "commit_sha": None,
+            }
+
+    wo = _workorder_from_stub(
+        stub=ctx.stub,
+        issue_id=issue_id,
+        issue_url=ctx.issue.get("url", ""),
+    )
+
+    if proposer is None:
+        proposer = _resolve_proposer(repo)
+
+    return _submit_run_validate_apply(
+        ctx, wo, client=client, proposer=proposer, dry_run=dry_run,
+    )

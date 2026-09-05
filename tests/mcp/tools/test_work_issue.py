@@ -185,3 +185,49 @@ def test_submit_run_apply_invalid_proposal_posts_comment(tmp_path, monkeypatch):
     assert "job_id" in env
     assert len(issue["comments"]) >= 1
     assert issue["comments"][0]["author"] == "mcp"
+
+
+def test_architect_work_issue_dry_run_envelope(tmp_path, monkeypatch):
+    """End-to-end envelope: full tool wrapper with fake proposer via kwarg."""
+    from opencode_arch.mcp.tools.work_issue import architect_work_issue
+    from tests.fixtures.fake_proposer import make_noop_valid_proposer
+
+    monkeypatch.setenv("OPENCODE_SESSION_ID", "ses_env_test")
+    _, res = _publish_root(tmp_path)
+
+    with FakeLogsDB() as fake:
+        monkeypatch.setenv("LOGS_DB_URL", f"http://127.0.0.1:{fake._port}")
+        ctx = _setup_ctx(tmp_path, fake.client, comment_id="c-env")
+        iid = ctx.issue["issue_id"]
+        env = architect_work_issue(
+            str(tmp_path),
+            issue_id=iid,
+            dry_run=True,
+            proposer=make_noop_valid_proposer(model_version=res.root_digest),
+        )
+
+    assert env["ok"] is True, env
+    assert "work_order_id" in env
+    assert env["commit_sha"] is None
+    assert env.get("dry_run") is True
+
+
+def test_architect_work_issue_reuses_prior_completed_job(tmp_path, monkeypatch):
+    """Second call with same comment short-circuits when a completed Job exists."""
+    from opencode_arch.mcp.tools.work_issue import architect_work_issue
+    from tests.fixtures.fake_proposer import make_noop_valid_proposer
+
+    monkeypatch.setenv("OPENCODE_SESSION_ID", "ses_reuse")
+    _, res = _publish_root(tmp_path)
+    proposer = make_noop_valid_proposer(model_version=res.root_digest)
+
+    with FakeLogsDB() as fake:
+        monkeypatch.setenv("LOGS_DB_URL", f"http://127.0.0.1:{fake._port}")
+        ctx = _setup_ctx(tmp_path, fake.client, comment_id="c-reuse")
+        iid = ctx.issue["issue_id"]
+        first = architect_work_issue(str(tmp_path), issue_id=iid, dry_run=True, proposer=proposer)
+        second = architect_work_issue(str(tmp_path), issue_id=iid, dry_run=True, proposer=proposer)
+
+    assert first["ok"] is True
+    assert second.get("reused") is True
+    assert second["work_order_id"] == first["work_order_id"]
