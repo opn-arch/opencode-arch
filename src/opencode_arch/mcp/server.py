@@ -1007,6 +1007,44 @@ try:
             dry_run=dry_run,
         )
 
+    from opencode_arch.mcp.tools.lifecycle.package_merge import (
+        architect_package_merge_tool,
+    )
+
+    @mcp.tool()
+    async def architect_package_merge(
+        repo_path: str,
+        base_revision: str,
+        local_revision: str,
+        remote_revision: str,
+    ) -> dict:
+        """Three-way merge of three published architecture package revisions.
+
+        Loads the three named 7-digit revisions from the repo's root
+        lifecycle package, runs
+        :func:`opencode_arch.lifecycle_exec.merge.three_way_merge`, and:
+
+        * If there are no conflicts, publishes the merged model as a new
+          generation and records a ``lifecycle.package.merge`` journal
+          event. Returns ``{ok: True, merged_digest, merged_revision,
+          conflicts: [], stats}``.
+        * If there are conflicts, does NOT publish and does NOT record a
+          journal event. Returns ``{ok: True, merged_digest: None,
+          conflicts: [...], stats}`` so the caller can resolve them.
+
+        Errors: SCHEMA_VIOLATION (revision not ``^\\d{7}$``), NOT_FOUND
+        (repo, package, or any of the three revisions missing —
+        ``details.reason`` names which), PRECONDITION_FAILED (a revision's
+        model file is malformed), INTERNAL (merge integrity failure or
+        any other unexpected exception; no traceback leaked).
+        """
+        return await architect_package_merge_tool(
+            repo_path=repo_path,
+            base_revision=base_revision,
+            local_revision=local_revision,
+            remote_revision=remote_revision,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
