@@ -93,6 +93,40 @@ Verifies model representativeness against code reality using three mechanical su
 
 **When to use:** After extraction — verify the model is 100% representative before accepting it.
 
+## Phase 2 Lifecycle Tools (18 new)
+
+Phase 2 (branch `feat/phase2-lifecycle`) added **18 MCP tools** covering the full architecture lifecycle — packaging, views, artifact rebuild, and an AI/workorder execution loop. These live in `mcp/tools/lifecycle/` and `mcp/tools/ai/` and do NOT modify any of the 7 core tools above (per Phase 2 exit criterion #4).
+
+### Lifecycle (12 tools, `mcp/tools/lifecycle/`)
+- `architect_package_publish` — publish current model as a versioned package generation
+- `architect_package_load` — load a published package (by digest / generation)
+- `architect_package_list_generations` — enumerate available generations
+- `architect_package_diff` — structural diff between two generations
+- `architect_package_stale` — detect drift vs. current code
+- `architect_package_children_add` — federate a child package (`add_root`)
+- `architect_package_merge` — merge child packages into a parent view
+- `architect_slice_materialize` — materialize a slice as a standalone package
+- `architect_view_project` — project an architecture view (context/components/etc.)
+- `architect_view_render` — render a projected view (svg/png/mermaid)
+- `architect_artifact_plan` — plan artifact rebuild set
+- `architect_artifact_rebuild` — execute artifact rebuild
+
+### AI / Workorder (6 tools, `mcp/tools/ai/`)
+- `architect_workorder_submit` — submit a workorder (unit of proposed change)
+- `architect_job_get` — inspect a job's current state
+- `architect_job_transition` — advance a job's lifecycle state
+- `architect_job_run` — execute a job (with fixture or real proposer)
+- `architect_proposal_validate` — validate a proposal against the model
+- `architect_proposal_apply` — apply a validated proposal (dry-run or real)
+
+### Supporting modules
+- `lifecycle_bridge/` — thin adapter to `architecture-model-standard`'s lifecycle APIs. Keeps MCP tools decoupled from library churn.
+- `lifecycle_exec/` — execution primitives with **zero MCP dependencies** (unit-testable standalone): `paths`, `rebuild`, `worker`, `apply`, `merge`, `federation`.
+- `mcp/envelope.py` — shared request/response envelope + error taxonomy for all lifecycle tools.
+- CLI `lifecycle` and `ai` subcommand groups mirror the MCP surface.
+
+Every state change (publish, transition, apply, rebuild) emits a journal event.
+
 ## Package Structure
 
 ```
@@ -110,7 +144,8 @@ src/opencode_arch/
 │   └── __init__.py
 ├── mcp/
 │   ├── __init__.py
-│   ├── server.py         — FastMCP server (registers 6 tools)
+│   ├── envelope.py       — shared request/response envelope + error taxonomy (Phase 2)
+│   ├── server.py         — FastMCP server (registers core + lifecycle + AI tools)
 │   └── tools/
 │       ├── __init__.py
 │       ├── scan.py       — scan_repository()
@@ -119,7 +154,19 @@ src/opencode_arch/
 │       ├── extract.py    — store_extraction()
 │       ├── generate.py   — run_tests_on_generated_code()
 │       ├── group.py      — group_repository()
-│       └── check.py      — check_representativeness()
+│       ├── check.py      — check_representativeness()
+│       ├── lifecycle/    — 12 Phase 2 lifecycle tools (package_*, slice_materialize,
+│       │                   view_project, view_render, artifact_plan, artifact_rebuild)
+│       └── ai/           — 6 Phase 2 AI/workorder tools (workorder_submit, job_get,
+│                           job_transition, job_run, proposal_validate, proposal_apply)
+├── lifecycle_bridge/     — thin adapter to architecture-model-standard lifecycle APIs (Phase 2)
+├── lifecycle_exec/       — MCP-free execution primitives (Phase 2)
+│   ├── paths.py          — workspace layout resolver
+│   ├── rebuild.py        — artifact rebuild planner/executor
+│   ├── worker.py         — job execution driver
+│   ├── apply.py          — proposal application (dry-run + real)
+│   ├── merge.py          — package merge logic
+│   └── federation.py     — child-package federation
 ├── runner/
 │   ├── __init__.py
 │   ├── base.py           — RunResult, RunnerBackend protocol

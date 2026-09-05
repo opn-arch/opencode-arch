@@ -14,6 +14,7 @@ def main():
         and sys.argv[1] not in (
             "extract", "generate", "bench", "metrics", "report",
             "regen-loop", "confidence", "calibrate", "export-data", "docs", "export",
+            "lifecycle", "ai",
         )
     ):
         from opencode_arch.cli.launch import run_launch
@@ -118,6 +119,13 @@ def main():
     docs_val_p.add_argument("project_path", help="Path to the target project")
     docs_val_p.add_argument("--docs-dir", default=None, help="Docs directory (default: docs/se/)")
     docs_val_p.add_argument("--model-path", default=None, help="Path to .architecture-model.yaml")
+
+    from opencode_arch.cli.lifecycle import (
+        register_lifecycle_subparsers, register_ai_subparsers,
+        dispatch_lifecycle, dispatch_ai,
+    )
+    register_lifecycle_subparsers(subparsers)
+    register_ai_subparsers(subparsers)
 
     args = parser.parse_args()
 
@@ -255,6 +263,12 @@ def main():
                 manifest = None
             result = validate_docs(docs_dir, model, manifest)
             _print_validation_result(result)
+
+    elif args.command == "lifecycle":
+        sys.exit(dispatch_lifecycle(args))
+
+    elif args.command == "ai":
+        sys.exit(dispatch_ai(args))
 
 
 def _print_docs_result(result):
