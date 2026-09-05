@@ -51,3 +51,42 @@ def test_workorder_from_stub_populates_parameters(tmp_path, monkeypatch):
     assert wo.parameters["comment_id"] == "c-1"
     assert wo.parameters["session_id"] == "ses_xyz"
     assert wo.input_slice_refs and wo.input_slice_refs[0].slice_id == "s"
+
+
+def test_existing_completed_job_short_circuits(tmp_path):
+    """Completed Job whose WorkOrder.parameters.comment_id matches must be returned."""
+    from architecture_model.ai.jobs import JobStore, JobState
+    from architecture_model.ai.work_order import WorkOrder, SliceRef
+    from architecture_model.lifecycle.atomic_store import write_atomic
+    from opencode_arch.mcp.tools.work_issue import _existing_completed_job
+    import yaml
+
+    # 1. Build + persist a WorkOrder carrying comment_id in parameters.
+    wo = WorkOrder.build(
+        intent="x",
+        slices=[SliceRef(slice_id="s", model_revision="0000001")],
+        accepts=["model-patch"],
+        max_tokens=1000, max_wall_seconds=60,
+        requested_by="test",
+        parameters={"comment_id": "c-1"},
+    )
+    wo_dir = tmp_path / ".architecture" / "ai" / "workorders"
+    wo_dir.mkdir(parents=True, exist_ok=True)
+    write_atomic(wo_dir / f"{wo.id}.yaml", yaml.safe_dump(wo.to_dict()).encode("utf-8"))
+
+    # 2. Create Job, transition draft→approved→queued→running→validating→completed.
+    js = JobStore(tmp_path)
+    job = js.create(work_order_id=wo.id)
+    js.transition(job.id, JobState.approved)
+    js.transition(job.id, JobState.queued)
+    js.transition(job.id, JobState.running)
+    js.transition(job.id, JobState.validating)
+    js.transition(job.id, JobState.completed, result_ref="prop-1")
+
+    # 3. Look up.
+    found = _existing_completed_job(tmp_path, comment_id="c-1")
+    assert found is not None
+    assert found.id == job.id
+
+    # 4. Different comment_id returns None.
+    assert _existing_completed_job(tmp_path, comment_id="other") is None

@@ -62,3 +62,30 @@ def _workorder_from_stub(*, stub: CommentStub, issue_id: int | str, issue_url: s
             "package_id": stub.package_id, "revision": stub.revision,
         },
     )
+
+
+def _existing_completed_job(repo_path: Path, *, comment_id: str):
+    """Return a completed Job whose WorkOrder has parameters.comment_id == comment_id, else None."""
+    from architecture_model.ai.jobs import JobStore, JobState
+    from architecture_model.ai.work_order import WorkOrder
+    import yaml as _yaml
+
+    js = JobStore(repo_path)
+    wo_dir = repo_path / ".architecture" / "ai" / "workorders"
+    for job_id in js.list_ids():
+        try:
+            job = js.get(job_id)
+        except KeyError:
+            continue
+        if job.state != JobState.completed:
+            continue
+        wo_path = wo_dir / f"{job.work_order_id}.yaml"
+        if not wo_path.exists():
+            continue
+        try:
+            wo = WorkOrder.from_dict(_yaml.safe_load(wo_path.read_text(encoding="utf-8")))
+        except Exception:
+            continue
+        if wo.parameters.get("comment_id") == comment_id:
+            return job
+    return None
