@@ -1,0 +1,8 @@
+{
+  "prompt": "hello",
+  "text": "world",
+  "tokens_prompt": 1,
+  "tokens_completion": 1,
+  "model": "test-model",
+  "finish_reason": "stop"
+}
