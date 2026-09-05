@@ -1,10 +1,60 @@
 from pathlib import Path
 from datetime import datetime, timezone
+import yaml
 from architecture_model.comments.models import CommentStub
 from architecture_model.comments.store import write_stub, set_issue_ref
 from architecture_model.comments.models import IssueRef
+from architecture_model.lifecycle.package import load_package
+from architecture_model.lifecycle.publication import PackageBundle, publish
+from architecture_model.lifecycle.versions import SchemaVersions
 from tests.fixtures.fake_logs_db import FakeLogsDB
 from opencode_arch.mcp.tools.work_issue import _load_and_resolve, WorkIssueError
+
+
+_MODEL_YAML = (
+    "meta:\n"
+    "  schema_version: '1.3'\n"
+    "  project: test\n"
+    "entities:\n"
+    "  components:\n"
+    "    - id: COMP-1\n"
+    "      name: Alpha\n"
+    "      status: ACTIVE\n"
+)
+
+
+def _publish_root(repo):
+    lifecycle = repo / ".architecture" / "lifecycle"
+    lifecycle.mkdir(parents=True, exist_ok=True)
+    (lifecycle / "package.yaml").write_text(
+        yaml.safe_dump({
+            "architecture_id": "root",
+            "name": "root",
+            "slug": "root",
+            "contract_version": SchemaVersions.PACKAGE,
+            "model_ref": "model/.architecture-model.yaml",
+            "manifest_ref": "manifest/manifest.json",
+        }, sort_keys=True),
+        encoding="utf-8",
+    )
+    pkg = load_package(lifecycle)
+    res = publish(pkg, PackageBundle(model_bytes=_MODEL_YAML.encode(), manifest_bytes=b"{}"))
+    return pkg, res
+
+
+def _setup_ctx(tmp_path, fake_client, *, comment_id="c-1", revision="0000001"):
+    stub = CommentStub(
+        comment_id=comment_id, artifact_id="a", view_id="v", slice_id="s",
+        package_id="p", revision=revision,
+        body="please add COMP-3", author="tester",
+        created_at=datetime(2026, 9, 5, tzinfo=timezone.utc),
+    )
+    write_stub(tmp_path, stub)
+    issue_res = fake_client.create_issue(
+        external_key=comment_id, title="t", body="b", tags=[], meta={},
+    )
+    set_issue_ref(tmp_path, comment_id, IssueRef(issue_id=issue_res["issue_id"]))
+    return _load_and_resolve(tmp_path, fake_client, issue_res["issue_id"])
 
 
 def _stub(cid="c-1"):
@@ -90,3 +140,48 @@ def test_existing_completed_job_short_circuits(tmp_path):
 
     # 4. Different comment_id returns None.
     assert _existing_completed_job(tmp_path, comment_id="other") is None
+
+
+def test_submit_run_apply_success_dry_run(tmp_path, monkeypatch):
+    from opencode_arch.mcp.tools.work_issue import _submit_run_validate_apply, _workorder_from_stub
+    from tests.fixtures.fake_proposer import make_noop_valid_proposer
+
+    monkeypatch.setenv("OPENCODE_SESSION_ID", "ses_test")
+    _, res = _publish_root(tmp_path)
+
+    with FakeLogsDB() as fake:
+        ctx = _setup_ctx(tmp_path, fake.client)
+        wo = _workorder_from_stub(stub=ctx.stub, issue_id=ctx.issue["issue_id"],
+                                  issue_url=ctx.issue.get("url", ""))
+        proposer = make_noop_valid_proposer(model_version=res.root_digest)
+        env = _submit_run_validate_apply(ctx, wo, client=fake.client,
+                                         proposer=proposer, dry_run=True)
+
+    assert env["ok"] is True, env
+    assert env["work_order_id"] == wo.id
+    assert env["commit_sha"] is None
+    assert env["dry_run"] is True
+    assert env["package_revision_to"] is None
+    assert env["model_diff_digest"] is None
+
+
+def test_submit_run_apply_invalid_proposal_posts_comment(tmp_path, monkeypatch):
+    from opencode_arch.mcp.tools.work_issue import _submit_run_validate_apply, _workorder_from_stub
+    from tests.fixtures.fake_proposer import make_invalid_proposer
+
+    monkeypatch.setenv("OPENCODE_SESSION_ID", "ses_test")
+    _publish_root(tmp_path)
+
+    with FakeLogsDB() as fake:
+        ctx = _setup_ctx(tmp_path, fake.client)
+        wo = _workorder_from_stub(stub=ctx.stub, issue_id=ctx.issue["issue_id"],
+                                  issue_url=ctx.issue.get("url", ""))
+        env = _submit_run_validate_apply(ctx, wo, client=fake.client,
+                                         proposer=make_invalid_proposer(), dry_run=True)
+        issue = fake.client.get_issue(ctx.issue["issue_id"])
+
+    assert env["ok"] is False
+    assert env["error"] == "proposal_invalid"
+    assert "job_id" in env
+    assert len(issue["comments"]) >= 1
+    assert issue["comments"][0]["author"] == "mcp"

@@ -89,3 +89,78 @@ def _existing_completed_job(repo_path: Path, *, comment_id: str):
         if wo.parameters.get("comment_id") == comment_id:
             return job
     return None
+
+
+def _submit_run_validate_apply(
+    ctx: _WorkContext,
+    work_order,
+    *,
+    client: LogsDBClient,
+    proposer,
+    dry_run: bool = False,
+) -> dict:
+    """Steps 6-9 of the work-issue flow: submit WorkOrder, run proposer, validate, apply."""
+    from architecture_model.ai.jobs import JobStore, JobState
+    from architecture_model.ai.proposals import proposal_from_dict
+    from architecture_model.lifecycle.atomic_store import write_atomic
+    from architecture_model.lifecycle.journal import WORKORDER_FROM_ISSUE
+    from opencode_arch.lifecycle_exec.worker import run_job
+    from opencode_arch.lifecycle_exec.apply import apply_proposal
+    import yaml as _yaml
+
+    repo = ctx.repo_path
+
+    wo_dir = repo / ".architecture" / "ai" / "workorders"
+    wo_dir.mkdir(parents=True, exist_ok=True)
+    write_atomic(
+        wo_dir / f"{work_order.id}.yaml",
+        _yaml.safe_dump(work_order.to_dict(), sort_keys=True).encode("utf-8"),
+    )
+
+    js = JobStore(repo)
+    job = js.create(work_order_id=work_order.id, actor="architect_work_issue")
+    js.transition(job.id, JobState.approved, actor="architect_work_issue")
+    js.transition(job.id, JobState.queued, actor="architect_work_issue")
+
+    journal = Journal(repo / ".architecture" / "lifecycle" / "journal.jsonl")
+    journal.record(WORKORDER_FROM_ISSUE, {
+        "actor": "architect_work_issue",
+        "issue_id": ctx.issue.get("issue_id"),
+        "comment_id": ctx.stub.comment_id,
+        "work_order_id": work_order.id,
+        "job_id": job.id,
+    })
+
+    final_job = run_job(repo, job.id, proposer=proposer)
+
+    if final_job.state != JobState.completed:
+        error_msg = final_job.error or "unknown error"
+        try:
+            client.post_comment(
+                ctx.issue["issue_id"], author="mcp",
+                body=f"Job {final_job.id} failed: {error_msg}",
+            )
+        except Exception:
+            pass
+        return {
+            "ok": False,
+            "error": "proposal_invalid",
+            "job_id": final_job.id,
+            "work_order_id": work_order.id,
+            "message": error_msg,
+        }
+
+    proposal_path = repo / final_job.result_ref
+    proposal_data = _yaml.safe_load(proposal_path.read_text(encoding="utf-8"))
+    proposal = proposal_from_dict(proposal_data)
+    report = apply_proposal(repo, proposal, dry_run=dry_run)
+
+    return {
+        "ok": True,
+        "work_order_id": work_order.id,
+        "job_id": final_job.id,
+        "package_revision_to": report.new_revision,
+        "model_diff_digest": report.digest,
+        "commit_sha": None,
+        "dry_run": dry_run,
+    }
