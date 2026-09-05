@@ -960,6 +960,53 @@ try:
             slice_ids=slice_ids,
         )
 
+    from opencode_arch.mcp.tools.ai.proposal_apply import (
+        architect_proposal_apply_tool,
+    )
+
+    @mcp.tool()
+    async def architect_proposal_apply(
+        repo_path: str,
+        proposal: dict,
+        work_order_id: str,
+        dry_run: bool = True,
+    ) -> dict:
+        """Apply a persisted, completed AI Proposal to the lifecycle store.
+
+        Preconditions: the WorkOrder file must exist at
+        ``.architecture/ai/workorders/<work_order_id>.yaml`` AND a Job
+        referencing ``work_order_id`` must be in state ``completed`` AND
+        that job's ``result_ref`` must point to a persisted proposal
+        whose ``provenance.work_order_id`` and ``provenance.prompt_digest``
+        match the caller's ``proposal`` (identity match).
+
+        Success envelope: ``{"ok": True, "report": <ApplyReport as dict>}``.
+        The ``report`` mirrors :class:`~opencode_arch.lifecycle_exec.apply.ApplyReport`
+        with ``changes`` (list), ``new_revision`` (``str | None``),
+        ``digest`` (``str | None``), and ``journal_events`` (list of dicts).
+
+        On non-dry-run success, an ``ai.proposal.apply`` journal event is
+        recorded IN ADDITION to the per-kind events already written by
+        :func:`~opencode_arch.lifecycle_exec.apply.apply_proposal`. Dry
+        runs and error paths never write this T19 event.
+
+        Errors: INVALID_ARGUMENT (proposal not dict; empty work_order_id;
+        non-bool dry_run), NOT_FOUND (repo missing;
+        ``PackageNotFoundError`` from apply), SCHEMA_VIOLATION (proposal
+        parse failed; ``InvalidProposalError`` from apply),
+        PRECONDITION_FAILED (``details.reason`` in
+        ``{"workorder_missing", "job_missing", "job_not_completed",
+        "proposal_mismatch", "drift"}``; drift carries
+        ``details.expected`` / ``details.actual``), INTERNAL (single-line
+        message; no traceback leak).
+        """
+        return await architect_proposal_apply_tool(
+            repo_path=repo_path,
+            proposal=proposal,
+            work_order_id=work_order_id,
+            dry_run=dry_run,
+        )
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
