@@ -543,3 +543,57 @@ Register thin MCP endpoints wrapping every `architecture_model.lifecycle.*` and 
 - Never stage `.architecture/*`, `.architecture-models/*`, `.architecture-model.yaml`.
 - Use combined implementer + reviewer subagent pattern from Phase 1.
 - Every task ends with the full-suite baseline command passing.
+
+---
+
+## Phase 2 completion report
+
+**Status:** Complete. Ready for merge review.
+
+### Delivery summary
+
+- **Tasks completed:** 24 total = 23 code/test tasks (T1-T23) + this doc task (T24).
+- **Final test suite:** `916 passed, 2 failed` (`tests/ -q --ignore=tests/e2e`). The 2 failures are pre-existing and unchanged from the Phase 1 baseline pattern:
+  - `tests/test_adaptive_budget.py::TestComputeAdaptiveBudget::test_very_large_repo_capped`
+  - `tests/test_ingest.py::test_ingest_basic`
+  No new failures introduced by Phase 2.
+- **MCP tool count:** **18 new tools** (the plan's original "22" claim was incorrect and is corrected here):
+  - **12 lifecycle tools** under `mcp/tools/lifecycle/`: `package_publish`, `package_load`, `package_list_generations`, `package_diff`, `package_stale`, `package_children_add`, `package_merge`, `slice_materialize`, `view_project`, `view_render`, `artifact_plan`, `artifact_rebuild`.
+  - **6 AI tools** under `mcp/tools/ai/`: `workorder_submit`, `job_get`, `job_transition`, `job_run`, `proposal_validate`, `proposal_apply`.
+
+### Key modules added
+
+- `src/opencode_arch/lifecycle_bridge/` — thin adapter to `architecture-model-standard`'s lifecycle APIs; keeps MCP tools decoupled from library churn.
+- `src/opencode_arch/lifecycle_exec/` — execution primitives with **zero MCP dependencies** (per exit criterion #3), unit-testable standalone:
+  - `paths.py` — workspace layout resolver
+  - `rebuild.py` — artifact rebuild planner/executor
+  - `worker.py` — job execution driver
+  - `apply.py` — proposal application (dry-run + real)
+  - `merge.py` — package merge logic
+  - `federation.py` — child-package federation (`add_root`, etc.)
+- `src/opencode_arch/mcp/tools/lifecycle/*` — 12 lifecycle MCP tool modules.
+- `src/opencode_arch/mcp/tools/ai/*` — 6 AI/workorder MCP tool modules.
+- `src/opencode_arch/mcp/envelope.py` — shared request/response envelope + error taxonomy for lifecycle tools.
+- CLI `lifecycle` + `ai` subcommand groups (all pass `--help` per exit criterion #7).
+
+### Nit ledger
+
+- **Total open nits:** 106 (104 pre-T23 + N105 + N106).
+- **Critical follow-up: N101.** `package_publish.py` MCP tool path still contains the `_ensure_root_package` antipattern despite the CLI equivalent being cleaned up in T22. This is a duplicated-logic hazard and should be the first item picked up post-merge.
+- **Phase 1 escalations still open (deferred):** N50, N52, N53, N64, N73, N74, N81, N100, N105.
+
+### Exit criteria check
+
+| # | Criterion | Status |
+|---|-----------|--------|
+| 1 | Suite passes with no new failures | ✅ 916 passed, 2 known failures |
+| 2 | All new MCP tools registered/callable | ✅ 18 tools (corrected from "22") |
+| 3 | `lifecycle_exec` MCP-free | ✅ verified in T23 |
+| 4 | No mods to existing top-level `mcp/tools/*.py` | ✅ new tools under `lifecycle/` + `ai/` |
+| 5 | Journal events on every state change | ✅ publish, transition, apply, rebuild |
+| 6 | Phase 1 HEAD `7f0c7dc` imports cleanly | ✅ |
+| 7 | CLI `--help` for every new subcommand | ✅ |
+
+### Verdict
+
+**Phase 2 complete.** Ready for merge review. Post-merge, first-priority follow-up is N101 (`package_publish` antipattern in MCP tool path).
