@@ -198,6 +198,7 @@ def test_model_patch_drift_accepts_revision_string(tmp_path):
     assert report.journal_events[0]["event"] == "ai.proposal.apply.model_patch"
 
 
+@pytest.mark.no_pkg_init
 def test_model_patch_missing_package(tmp_path):
     proposal = ModelPatch(
         provenance=_prov("x"),

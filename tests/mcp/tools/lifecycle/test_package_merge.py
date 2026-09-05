@@ -1,6 +1,8 @@
 """Tests for architect_package_merge MCP tool (T20)."""
 from __future__ import annotations
 
+import pytest
+
 import asyncio
 import json
 from pathlib import Path
@@ -165,6 +167,7 @@ def test_invalid_revision_format(tmp_path):
 
 
 # 8
+@pytest.mark.no_pkg_init
 def test_no_package(tmp_path):
     env = _merge(tmp_path, "0000001", "0000002", "0000003")
     assert env["ok"] is False

@@ -1,6 +1,8 @@
 """Tests for architect_package_stale MCP tool."""
 from __future__ import annotations
 
+import pytest
+
 import asyncio
 from pathlib import Path
 
@@ -129,6 +131,7 @@ def test_stale_result_sorted_by_kind_and_node_id(tmp_path):
 
 
 # 6
+@pytest.mark.no_pkg_init
 def test_stale_no_root_package(tmp_path):
     env = _stale(tmp_path, ["foo.py"])
     assert env["ok"] is False

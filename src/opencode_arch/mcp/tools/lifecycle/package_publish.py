@@ -8,9 +8,14 @@ Deviation notes vs. the plan
 ----------------------------
 * Phase 1 ``publish()`` requires an already-loaded
   :class:`architecture_model.lifecycle.package.ArchitecturePackage` (i.e.
-  a ``package.yaml`` on disk). This tool auto-creates a minimal root
-  ``package.yaml`` at ``<repo>/.architecture/lifecycle/package.yaml`` on
-  first invocation and reuses it thereafter.
+  a ``package.yaml`` on disk). This tool does **not** auto-create the
+  root package — callers must have run ``lifecycle publish
+  --init-package --architecture-id <id>`` (or otherwise created
+  ``<repo>/.architecture/lifecycle/package.yaml``) first. If the file is
+  missing, the tool returns a ``NOT_FOUND`` envelope. This mirrors the
+  CLI's post-T22 behaviour (see ``opencode_arch.cli.lifecycle
+  .cmd_lifecycle_publish``) and closes N101 — the last carry-over of the
+  ``_ensure_root_package`` antipattern.
 * ``PublicationResult`` exposes ``generation`` / ``root_digest`` /
   ``generation_dir`` — not ``package_id`` / ``revision`` / ``digest`` /
   ``index_path``. The tool maps them:
@@ -26,53 +31,9 @@ Deviation notes vs. the plan
 from __future__ import annotations
 
 import json
-from pathlib import Path
-
-import yaml
 
 from opencode_arch.lifecycle_exec import paths
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
-
-_ROOT_ARCH_ID = "root-pkg"
-
-
-def _package_yaml_template() -> dict:
-    """Root package descriptor template.
-
-    ``model_ref`` / ``manifest_ref`` point at paths INSIDE a generation
-    directory (Phase 1 ``publish`` writes to
-    ``generations/<n>/model/.architecture-model.yaml`` and
-    ``generations/<n>/manifest/manifest.json``). Consumers of the model
-    must rebase ``pkg.root`` to the current generation (see
-    ``opencode_arch.lifecycle_bridge.resolve_current_pkg``) before
-    ``pkg.root / pkg.model_ref`` resolves to a real file.
-
-    ``contract_version`` is sourced from Phase 1's ``SchemaVersions.PACKAGE``
-    to avoid drift when the schema bumps.
-    """
-    from architecture_model.lifecycle.versions import SchemaVersions
-
-    return {
-        "architecture_id": _ROOT_ARCH_ID,
-        "name": "Root Package",
-        "slug": _ROOT_ARCH_ID,
-        "contract_version": SchemaVersions.PACKAGE,
-        "model_ref": "model/.architecture-model.yaml",
-        "manifest_ref": "manifest/manifest.json",
-    }
-
-
-def _ensure_root_package(lifecycle_root: Path):
-    """Load or create the root ArchitecturePackage at ``lifecycle_root``."""
-    from architecture_model.lifecycle.package import load_package
-
-    pkg_yaml = lifecycle_root / "package.yaml"
-    if not pkg_yaml.exists():
-        pkg_yaml.write_text(
-            yaml.safe_dump(_package_yaml_template(), sort_keys=True),
-            encoding="utf-8",
-        )
-    return load_package(lifecycle_root)
 
 
 @tool_result
@@ -85,7 +46,10 @@ async def publish_package_tool(
     """Publish a new architecture package to the repo's lifecycle store."""
     # 1. Import Phase 1 lazily so import errors surface as INTERNAL only when
     #    the tool is actually invoked.
+    import yaml
+
     from architecture_model.core.parser import _parse_raw
+    from architecture_model.lifecycle.package import load_package
     from architecture_model.lifecycle.publication import (
         PackageBundle,
         PublicationLockTimeout,
@@ -96,7 +60,8 @@ async def publish_package_tool(
     # 2. Validate + resolve repo.
     repo = resolve_repo(repo_path)
 
-    # 3. Ensure lifecycle tree.
+    # 3. Ensure lifecycle tree exists (idempotent; creates dirs only,
+    #    never package.yaml).
     tree = paths.ensure_all(repo)
     lifecycle_root = tree["package_root"]
 
@@ -130,8 +95,17 @@ async def publish_package_tool(
             raise ValueError(f"manifest_json is not valid JSON: {exc}") from exc
         manifest_bytes = manifest_json.encode("utf-8")
 
-    # 6. Load/create root package.
-    pkg = _ensure_root_package(lifecycle_root)
+    # 6. Resolve the existing root package. Callers must init it first
+    #    (see module docstring). N101: do NOT auto-create.
+    pkg_yaml = lifecycle_root / "package.yaml"
+    if not pkg_yaml.exists():
+        return err(
+            "NOT_FOUND",
+            "Package not found: run `lifecycle publish --init-package "
+            "--architecture-id <id>` first",
+            package_yaml=str(pkg_yaml),
+        )
+    pkg = load_package(lifecycle_root)
 
     # 7. Enforce parent_package_id if provided.
     if parent_package_id is not None:

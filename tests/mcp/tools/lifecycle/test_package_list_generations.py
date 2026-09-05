@@ -1,6 +1,8 @@
 """Tests for architect_package_list_generations MCP tool."""
 from __future__ import annotations
 
+import pytest
+
 import asyncio
 
 from opencode_arch.mcp.tools.lifecycle.package_publish import publish_package_tool
@@ -35,6 +37,7 @@ def _list(repo):
 
 
 # 1
+@pytest.mark.no_pkg_init
 def test_list_no_publications_returns_not_found(tmp_path):
     env = _list(tmp_path)
     # No package.yaml auto-created by list => NOT_FOUND.

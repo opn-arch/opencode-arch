@@ -31,6 +31,22 @@ def _publish(repo, **kw):
     return _run(publish_package_tool(repo_path=str(repo), **kw))
 
 
+# N101 regression — publish MUST NOT auto-create the root package.
+# Uses a subdirectory so the autouse conftest's package.yaml init
+# (which lives under ``tmp_path``) does not reach this scenario.
+def test_publish_without_package_yaml_returns_not_found(tmp_path):
+    empty_repo = tmp_path / "empty_repo"
+    empty_repo.mkdir()
+    env = _run(publish_package_tool(
+        repo_path=str(empty_repo), model_yaml=VALID_MODEL_YAML,
+    ))
+    assert env["ok"] is False, env
+    assert env["error"]["code"] == "NOT_FOUND"
+    assert not (
+        empty_repo / ".architecture" / "lifecycle" / "package.yaml"
+    ).exists()
+
+
 # 1
 def test_publish_success_returns_ok_envelope(tmp_path):
     env = _publish(tmp_path, model_yaml=VALID_MODEL_YAML)

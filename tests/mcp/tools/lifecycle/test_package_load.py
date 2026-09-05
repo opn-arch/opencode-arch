@@ -79,6 +79,7 @@ def test_load_no_publication_returns_not_found(tmp_path):
 
 
 # 5
+@pytest.mark.no_pkg_init
 def test_load_missing_package_yaml_returns_not_found(tmp_path):
     # Create lifecycle dir but no package.yaml.
     (tmp_path / ".architecture" / "lifecycle").mkdir(parents=True)

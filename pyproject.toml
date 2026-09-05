@@ -47,6 +47,7 @@ testpaths = ["tests"]
 asyncio_mode = "auto"
 markers = [
     "e2e: expensive end-to-end tests requiring LLM calls (deselect with '-m \"not e2e\"')",
+    "no_pkg_init: opt out of the lifecycle-test autouse fixture that pre-writes package.yaml",
 ]
 
 [tool.coverage.run]
