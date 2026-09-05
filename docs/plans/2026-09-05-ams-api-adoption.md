@@ -102,3 +102,53 @@ PYTHONPATH="$PWD/src:/Users/baigm2/Documents/Projects/architecture-model-standar
 - Confirm final suite: 917 passed + 2 pre-existing (or higher if we added confirmations).
 
 **Commit:** `docs(ams-api-adoption): completion report`
+
+---
+
+## Completion report
+
+**Date completed:** 2026-09-05
+**Branch:** `feat/ams-api-adoption` (based on `main` @ `531b845`)
+**Scope selected:** B (adopt all new helpers).
+
+### Test suite delta
+
+| Metric | Baseline | Final | Delta |
+|--------|:--------:|:-----:|:-----:|
+| Passed | 917 | **917** | 0 |
+| Pre-existing failures | 2 | 2 | 0 |
+| Regressions | — | **0** | — |
+
+Behavior-preserving refactor. No test-count change is expected or desired.
+
+### Task-by-task result
+
+| # | Task | Commit | Outcome | Files touched |
+|:-:|:-----|:------:|:--------|:--------------|
+| Plan | AMS API adoption plan | `31aa5d9` | Committed | `docs/plans/2026-09-05-ams-api-adoption.md` |
+| T1 | Adopt `generation_dir` (N74) | `3fa8f2a` | **Adopted** | 4 lifecycle/CLI files |
+| T2 | Delegate `_apply_model_patch` (N52) | `a72c913` | **Documented** — contracts diverge (dict vs dataclass, distinct error types, dry-run wrapper); local logic retained with docstring pointer | `lifecycle_exec/apply.py` docstring (+21 lines) |
+| T3 | Adopt `current_root_digest` (N53) | `7f17b62` | **Adopted** | `lifecycle_exec/apply.py` (-8/+2) |
+| T4 | Adopt `MaterializedSlice.to_dict` (N105) | — | **Skipped** — MCP response shape adds `digest`/`persisted_path` and omits `provenance`; adoption would change response contract | none |
+| T5 | Adopt `WorkOrder.build` + `Provenance.proposal_id` auto-derive (N100/N64) | — | **N/A** — opencode-arch only uses `WorkOrder.from_dict`; all `Provenance(...)` calls already omit `proposal_id` (auto-derive already active) | none |
+| T6 | Completion report + CONTEXT | (this commit) | Done | `CONTEXT.md`, this plan |
+
+### Adoption rate
+
+- **Adopted:** 2 APIs (`generation_dir`, `current_root_digest`)
+- **Documented + retained:** 1 API (`apply_model_patch` — divergent contract)
+- **Skipped (shape divergence):** 1 API (`MaterializedSlice.to_dict`)
+- **Already in use:** 1 API (`Provenance.proposal_id` auto-derive)
+- **Not applicable:** 1 API (`WorkOrder.build` — no construction sites)
+
+**Honest scope B outcome:** opencode-arch was already in reasonably good shape. The APIs that clearly fit (private → public renames) landed cleanly; the ones with contract friction were correctly left alone rather than forced.
+
+### Follow-up notes (deferred)
+
+1. **`apply_model_patch` contract convergence** — if opencode-arch's `_apply_ops` is ever migrated to `ArchitectureModel` dataclass mutation (rather than raw yaml dict), delegate to the public helper. Requires test-error-type migration (`InvalidProposalError` → `ParseError`).
+2. **`MaterializedSlice.to_dict` extension** — if the ams library adds `digest`/`persisted_path` support to `MaterializedSlice.to_dict()` (or accepts a `**extra` merge), opencode-arch could adopt it.
+3. **`ParseError` migration** — Scope C item, deferred: migrate opencode-arch error handling in parser-adjacent paths to catch the canonical `ParseError`.
+
+### Downstream impact
+
+None. This is a consumer-side refactor of opencode-arch only; no ams changes were needed. The `PYTHONPATH` dependency on `feat/curated-se-views` remains in place; once that branch merges to ams `main`, the `PYTHONPATH` pin can be simplified.
