@@ -154,7 +154,7 @@ def test_submit_run_apply_success_dry_run(tmp_path, monkeypatch):
         wo = _workorder_from_stub(stub=ctx.stub, issue_id=ctx.issue["issue_id"],
                                   issue_url=ctx.issue.get("url", ""))
         proposer = make_noop_valid_proposer(model_version=res.root_digest)
-        env = _submit_run_validate_apply(ctx, wo, client=fake.client,
+        env, _ = _submit_run_validate_apply(ctx, wo, client=fake.client,
                                          proposer=proposer, dry_run=True)
 
     assert env["ok"] is True, env
@@ -176,7 +176,7 @@ def test_submit_run_apply_invalid_proposal_posts_comment(tmp_path, monkeypatch):
         ctx = _setup_ctx(tmp_path, fake.client)
         wo = _workorder_from_stub(stub=ctx.stub, issue_id=ctx.issue["issue_id"],
                                   issue_url=ctx.issue.get("url", ""))
-        env = _submit_run_validate_apply(ctx, wo, client=fake.client,
+        env, _ = _submit_run_validate_apply(ctx, wo, client=fake.client,
                                          proposer=make_invalid_proposer(), dry_run=True)
         issue = fake.client.get_issue(ctx.issue["issue_id"])
 
@@ -231,3 +231,58 @@ def test_architect_work_issue_reuses_prior_completed_job(tmp_path, monkeypatch):
     assert first["ok"] is True
     assert second.get("reused") is True
     assert second["work_order_id"] == first["work_order_id"]
+
+
+import subprocess
+
+
+def _git_init(repo):
+    subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=repo, check=True)
+    subprocess.run(["git", "config", "user.name", "Test"], cwd=repo, check=True)
+    subprocess.run(["git", "config", "commit.gpgsign", "false"], cwd=repo, check=True)
+
+
+def test_architect_work_issue_full_flow_non_dry_run(tmp_path, monkeypatch):
+    """Non-dry-run: soft-gate posts, commit made with trailers, issue closed, envelope has commit_sha."""
+    from opencode_arch.mcp.tools.work_issue import architect_work_issue
+    from tests.fixtures.fake_proposer import make_noop_valid_proposer
+
+    monkeypatch.setenv("OPENCODE_SESSION_ID", "ses_full_flow")
+    _, res = _publish_root(tmp_path)
+    _git_init(tmp_path)
+    proposer = make_noop_valid_proposer(model_version=res.root_digest)
+
+    with FakeLogsDB() as fake:
+        monkeypatch.setenv("LOGS_DB_URL", f"http://127.0.0.1:{fake._port}")
+        ctx = _setup_ctx(tmp_path, fake.client, comment_id="c-full")
+        iid = ctx.issue["issue_id"]
+
+        env = architect_work_issue(
+            str(tmp_path), issue_id=iid, dry_run=False, proposer=proposer,
+        )
+
+        assert env["ok"] is True, env
+        assert env.get("commit_sha"), env
+        assert env.get("issue_closed") is True
+        assert env["package_revision_to"] == "0000002"
+
+        msg = subprocess.check_output(
+            ["git", "-C", str(tmp_path), "log", "-1", "--format=%B"], text=True,
+        )
+        assert f"Issue: logs-db#{iid}" in msg
+        assert "Comment: c-full" in msg
+        assert "Session: ses_full_flow" in msg
+        assert "Model-Revision-From: 0000001" in msg
+        assert "Model-Revision-To: 0000002" in msg
+        assert "Model-Diff-Digest: sha256-v1:" in msg
+
+        issue = fake.client.get_issue(iid)
+        assert issue["state"] == "closed"
+        assert issue["close_meta"]["commit_sha"] == env["commit_sha"]
+        assert any(c["author"] == "mcp" for c in issue["comments"])
+
+    import json
+    jpath = tmp_path / ".architecture" / "lifecycle" / "journal.jsonl"
+    events = [json.loads(l)["event"] for l in jpath.read_text(encoding="utf-8").splitlines() if l.strip()]
+    assert "issue.close" in events

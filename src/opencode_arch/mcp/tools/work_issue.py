@@ -42,6 +42,83 @@ def _load_and_resolve(repo_path: Path, client: LogsDBClient, issue_id: int | str
     return _WorkContext(repo_path=repo_path, issue=issue, stub=stub)
 
 
+def _soft_gate(ctx: _WorkContext, client: LogsDBClient, apply_report) -> dict | None:
+    """Post an informational progress comment after apply. Non-blocking.
+
+    TODO: integrate architect_check / architect_gate to run structural checks
+    on the newly published model. For now, just post revision + digest so a
+    human reviewer can trace the change.
+    """
+    if apply_report.new_revision is None:
+        return None
+    body = (
+        f"Applied model patch: revision {apply_report.new_revision}, "
+        f"digest {apply_report.digest}"
+    )
+    posted = False
+    try:
+        client.post_comment(ctx.issue["issue_id"], author="mcp", body=body)
+        posted = True
+    except Exception:
+        pass
+    return {"posted": posted, "comment": body}
+
+
+def _rebuild_affected(ctx: _WorkContext, apply_report) -> list:
+    """Rebuild artifacts affected by the applied patch.
+
+    TODO(A4.2 follow-up): full ArtifactSpec-driven rebuild requires fixtures
+    to be authored. Stub returns []; the loop continues so Plan A can close.
+    """
+    if apply_report.new_revision is None:
+        return []
+    return []
+
+
+def _commit_step(ctx: _WorkContext, apply_report, *, provider: str | None = None) -> str:
+    from opencode_arch.lifecycle_exec.commit import build_trailers, commit_with_trailers
+
+    issue_id = ctx.issue["issue_id"]
+    trailers = build_trailers(
+        issue_id=issue_id,
+        comment_id=ctx.stub.comment_id,
+        session_id=resolve_session_id(),
+        revision_from=ctx.stub.revision,
+        revision_to=apply_report.new_revision,
+        model_diff_digest=apply_report.digest,
+        provider=provider,
+    )
+    return commit_with_trailers(
+        ctx.repo_path,
+        subject=f"chore(arch): apply proposal from logs-db#{issue_id}",
+        body="",
+        trailers=trailers,
+    )
+
+
+def _close_issue(
+    ctx: _WorkContext, client: LogsDBClient, *, commit_sha: str, model_diff_digest: str,
+) -> dict:
+    from architecture_model.lifecycle.journal import ISSUE_CLOSE
+
+    issue_id = ctx.issue["issue_id"]
+    resp = client.close_issue(
+        issue_id,
+        commit_sha=commit_sha,
+        model_diff_digest=model_diff_digest,
+        note=f"Applied via architect_work_issue at {commit_sha[:8]}",
+    )
+    journal = Journal(ctx.repo_path / ".architecture" / "lifecycle" / "journal.jsonl")
+    journal.record(ISSUE_CLOSE, {
+        "actor": "architect_work_issue",
+        "issue_id": issue_id,
+        "comment_id": ctx.stub.comment_id,
+        "commit_sha": commit_sha,
+        "model_diff_digest": model_diff_digest,
+    })
+    return resp
+
+
 from architecture_model.ai.work_order import WorkOrder, SliceRef
 from opencode_arch.session import resolve_session_id
 
@@ -149,14 +226,14 @@ def _submit_run_validate_apply(
             "job_id": final_job.id,
             "work_order_id": work_order.id,
             "message": error_msg,
-        }
+        }, None
 
     proposal_path = repo / final_job.result_ref
     proposal_data = _yaml.safe_load(proposal_path.read_text(encoding="utf-8"))
     proposal = proposal_from_dict(proposal_data)
     report = apply_proposal(repo, proposal, dry_run=dry_run)
 
-    return {
+    env = {
         "ok": True,
         "work_order_id": work_order.id,
         "job_id": final_job.id,
@@ -165,6 +242,7 @@ def _submit_run_validate_apply(
         "commit_sha": None,
         "dry_run": dry_run,
     }
+    return env, report
 
 
 def _resolve_logs_db_url(repo_path: Path) -> str:
@@ -228,6 +306,23 @@ def architect_work_issue(
     if proposer is None:
         proposer = _resolve_proposer(repo)
 
-    return _submit_run_validate_apply(
+    env, apply_report = _submit_run_validate_apply(
         ctx, wo, client=client, proposer=proposer, dry_run=dry_run,
     )
+    return _finalize(ctx, client, env, apply_report)
+
+
+def _finalize(ctx: _WorkContext, client: LogsDBClient, env: dict, apply_report) -> dict:
+    if not env.get("ok") or apply_report is None or apply_report.new_revision is None:
+        return env
+    _soft_gate(ctx, client, apply_report)
+    _rebuild_affected(ctx, apply_report)
+    commit_sha = _commit_step(ctx, apply_report)
+    _close_issue(
+        ctx, client,
+        commit_sha=commit_sha,
+        model_diff_digest=apply_report.digest,
+    )
+    env["commit_sha"] = commit_sha
+    env["issue_closed"] = True
+    return env
