@@ -51,10 +51,10 @@ async def package_diff_tool(
     to_revision: str,
 ) -> dict:
     """Compute a semantic diff between two published generations."""
+    from architecture_model.lifecycle import generation_dir
     from architecture_model.lifecycle.diff import semantic_diff
     from architecture_model.lifecycle.package import load_package
     from architecture_model.lifecycle.publication import (
-        _generation_dir,
         list_generations,
     )
 
@@ -83,10 +83,10 @@ async def package_diff_tool(
         resolved[label] = n
 
     model_from, manifest_from = _load_generation(
-        pkg, _generation_dir(pkg, resolved["from"])
+        pkg, generation_dir(pkg, resolved["from"])
     )
     model_to, manifest_to = _load_generation(
-        pkg, _generation_dir(pkg, resolved["to"])
+        pkg, generation_dir(pkg, resolved["to"])
     )
 
     diff = semantic_diff(

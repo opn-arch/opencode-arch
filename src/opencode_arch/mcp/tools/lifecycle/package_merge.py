@@ -77,9 +77,9 @@ async def architect_package_merge_tool(
     from architecture_model.core.parser import load_model
     from architecture_model.lifecycle.journal import Journal
     from architecture_model.lifecycle.package import load_package
+    from architecture_model.lifecycle import generation_dir
     from architecture_model.lifecycle.publication import (
         PackageBundle,
-        _generation_dir,
         list_generations,
         publish,
     )
@@ -131,7 +131,7 @@ async def architect_package_merge_tool(
     # 3. Load the three models.
     loaded: dict[str, Any] = {}
     for label, rev in labels.items():
-        gen_dir = _generation_dir(pkg, int(rev))
+        gen_dir = generation_dir(pkg, int(rev))
         model_path = gen_dir / _MODEL_REL
         try:
             loaded[label] = load_model(model_path)
@@ -177,7 +177,7 @@ async def architect_package_merge_tool(
     # 6. Publish merged model as a new generation.
     merged_yaml = result.merged_model.to_yaml()
     # Preserve manifest bytes from the local revision.
-    local_gen_dir = _generation_dir(pkg, int(local_revision))
+    local_gen_dir = generation_dir(pkg, int(local_revision))
     manifest_path = local_gen_dir / _MANIFEST_REL
     manifest_bytes = (
         manifest_path.read_bytes() if manifest_path.is_file() else b""
