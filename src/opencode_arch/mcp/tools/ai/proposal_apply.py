@@ -41,6 +41,7 @@ from typing import Any
 # Module-level import so tests can monkeypatch this seam.
 from opencode_arch.lifecycle_exec.apply import apply_proposal
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 
 def _extract_identity(proposal: dict) -> tuple[str | None, str | None]:
@@ -64,6 +65,7 @@ def _json_safe(value: Any) -> Any:
     return value
 
 
+@instrumented("mcp_tool:architect_proposal_apply")
 @tool_result
 async def architect_proposal_apply_tool(
     repo_path: str,

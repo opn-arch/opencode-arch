@@ -10,10 +10,12 @@ from dataclasses import asdict
 from pathlib import Path
 
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 _SIL_DB_REL = Path(".architecture") / "sil.sqlite"
 
 
+@instrumented("mcp_tool:component_health")
 @tool_result
 async def component_health_tool(repo_path: str, component_id: str) -> dict:
     """Return SI&L record + short 7-day trend for a single component."""

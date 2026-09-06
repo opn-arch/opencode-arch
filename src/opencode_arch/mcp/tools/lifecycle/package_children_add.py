@@ -23,8 +23,10 @@ from pydantic import ValidationError
 
 from opencode_arch.lifecycle_exec import paths
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 
+@instrumented("mcp_tool:package_children_add")
 @tool_result
 async def package_children_add_tool(
     repo_path: str,

@@ -17,8 +17,10 @@ from __future__ import annotations
 from pathlib import Path
 
 from opencode_arch.mcp.envelope import err, ok, tool_result
+from architecture_model.sil.decorators import instrumented
 
 
+@instrumented("mcp_tool:architect_job_get")
 @tool_result
 async def architect_job_get_tool(repo_path: str, job_id: str) -> dict:
     """Return the persisted Job identified by ``job_id``."""

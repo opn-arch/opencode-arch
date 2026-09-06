@@ -19,8 +19,10 @@ from __future__ import annotations
 import yaml
 
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 
+@instrumented("mcp_tool:architect_proposal_validate")
 @tool_result
 async def architect_proposal_validate_tool(
     repo_path: str,
