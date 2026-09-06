@@ -37,7 +37,83 @@ _EXT: dict[str, str] = {
     "markdown": "md",
     "html": "html",
     "ai-context": "txt",
+    "pipeline-html": "html",
 }
+
+
+# ---------------------------------------------------------------------------
+# pipeline-html renderer glue
+# ---------------------------------------------------------------------------
+# The ``pipeline-html`` renderer has a signature
+# ``(*, materialized_slice, sil_store=None) -> str`` that doesn't match the
+# generic ``(pv, spec) -> bytes`` renderer contract. We special-case it
+# in :func:`rebuild_artifacts`:
+#   1. Skip the ``project(view, ms)`` step (the view is a passthrough).
+#   2. Build a rollup adapter over ``<repo>/.architecture/sil.sqlite`` when
+#      present, else pass ``sil_store=None``.
+#   3. Call ``render_pipeline_html(materialized_slice=ms, sil_store=...)``.
+#   4. Encode the returned HTML string to UTF-8 bytes.
+#   5. After successful atomic write, mirror the renderer's static assets
+#      (index.css, badges.js, drilldown.js) alongside the emitted HTML so
+#      the ``<link>`` / ``<script>`` tags resolve when the file is opened
+#      via ``file://``.
+
+
+class _SILRollupAdapter:
+    """Duck-typed ``rollup(component_id) -> dict | None`` over ``SILStore``.
+
+    ``pipeline_html_data.build`` only calls ``rollup``; we compute it lazily
+    from the store's per-component 7-day aggregates. Returns ``None`` for
+    components with no events so the builder omits their badge entirely.
+    """
+
+    def __init__(self, store: Any) -> None:
+        self._store = store
+
+    def rollup(self, component_id: str) -> dict | None:
+        try:
+            invocations = int(self._store.invocations_7d(component_id))
+        except Exception:  # pragma: no cover — defensive
+            return None
+        if invocations <= 0:
+            return None
+        try:
+            return {
+                "invocations_7d": invocations,
+                "failure_rate_7d": round(float(self._store.failure_rate_7d(component_id)), 4),
+                "avg_duration_ms": round(float(self._store.avg_duration_ms(component_id)), 2),
+            }
+        except Exception:  # pragma: no cover — defensive
+            return None
+
+
+def _open_sil_store(repo: Path):
+    """Return a rollup adapter over ``<repo>/.architecture/sil.sqlite`` or None."""
+    sil_db = repo / ".architecture" / "sil.sqlite"
+    if not sil_db.exists():
+        return None
+    try:
+        from opencode_arch.sil.store import SILStore
+
+        return _SILRollupAdapter(SILStore(sil_db))
+    except Exception:  # pragma: no cover — defensive
+        return None
+
+
+def _copy_pipeline_html_assets(out_dir: Path) -> None:
+    """Mirror the pipeline_dashboard asset tree next to the emitted HTML."""
+    import shutil
+
+    from architecture_model.lifecycle import renderers as _r_pkg
+
+    src = Path(_r_pkg.__file__).parent / "assets" / "pipeline_dashboard"
+    if not src.is_dir():
+        return
+    dest = out_dir / "assets" / "pipeline_dashboard"
+    dest.mkdir(parents=True, exist_ok=True)
+    for asset in src.iterdir():
+        if asset.is_file():
+            shutil.copy2(asset, dest / asset.name)
 
 
 @dataclass
@@ -315,66 +391,106 @@ def rebuild_artifacts(
             )
             continue
 
-        # -- project ----------------------------------------------------------
-        try:
-            pv = project(view, ms)
-        except Exception as exc:  # noqa: BLE001
-            report.failed.append({
-                "spec_id": spec_id,
-                "reason": "project_error",
-                "detail": str(exc),
-            })
-            report.journal_events.append(
-                _journal("artifact.failed", spec_id, ts, reason="project_error")
-            )
-            continue
-
-        # -- render -----------------------------------------------------------
+        # -- project + render -------------------------------------------------
         renderer_name = spec.renderer  # See deviations note in module docstring.
-        try:
-            renderer = get_renderer(renderer_name)
-        except KeyError as exc:
-            report.failed.append({
-                "spec_id": spec_id,
-                "reason": "render_error",
-                "detail": f"renderer not registered: {exc}",
-            })
-            report.journal_events.append(
-                _journal("artifact.failed", spec_id, ts, reason="render_error")
-            )
-            continue
 
-        try:
-            result = renderer(pv, spec)
-        except Exception as exc:  # noqa: BLE001
-            report.failed.append({
-                "spec_id": spec_id,
-                "reason": "render_error",
-                "detail": str(exc),
-            })
-            report.journal_events.append(
-                _journal("artifact.failed", spec_id, ts, reason="render_error")
-            )
-            continue
+        if renderer_name == "pipeline-html":
+            # Special-case: bypass ViewProjection (view is a passthrough marker
+            # for pipeline-html); call the renderer directly with the
+            # materialized slice and an optional SIL rollup adapter.
+            try:
+                from architecture_model.lifecycle.renderers.pipeline_html import (
+                    render_pipeline_html,
+                )
 
-        # Renderer contract: registered renderers return bytes. Accept a few
-        # tolerant shapes so a future ProjectedView-style return still works.
-        if isinstance(result, (bytes, bytearray)):
-            body: bytes = bytes(result)
-        elif hasattr(result, "body") and isinstance(result.body, (bytes, bytearray)):
-            body = bytes(result.body)
-        elif hasattr(result, "body_utf8") and isinstance(result.body_utf8, str):
-            body = result.body_utf8.encode("utf-8")
+                html_str = render_pipeline_html(
+                    materialized_slice=ms,
+                    sil_store=_open_sil_store(repo),
+                )
+            except Exception as exc:  # noqa: BLE001
+                report.failed.append({
+                    "spec_id": spec_id,
+                    "reason": "render_error",
+                    "detail": str(exc),
+                })
+                report.journal_events.append(
+                    _journal("artifact.failed", spec_id, ts, reason="render_error")
+                )
+                continue
+            if not isinstance(html_str, str):
+                report.failed.append({
+                    "spec_id": spec_id,
+                    "reason": "render_error",
+                    "detail": (
+                        f"pipeline-html renderer returned unsupported type "
+                        f"{type(html_str).__name__}"
+                    ),
+                })
+                report.journal_events.append(
+                    _journal("artifact.failed", spec_id, ts, reason="render_error")
+                )
+                continue
+            body: bytes = html_str.encode("utf-8")
         else:
-            report.failed.append({
-                "spec_id": spec_id,
-                "reason": "render_error",
-                "detail": f"renderer returned unsupported type {type(result).__name__}",
-            })
-            report.journal_events.append(
-                _journal("artifact.failed", spec_id, ts, reason="render_error")
-            )
-            continue
+            # -- project ------------------------------------------------------
+            try:
+                pv = project(view, ms)
+            except Exception as exc:  # noqa: BLE001
+                report.failed.append({
+                    "spec_id": spec_id,
+                    "reason": "project_error",
+                    "detail": str(exc),
+                })
+                report.journal_events.append(
+                    _journal("artifact.failed", spec_id, ts, reason="project_error")
+                )
+                continue
+
+            # -- render -------------------------------------------------------
+            try:
+                renderer = get_renderer(renderer_name)
+            except KeyError as exc:
+                report.failed.append({
+                    "spec_id": spec_id,
+                    "reason": "render_error",
+                    "detail": f"renderer not registered: {exc}",
+                })
+                report.journal_events.append(
+                    _journal("artifact.failed", spec_id, ts, reason="render_error")
+                )
+                continue
+
+            try:
+                result = renderer(pv, spec)
+            except Exception as exc:  # noqa: BLE001
+                report.failed.append({
+                    "spec_id": spec_id,
+                    "reason": "render_error",
+                    "detail": str(exc),
+                })
+                report.journal_events.append(
+                    _journal("artifact.failed", spec_id, ts, reason="render_error")
+                )
+                continue
+
+            # Renderer contract: registered renderers return bytes. Accept a few
+            # tolerant shapes so a future ProjectedView-style return still works.
+            if isinstance(result, (bytes, bytearray)):
+                body = bytes(result)
+            elif hasattr(result, "body") and isinstance(result.body, (bytes, bytearray)):
+                body = bytes(result.body)
+            elif hasattr(result, "body_utf8") and isinstance(result.body_utf8, str):
+                body = result.body_utf8.encode("utf-8")
+            else:
+                report.failed.append({
+                    "spec_id": spec_id,
+                    "reason": "render_error",
+                    "detail": f"renderer returned unsupported type {type(result).__name__}",
+                })
+                report.journal_events.append(
+                    _journal("artifact.failed", spec_id, ts, reason="render_error")
+                )
+                continue
 
         emitted_digest = "sha256:" + hashlib.sha256(body).hexdigest()
 
@@ -467,6 +583,13 @@ def rebuild_artifacts(
                 _journal("artifact.failed", spec_id, ts, reason="write_error")
             )
             continue
+
+        # -- pipeline-html asset mirror --------------------------------------
+        if renderer_name == "pipeline-html":
+            try:
+                _copy_pipeline_html_assets(out_dir)
+            except Exception:  # noqa: BLE001 — asset copy is best-effort
+                pass
 
         report.built.append({
             "spec_id": spec_id,
