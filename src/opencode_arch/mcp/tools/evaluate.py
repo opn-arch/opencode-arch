@@ -78,11 +78,38 @@ async def evaluate_workspace(
         "scorecards": scorecards,
         "overall_health": round(overall, 1),
         "recommendations": recommendations,
+        "sil_summary": _collect_sil_summary(repo),
         "from_cache": False,
     }
 
     eval_path.write_text(yaml.dump(result, default_flow_style=False, sort_keys=False))
     return result
+
+
+def _collect_sil_summary(repo_path: Path) -> dict:
+    """Return per-component SIL rollup dict keyed by component_id.
+
+    Reads ``<repo>/.architecture/sil.sqlite`` if present. Gracefully
+    returns ``{}`` when the store is missing or unreadable. Each entry is
+    ``{invocations_7d, failure_rate_7d, avg_duration_ms}``.
+    """
+    sil_db = repo_path / ".architecture" / "sil.sqlite"
+    if not sil_db.exists():
+        return {}
+    try:
+        from opencode_arch.sil.store import SILStore
+
+        store = SILStore(sil_db)
+        summary: dict[str, dict[str, Any]] = {}
+        for comp_id in store.distinct_component_ids():
+            summary[comp_id] = {
+                "invocations_7d": store.invocations_7d(comp_id),
+                "failure_rate_7d": round(store.failure_rate_7d(comp_id), 4),
+                "avg_duration_ms": round(store.avg_duration_ms(comp_id), 2),
+            }
+        return summary
+    except Exception:
+        return {}
 
 
 def _evaluate_repo(sys_name: str, sys_path: Path) -> dict:

@@ -152,6 +152,14 @@ class SILStore:
             avg = cur.fetchone()[0]
             return float(avg) if avg is not None else 0.0
 
+    def distinct_component_ids(self) -> list[str]:
+        """Return sorted list of distinct component_ids present in the store."""
+        with self._lock:
+            cur = self._conn.execute(
+                "SELECT DISTINCT component_id FROM sil_events ORDER BY component_id"
+            )
+            return [row[0] for row in cur.fetchall()]
+
     # ---- AMS binding ------------------------------------------------------
 
     def bind_ams_decorator(self) -> bool:
