@@ -43,6 +43,7 @@ from opencode_arch.lifecycle_exec.merge import (
     three_way_merge,
 )
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 _REV_RE = re.compile(r"^\d{7}$")
 _MODEL_REL = Path("model") / ".architecture-model.yaml"
@@ -65,6 +66,7 @@ def _conflict_dict(c: Conflict) -> dict:
     return _json_safe(d)
 
 
+@instrumented("mcp_tool:architect_package_merge")
 @tool_result
 async def architect_package_merge_tool(
     repo_path: str,

@@ -31,6 +31,7 @@ from pathlib import Path
 
 from opencode_arch.lifecycle_exec import paths
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 _REV_RE = re.compile(r"^\d{1,7}$")
 _MODEL_REL = Path("model") / ".architecture-model.yaml"
@@ -38,6 +39,7 @@ _MANIFEST_REL = Path("manifest") / "manifest.json"
 _DIGEST_REL = Path("digest.json")
 
 
+@instrumented("mcp_tool:package_load")
 @tool_result
 async def package_load_tool(
     repo_path: str,

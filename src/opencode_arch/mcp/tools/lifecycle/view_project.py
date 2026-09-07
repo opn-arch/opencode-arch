@@ -14,8 +14,10 @@ from __future__ import annotations
 
 from opencode_arch.mcp.envelope import err, ok, tool_result
 from opencode_arch.mcp.tools.lifecycle._view_common import load_and_materialize
+from architecture_model.sil.decorators import instrumented
 
 
+@instrumented("mcp_tool:view_project")
 @tool_result
 async def view_project_tool(
     repo_path: str,

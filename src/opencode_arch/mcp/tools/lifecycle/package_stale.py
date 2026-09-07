@@ -15,8 +15,10 @@ from pathlib import Path
 
 from opencode_arch.lifecycle_exec import paths
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 
+@instrumented("mcp_tool:package_stale")
 @tool_result
 async def package_stale_tool(
     repo_path: str,

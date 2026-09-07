@@ -23,6 +23,7 @@ from pathlib import Path
 
 from opencode_arch.lifecycle_exec import paths
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 _REV_RE = re.compile(r"^\d{7}$")
 _MODEL_REL = Path("model") / ".architecture-model.yaml"
@@ -44,6 +45,7 @@ def _load_generation(pkg, gen_dir: Path):
     return model, manifest
 
 
+@instrumented("mcp_tool:package_diff")
 @tool_result
 async def package_diff_tool(
     repo_path: str,
