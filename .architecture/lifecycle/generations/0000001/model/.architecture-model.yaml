@@ -1,0 +1,1068 @@
+meta:
+  schema_version: '1.3'
+  project: opencode-arch
+  generated_at: ''
+entities:
+  actors:
+  - id: ACT-1
+    name: CLI User
+    status: ACTIVE
+    goals:
+    - Use opencode-arch effectively
+    type: human
+  behaviors:
+  - id: BEH-1
+    name: 'CLI: Run Benchmark'
+    status: ACTIVE
+    actor_id: ACT-1
+    steps:
+    - ArgumentParser
+    - add_argument
+    - parse_args
+    - print
+    - run_benchmark
+  - id: BEH-2
+    name: 'CLI: Benchmark Economy'
+    status: ACTIVE
+    actor_id: ACT-1
+    steps:
+    - ArgumentParser
+    - add_argument
+    - parse_args
+    - run
+    - print_report
+  - id: BEH-3
+    name: 'CLI: Main'
+    status: ACTIVE
+    actor_id: ACT-1
+    steps:
+    - ArgumentParser
+    - add_subparsers
+    - add_parser
+    - add_argument
+    - parse_args
+  interfaces:
+  - id: IF-1
+    name: run_benchmark CLI
+    status: ACTIVE
+    type: internal
+  - id: IF-2
+    name: benchmark_economy CLI
+    status: ACTIVE
+    type: internal
+  - id: IF-3
+    name: main CLI
+    status: ACTIVE
+    type: internal
+  - id: IF-4
+    name: COMP-3-1 Library API
+    status: ACTIVE
+    description: 18 public symbols exported
+    type: internal
+  - id: IF-5
+    name: COMP-3-2 Library API
+    status: ACTIVE
+    description: 6 public symbols exported
+    type: internal
+  - id: IF-6
+    name: COMP-3-3 Library API
+    status: ACTIVE
+    description: 10 public symbols exported
+    type: internal
+  - id: IF-7
+    name: COMP-3-4 Library API
+    status: ACTIVE
+    description: 14 public symbols exported
+    type: internal
+  - id: IF-8
+    name: COMP-3-5 Library API
+    status: ACTIVE
+    description: 3 public symbols exported
+    type: internal
+  - id: IF-9
+    name: COMP-3-6 Library API
+    status: ACTIVE
+    description: 2 public symbols exported
+    type: internal
+  - id: IF-10
+    name: COMP-3-7 Library API
+    status: ACTIVE
+    description: 33 public symbols exported
+    type: internal
+  - id: IF-11
+    name: COMP-3-8 Library API
+    status: ACTIVE
+    description: 6 public symbols exported
+    type: internal
+  - id: IF-12
+    name: COMP-3-12 Library API
+    status: ACTIVE
+    description: 3 public symbols exported
+    type: internal
+  - id: IF-13
+    name: COMP-3-13 Library API
+    status: ACTIVE
+    description: 8 public symbols exported
+    type: internal
+  - id: IF-auto-COMP-1
+    name: Extraction Tools API
+    status: ACTIVE
+    type: internal
+  - id: IF-auto-COMP-4
+    name: Requirements API
+    status: ACTIVE
+    type: internal
+  - id: IF-auto-COMP-5
+    name: Resolution API
+    status: ACTIVE
+    type: internal
+  - id: IF-auto-COMP-6
+    name: Context Tools API
+    status: ACTIVE
+    type: internal
+  - id: IF-auto-COMP-7
+    name: Model Management Tools API
+    status: ACTIVE
+    type: internal
+  - id: IF-auto-COMP-8
+    name: Documentation Tools API
+    status: ACTIVE
+    type: internal
+  - id: IF-auto-COMP-9
+    name: Quality Gate Tools API
+    status: ACTIVE
+    type: internal
+  - id: IF-auto-COMP-10
+    name: Requirements Tools API
+    status: ACTIVE
+    type: internal
+  - id: IF-auto-COMP-11
+    name: Live Analysis Tools API
+    status: ACTIVE
+    type: internal
+  - id: IF-auto-COMP-12
+    name: Runner API
+    status: ACTIVE
+    type: internal
+  - id: IF-auto-COMP-13
+    name: Telemetry API
+    status: ACTIVE
+    type: internal
+  - id: IF-auto-COMP-14
+    name: Learning API
+    status: ACTIVE
+    type: internal
+  - id: IF-auto-COMP-15
+    name: MCP Server API
+    status: ACTIVE
+    type: internal
+  constraints:
+  - id: CON-1
+    name: Python >=3.11
+    status: ACTIVE
+    type: technology
+  - id: CON-2
+    name: 'CI/CD: GitHub Actions'
+    status: ACTIVE
+    type: technology
+  components:
+  - id: COMP-1
+    name: Extraction Tools
+    status: ACTIVE
+    description: Source in src/opencode_arch/mcp/tools (5 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/mcp/tools/scan.py
+    - src/opencode_arch/mcp/tools/extract.py
+    - src/opencode_arch/mcp/tools/group.py
+    - src/opencode_arch/mcp/tools/ingest.py
+    - src/opencode_arch/mcp/tools/pipeline.py
+    contract: "Core extraction pipeline \u2014 scan, extract, group, ingest, pipeline\
+      \ orchestration"
+    constants:
+    - name: COMPRESSION_WARN_THRESHOLD
+      value: '50'
+      context: "architect_slice MCP tool \u2014 compress repository context for LLM\
+        \ consumption"
+    - name: COMPRESSION_CRITICAL_THRESHOLD
+      value: '200'
+      context: "architect_slice MCP tool \u2014 compress repository context for LLM\
+        \ consumption"
+    interfaces:
+    - name: exposes_to_Cli
+      kind: provides
+      target_component: COMP-3
+      symbols:
+      - store_extraction
+    - name: uses_Resolution
+      kind: requires
+      target_component: COMP-5
+      symbols:
+      - estimate_regenerability
+      - check_fidelity
+      - with_quality
+      - SessionAccumulator
+    - name: uses_Cli
+      kind: requires
+      target_component: COMP-3
+      symbols:
+      - drain_and_store
+    - name: uses_Requirements
+      kind: requires
+      target_component: COMP-4
+      symbols:
+      - hash_content
+      - cached_llm_call
+      - CachedResult
+      - LLMCache
+  - id: COMP-2
+    name: Artifacts
+    status: ACTIVE
+    description: Source in scripts (2 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/artifacts/context.py
+    - src/opencode_arch/artifacts/diagrams.py
+    - src/opencode_arch/artifacts/selector.py
+    - src/opencode_arch/artifacts/templates.py
+    contract: Context assembler for artifact generation
+  - id: COMP-3
+    name: CLI Commands
+    status: ACTIVE
+    description: Source in src/opencode_arch/cli (13 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/cli/bench.py
+    - src/opencode_arch/cli/calibrate.py
+    - src/opencode_arch/cli/confidence.py
+    - src/opencode_arch/cli/docs.py
+    - src/opencode_arch/cli/docs_validator.py
+    - src/opencode_arch/cli/export_data.py
+    - src/opencode_arch/cli/extract.py
+    - src/opencode_arch/cli/gap_analyzer.py
+    - src/opencode_arch/cli/generate.py
+    - src/opencode_arch/cli/launch.py
+    - src/opencode_arch/cli/main.py
+    - src/opencode_arch/cli/metrics.py
+    - src/opencode_arch/cli/regen_loop.py
+    contract: "CLI command implementations \u2014 extract, generate, docs, bench,\
+      \ launch, metrics"
+    test_contracts:
+    - test_file: test_docs_validator.py
+      test_method: test_all_valid_references_pass
+      assertion: result.total_artifacts == 1
+      contract_type: value_equality
+    - test_file: test_docs_validator.py
+      test_method: test_empty_directory_is_valid
+      assertion: result.total_artifacts == 0
+      contract_type: value_equality
+    - test_file: test_docs_validator.py
+      test_method: test_returns_empty_for_none
+      assertion: files == set()
+      contract_type: value_equality
+    - test_file: test_docs_validator.py
+      test_method: test_clean_artifact_passes
+      assertion: result.passed == 1
+      contract_type: value_equality
+    - test_file: test_docs_validator.py
+      test_method: test_no_manifest_skips_file_checks
+      assertion: len(path_errors) == 0
+      contract_type: value_equality
+    - test_file: test_docs_validator.py
+      test_method: test_from_frontmatter
+      assertion: _get_artifact_id_from_file(filepath) == 'system-overview'
+      contract_type: value_equality
+    - test_file: test_docs_validator.py
+      test_method: test_fallback_to_filename
+      assertion: _get_artifact_id_from_file(filepath) == 'api-reference'
+      contract_type: value_equality
+    - test_file: test_gap_analyzer.py
+      test_method: test_deduplication
+      assertion: 'result.count(''Missing symbol: X'') == 1'
+      contract_type: value_equality
+    - test_file: test_gap_analyzer.py
+      test_method: test_no_failures
+      assertion: result == []
+      contract_type: value_equality
+    - test_file: test_launch.py
+      test_method: test_idempotent
+      assertion: content.count(CONTEXT_START) == 1
+      contract_type: value_equality
+    - test_file: test_launch.py
+      test_method: test_creates_if_missing
+      assertion: data['name'] == 'opencode-arch'
+      contract_type: value_equality
+    - test_file: test_launch.py
+      test_method: test_does_not_overwrite_existing
+      assertion: 'data == {''custom'': True}'
+      contract_type: value_equality
+    - test_file: test_launch.py
+      test_method: test_preflight_on_empty_dir
+      assertion: result['repo'] == str(tmp_path)
+      contract_type: value_equality
+    - test_file: test_regen_loop.py
+      test_method: test_passed_and_failed
+      assertion: passed == 3
+      contract_type: value_equality
+    - test_file: test_regen_loop.py
+      test_method: test_all_passed
+      assertion: passed == 5
+      contract_type: value_equality
+    - test_file: test_regen_loop.py
+      test_method: test_all_failed
+      assertion: passed == 0
+      contract_type: value_equality
+    - test_file: test_regen_loop.py
+      test_method: test_no_summary
+      assertion: passed == 0
+      contract_type: value_equality
+    - test_file: test_regen_loop.py
+      test_method: test_no_test_files
+      assertion: result['total'] == 0
+      contract_type: value_equality
+    - test_file: test_regen_loop.py
+      test_method: test_nonexistent_files
+      assertion: result['total'] == 0
+      contract_type: value_equality
+    - test_file: test_regen_loop.py
+      test_method: test_real_passing_test
+      assertion: result['passed'] == 1
+      contract_type: value_equality
+    - test_file: test_regen_loop.py
+      test_method: test_real_failing_test
+      assertion: result['failed'] == 1
+      contract_type: value_equality
+    - test_file: test_runner.py
+      test_method: test_run_result_fields
+      assertion: r.output == 'hello'
+      contract_type: value_equality
+    - test_file: test_telemetry.py
+      test_method: test_record_and_query
+      assertion: len(records) == 1
+      contract_type: value_equality
+    - test_file: test_telemetry.py
+      test_method: test_record_multiple
+      assertion: len(records) == 5
+      contract_type: value_equality
+    - test_file: test_telemetry.py
+      test_method: test_average_metrics
+      assertion: avg['avg_context_tokens'] == 500
+      contract_type: value_equality
+    interfaces:
+    - name: uses_Tools
+      kind: requires
+      target_component: COMP-1
+      symbols:
+      - store_extraction
+    - name: exposes_to_Tools
+      kind: provides
+      target_component: COMP-1
+      symbols:
+      - drain_and_store
+  - id: COMP-4
+    name: Requirements
+    status: ACTIVE
+    description: Source in src/opencode_arch/llm, src/opencode_arch/requirements (5
+      files)
+    source_block: S1
+    files:
+    - src/opencode_arch/llm/cache.py
+    - src/opencode_arch/requirements/llm_extractor.py
+    - src/opencode_arch/requirements/matcher.py
+    - src/opencode_arch/requirements/parser.py
+    - src/opencode_arch/requirements/retroactive.py
+    contract: LLM-assisted requirement extraction from freeform documents
+    interfaces:
+    - name: exposes_to_Tools
+      kind: provides
+      target_component: COMP-1
+      symbols:
+      - hash_content
+      - cached_llm_call
+      - CachedResult
+      - LLMCache
+  - id: COMP-5
+    name: Resolution
+    status: ACTIVE
+    description: Source in src/opencode_arch/agent, src/opencode_arch/context, src/opencode_arch/mcp
+      (6 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/regen/self_heal.py
+    - src/opencode_arch/regen/spot_check.py
+    - src/opencode_arch/agent/resolution.py
+    - src/opencode_arch/mcp/quality.py
+    - src/opencode_arch/context/formatter.py
+    - src/opencode_arch/context/pipeline_bridge.py
+    contract: Self-healing loop for spot-check failures
+    test_contracts:
+    - test_file: test_spot_check.py
+      test_method: test_select_target_specific_component
+      assertion: target.component_id == 'COMP-1'
+      contract_type: value_equality
+    - test_file: test_spot_check.py
+      test_method: test_spot_check_dry_run
+      assertion: result.iterations == 0
+      contract_type: value_equality
+    - test_file: test_spot_check.py
+      test_method: test_classify_failure_missing_impl
+      assertion: len(actions) == 1
+      contract_type: value_equality
+    - test_file: test_spot_check.py
+      test_method: test_structural_similarity_identical
+      assertion: _structural_similarity(code, code) == 100.0
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_low_compression
+      assertion: estimate_regenerability(1.5, 100, 5, 0) == 0.78
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_medium_compression
+      assertion: estimate_regenerability(5, 100, 5, 0) == 0.69
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_high_compression
+      assertion: estimate_regenerability(30, 100, 5, 0) == 0.55
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_very_high_compression
+      assertion: estimate_regenerability(100, 100, 5, 0) == 0.44
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_extreme_compression
+      assertion: estimate_regenerability(300, 100, 5, 0) == 0.19
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_contract_boost
+      assertion: estimate_regenerability(1.5, 100, 5, 10) == 0.88
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_contract_boost_capped
+      assertion: estimate_regenerability(1.5, 100, 5, 30) == 0.98
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_confidence_scales
+      assertion: estimate_regenerability(1.5, 50, 5, 0) == 0.39
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_boundary_2x
+      assertion: estimate_regenerability(2, 100, 5, 0) == 0.69
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_boundary_10x
+      assertion: estimate_regenerability(10.1, 100, 5, 0) == 0.55
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_no_loss
+      assertion: result['entities_in'] == 3
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_data_loss
+      assertion: result['entities_in'] == 3
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_record_and_summary
+      assertion: s['total_calls'] == 3
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_dict_result
+      assertion: result['data'] == 42
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_string_result
+      assertion: result == 'hello'
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_quality_context_warnings
+      assertion: result['_quality']['warnings'] == ['something wrong']
+      contract_type: value_equality
+    - test_file: test_quality.py
+      test_method: test_non_dict_result_untouched
+      assertion: result == 'just a string'
+      contract_type: value_equality
+    interfaces:
+    - name: exposes_to_Tools
+      kind: provides
+      target_component: COMP-1
+      symbols:
+      - estimate_regenerability
+      - check_fidelity
+      - with_quality
+      - SessionAccumulator
+  - id: COMP-6
+    name: Context Tools
+    status: ACTIVE
+    description: Source in src/opencode_arch/mcp/tools (3 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/mcp/tools/slice.py
+    - src/opencode_arch/mcp/tools/check.py
+    - src/opencode_arch/mcp/tools/validate.py
+    contract: "Context slicing and model validation \u2014 slice, check, validate"
+  - id: COMP-7
+    name: Model Management Tools
+    status: ACTIVE
+    description: Source in src/opencode_arch/mcp/tools (4 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/mcp/tools/correct.py
+    - src/opencode_arch/mcp/tools/feedback.py
+    - src/opencode_arch/mcp/tools/learn.py
+    - src/opencode_arch/mcp/tools/stats.py
+    contract: "Model lifecycle management \u2014 corrections, feedback, learning,\
+      \ stats"
+  - id: COMP-8
+    name: Documentation Tools
+    status: ACTIVE
+    description: Source in src/opencode_arch/mcp/tools (3 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/mcp/tools/docs.py
+    - src/opencode_arch/mcp/tools/export.py
+    - src/opencode_arch/mcp/tools/decompose.py
+    contract: "SE documentation generation and export \u2014 docs, export, decompose"
+  - id: COMP-9
+    name: Quality Gate Tools
+    status: ACTIVE
+    description: Source in src/opencode_arch/mcp/tools (4 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/mcp/tools/gate.py
+    - src/opencode_arch/mcp/tools/generate.py
+    - src/opencode_arch/mcp/tools/llm_audit.py
+    - src/opencode_arch/mcp/tools/regen_score.py
+    contract: "Quality gates and code generation \u2014 gate, generate, llm_audit,\
+      \ regen_score"
+  - id: COMP-10
+    name: Requirements Tools
+    status: ACTIVE
+    description: Source in src/opencode_arch/mcp/tools (3 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/mcp/tools/require.py
+    - src/opencode_arch/mcp/tools/trace_requirements.py
+    - src/opencode_arch/mcp/tools/author.py
+    contract: "Requirements capture and tracing \u2014 require, trace, author"
+  - id: COMP-11
+    name: Live Analysis Tools
+    status: ACTIVE
+    description: Source in src/opencode_arch/mcp/tools (5 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/mcp/tools/assess.py
+    - src/opencode_arch/mcp/tools/evaluate.py
+    - src/opencode_arch/mcp/tools/sync.py
+    - src/opencode_arch/mcp/tools/log.py
+    - src/opencode_arch/mcp/tools/diff.py
+    contract: "Live conversation analysis and DB sync \u2014 assess, evaluate, sync,\
+      \ log, diff"
+  - id: COMP-12
+    name: Runner
+    status: ACTIVE
+    description: Source in src/opencode_arch/runner (2 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/runner/base.py
+    - src/opencode_arch/runner/opencode.py
+    contract: "LLM runner backends \u2014 base protocol and OpenCode implementation"
+  - id: COMP-13
+    name: Telemetry
+    status: ACTIVE
+    description: Source in src/opencode_arch/telemetry (3 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/telemetry/collector.py
+    - src/opencode_arch/telemetry/recorder.py
+    - src/opencode_arch/telemetry/store.py
+    contract: Telemetry collection, recording, and persistent storage
+  - id: COMP-14
+    name: Learning
+    status: ACTIVE
+    description: Source in src/opencode_arch/learning (6 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/learning/adapter.py
+    - src/opencode_arch/learning/assessor.py
+    - src/opencode_arch/learning/classifier.py
+    - src/opencode_arch/learning/lessons.py
+    - src/opencode_arch/learning/maintainer.py
+    - src/opencode_arch/learning/patterns.py
+    contract: "Learning system \u2014 prompt adaptation, failure classification, lessons,\
+      \ drift detection"
+  - id: COMP-15
+    name: MCP Server
+    status: ACTIVE
+    description: Source in src/opencode_arch/mcp (3 files)
+    source_block: S1
+    files:
+    - src/opencode_arch/mcp/server.py
+    - src/opencode_arch/mcp/__init__.py
+    - src/opencode_arch/mcp/quality.py
+    contract: MCP server registration and tool dispatch
+  - id: COMP-COMMENT-SYNC
+    name: Comment Sync & Work Issue Integration
+    status: ACTIVE
+    description: MCP-side glue for the comment-view loop. Sync tool pushes local comments
+      to logs-db; work_issue tool converts issues into work orders. `lifecycle_exec.commit`
+      records structured commit events on proposal apply.
+    source_block: S1
+    files:
+    - src/opencode_arch/lifecycle_exec/commit.py
+    - src/opencode_arch/logs_db/__init__.py
+    - src/opencode_arch/logs_db/client.py
+    - src/opencode_arch/mcp/tools/sync.py
+    - src/opencode_arch/mcp/tools/work_issue.py
+    - src/opencode_arch/mcp/server.py
+    - src/opencode_arch/session.py
+    contract: 'MCP tools: architect_sync, architect_work_issue. Session accumulator
+      buffers comments/findings for batched sync. logs-db client is a thin JSON POST
+      wrapper against the reviewer service API.'
+  - id: COMP-SIL-STORE
+    name: SI&L Store
+    status: ACTIVE
+    description: SQLite-backed telemetry store owning the SI&L event ring buffer.
+      50 recent events per component; snapshot writer emits per-component YAML rollups.
+      Consumed by architect_component_health and architect_evaluate MCP tools.
+    source_block: S1
+    files:
+    - src/opencode_arch/sil/__init__.py
+    - src/opencode_arch/sil/store.py
+    - src/opencode_arch/sil/snapshot.py
+    contract: 'SILStore(path).emit(component_id, kind, outcome, duration_ms). Query
+      API: invocations_7d, failure_rate_7d, avg_duration_ms, distinct_component_ids.
+      Snapshot writes `.architecture/sil/<cid>.yaml`.'
+  - id: COMP-LLM-PROVIDERS
+    name: LLM Provider Adapters
+    status: ACTIVE
+    description: Concrete LLMProvider implementations. MCPProvider invokes opencode
+      subprocess via runner; FrontierProvider talks Anthropic/OpenAI HTTPS; RelayExtProvider
+      posts to opencode-relay. Policy layer routes calls by TaskClass with cost caps
+      and fallback.
+    source_block: S1
+    files:
+    - src/opencode_arch/llm/policy.py
+    - src/opencode_arch/llm/registry.py
+    - src/opencode_arch/llm/providers/__init__.py
+    - src/opencode_arch/llm/providers/mcp.py
+    - src/opencode_arch/llm/providers/frontier.py
+    - src/opencode_arch/llm/providers/relay_ext.py
+    - src/opencode_arch/runner/opencode.py
+    contract: Providers implement complete/stream/structured/tokenize. Policy `.architecture/llm/policy.yaml`
+      maps TaskClass to RoutingRule(provider, model, max_cost_usd_per_call, fallback).
+      Runner.run_via_policy enforces caps and falls back on error.
+  - id: COMP-DASHBOARD-REBUILD
+    name: Pipeline HTML Rebuild Integration
+    status: ACTIVE
+    description: Rebuild executor branch that special-cases the pipeline-html renderer.
+      Opens the repo-local SIL store, wraps it in a rollup adapter, invokes `render_pipeline_html`,
+      and mirrors dashboard assets alongside the emitted HTML. Reuses standard digest/skip/write
+      plumbing.
+    source_block: S1
+    files:
+    - src/opencode_arch/lifecycle_exec/rebuild.py
+    contract: Detects renderer=="pipeline-html", builds _SILRollupAdapter over .architecture/sil.sqlite,
+      calls render_pipeline_html(materialized_slice, sil_store), writes UTF-8, mirrors
+      index.css + badges.js + drilldown.js.
+  - id: COMP-HEALTH-TOOL
+    name: Component Health MCP Tools
+    status: ACTIVE
+    description: MCP surface for SI&L observability. architect_component_health returns
+      a single-component health envelope; architect_evaluate merges sil_summary into
+      the standard evaluation report.
+    source_block: S1
+    files:
+    - src/opencode_arch/mcp/tools/component_health.py
+    - src/opencode_arch/mcp/tools/evaluate.py
+    - src/opencode_arch/mcp/tools/pipeline.py
+    contract: 'architect_component_health(COMP-*) -> {ok, record: {component_id, kind,
+      name, metrics, recent_events}, trend}. architect_evaluate now includes sil_summary
+      keyed by component_id.'
+  requirements:
+  - id: REQ-E1
+    name: regen_loop.py has 4 error-handling functions
+    status: ACTIVE
+    priority: could
+  - id: REQ-I1
+    name: 'RunnerBackend protocol requires: run'
+    status: ACTIVE
+    priority: must
+  - id: REQ-O1
+    name: Component COMP-9 has logging instrumentation
+    status: ACTIVE
+    priority: could
+  - id: REQ-Q1
+    name: Component COMP-3-5 has 14 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-T5
+    name: 'Python >=3.11: Project requires Python >=3.11'
+    status: ACTIVE
+    priority: must
+  - id: REQ-Q10
+    name: Component COMP-3 has 3 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q11
+    name: Component COMP-24 has 3 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q12
+    name: Component COMP-4 has 2 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q13
+    name: Component COMP-28 has 2 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q14
+    name: Component COMP-23 has 2 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q15
+    name: Component COMP-1 has 2 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q16
+    name: Component COMP-3-13 has 2 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q17
+    name: Component COMP-8 has 1 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q18
+    name: Component COMP-15 has 1 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q19
+    name: Component COMP-9 has 1 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q2
+    name: Component COMP-3-5 has 14 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q3
+    name: Component COMP-3-9 has 12 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q4
+    name: Component COMP-3-4 has 7 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q5
+    name: Component COMP-3-12 has 6 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q6
+    name: Component COMP-3-1 has 6 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q7
+    name: Component COMP-3-8 has 5 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q8
+    name: Component COMP-3-2 has 3 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-Q9
+    name: Component COMP-3-13 has 2 test file(s) covering its source
+    status: ACTIVE
+    priority: should
+  - id: REQ-T6
+    name: 'Python >=3.11: Project requires Python >=3.11'
+    status: ACTIVE
+    priority: must
+relationships:
+- type: uses
+  from: COMP-1
+  to: COMP-13
+  description: Extraction Tools imports from Telemetry
+- type: uses
+  from: COMP-1
+  to: COMP-15
+  description: Extraction Tools imports from MCP Server
+- type: uses
+  from: COMP-1
+  to: COMP-8
+  description: Extraction Tools imports from Documentation Tools
+- type: uses
+  from: COMP-10
+  to: COMP-12
+  description: Requirements Tools imports from Runner
+- type: uses
+  from: COMP-10
+  to: COMP-15
+  description: Requirements Tools imports from MCP Server
+- type: uses
+  from: COMP-10
+  to: COMP-4
+  description: Requirements Tools imports from Requirements
+- type: uses
+  from: COMP-15
+  to: COMP-1
+  description: MCP Server imports from Extraction Tools
+- type: uses
+  from: COMP-15
+  to: COMP-10
+  description: MCP Server imports from Requirements Tools
+- type: uses
+  from: COMP-15
+  to: COMP-11
+  description: MCP Server imports from Live Analysis Tools
+- type: uses
+  from: COMP-15
+  to: COMP-6
+  description: MCP Server imports from Context Tools
+- type: uses
+  from: COMP-15
+  to: COMP-7
+  description: MCP Server imports from Model Management Tools
+- type: uses
+  from: COMP-15
+  to: COMP-8
+  description: MCP Server imports from Documentation Tools
+- type: uses
+  from: COMP-15
+  to: COMP-9
+  description: MCP Server imports from Quality Gate Tools
+- type: uses
+  from: COMP-3
+  to: COMP-1
+  description: CLI Commands imports from Extraction Tools
+- type: uses
+  from: COMP-3
+  to: COMP-12
+  description: CLI Commands imports from Runner
+- type: uses
+  from: COMP-3
+  to: COMP-13
+  description: CLI Commands imports from Telemetry
+- type: uses
+  from: COMP-3
+  to: COMP-14
+  description: CLI Commands imports from Learning
+- type: uses
+  from: COMP-3
+  to: COMP-6
+  description: CLI Commands imports from Context Tools
+- type: uses
+  from: COMP-3
+  to: COMP-8
+  description: CLI Commands imports from Documentation Tools
+- type: uses
+  from: COMP-3
+  to: COMP-9
+  description: CLI Commands imports from Quality Gate Tools
+- type: uses
+  from: COMP-6
+  to: COMP-13
+  description: Context Tools imports from Telemetry
+- type: uses
+  from: COMP-6
+  to: COMP-15
+  description: Context Tools imports from MCP Server
+- type: uses
+  from: COMP-7
+  to: COMP-13
+  description: Model Management Tools imports from Telemetry
+- type: uses
+  from: COMP-7
+  to: COMP-15
+  description: Model Management Tools imports from MCP Server
+- type: uses
+  from: COMP-8
+  to: COMP-15
+  description: Documentation Tools imports from MCP Server
+- type: uses
+  from: COMP-9
+  to: COMP-12
+  description: Quality Gate Tools imports from Runner
+- type: uses
+  from: COMP-9
+  to: COMP-13
+  description: Quality Gate Tools imports from Telemetry
+- type: uses
+  from: COMP-9
+  to: COMP-15
+  description: Quality Gate Tools imports from MCP Server
+- type: uses
+  from: COMP-9
+  to: COMP-4
+  description: Quality Gate Tools imports from Requirements
+- type: uses
+  from: COMP-9
+  to: COMP-5
+  description: Quality Gate Tools imports from Resolution
+- type: satisfies
+  from: COMP-3
+  to: REQ-E1
+- type: satisfies
+  from: COMP-3
+  to: REQ-I1
+- type: satisfies
+  from: COMP-3
+  to: REQ-O1
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q1
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q10
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q11
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q2
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q3
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q4
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q5
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q6
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q7
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q8
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q9
+- type: exposes
+  from: COMP-2
+  to: IF-1
+- type: exposes
+  from: COMP-2
+  to: IF-2
+- type: exposes
+  from: COMP-3
+  to: IF-3
+- type: satisfies
+  from: COMP-12
+  to: REQ-E1
+- type: satisfies
+  from: COMP-4
+  to: REQ-Q12
+- type: satisfies
+  from: COMP-1
+  to: REQ-Q15
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q16
+- type: satisfies
+  from: COMP-8
+  to: REQ-Q17
+- type: satisfies
+  from: COMP-15
+  to: REQ-Q18
+- type: satisfies
+  from: COMP-9
+  to: REQ-Q19
+- type: satisfies
+  from: COMP-13
+  to: REQ-E1
+- type: satisfies
+  from: COMP-12
+  to: REQ-Q13
+- type: satisfies
+  from: COMP-1
+  to: REQ-Q16
+- type: satisfies
+  from: COMP-3
+  to: REQ-Q17
+- type: satisfies
+  from: COMP-9
+  to: REQ-Q18
+- type: satisfies
+  from: COMP-15
+  to: REQ-Q19
+- type: exposes
+  from: COMP-3
+  to: IF-4
+- type: exposes
+  from: COMP-3
+  to: IF-5
+- type: exposes
+  from: COMP-3
+  to: IF-6
+- type: exposes
+  from: COMP-3
+  to: IF-7
+- type: exposes
+  from: COMP-3
+  to: IF-8
+- type: exposes
+  from: COMP-3
+  to: IF-9
+- type: exposes
+  from: COMP-3
+  to: IF-10
+- type: exposes
+  from: COMP-3
+  to: IF-11
+- type: exposes
+  from: COMP-3
+  to: IF-12
+- type: exposes
+  from: COMP-3
+  to: IF-13
+- type: exposes
+  from: COMP-1
+  to: IF-auto-COMP-1
+- type: exposes
+  from: COMP-4
+  to: IF-auto-COMP-4
+- type: exposes
+  from: COMP-5
+  to: IF-auto-COMP-5
+- type: exposes
+  from: COMP-6
+  to: IF-auto-COMP-6
+- type: exposes
+  from: COMP-7
+  to: IF-auto-COMP-7
+- type: exposes
+  from: COMP-8
+  to: IF-auto-COMP-8
+- type: exposes
+  from: COMP-9
+  to: IF-auto-COMP-9
+- type: exposes
+  from: COMP-10
+  to: IF-auto-COMP-10
+- type: exposes
+  from: COMP-11
+  to: IF-auto-COMP-11
+- type: exposes
+  from: COMP-12
+  to: IF-auto-COMP-12
+- type: exposes
+  from: COMP-13
+  to: IF-auto-COMP-13
+- type: exposes
+  from: COMP-14
+  to: IF-auto-COMP-14
+- type: exposes
+  from: COMP-15
+  to: IF-auto-COMP-15
+- type: depends-on
+  from: COMP-COMMENT-SYNC
+  to: COMP-15
+- type: depends-on
+  from: COMP-DASHBOARD-REBUILD
+  to: COMP-SIL-STORE
+- type: depends-on
+  from: COMP-HEALTH-TOOL
+  to: COMP-SIL-STORE
+- type: depends-on
+  from: COMP-LLM-PROVIDERS
+  to: COMP-15
