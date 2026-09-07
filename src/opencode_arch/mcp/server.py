@@ -507,6 +507,28 @@ try:
         return await sync_findings(repo_path=repo_path, dry_run=dry_run)
 
     @mcp.tool()
+    async def architect_work_issue(
+        repo_path: str,
+        issue_id: int,
+        dry_run: bool = False,
+        force: bool = False,
+    ) -> dict:
+        """Execute the comment→issue→dev loop for one logs-db issue.
+
+        Resolves the local comment stub, submits a WorkOrder, runs the configured
+        proposer, validates + applies the resulting proposal. Steps 10-13
+        (rebuild, commit, close) land in Phase A4.
+
+        Args:
+            repo_path: Repository root.
+            issue_id: logs-db issue id to work.
+            dry_run: If True, do not persist a new package generation.
+            force: Bypass idempotency check.
+        """
+        from opencode_arch.mcp.tools.work_issue import architect_work_issue as _impl
+        return _impl(repo_path, issue_id=issue_id, dry_run=dry_run, force=force)
+
+    @mcp.tool()
     async def architect_learn(
         learning_type: str,
         stage: str = "",
