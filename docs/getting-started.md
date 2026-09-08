@@ -100,4 +100,5 @@ The agent uses these tools in sequence: scan → group → slice → (produce mo
 ## Next Steps
 
 - [Collecting Training Data](training-data.md) — use opencode-arch to build fine-tuning datasets
+- [Architecture Refresh Templates](templates/README.md) — opt-in pre-commit hook and GitHub Actions workflow to keep the model in sync with code
 - [Contributing](../CONTRIBUTING.md) — how to develop and extend opencode-arch

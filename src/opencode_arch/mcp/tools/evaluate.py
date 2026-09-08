@@ -79,6 +79,7 @@ async def evaluate_workspace(
         "overall_health": round(overall, 1),
         "recommendations": recommendations,
         "sil_summary": _collect_sil_summary(repo),
+        "freshness_summary": _collect_freshness_summary(repo),
         "from_cache": False,
     }
 
@@ -110,6 +111,40 @@ def _collect_sil_summary(repo_path: Path) -> dict:
         return summary
     except Exception:
         return {}
+
+
+def _collect_freshness_summary(repo_path: Path) -> dict:
+    """Return freshness distribution over ``.architecture/lifecycle/artifacts/*``.
+
+    Phase 1 pragmatic implementation (Task 14): AMS Task 10 stamps
+    ``ProjectedView.provenance["freshness"]`` in-memory during ``project()``,
+    but the OCA rebuild path (``lifecycle_exec/rebuild.py``) writes raw
+    renderer bytes to ``<id>.<ext>`` without a provenance sidecar. Nothing
+    persisted on disk currently distinguishes fresh/stale/pending.
+
+    Until Phase 2 persists per-artifact provenance, every file found is
+    counted as ``unknown`` and the summary always exposes the four keys the
+    plan mandates (``fresh``, ``stale``, ``pending``, ``total``) plus an
+    ``unknown`` bucket for accurate accounting. Missing artifacts dir → all
+    zeros.
+    """
+    artifacts_dir = repo_path / ".architecture" / "lifecycle" / "artifacts"
+    summary = {"fresh": 0, "stale": 0, "pending": 0, "unknown": 0, "total": 0}
+    if not artifacts_dir.is_dir():
+        return summary
+    try:
+        for entry in artifacts_dir.iterdir():
+            # ``is_file()`` intentionally skips renderer-created subdirs
+            # (e.g. ``assets/`` next to ``pipeline.html``, see
+            # ``lifecycle_exec/rebuild.py`` pipeline-html renderer).
+            if not entry.is_file():
+                continue
+            # No persisted freshness marker yet — bucket as unknown.
+            summary["unknown"] += 1
+            summary["total"] += 1
+    except OSError:
+        pass
+    return summary
 
 
 def _evaluate_repo(sys_name: str, sys_path: Path) -> dict:
