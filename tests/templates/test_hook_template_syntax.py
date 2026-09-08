@@ -18,7 +18,20 @@ def test_pre_commit_hook_is_valid_bash():
 def test_pre_commit_hook_has_shebang_and_strict_mode():
     lines = HOOK.read_text().splitlines()
     assert lines[0] == "#!/usr/bin/env bash", f"missing bash shebang: {lines[0]!r}"
-    assert any("set -euo pipefail" in ln for ln in lines[:10]), "missing strict-mode preamble"
+    # `-e` is intentionally omitted so the hook can inspect `opencode-arch
+    # extract`'s exit status and honor OPENCODE_ARCH_STRICT. `-u` and
+    # `pipefail` remain required.
+    assert any("set -uo pipefail" in ln for ln in lines[:20]), (
+        "missing strict-mode preamble (`set -uo pipefail`)"
+    )
+
+
+def test_pre_commit_hook_gates_failure_behind_strict_env():
+    body = HOOK.read_text()
+    assert "OPENCODE_ARCH_STRICT" in body, (
+        "hook must gate abort-on-failure behind OPENCODE_ARCH_STRICT to avoid "
+        "training contributors to use --no-verify on transient LLM errors"
+    )
 
 
 def test_github_actions_workflow_is_valid_yaml():
