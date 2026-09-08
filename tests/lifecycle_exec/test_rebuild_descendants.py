@@ -1,17 +1,36 @@
 """Verification tests for scope='descendants' rebuild behavior (Phase 1, Task 13).
 
-Task 13 was originally scoped in the Phase 1 plan as "extend
-``rebuild_artifacts`` to iterate per-M2 sub-model when
-``slice.scope == 'descendants'``." Recon during execution found this
-capability already exists inside
-``architecture_model.lifecycle.model_slice_materializer.materialize`` —
-when ``slice.scope == 'descendants'`` it walks ``iter_descendants(pkg)``
-and merges each child model into the projected fragment.
+Phase 1 shipping semantics vs. plan intent — READ BEFORE EDITING
+-----------------------------------------------------------------
+Plan Task 13 originally asked for **per-subsystem fan-out**: enumerate
+``iter_descendants(root_pkg, include_self=True)``, rebuild ONCE per
+descendant, and emit N artifacts whose output paths carry a subsystem
+slug (e.g. ``conops-a.md``, ``conops-b.md``). See
+``docs/plans/2026-09-08-phase-1-substrate-and-liveness.md`` lines
+1449–1528 in the AMS repo.
 
-This test module locks in that behavior end-to-end through the
-``rebuild_artifacts`` executor so future refactors cannot silently
-regress it, and documents the observable semantics (single artifact,
-merged fragment) for the mapping layer above.
+The Phase 1 shipping semantics are **merged-fragment**, NOT fan-out:
+
+* ``materialize()`` (ams ``model_slice_materializer.py:184``) walks
+  ``iter_descendants(pkg, include_self=False)`` and merges every
+  descendant's entities into ONE fragment.
+* ``rebuild_artifacts`` (oca ``lifecycle_exec/rebuild.py:210``) has
+  no ``slice.scope`` awareness — it produces exactly one artifact per
+  ``ArtifactSpec``, regardless of scope, at the fixed path
+  ``<lifecycle>/artifacts/<spec_id>.<ext>``.
+
+Merged-fragment answers "give me one architectural document that
+spans the whole tree." Per-subsystem fan-out answers "give me one
+document per M2 subsystem, addressable by slug." They are different
+features. Phase 1 ships merged-fragment; per-subsystem fan-out is
+deferred to Phase 2 (see the Phase 2 plan for the "Executor
+per-subsystem fan-out" task).
+
+**These tests lock in the merged-fragment path.** They are the
+regression suite for that behavior. When fan-out lands in Phase 2 it
+will introduce ADDITIONAL tests asserting ``len(report.built) == N``
+and per-artifact fragment isolation; it should not modify these
+assertions.
 
 Fixture note
 ------------
@@ -24,7 +43,7 @@ descendants are walked. We register children by editing the root
 ``package_children_add_tool`` because that tool validates the child
 path against ``<lifecycle>/<rel>`` (un-resolved), whereas ``rebuild``
 resolves via ``<lifecycle>/CURRENT/<rel>``. Writing directly matches
-what the plan calls "M2 sub-model iteration" without depending on the
+what the merge path actually exercises without depending on the
 authoring surface.
 """
 from __future__ import annotations
@@ -227,10 +246,20 @@ def test_descendants_scope_merges_child_models(tmp_path, capturing_projector):
     assert len(report.built) == 1
     # Fragment contains BOTH root + descendant entities.
     assert capturing_projector["component_ids"] == ["COMP-CHILD", "COMP-ROOT"]
+    # One artifact => exactly one projector invocation (guards against
+    # double-materialize regressions in the executor).
+    assert capturing_projector["call_count"] == 1
 
 
-def test_descendants_scope_without_children_equals_local(tmp_path, capturing_projector):
-    """No children => descendants scope yields the same result as local."""
+def test_descendants_scope_no_children_is_not_error(tmp_path, capturing_projector):
+    """scope='descendants' with zero registered children is a no-op, not an error.
+
+    Boundary check only — the descendants merge loop degrades to a no-op
+    here, so this test would still pass if ``iter_descendants`` were
+    stubbed to return ``[]``. The real merge-semantics coverage lives in
+    ``test_descendants_scope_merges_child_models`` and
+    ``test_descendants_scope_multiple_children``.
+    """
     _publish_root(tmp_path)  # no _make_child
 
     report = _rebuild(
@@ -263,8 +292,11 @@ def test_descendants_scope_multiple_children(tmp_path, capturing_projector):
         [_slice(scope="descendants")],
     )
     assert report.failed == [], report.failed
+    # Assertion is stable because the projector sorts by id — this does
+    # NOT pin ``iter_descendants`` traversal order.
     assert capturing_projector["component_ids"] == [
         "COMP-CHILD",
         "COMP-CHILD-B",
         "COMP-ROOT",
     ]
+    assert capturing_projector["call_count"] == 1
