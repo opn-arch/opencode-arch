@@ -1,0 +1,28 @@
+name: Architecture Refresh
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install opencode-arch
+        run: pip install opencode-arch
+      - name: Refresh model + views
+        # No dedicated `refresh` subcommand exists yet; `extract` produces the
+        # canonical .architecture-model.yaml and downstream artifacts.
+        run: opencode-arch extract .
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: architecture-artifacts
+          path: .architecture/lifecycle/artifacts/
