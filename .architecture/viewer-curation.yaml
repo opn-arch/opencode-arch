@@ -1,0 +1,49 @@
+version: 1
+# Viewer curation overlay for the review branch (OCA side).
+#
+# Selectors use qualified `root::` IDs so they resolve against the top-level
+# model. The viewer CLI aliases the loaded model as `root` regardless of the
+# --model source path.
+#
+# Curated groupings surface Plan A + Plan B additions in the SE views.
+views:
+  functional:
+    featured:
+      - root::COMP-COMMENT-SYNC
+      - root::COMP-SIL-STORE
+      - root::COMP-LLM-PROVIDERS
+      - root::COMP-DASHBOARD-REBUILD
+      - root::COMP-HEALTH-TOOL
+    groups:
+      - id: view-comment-pipeline
+        label: "View-Comment Pipeline (Plan A)"
+        members:
+          - root::COMP-COMMENT-SYNC
+      - id: sil-llm-dashboard
+        label: "SIL + LLM Provider + Dashboard (Plan B)"
+        members:
+          - root::COMP-SIL-STORE
+          - root::COMP-LLM-PROVIDERS
+          - root::COMP-DASHBOARD-REBUILD
+          - root::COMP-HEALTH-TOOL
+  logical:
+    featured:
+      - root::COMP-COMMENT-SYNC
+      - root::COMP-SIL-STORE
+      - root::COMP-LLM-PROVIDERS
+      - root::COMP-DASHBOARD-REBUILD
+      - root::COMP-HEALTH-TOOL
+    groups:
+      - id: view-comment-pipeline-logical
+        label: "View-Comment Pipeline (Plan A)"
+        kind: aggregate
+        members:
+          - root::COMP-COMMENT-SYNC
+      - id: sil-llm-dashboard-logical
+        label: "SIL + LLM Provider + Dashboard (Plan B)"
+        kind: aggregate
+        members:
+          - root::COMP-SIL-STORE
+          - root::COMP-LLM-PROVIDERS
+          - root::COMP-DASHBOARD-REBUILD
+          - root::COMP-HEALTH-TOOL

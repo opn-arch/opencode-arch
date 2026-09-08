@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pipeline Dashboard</title>
+  <link rel="stylesheet" href="assets/pipeline_dashboard/index.css">
+</head>
+<body>
+  <main id="pipeline-root" data-view="pipeline-html"></main>
+  <aside id="pipeline-drilldown" hidden></aside>
+  <script id="pipeline-state" type="application/json">
+{
+  "badges": {
+    "COMP-15": {
+      "avg_duration_ms": 42.16,
+      "failure_rate_7d": 0.0078,
+      "invocations_7d": 1284
+    },
+    "COMP-COMMENT-SYNC": {
+      "avg_duration_ms": 188.18,
+      "failure_rate_7d": 0.0909,
+      "invocations_7d": 88
+    },
+    "COMP-DASHBOARD-REBUILD": {
+      "avg_duration_ms": 22.22,
+      "failure_rate_7d": 0.0202,
+      "invocations_7d": 445
+    },
+    "COMP-HEALTH-TOOL": {
+      "avg_duration_ms": 55.13,
+      "failure_rate_7d": 0.0047,
+      "invocations_7d": 640
+    },
+    "COMP-LLM-PROVIDERS": {
+      "avg_duration_ms": 876.31,
+      "failure_rate_7d": 0.0619,
+      "invocations_7d": 210
+    },
+    "COMP-SIL-STORE": {
+      "avg_duration_ms": 8.0,
+      "failure_rate_7d": 0.0009,
+      "invocations_7d": 3200
+    }
+  },
+  "edges": [
+    {
+      "from": "COMP-1",
+      "to": "COMP-13",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-1",
+      "to": "COMP-15",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-1",
+      "to": "COMP-8",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-10",
+      "to": "COMP-12",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-10",
+      "to": "COMP-15",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-10",
+      "to": "COMP-4",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-15",
+      "to": "COMP-1",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-15",
+      "to": "COMP-10",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-15",
+      "to": "COMP-11",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-15",
+      "to": "COMP-6",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-15",
+      "to": "COMP-7",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-15",
+      "to": "COMP-8",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-15",
+      "to": "COMP-9",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-3",
+      "to": "COMP-1",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-3",
+      "to": "COMP-12",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-3",
+      "to": "COMP-13",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-3",
+      "to": "COMP-14",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-3",
+      "to": "COMP-6",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-3",
+      "to": "COMP-8",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-3",
+      "to": "COMP-9",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-6",
+      "to": "COMP-13",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-6",
+      "to": "COMP-15",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-7",
+      "to": "COMP-13",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-7",
+      "to": "COMP-15",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-8",
+      "to": "COMP-15",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-9",
+      "to": "COMP-12",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-9",
+      "to": "COMP-13",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-9",
+      "to": "COMP-15",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-9",
+      "to": "COMP-4",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-9",
+      "to": "COMP-5",
+      "type": "uses"
+    },
+    {
+      "from": "COMP-COMMENT-SYNC",
+      "to": "COMP-15",
+      "type": "depends-on"
+    },
+    {
+      "from": "COMP-DASHBOARD-REBUILD",
+      "to": "COMP-SIL-STORE",
+      "type": "depends-on"
+    },
+    {
+      "from": "COMP-HEALTH-TOOL",
+      "to": "COMP-SIL-STORE",
+      "type": "depends-on"
+    },
+    {
+      "from": "COMP-LLM-PROVIDERS",
+      "to": "COMP-15",
+      "type": "depends-on"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "COMP-1",
+      "kind": "component",
+      "name": "Extraction Tools"
+    },
+    {
+      "id": "COMP-10",
+      "kind": "component",
+      "name": "Requirements Tools"
+    },
+    {
+      "id": "COMP-11",
+      "kind": "component",
+      "name": "Live Analysis Tools"
+    },
+    {
+      "id": "COMP-12",
+      "kind": "component",
+      "name": "Runner"
+    },
+    {
+      "id": "COMP-13",
+      "kind": "component",
+      "name": "Telemetry"
+    },
+    {
+      "id": "COMP-14",
+      "kind": "component",
+      "name": "Learning"
+    },
+    {
+      "id": "COMP-15",
+      "kind": "component",
+      "name": "MCP Server"
+    },
+    {
+      "id": "COMP-2",
+      "kind": "component",
+      "name": "Artifacts"
+    },
+    {
+      "id": "COMP-3",
+      "kind": "component",
+      "name": "CLI Commands"
+    },
+    {
+      "id": "COMP-4",
+      "kind": "component",
+      "name": "Requirements"
+    },
+    {
+      "id": "COMP-5",
+      "kind": "component",
+      "name": "Resolution"
+    },
+    {
+      "id": "COMP-6",
+      "kind": "component",
+      "name": "Context Tools"
+    },
+    {
+      "id": "COMP-7",
+      "kind": "component",
+      "name": "Model Management Tools"
+    },
+    {
+      "id": "COMP-8",
+      "kind": "component",
+      "name": "Documentation Tools"
+    },
+    {
+      "id": "COMP-9",
+      "kind": "component",
+      "name": "Quality Gate Tools"
+    },
+    {
+      "id": "COMP-COMMENT-SYNC",
+      "kind": "component",
+      "name": "Comment Sync & Work Issue Integration"
+    },
+    {
+      "id": "COMP-DASHBOARD-REBUILD",
+      "kind": "component",
+      "name": "Pipeline HTML Rebuild Integration"
+    },
+    {
+      "id": "COMP-HEALTH-TOOL",
+      "kind": "component",
+      "name": "Component Health MCP Tools"
+    },
+    {
+      "id": "COMP-LLM-PROVIDERS",
+      "kind": "component",
+      "name": "LLM Provider Adapters"
+    },
+    {
+      "id": "COMP-SIL-STORE",
+      "kind": "component",
+      "name": "SI&L Store"
+    }
+  ]
+}
+  </script>
+  <script src="assets/pipeline_dashboard/badges.js" defer></script>
+  <script src="assets/pipeline_dashboard/drilldown.js" defer></script>
+</body>
+</html>

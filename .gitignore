@@ -7,3 +7,8 @@ build/
 *.egg
 .venv/
 .architecture-archive/
+
+# Review session — local only
+review/
+.architecture/sil.sqlite
+.architecture/lifecycle/.locks/

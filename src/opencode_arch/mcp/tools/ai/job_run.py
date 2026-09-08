@@ -32,6 +32,7 @@ from pathlib import Path
 import yaml
 
 from opencode_arch.mcp.envelope import err, ok, tool_result
+from architecture_model.sil.decorators import instrumented
 
 _CONFIG_REL = ".architecture/ai/proposer_config.yaml"
 
@@ -44,6 +45,7 @@ def _malformed(msg: str) -> dict:
     )
 
 
+@instrumented("mcp_tool:architect_job_run")
 @tool_result
 async def architect_job_run_tool(repo_path: str, job_id: str) -> dict:
     """Execute one queued job through the configured proposer."""

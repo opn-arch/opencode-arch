@@ -1,0 +1,35 @@
+kind: model-patch
+provenance:
+  work_order_id: review-plan-a-oca
+  model_version: '1.3'
+  prompt_digest: sha256-v1:review-session-plan-a-oca
+  proposal_id: sha256-v1:review-plan-a-oca
+operations:
+  - op: add
+    target_kind: components
+    value:
+      id: COMP-COMMENT-SYNC
+      name: Comment Sync & Work Issue Integration
+      status: ACTIVE
+      description: >-
+        MCP-side glue for the comment-view loop. Sync tool pushes local
+        comments to logs-db; work_issue tool converts issues into work orders.
+        `lifecycle_exec.commit` records structured commit events on
+        proposal apply.
+      source_block: S1
+      files:
+        - src/opencode_arch/lifecycle_exec/commit.py
+        - src/opencode_arch/logs_db/__init__.py
+        - src/opencode_arch/logs_db/client.py
+        - src/opencode_arch/mcp/tools/sync.py
+        - src/opencode_arch/mcp/tools/work_issue.py
+        - src/opencode_arch/mcp/server.py
+        - src/opencode_arch/session.py
+      contract: >-
+        MCP tools: architect_sync, architect_work_issue. Session accumulator
+        buffers comments/findings for batched sync. logs-db client is a
+        thin JSON POST wrapper against the reviewer service API.
+extra_relationships:
+  - from: COMP-COMMENT-SYNC
+    to: COMP-15
+    type: depends-on

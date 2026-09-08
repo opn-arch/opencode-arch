@@ -23,6 +23,30 @@ def _slugify(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
+def _write_sil_snapshots(repo_root: Path) -> None:
+    """Materialize per-component SIL snapshots to ``<repo>/.architecture/sil/<comp>.yaml``.
+
+    Called at the tail of a successful pipeline run as the plan's "cron
+    hook" — a periodic YAML materialization of the SQLite store. All
+    exceptions are swallowed by the caller so pipeline runs are never
+    blocked by snapshot failures.
+    """
+    sil_db = repo_root / ".architecture" / "sil.sqlite"
+    if not sil_db.exists():
+        return
+    from opencode_arch.sil.store import SILStore
+    from opencode_arch.sil.snapshot import write_snapshot
+
+    store = SILStore(sil_db)
+    out_dir = repo_root / ".architecture" / "sil"
+    for comp_id in store.distinct_component_ids():
+        try:
+            write_snapshot(store, comp_id, out_dir / f"{_slugify(comp_id)}.yaml")
+        except Exception:
+            # per-component failures are non-fatal.
+            continue
+
+
 @with_quality
 async def run_pipeline(
     repo_path: str,
@@ -439,6 +463,13 @@ async def run_pipeline(
             response["scope"] = boundary.system_id
             response["system_name"] = boundary.name
             response["system_files"] = boundary.files
+
+        # B2.2.5: snapshot every distinct component in the SIL store to YAML.
+        # Best-effort — snapshot failures must not fail the pipeline call.
+        try:
+            _write_sil_snapshots(root)
+        except Exception:
+            pass
 
         return response
     except Exception as e:

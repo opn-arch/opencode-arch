@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pipeline Dashboard</title>
+  <link rel="stylesheet" href="assets/pipeline_dashboard/index.css">
+</head>
+<body>
+  <main id="pipeline-root" data-view="pipeline-html"></main>
+  <aside id="pipeline-drilldown" hidden></aside>
+  <script id="pipeline-state" type="application/json">
+{
+  "badges": {
+    "COMP-COMMENT-SYNC": {
+      "avg_duration_ms": 188.18,
+      "failure_rate_7d": 0.0909,
+      "invocations_7d": 88
+    }
+  },
+  "edges": [],
+  "nodes": [
+    {
+      "id": "COMP-COMMENT-SYNC",
+      "kind": "component",
+      "name": "Comment Sync & Work Issue Integration"
+    }
+  ]
+}
+  </script>
+  <script src="assets/pipeline_dashboard/badges.js" defer></script>
+  <script src="assets/pipeline_dashboard/drilldown.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+{"event":"package.publish.begin","id":"f127e1797eea4f6dabb4d0843072e9c6","payload":{"architecture_id":"oca-root","generation":1,"root_digest":"sha256-v1:4ff78ad2f7fcc2f44b16f2db8f69477e288a822c5df2030618ee545f6da20ae3"},"ts":"2026-09-07T16:20:48.188268Z"}
+{"event":"package.publish.commit","id":"7363d290991644b99f6f092bd6322898","payload":{"architecture_id":"oca-root","generation":1,"root_digest":"sha256-v1:4ff78ad2f7fcc2f44b16f2db8f69477e288a822c5df2030618ee545f6da20ae3"},"ts":"2026-09-07T16:20:48.194896Z"}
+{"event":"package.publish","id":"3b8115aab71341298bc01de1c8cbf28a","payload":{"actor":"mcp","digest":"sha256-v1:4ff78ad2f7fcc2f44b16f2db8f69477e288a822c5df2030618ee545f6da20ae3","package_id":"oca-root","revision":"0000001"},"ts":"2026-09-07T16:20:48.195132Z"}

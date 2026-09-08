@@ -24,8 +24,10 @@ import yaml
 
 from opencode_arch.lifecycle_exec import paths
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 
+@instrumented("mcp_tool:slice_materialize")
 @tool_result
 async def slice_materialize_tool(
     repo_path: str,

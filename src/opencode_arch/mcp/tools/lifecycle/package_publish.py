@@ -34,8 +34,10 @@ import json
 
 from opencode_arch.lifecycle_exec import paths
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 
+@instrumented("mcp_tool:publish_package")
 @tool_result
 async def publish_package_tool(
     repo_path: str,

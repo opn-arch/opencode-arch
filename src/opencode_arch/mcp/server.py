@@ -507,6 +507,28 @@ try:
         return await sync_findings(repo_path=repo_path, dry_run=dry_run)
 
     @mcp.tool()
+    async def architect_work_issue(
+        repo_path: str,
+        issue_id: int,
+        dry_run: bool = False,
+        force: bool = False,
+    ) -> dict:
+        """Execute the comment→issue→dev loop for one logs-db issue.
+
+        Resolves the local comment stub, submits a WorkOrder, runs the configured
+        proposer, validates + applies the resulting proposal. Steps 10-13
+        (rebuild, commit, close) land in Phase A4.
+
+        Args:
+            repo_path: Repository root.
+            issue_id: logs-db issue id to work.
+            dry_run: If True, do not persist a new package generation.
+            force: Bypass idempotency check.
+        """
+        from opencode_arch.mcp.tools.work_issue import architect_work_issue as _impl
+        return _impl(repo_path, issue_id=issue_id, dry_run=dry_run, force=force)
+
+    @mcp.tool()
     async def architect_learn(
         learning_type: str,
         stage: str = "",
@@ -1043,6 +1065,32 @@ try:
             base_revision=base_revision,
             local_revision=local_revision,
             remote_revision=remote_revision,
+        )
+
+    from opencode_arch.mcp.tools.component_health import component_health_tool
+
+    @mcp.tool()
+    async def architect_component_health(
+        repo_path: str,
+        component_id: str,
+    ) -> dict:
+        """Return the SI&L record + 7-day trend for a single component.
+
+        Reads ``<repo_path>/.architecture/sil.sqlite`` (the shared SI&L
+        event store populated by instrumented pipeline stages / MCP tools).
+
+        Returns an envelope ``{ok: True, record: {...}, trend: {...}}`` where
+        ``record`` mirrors the SILRecord serialization used by the snapshot
+        writer (``component_id``, ``kind``, ``name``, ``metrics``,
+        ``recent_events``) and ``trend`` is a distinct short summary
+        ``{invocations_7d, failure_rate_7d, avg_duration_ms}``.
+
+        Errors: INVALID_ARGUMENT (empty ``component_id``), NOT_FOUND
+        (repo missing, SI&L store missing, or no events for the component).
+        """
+        return await component_health_tool(
+            repo_path=repo_path,
+            component_id=component_id,
         )
 
 except ImportError:

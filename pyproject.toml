@@ -24,6 +24,7 @@ classifiers = [
 dependencies = [
     "architecture-model-standard>=1.0.0",
     "pyyaml>=6.0",
+    "httpx>=0.27",
 ]
 
 [project.urls]
@@ -33,7 +34,7 @@ Documentation = "https://github.com/opn-arch/opencode-arch#readme"
 "Bug Tracker" = "https://github.com/opn-arch/opencode-arch/issues"
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "pytest-asyncio>=0.21", "pytest-cov>=4.0"]
+dev = ["pytest>=7.0", "pytest-asyncio>=0.21", "pytest-cov>=4.0", "respx>=0.21", "flask>=3.0"]
 mcp = ["mcp>=1.0"]
 
 [tool.hatch.build.targets.wheel]

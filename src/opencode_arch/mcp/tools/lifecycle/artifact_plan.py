@@ -28,8 +28,10 @@ Errors
 from __future__ import annotations
 
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 
+@instrumented("mcp_tool:artifact_plan")
 @tool_result
 async def artifact_plan_tool(
     repo_path: str,

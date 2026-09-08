@@ -59,6 +59,34 @@ class OpencodeRunner:
             )
 
 
+    def run_via_policy(
+        self,
+        prompt: str,
+        *,
+        task_class_name: str,
+        repo_path: str = ".",
+    ) -> RunResult:
+        """Route through Policy.pick(...).complete(...) if policy configured, else fall back to run().
+
+        Synchronous. Wraps Completion into RunResult for caller compatibility.
+        Falls back to asyncio.run(self.run(prompt, repo_path)) if no policy.yaml found.
+        """
+        from pathlib import Path as _P
+        policy_path = _P(repo_path) / ".architecture" / "llm" / "policy.yaml"
+        if not policy_path.exists():
+            import asyncio
+            return asyncio.run(self.run(prompt, repo_path))
+        from opencode_arch.llm.policy import load_policy, TaskClass
+        policy = load_policy(_P(repo_path))
+        provider = policy.pick(TaskClass(task_class_name))
+        completion = provider.complete(prompt, model=self.model, max_tokens=4096)
+        return RunResult(
+            output=completion["text"],
+            exit_code=0,
+            success=True,
+        )
+
+
 def _strip_ansi(text: str) -> str:
     """Remove ANSI escape sequences from text."""
     import re

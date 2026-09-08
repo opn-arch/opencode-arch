@@ -1,0 +1,99 @@
+kind: model-patch
+provenance:
+  work_order_id: review-plan-b-oca
+  model_version: '1.3'
+  prompt_digest: sha256-v1:review-session-plan-b-oca
+  proposal_id: sha256-v1:review-plan-b-oca
+operations:
+  - op: add
+    target_kind: components
+    value:
+      id: COMP-SIL-STORE
+      name: SI&L Store
+      status: ACTIVE
+      description: >-
+        SQLite-backed telemetry store owning the SI&L event ring buffer.
+        50 recent events per component; snapshot writer emits per-component
+        YAML rollups. Consumed by architect_component_health and
+        architect_evaluate MCP tools.
+      source_block: S1
+      files:
+        - src/opencode_arch/sil/__init__.py
+        - src/opencode_arch/sil/store.py
+        - src/opencode_arch/sil/snapshot.py
+      contract: >-
+        SILStore(path).emit(component_id, kind, outcome, duration_ms).
+        Query API: invocations_7d, failure_rate_7d, avg_duration_ms,
+        distinct_component_ids. Snapshot writes `.architecture/sil/<cid>.yaml`.
+  - op: add
+    target_kind: components
+    value:
+      id: COMP-LLM-PROVIDERS
+      name: LLM Provider Adapters
+      status: ACTIVE
+      description: >-
+        Concrete LLMProvider implementations. MCPProvider invokes opencode
+        subprocess via runner; FrontierProvider talks Anthropic/OpenAI HTTPS;
+        RelayExtProvider posts to opencode-relay. Policy layer routes calls
+        by TaskClass with cost caps and fallback.
+      source_block: S1
+      files:
+        - src/opencode_arch/llm/policy.py
+        - src/opencode_arch/llm/registry.py
+        - src/opencode_arch/llm/providers/__init__.py
+        - src/opencode_arch/llm/providers/mcp.py
+        - src/opencode_arch/llm/providers/frontier.py
+        - src/opencode_arch/llm/providers/relay_ext.py
+        - src/opencode_arch/runner/opencode.py
+      contract: >-
+        Providers implement complete/stream/structured/tokenize. Policy
+        `.architecture/llm/policy.yaml` maps TaskClass to
+        RoutingRule(provider, model, max_cost_usd_per_call, fallback).
+        Runner.run_via_policy enforces caps and falls back on error.
+  - op: add
+    target_kind: components
+    value:
+      id: COMP-DASHBOARD-REBUILD
+      name: Pipeline HTML Rebuild Integration
+      status: ACTIVE
+      description: >-
+        Rebuild executor branch that special-cases the pipeline-html renderer.
+        Opens the repo-local SIL store, wraps it in a rollup adapter, invokes
+        `render_pipeline_html`, and mirrors dashboard assets alongside the
+        emitted HTML. Reuses standard digest/skip/write plumbing.
+      source_block: S1
+      files:
+        - src/opencode_arch/lifecycle_exec/rebuild.py
+      contract: >-
+        Detects renderer=="pipeline-html", builds _SILRollupAdapter over
+        .architecture/sil.sqlite, calls render_pipeline_html(materialized_slice,
+        sil_store), writes UTF-8, mirrors index.css + badges.js + drilldown.js.
+  - op: add
+    target_kind: components
+    value:
+      id: COMP-HEALTH-TOOL
+      name: Component Health MCP Tools
+      status: ACTIVE
+      description: >-
+        MCP surface for SI&L observability. architect_component_health returns
+        a single-component health envelope; architect_evaluate merges
+        sil_summary into the standard evaluation report.
+      source_block: S1
+      files:
+        - src/opencode_arch/mcp/tools/component_health.py
+        - src/opencode_arch/mcp/tools/evaluate.py
+        - src/opencode_arch/mcp/tools/pipeline.py
+      contract: >-
+        architect_component_health(COMP-*) -> {ok, record: {component_id,
+        kind, name, metrics, recent_events}, trend}.
+        architect_evaluate now includes sil_summary keyed by component_id.
+extra_relationships:
+  - from: COMP-DASHBOARD-REBUILD
+    to: COMP-SIL-STORE
+    type: depends-on
+  - from: COMP-HEALTH-TOOL
+    to: COMP-SIL-STORE
+    type: depends-on
+  - from: COMP-LLM-PROVIDERS
+    to: COMP-15
+    type: depends-on

@@ -23,8 +23,10 @@ from datetime import datetime, timezone
 import yaml
 
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 
+@instrumented("mcp_tool:architect_workorder_submit")
 @tool_result
 async def architect_workorder_submit_tool(
     repo_path: str,

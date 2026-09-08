@@ -25,8 +25,10 @@ Errors
 from __future__ import annotations
 
 from opencode_arch.mcp.envelope import err, ok, resolve_repo, tool_result
+from architecture_model.sil.decorators import instrumented
 
 
+@instrumented("mcp_tool:architect_artifact_rebuild")
 @tool_result
 async def architect_artifact_rebuild_tool(
     repo_path: str,
