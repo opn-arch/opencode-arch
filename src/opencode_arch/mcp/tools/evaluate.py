@@ -134,6 +134,9 @@ def _collect_freshness_summary(repo_path: Path) -> dict:
         return summary
     try:
         for entry in artifacts_dir.iterdir():
+            # ``is_file()`` intentionally skips renderer-created subdirs
+            # (e.g. ``assets/`` next to ``pipeline.html``, see
+            # ``lifecycle_exec/rebuild.py`` pipeline-html renderer).
             if not entry.is_file():
                 continue
             # No persisted freshness marker yet — bucket as unknown.

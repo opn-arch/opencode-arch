@@ -43,3 +43,23 @@ def test_evaluate_freshness_missing_artifacts_dir(tmp_path):
     assert "freshness_summary" in result
     fs = result["freshness_summary"]
     assert fs == {"fresh": 0, "stale": 0, "pending": 0, "unknown": 0, "total": 0}
+
+
+def test_evaluate_freshness_ignores_subdirectories(tmp_path):
+    """Renderer-created subdirs (e.g. pipeline-html ``assets/``) don't count.
+
+    Locks in the ``is_file()`` guard so a future maintainer doesn't turn it
+    into a recursive walk.
+    """
+    artifacts = tmp_path / ".architecture" / "lifecycle" / "artifacts"
+    artifacts.mkdir(parents=True)
+    (artifacts / "pipeline.html").write_text("<html></html>")
+    assets = artifacts / "assets"
+    assets.mkdir()
+    (assets / "styles.css").write_text("body{}")
+    (assets / "badges.js").write_text("// badges")
+    result = _run(evaluate_workspace(repo_path=str(tmp_path), force_refresh=True))
+    fs = result["freshness_summary"]
+    # Only the top-level file counts; asset children are ignored.
+    assert fs["total"] == 1
+    assert fs["unknown"] == 1
