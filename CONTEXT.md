@@ -127,6 +127,34 @@ Phase 2 (branch `feat/phase2-lifecycle`) added **18 MCP tools** covering the ful
 
 Every state change (publish, transition, apply, rebuild) emits a journal event.
 
+### `architect_docs` as sugar over `rebuild_artifacts` (Phase 1)
+
+`architect_docs(repo_path, formats="all")` (defined at
+`src/opencode_arch/mcp/server.py:281`) is the legacy entry point for
+generating the SE document family (ConOps, ICD, component specs, use
+cases, functional/logical architecture, requirements analysis, V&V,
+operations/maintenance manuals, risk assessment, interface spec,
+artifact traceability). After the Phase 1 model → view mapping work,
+it becomes **sugar over `architect_artifact_rebuild`**: each requested
+`format` maps to a fixed `(ModelSlice, ViewSpec, ArtifactSpec)` triple
+defined in `src/opencode_arch/mcp/tools/docs_specs.py`, and the tool
+delegates to the substrate pipeline
+`materialize → project → render → rebuild`. This is the minimum-
+invasive mapping — no `generate_docs` refactor — chosen to keep
+callers of `architect_docs` working unchanged while the substrate
+becomes the single artifact path.
+
+Freshness metadata rides on every rendered artifact via the
+`DiagramSpec.freshness` / `.revision` fields stamped inside `project()`
+(see `architecture_model.lifecycle.view_projection:189-194`).
+`architect_evaluate` exposes a `freshness_summary` key of shape
+`{fresh, stale, unknown, pending}` counting the per-artifact status.
+In Phase 1 all values report as `unknown` because the freshness stamp
+is in-memory only — per-artifact `<id>.provenance.json` sidecars are
+deferred to Phase 2 Task 28. See
+`../architecture-model-standard/docs/plans/2026-09-08-phase-1-substrate-and-liveness.md`
+for the full Phase 1 plan.
+
 ## Package Structure
 
 ```
