@@ -124,6 +124,29 @@ async def check_gate(repo_path: str, model_yaml: str = "") -> dict[str, Any]:
             "Call architect_log when discovering architectural decisions",
         ]
 
+        # Phase 2 Task 18: append gate outcome to .architecture/gates.jsonl.
+        # Fail-soft: the journal is diagnostic — never fail the gate on
+        # write errors. model_revision is left None (optional) — a real
+        # revision lookup would require ArchitecturePackage.from_repo which
+        # is not currently a public API on ArchitecturePackage.
+        try:
+            from architecture_model.feedback.gates import GateEvent, append as _gates_append
+
+            outcome = "pass" if result.get("phase_requirements_met") else "fail"
+            findings = tuple(str(i) for i in (result.get("issues") or ()))
+            _gates_append(
+                repo,
+                GateEvent(
+                    gate_id="architect_gate",
+                    outcome=outcome,  # type: ignore[arg-type]
+                    findings=findings,
+                    model_revision=None,
+                ),
+            )
+        except Exception:
+            # Journal is best-effort; never propagate.
+            pass
+
         return result
     except Exception as e:
         return {"error": f"Gate check failed: {e}"}
