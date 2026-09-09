@@ -183,6 +183,61 @@ are **fail-soft**: journal-write errors never fail the parent tool.
 See `../architecture-model-standard/docs/plans/2026-09-08-phase-2-schema-and-semantic-content.md`
 for the full Phase 2 plan and the AMS-side schema/journal contracts.
 
+## Phase 3 entity-scoped tools
+
+Phase 3 (branch `feat/model-view-mapping-phase-3`) extends three of the
+core MCP tools to consume the AMS entity-scoped slicing and per-entity
+projector convention. No new MCP tools are added; existing envelopes
+grow one new field each. Fully backward-compatible.
+
+### `architect_slice` accepts `focus="entity(<id>)"`
+
+`slice_context(repo_path, focus="entity(COMP-3)", budget=..., detail=...)`
+now recognizes the entity-focus form. On match it calls
+`architecture_model.core.slicer.slice_by_entity(model, entity_id)` to
+reduce the model to the entity plus its transitive `contains`
+descendants and 1-hop `realizes`/`exposes`/`consumes`/`depends-on`
+neighborhood, then formats that sub-model via the existing
+`format_model_context`. Unknown entity ids fall back to full-model
+formatting (never raises). Detection happens before the layer-focus
+fallback so it takes precedence over similarly-named layers.
+Implementation: `src/opencode_arch/mcp/tools/slice.py:_slice_from_model`.
+
+### `architect_docs` supports `formats="entity_pages"`
+
+Opt-in special format — NOT part of `all`. Walks the model and, for
+each family in `_FAMILY_KINDS` (families 1, 2, 3, 4, 6, 7, 8; family 5
+deferred to Phase 4) and each entity of a supported kind, writes a
+Markdown page at
+`.architecture/lifecycle/artifacts/entity_pages/family{N}/{entity_id}.md`.
+
+Direct-projection path (skips the full ArchitecturePackage → ModelSlice
+→ materialize → project → renderer rebuild ceremony): instantiates the
+`FamilyNEntityPage` classes from
+`architecture_model.lifecycle.projectors.entity_pages` and calls them
+with a config dict populated from the private
+`_compute_entity_scope_metadata` helper. Entities whose projected body
+is empty (no `intent`/`goals`/`stakeholders`/etc. — everything gated)
+are silently skipped. Implementation:
+`src/opencode_arch/mcp/tools/entity_pages.py`.
+
+### `architect_evaluate` emits `drilldowns`
+
+The evaluate envelope grows a `drilldowns: {entity_id: [rel_url, ...]}`
+key. Values are relative paths under
+`.architecture/lifecycle/artifacts/entity_pages/` (e.g.
+`family1/COMP-1.md`), sorted per entity for determinism. Only entities
+with at least one generated page appear. Missing directory → `{}`.
+Consumers use this map to render breadcrumb navigation and drill-down
+links across the artifact set produced by `architect_docs
+formats='entity_pages'`. Implementation:
+`src/opencode_arch/mcp/tools/evaluate.py:_collect_drilldowns`.
+
+See `../architecture-model-standard/docs/plans/2026-09-08-phase-3-recursion-and-entity-views.md`
+for the full 24-task Phase 3 plan and the AMS-side substrate
+(`slice_by_entity`, `entity(<id>)` scope, EntityPageProjector,
+recursion controls on ViewSpec).
+
 ## Package Structure
 
 ```

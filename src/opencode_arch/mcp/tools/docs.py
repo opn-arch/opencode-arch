@@ -291,6 +291,23 @@ async def generate_docs(
             except Exception as e:
                 errors.append(f"se_docs: {e}")
 
+        # Entity pages (Phase 3 Task 20) — opt-in only, not part of ``all``.
+        if "entity_pages" in requested:
+            try:
+                from opencode_arch.mcp.tools.entity_pages import generate_entity_pages
+
+                ep_root = path / ".architecture" / "lifecycle" / "artifacts" / "entity_pages"
+                ep_paths = generate_entity_pages(model, ep_root)
+                for p in ep_paths:
+                    try:
+                        generated.append(str(p.relative_to(path)))
+                    except ValueError:
+                        generated.append(str(p))
+                if not ep_paths:
+                    errors.append("entity_pages: no pages generated (empty model?)")
+            except Exception as e:
+                errors.append(f"entity_pages: {e}")
+
         # Index generated LAST — needs paths of other generated docs
         if "index" in requested or "all" in requested:
             try:
