@@ -471,8 +471,118 @@ async def run_pipeline(
         except Exception:
             pass
 
+        # Phase 2 Task 19: append a DriftSnapshot to .architecture/drift.jsonl.
+        # Fail-soft: journal is diagnostic. Uses a minimal, local drift
+        # detector (orphan / unrealized_capability / broken_ref /
+        # missing_impl) — a shared architecture_model.core.drift helper
+        # is deferred; the primitives live here for Task 19.
+        try:
+            _append_drift_snapshot(root)
+        except Exception:
+            pass
+
         return response
     except Exception as e:
         import traceback
 
         return {"error": f"Pipeline failed: {e}", "traceback": traceback.format_exc()}
+
+
+def _append_drift_snapshot(root: Path) -> None:
+    """Compute drift flags from the emitted model and append a snapshot.
+
+    Rules (minimal, deterministic, dependency-free):
+        * ``broken_ref``: relationship endpoint (``from`` / ``to``) does
+          not resolve to a known entity id.
+        * ``unrealized_capability``: capability with no incoming
+          ``realizes`` relationship.
+        * ``orphan``: component appearing in NO relationship (either side).
+        * ``missing_impl``: component with an empty ``files`` list.
+
+    Silently returns if no model file exists at ``.architecture-model.yaml``.
+    """
+    from architecture_model.core.parser import load_model
+    from architecture_model.feedback.drift import (
+        DriftFlag,
+        DriftSnapshot,
+        append as _drift_append,
+    )
+
+    model_file = root / ".architecture-model.yaml"
+    if not model_file.exists():
+        return
+    model = load_model(model_file)
+
+    entity_ids: set[str] = set()
+    for coll in (
+        model.entities.components,
+        model.entities.capabilities,
+        model.entities.behaviors,
+        model.entities.interfaces,
+        model.entities.constraints,
+        model.entities.actors,
+        model.entities.layers,
+    ):
+        for e in coll:
+            entity_ids.add(getattr(e, "id", ""))
+    entity_ids.discard("")
+
+    # Endpoints referenced by any relationship.
+    referenced: set[str] = set()
+    realizes_targets: set[str] = set()
+    flags: list[DriftFlag] = []
+    for rel in model.relationships:
+        rel_from = getattr(rel, "from_id", "")
+        rel_to = getattr(rel, "to_id", "")
+        rel_type = getattr(rel, "type", "")
+        referenced.add(rel_from)
+        referenced.add(rel_to)
+        for endpoint in (rel_from, rel_to):
+            if endpoint and endpoint not in entity_ids:
+                flags.append(
+                    DriftFlag(
+                        entity_id=endpoint,
+                        kind="broken_ref",
+                        detail=f"{rel_type}: unknown endpoint",
+                    )
+                )
+        if rel_type == "realizes":
+            realizes_targets.add(rel_to)
+
+    for cap in model.entities.capabilities:
+        if cap.id not in realizes_targets:
+            flags.append(
+                DriftFlag(
+                    entity_id=cap.id,
+                    kind="unrealized_capability",
+                    detail="no realizing component",
+                )
+            )
+
+    for comp in model.entities.components:
+        if comp.id not in referenced:
+            flags.append(
+                DriftFlag(
+                    entity_id=comp.id,
+                    kind="orphan",
+                    detail="no incoming or outgoing relationships",
+                )
+            )
+        files = getattr(comp, "files", None) or []
+        if not files:
+            flags.append(
+                DriftFlag(
+                    entity_id=comp.id,
+                    kind="missing_impl",
+                    detail="component has no source files declared",
+                )
+            )
+
+    # model revision: best-effort from meta.digest / schema_version; None if unknown.
+    revision = getattr(model.meta, "digest", None) or getattr(
+        model.meta, "schema_version", "unknown"
+    )
+    _drift_append(
+        root,
+        DriftSnapshot(model_revision=str(revision), flags=tuple(flags)),
+    )
