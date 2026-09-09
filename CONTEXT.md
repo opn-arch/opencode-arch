@@ -155,6 +155,34 @@ deferred to Phase 2 Task 28. See
 `../architecture-model-standard/docs/plans/2026-09-08-phase-1-substrate-and-liveness.md`
 for the full Phase 1 plan.
 
+### Model → view mapping Phase 2 feedback wiring
+
+Phase 2 of the model → view mapping design (AMS schema 2.1 + feedback
+journals) added three cross-cutting integrations on the OCA side. All
+are **fail-soft**: journal-write errors never fail the parent tool.
+
+- **Gates journal.** `architect_gate` (MCP tool at
+  `src/opencode_arch/mcp/tools/gate.py`) appends a `GateEvent`
+  (`gate_id="architect_gate"`, `outcome` derived from
+  `phase_requirements_met`, `findings=tuple(issues)`) to
+  `.architecture/gates.jsonl` after computing `next_steps`.
+- **Drift journal.** `architect_pipeline`
+  (`src/opencode_arch/mcp/tools/pipeline.py`) calls
+  `_append_drift_snapshot(root)` after `_write_sil_snapshots`. It loads
+  `.architecture-model.yaml` and computes four drift kinds locally —
+  `broken_ref`, `unrealized_capability`, `orphan`, `missing_impl` —
+  then appends to `.architecture/drift.jsonl`.
+- **Test-results ingestion.** New CLI `opencode-arch feedback
+  ingest-junit <xml> [--repo-path .] [--suite NAME]` calls
+  `architecture_model.feedback.junit_ingest.ingest_junit(path, suite=...)`
+  and appends the batch via `test_results.append(repo, batch)` to
+  `.architecture/test_results.jsonl`. Wired in
+  `src/opencode_arch/cli/feedback.py` and dispatched from
+  `src/opencode_arch/cli/main.py`.
+
+See `../architecture-model-standard/docs/plans/2026-09-08-phase-2-schema-and-semantic-content.md`
+for the full Phase 2 plan and the AMS-side schema/journal contracts.
+
 ## Package Structure
 
 ```
