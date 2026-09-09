@@ -186,10 +186,23 @@ def _slice_from_model(project_root: Path, focus: str, budget: int, detail: str) 
         format_source_block_context,
         format_artifact_context,
     )
-    from architecture_model.core.slicer import slice_by_layer
+    from architecture_model.core.slicer import slice_by_entity, slice_by_layer
 
     model_path = project_root / ".architecture-model.yaml"
     model = load_model(model_path)
+
+    # Entity-focus form: focus="entity(<id>)" — Phase 3 Task 19.
+    # Route through slice_by_entity so the returned context includes the entity,
+    # its transitive `contains` descendants, and its 1-hop neighborhood only.
+    if focus.startswith("entity(") and focus.endswith(")"):
+        entity_id = focus[len("entity(") : -1].strip()
+        if entity_id:
+            try:
+                sliced = slice_by_entity(model, entity_id=entity_id)
+                return format_model_context(sliced, max_tokens=budget, detail_level=detail)
+            except KeyError:
+                # Unknown entity id — fall through to full-model formatting.
+                return format_model_context(model, max_tokens=budget, detail_level=detail)
 
     # Try to include regen readiness grade in header
     try:
