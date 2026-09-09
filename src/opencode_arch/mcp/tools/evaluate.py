@@ -80,6 +80,7 @@ async def evaluate_workspace(
         "recommendations": recommendations,
         "sil_summary": _collect_sil_summary(repo),
         "freshness_summary": _collect_freshness_summary(repo),
+        "drilldowns": _collect_drilldowns(repo),
         "from_cache": False,
     }
 
@@ -111,6 +112,42 @@ def _collect_sil_summary(repo_path: Path) -> dict:
         return summary
     except Exception:
         return {}
+
+
+def _collect_drilldowns(repo_path: Path) -> dict[str, list[str]]:
+    """Return ``{entity_id: [family1/<id>.md, family3/<id>.md, ...]}`` for entity pages.
+
+    Phase 3 Task 21 implementation: scans
+    ``.architecture/lifecycle/artifacts/entity_pages/family*/<entity_id>.md``
+    (produced by ``architect_docs(formats='entity_pages')``) and groups
+    the relative artifact paths by ``entity_id`` (the file stem). Only
+    ``family<int>/`` subdirs and ``.md`` files are considered — noise is
+    ignored. Paths within each entity's list are sorted for
+    determinism. Missing directory → ``{}``.
+    """
+    root = repo_path / ".architecture" / "lifecycle" / "artifacts" / "entity_pages"
+    out: dict[str, list[str]] = {}
+    if not root.is_dir():
+        return out
+    try:
+        for family_dir in root.iterdir():
+            if not family_dir.is_dir():
+                continue
+            name = family_dir.name
+            if not (name.startswith("family") and name[6:].isdigit()):
+                continue
+            for md_file in family_dir.iterdir():
+                if not md_file.is_file() or md_file.suffix != ".md":
+                    continue
+                entity_id = md_file.stem
+                if not entity_id:
+                    continue
+                out.setdefault(entity_id, []).append(f"{name}/{md_file.name}")
+    except OSError:
+        return {}
+    for entity_id in out:
+        out[entity_id].sort()
+    return out
 
 
 def _collect_freshness_summary(repo_path: Path) -> dict:
