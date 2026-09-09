@@ -28,7 +28,7 @@ async def test_ingest_basic(tmp_repo):
     assert result["units"] == 2
     assert result["edges"] == 1
     assert result["language"] == "typescript"
-    assert (tmp_repo / ".architecture-model-extracted.yaml").exists()
+    assert (tmp_repo / ".architecture-model.yaml").exists()
     assert (tmp_repo / ".architecture-models" / "source-graph.json").exists()
 
 
