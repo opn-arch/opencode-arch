@@ -367,245 +367,306 @@ def rebuild_artifacts(
             )
             continue
 
-        # -- materialize ------------------------------------------------------
-        if pkg is None:
-            report.failed.append({
-                "spec_id": spec_id,
-                "reason": "materialize_error",
-                "detail": pkg_load_error or "no package loaded",
-            })
-            report.journal_events.append(
-                _journal("artifact.failed", spec_id, ts, reason="materialize_error")
-            )
-            continue
-        try:
-            ms = materialize(slice_obj, pkg)
-        except Exception as exc:  # noqa: BLE001
-            report.failed.append({
-                "spec_id": spec_id,
-                "reason": "materialize_error",
-                "detail": str(exc),
-            })
-            report.journal_events.append(
-                _journal("artifact.failed", spec_id, ts, reason="materialize_error")
-            )
-            continue
-
-        # -- project + render -------------------------------------------------
-        renderer_name = spec.renderer  # See deviations note in module docstring.
-
-        if renderer_name == "pipeline-html":
-            # Special-case: bypass ViewProjection (view is a passthrough marker
-            # for pipeline-html); call the renderer directly with the
-            # materialized slice and an optional SIL rollup adapter.
-            try:
-                from architecture_model.lifecycle.renderers.pipeline_html import (
-                    render_pipeline_html,
-                )
-
-                html_str = render_pipeline_html(
-                    materialized_slice=ms,
-                    sil_store=_open_sil_store(repo),
-                )
-            except Exception as exc:  # noqa: BLE001
+        # -- fan-out over descendants (scope='descendants:each') ------------
+        if slice_obj.scope == "descendants:each":
+            if pkg is None:
                 report.failed.append({
                     "spec_id": spec_id,
-                    "reason": "render_error",
-                    "detail": str(exc),
+                    "reason": "materialize_error",
+                    "detail": pkg_load_error or "no package loaded",
                 })
                 report.journal_events.append(
-                    _journal("artifact.failed", spec_id, ts, reason="render_error")
+                    _journal("artifact.failed", spec_id, ts, reason="materialize_error")
                 )
                 continue
-            if not isinstance(html_str, str):
-                report.failed.append({
-                    "spec_id": spec_id,
-                    "reason": "render_error",
-                    "detail": (
-                        f"pipeline-html renderer returned unsupported type "
-                        f"{type(html_str).__name__}"
-                    ),
-                })
-                report.journal_events.append(
-                    _journal("artifact.failed", spec_id, ts, reason="render_error")
-                )
-                continue
-            body: bytes = html_str.encode("utf-8")
+            from architecture_model.lifecycle.package import iter_descendants
+            per_pkg_slice = slice_obj.model_copy(update={"scope": "local"})
+            fanout_targets = [
+                (f"{spec_id}.{sub.slug}", sub, per_pkg_slice)
+                for sub in iter_descendants(pkg, include_self=True)
+            ]
         else:
-            # -- project ------------------------------------------------------
+            fanout_targets = [(spec_id, pkg, slice_obj)]
+
+        for _fanout_spec_id, _fanout_pkg, _fanout_slice in fanout_targets:
+            spec_id = _fanout_spec_id
+            pkg = _fanout_pkg
+            slice_obj = _fanout_slice
+            # -- materialize ------------------------------------------------------
+            if pkg is None:
+                report.failed.append({
+                    "spec_id": spec_id,
+                    "reason": "materialize_error",
+                    "detail": pkg_load_error or "no package loaded",
+                })
+                report.journal_events.append(
+                    _journal("artifact.failed", spec_id, ts, reason="materialize_error")
+                )
+                continue
             try:
-                pv = project(view, ms)
+                ms = materialize(slice_obj, pkg)
             except Exception as exc:  # noqa: BLE001
                 report.failed.append({
                     "spec_id": spec_id,
-                    "reason": "project_error",
+                    "reason": "materialize_error",
                     "detail": str(exc),
                 })
                 report.journal_events.append(
-                    _journal("artifact.failed", spec_id, ts, reason="project_error")
+                    _journal("artifact.failed", spec_id, ts, reason="materialize_error")
                 )
                 continue
 
-            # -- render -------------------------------------------------------
-            try:
-                renderer = get_renderer(renderer_name)
-            except KeyError as exc:
-                report.failed.append({
-                    "spec_id": spec_id,
-                    "reason": "render_error",
-                    "detail": f"renderer not registered: {exc}",
-                })
-                report.journal_events.append(
-                    _journal("artifact.failed", spec_id, ts, reason="render_error")
-                )
-                continue
+            # -- project + render -------------------------------------------------
+            renderer_name = spec.renderer  # See deviations note in module docstring.
 
-            try:
-                result = renderer(pv, spec)
-            except Exception as exc:  # noqa: BLE001
-                report.failed.append({
-                    "spec_id": spec_id,
-                    "reason": "render_error",
-                    "detail": str(exc),
-                })
-                report.journal_events.append(
-                    _journal("artifact.failed", spec_id, ts, reason="render_error")
-                )
-                continue
+            if renderer_name == "pipeline-html":
+                # Special-case: bypass ViewProjection (view is a passthrough marker
+                # for pipeline-html); call the renderer directly with the
+                # materialized slice and an optional SIL rollup adapter.
+                try:
+                    from architecture_model.lifecycle.renderers.pipeline_html import (
+                        render_pipeline_html,
+                    )
 
-            # Renderer contract: registered renderers return bytes. Accept a few
-            # tolerant shapes so a future ProjectedView-style return still works.
-            if isinstance(result, (bytes, bytearray)):
-                body = bytes(result)
-            elif hasattr(result, "body") and isinstance(result.body, (bytes, bytearray)):
-                body = bytes(result.body)
-            elif hasattr(result, "body_utf8") and isinstance(result.body_utf8, str):
-                body = result.body_utf8.encode("utf-8")
+                    html_str = render_pipeline_html(
+                        materialized_slice=ms,
+                        sil_store=_open_sil_store(repo),
+                    )
+                except Exception as exc:  # noqa: BLE001
+                    report.failed.append({
+                        "spec_id": spec_id,
+                        "reason": "render_error",
+                        "detail": str(exc),
+                    })
+                    report.journal_events.append(
+                        _journal("artifact.failed", spec_id, ts, reason="render_error")
+                    )
+                    continue
+                if not isinstance(html_str, str):
+                    report.failed.append({
+                        "spec_id": spec_id,
+                        "reason": "render_error",
+                        "detail": (
+                            f"pipeline-html renderer returned unsupported type "
+                            f"{type(html_str).__name__}"
+                        ),
+                    })
+                    report.journal_events.append(
+                        _journal("artifact.failed", spec_id, ts, reason="render_error")
+                    )
+                    continue
+                body: bytes = html_str.encode("utf-8")
             else:
+                # -- project ------------------------------------------------------
+                try:
+                    pv = project(view, ms)
+                except Exception as exc:  # noqa: BLE001
+                    report.failed.append({
+                        "spec_id": spec_id,
+                        "reason": "project_error",
+                        "detail": str(exc),
+                    })
+                    report.journal_events.append(
+                        _journal("artifact.failed", spec_id, ts, reason="project_error")
+                    )
+                    continue
+
+                # -- render -------------------------------------------------------
+                try:
+                    renderer = get_renderer(renderer_name)
+                except KeyError as exc:
+                    report.failed.append({
+                        "spec_id": spec_id,
+                        "reason": "render_error",
+                        "detail": f"renderer not registered: {exc}",
+                    })
+                    report.journal_events.append(
+                        _journal("artifact.failed", spec_id, ts, reason="render_error")
+                    )
+                    continue
+
+                try:
+                    result = renderer(pv, spec)
+                except Exception as exc:  # noqa: BLE001
+                    report.failed.append({
+                        "spec_id": spec_id,
+                        "reason": "render_error",
+                        "detail": str(exc),
+                    })
+                    report.journal_events.append(
+                        _journal("artifact.failed", spec_id, ts, reason="render_error")
+                    )
+                    continue
+
+                # Renderer contract: registered renderers return bytes. Accept a few
+                # tolerant shapes so a future ProjectedView-style return still works.
+                if isinstance(result, (bytes, bytearray)):
+                    body = bytes(result)
+                elif hasattr(result, "body") and isinstance(result.body, (bytes, bytearray)):
+                    body = bytes(result.body)
+                elif hasattr(result, "body_utf8") and isinstance(result.body_utf8, str):
+                    body = result.body_utf8.encode("utf-8")
+                else:
+                    report.failed.append({
+                        "spec_id": spec_id,
+                        "reason": "render_error",
+                        "detail": f"renderer returned unsupported type {type(result).__name__}",
+                    })
+                    report.journal_events.append(
+                        _journal("artifact.failed", spec_id, ts, reason="render_error")
+                    )
+                    continue
+
+            emitted_digest = "sha256:" + hashlib.sha256(body).hexdigest()
+
+            # -- output path ------------------------------------------------------
+            ext = _EXT.get(renderer_name)
+            if ext is None:
                 report.failed.append({
                     "spec_id": spec_id,
                     "reason": "render_error",
-                    "detail": f"renderer returned unsupported type {type(result).__name__}",
+                    "detail": f"no extension mapping for renderer {renderer_name!r}",
                 })
                 report.journal_events.append(
                     _journal("artifact.failed", spec_id, ts, reason="render_error")
                 )
                 continue
 
-        emitted_digest = "sha256:" + hashlib.sha256(body).hexdigest()
+            output_path = out_dir / f"{spec_id}.{ext}"
 
-        # -- output path ------------------------------------------------------
-        ext = _EXT.get(renderer_name)
-        if ext is None:
-            report.failed.append({
-                "spec_id": spec_id,
-                "reason": "render_error",
-                "detail": f"no extension mapping for renderer {renderer_name!r}",
-            })
-            report.journal_events.append(
-                _journal("artifact.failed", spec_id, ts, reason="render_error")
-            )
-            continue
+            expected = None
+            if isinstance(spec.parameters, dict):
+                expected = spec.parameters.get("expected_digest")
 
-        output_path = out_dir / f"{spec_id}.{ext}"
-
-        expected = None
-        if isinstance(spec.parameters, dict):
-            expected = spec.parameters.get("expected_digest")
-
-        # -- skip check -------------------------------------------------------
-        if (
-            output_path.exists()
-            and not force
-            and expected is not None
-            and expected == emitted_digest
-        ):
-            report.skipped.append({
-                "spec_id": spec_id,
-                "output_path": str(output_path),
-                "reason": "up_to_date",
-            })
-            report.journal_events.append(
-                _journal(
-                    "artifact.skipped",
-                    spec_id,
-                    ts,
-                    output_path=str(output_path),
-                    emitted_digest=emitted_digest,
-                    reason="up_to_date",
+            # -- skip check -------------------------------------------------------
+            if (
+                output_path.exists()
+                and not force
+                and expected is not None
+                and expected == emitted_digest
+            ):
+                report.skipped.append({
+                    "spec_id": spec_id,
+                    "output_path": str(output_path),
+                    "reason": "up_to_date",
+                })
+                report.journal_events.append(
+                    _journal(
+                        "artifact.skipped",
+                        spec_id,
+                        ts,
+                        output_path=str(output_path),
+                        emitted_digest=emitted_digest,
+                        reason="up_to_date",
+                    )
                 )
-            )
-            continue
+                continue
 
-        # -- digest mismatch --------------------------------------------------
-        if expected is not None and expected != emitted_digest:
-            pending = output_path.with_name(output_path.name + ".pending")
+            # -- digest mismatch --------------------------------------------------
+            if expected is not None and expected != emitted_digest:
+                pending = output_path.with_name(output_path.name + ".pending")
+                try:
+                    write_atomic(pending, body)
+                except Exception as exc:  # noqa: BLE001
+                    report.failed.append({
+                        "spec_id": spec_id,
+                        "reason": "write_error",
+                        "detail": f"failed to write pending: {exc}",
+                    })
+                    report.journal_events.append(
+                        _journal("artifact.failed", spec_id, ts, reason="write_error")
+                    )
+                    continue
+                report.failed.append({
+                    "spec_id": spec_id,
+                    "reason": "digest_mismatch",
+                    "detail": f"expected={expected} got={emitted_digest}",
+                    "output_path": str(pending),
+                })
+                report.journal_events.append(
+                    _journal(
+                        "artifact.failed",
+                        spec_id,
+                        ts,
+                        output_path=str(pending),
+                        emitted_digest=emitted_digest,
+                        reason="digest_mismatch",
+                    )
+                )
+                continue
+
+            # -- write ------------------------------------------------------------
             try:
-                write_atomic(pending, body)
+                write_atomic(output_path, body)
             except Exception as exc:  # noqa: BLE001
                 report.failed.append({
                     "spec_id": spec_id,
                     "reason": "write_error",
-                    "detail": f"failed to write pending: {exc}",
+                    "detail": str(exc),
                 })
                 report.journal_events.append(
                     _journal("artifact.failed", spec_id, ts, reason="write_error")
                 )
                 continue
-            report.failed.append({
+
+            # -- provenance sidecar (Phase 2 Task 28) ----------------------------
+            # AMS Task 10 stamps ProjectedView.provenance in-memory during
+            # project(). Persist a compact JSON sidecar next to <id>.<ext> so
+            # architect_evaluate.freshness_summary can classify per-artifact
+            # freshness on disk. pipeline-html bypasses project(); we stamp a
+            # minimal provenance ("fresh" now, revision from the materialized
+            # slice) so those artifacts also participate in the summary.
+            try:
+                import json as _json
+                if renderer_name == "pipeline-html":
+                    prov = {
+                        "freshness": "fresh",
+                        "revision": getattr(slice_obj, "model_revision", None),
+                        "produced_at": ts,
+                        "projector": "pipeline-html",
+                    }
+                else:
+                    src = getattr(pv, "provenance", None) or {}
+                    prov = {
+                        "freshness": src.get("freshness", "fresh"),
+                        "revision": src.get("revision"),
+                        "produced_at": src.get("produced_at", ts),
+                        "projector": src.get("projector") or getattr(
+                            view, "projector", None
+                        ),
+                    }
+                sidecar_path = output_path.with_name(
+                    output_path.name + ".provenance.json"
+                )
+                write_atomic(
+                    sidecar_path,
+                    (_json.dumps(prov, sort_keys=True) + "\n").encode("utf-8"),
+                )
+            except Exception:  # noqa: BLE001 — sidecar write is best-effort
+                pass
+
+            # -- pipeline-html asset mirror --------------------------------------
+            if renderer_name == "pipeline-html":
+                try:
+                    _copy_pipeline_html_assets(out_dir)
+                except Exception:  # noqa: BLE001 — asset copy is best-effort
+                    pass
+
+            report.built.append({
                 "spec_id": spec_id,
-                "reason": "digest_mismatch",
-                "detail": f"expected={expected} got={emitted_digest}",
-                "output_path": str(pending),
+                "output_path": str(output_path),
+                "emitted_digest": emitted_digest,
+                "renderer": renderer_name,
             })
             report.journal_events.append(
                 _journal(
-                    "artifact.failed",
+                    "artifact.built",
                     spec_id,
                     ts,
-                    output_path=str(pending),
+                    output_path=str(output_path),
                     emitted_digest=emitted_digest,
-                    reason="digest_mismatch",
                 )
             )
-            continue
-
-        # -- write ------------------------------------------------------------
-        try:
-            write_atomic(output_path, body)
-        except Exception as exc:  # noqa: BLE001
-            report.failed.append({
-                "spec_id": spec_id,
-                "reason": "write_error",
-                "detail": str(exc),
-            })
-            report.journal_events.append(
-                _journal("artifact.failed", spec_id, ts, reason="write_error")
-            )
-            continue
-
-        # -- pipeline-html asset mirror --------------------------------------
-        if renderer_name == "pipeline-html":
-            try:
-                _copy_pipeline_html_assets(out_dir)
-            except Exception:  # noqa: BLE001 — asset copy is best-effort
-                pass
-
-        report.built.append({
-            "spec_id": spec_id,
-            "output_path": str(output_path),
-            "emitted_digest": emitted_digest,
-            "renderer": renderer_name,
-        })
-        report.journal_events.append(
-            _journal(
-                "artifact.built",
-                spec_id,
-                ts,
-                output_path=str(output_path),
-                emitted_digest=emitted_digest,
-            )
-        )
 
     return report
 

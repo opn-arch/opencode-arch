@@ -116,18 +116,19 @@ def _collect_sil_summary(repo_path: Path) -> dict:
 def _collect_freshness_summary(repo_path: Path) -> dict:
     """Return freshness distribution over ``.architecture/lifecycle/artifacts/*``.
 
-    Phase 1 pragmatic implementation (Task 14): AMS Task 10 stamps
-    ``ProjectedView.provenance["freshness"]`` in-memory during ``project()``,
-    but the OCA rebuild path (``lifecycle_exec/rebuild.py``) writes raw
-    renderer bytes to ``<id>.<ext>`` without a provenance sidecar. Nothing
-    persisted on disk currently distinguishes fresh/stale/pending.
+    Phase 2 Task 28 implementation: the OCA rebuild path now writes a
+    ``<id>.provenance.json`` sidecar next to each rendered artifact. Each
+    sidecar carries at minimum ``{"freshness": "fresh" | "stale" |
+    "pending", "revision": ..., "produced_at": ..., "projector": ...}``.
+    We read the sidecar to bucket the parent artifact; artifacts produced
+    before Task 28 shipped (or by external tooling) have no sidecar and
+    are counted as ``unknown``. Sidecar files themselves are excluded
+    from the top-level file count.
 
-    Until Phase 2 persists per-artifact provenance, every file found is
-    counted as ``unknown`` and the summary always exposes the four keys the
-    plan mandates (``fresh``, ``stale``, ``pending``, ``total``) plus an
-    ``unknown`` bucket for accurate accounting. Missing artifacts dir → all
-    zeros.
+    Missing artifacts dir → all zeros.
     """
+    import json
+
     artifacts_dir = repo_path / ".architecture" / "lifecycle" / "artifacts"
     summary = {"fresh": 0, "stale": 0, "pending": 0, "unknown": 0, "total": 0}
     if not artifacts_dir.is_dir():
@@ -139,8 +140,20 @@ def _collect_freshness_summary(repo_path: Path) -> dict:
             # ``lifecycle_exec/rebuild.py`` pipeline-html renderer).
             if not entry.is_file():
                 continue
-            # No persisted freshness marker yet — bucket as unknown.
-            summary["unknown"] += 1
+            # Skip provenance sidecars from the top-level count.
+            if entry.name.endswith(".provenance.json"):
+                continue
+            sidecar = entry.with_name(entry.name + ".provenance.json")
+            freshness = "unknown"
+            if sidecar.is_file():
+                try:
+                    prov = json.loads(sidecar.read_text(encoding="utf-8"))
+                    val = prov.get("freshness")
+                    if val in ("fresh", "stale", "pending"):
+                        freshness = val
+                except (OSError, ValueError):
+                    freshness = "unknown"
+            summary[freshness] += 1
             summary["total"] += 1
     except OSError:
         pass

@@ -31,7 +31,7 @@ def compute_adaptive_budget(module_count: int, base: int = 4000) -> int:
     if module_count <= 20:
         return base
     extra = ((module_count - 20) // 10) * 200
-    return min(base + extra, 64000)
+    return min(base + extra, 16000)
 
 
 # Compression ratio thresholds (from telemetry analysis of 389 regen outcomes)
