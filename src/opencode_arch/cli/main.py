@@ -14,7 +14,7 @@ def main():
         and sys.argv[1] not in (
             "extract", "generate", "bench", "metrics", "report",
             "regen-loop", "confidence", "calibrate", "export-data", "docs", "export",
-            "lifecycle", "ai",
+            "lifecycle", "ai", "feedback",
         )
     ):
         from opencode_arch.cli.launch import run_launch
@@ -126,6 +126,11 @@ def main():
     )
     register_lifecycle_subparsers(subparsers)
     register_ai_subparsers(subparsers)
+
+    from opencode_arch.cli.feedback import (
+        register_feedback_subparsers, dispatch_feedback,
+    )
+    register_feedback_subparsers(subparsers)
 
     args = parser.parse_args()
 
@@ -269,6 +274,9 @@ def main():
 
     elif args.command == "ai":
         sys.exit(dispatch_ai(args))
+
+    elif args.command == "feedback":
+        sys.exit(dispatch_feedback(args))
 
 
 def _print_docs_result(result):
