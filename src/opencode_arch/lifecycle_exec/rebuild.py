@@ -609,6 +609,42 @@ def rebuild_artifacts(
                 )
                 continue
 
+            # -- provenance sidecar (Phase 2 Task 28) ----------------------------
+            # AMS Task 10 stamps ProjectedView.provenance in-memory during
+            # project(). Persist a compact JSON sidecar next to <id>.<ext> so
+            # architect_evaluate.freshness_summary can classify per-artifact
+            # freshness on disk. pipeline-html bypasses project(); we stamp a
+            # minimal provenance ("fresh" now, revision from the materialized
+            # slice) so those artifacts also participate in the summary.
+            try:
+                import json as _json
+                if renderer_name == "pipeline-html":
+                    prov = {
+                        "freshness": "fresh",
+                        "revision": getattr(slice_obj, "model_revision", None),
+                        "produced_at": ts,
+                        "projector": "pipeline-html",
+                    }
+                else:
+                    src = getattr(pv, "provenance", None) or {}
+                    prov = {
+                        "freshness": src.get("freshness", "fresh"),
+                        "revision": src.get("revision"),
+                        "produced_at": src.get("produced_at", ts),
+                        "projector": src.get("projector") or getattr(
+                            view, "projector", None
+                        ),
+                    }
+                sidecar_path = output_path.with_name(
+                    output_path.name + ".provenance.json"
+                )
+                write_atomic(
+                    sidecar_path,
+                    (_json.dumps(prov, sort_keys=True) + "\n").encode("utf-8"),
+                )
+            except Exception:  # noqa: BLE001 — sidecar write is best-effort
+                pass
+
             # -- pipeline-html asset mirror --------------------------------------
             if renderer_name == "pipeline-html":
                 try:

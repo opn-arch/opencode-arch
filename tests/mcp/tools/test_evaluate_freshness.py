@@ -63,3 +63,123 @@ def test_evaluate_freshness_ignores_subdirectories(tmp_path):
     # Only the top-level file counts; asset children are ignored.
     assert fs["total"] == 1
     assert fs["unknown"] == 1
+
+
+# ---------------------------------------------------------- Phase 2 Task 28
+
+
+def test_evaluate_freshness_reads_provenance_sidecar(tmp_path):
+    """Sidecar with ``freshness: fresh`` buckets the parent as fresh."""
+    import json
+
+    artifacts = tmp_path / ".architecture" / "lifecycle" / "artifacts"
+    artifacts.mkdir(parents=True)
+    (artifacts / "foo.md").write_text("# foo\n")
+    (artifacts / "foo.md.provenance.json").write_text(
+        json.dumps({"freshness": "fresh", "revision": "0000001"})
+    )
+    (artifacts / "bar.md").write_text("# bar\n")
+    (artifacts / "bar.md.provenance.json").write_text(
+        json.dumps({"freshness": "stale", "revision": "0000001"})
+    )
+    (artifacts / "baz.md").write_text("# baz\n")  # no sidecar
+    result = _run(evaluate_workspace(repo_path=str(tmp_path), force_refresh=True))
+    fs = result["freshness_summary"]
+    assert fs["total"] == 3  # sidecars themselves excluded from total
+    assert fs["fresh"] == 1
+    assert fs["stale"] == 1
+    assert fs["unknown"] == 1
+    assert fs["pending"] == 0
+
+
+def test_evaluate_freshness_after_real_rebuild(tmp_path):
+    """End-to-end: rebuild produces sidecars → evaluate reports fresh."""
+    import asyncio
+
+    import yaml
+
+    from architecture_model.core.diagram_spec import DiagramSpec
+    from architecture_model.lifecycle.versions import SchemaVersions
+    from architecture_model.lifecycle.view_projection import DEFAULT_REGISTRY
+    from opencode_arch.lifecycle_exec.rebuild import rebuild_artifacts
+    from opencode_arch.mcp.tools.lifecycle.package_publish import publish_package_tool
+
+    # Init root package.yaml (this test lives outside tests/lifecycle_exec/
+    # which has an autouse conftest fixture for this).
+    lifecycle = tmp_path / ".architecture" / "lifecycle"
+    lifecycle.mkdir(parents=True, exist_ok=True)
+    (lifecycle / "package.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "architecture_id": "root-pkg",
+                "name": "root-pkg",
+                "slug": "root-pkg",
+                "contract_version": SchemaVersions.PACKAGE,
+                "model_ref": "model/.architecture-model.yaml",
+                "manifest_ref": "manifest/manifest.json",
+            },
+            sort_keys=True,
+        ),
+        encoding="utf-8",
+    )
+
+    model_yaml = (
+        "meta:\n  project: t\n  schema_version: '2.0'\n"
+        "entities:\n  components:\n    - id: COMP-1\n      name: C\n      status: ACTIVE\n"
+        "relationships: []\n"
+    )
+    env = asyncio.run(
+        publish_package_tool(repo_path=str(tmp_path), model_yaml=model_yaml)
+    )
+    assert env["ok"], env
+
+    def proj(fragment, config):
+        return DiagramSpec(id="d", title="D")
+
+    DEFAULT_REGISTRY.register("t.eval_fresh", proj, version="1.0.0")
+    try:
+        report = rebuild_artifacts(
+            tmp_path,
+            [
+                {
+                    "id": "art",
+                    "renderer": "markdown",
+                    "view_ref": {"view_id": "v", "model_revision": "0000001"},
+                }
+            ],
+            [
+                {
+                    "id": "v",
+                    "slice_ref": {"slice_id": "s", "model_revision": "0000001"},
+                    "projector": "t.eval_fresh",
+                    "output_content_kind": "diagram",
+                }
+            ],
+            [
+                {
+                    "id": "s",
+                    "architecture_id": "root-pkg",
+                    "model_revision": "0000001",
+                    "scope": "local",
+                    "closure": "strict",
+                    "shared_refs": "none",
+                    "selectors": {"entity_kinds": ["components"]},
+                }
+            ],
+        )
+    finally:
+        DEFAULT_REGISTRY.unregister("t.eval_fresh")
+
+    assert report.failed == [], report.failed
+    assert len(report.built) == 1
+
+    # Sidecar should exist next to art.md.
+    artifacts_dir = tmp_path / ".architecture" / "lifecycle" / "artifacts"
+    assert (artifacts_dir / "art.md").exists()
+    assert (artifacts_dir / "art.md.provenance.json").exists()
+
+    result = _run(evaluate_workspace(repo_path=str(tmp_path), force_refresh=True))
+    fs = result["freshness_summary"]
+    # Sidecar is excluded from the top-level count; artifact bucketed as fresh.
+    assert fs["total"] == 1, fs
+    assert fs["fresh"] >= 1, fs
