@@ -312,6 +312,42 @@ Two production-ready templates in `../architecture-model-standard/docs/templates
 See `../architecture-model-standard/docs/plans/2026-09-08-phase-4-writeback-endpoints-federated.md`
 for the full 28-task Phase 4 plan.
 
+## Phase 5 substrate (deferred completion — fan-out, provenance, family5)
+
+Phase 5 closes three deferred Phase 2/3 sub-tasks. Fully
+backward-compatible; no schema or contract changes.
+
+**Per-subsystem fan-out (Phase 2 Task 27).** When an ``ArtifactSpec``
+resolves to a slice with ``scope="descendants:each"``,
+``rebuild_artifacts`` enumerates ``iter_descendants(pkg,
+include_self=True)`` and emits **one artifact per descendant** (root
+included). The executor rewrites each in-flight ``spec_id`` to
+``<spec_id>.<subsystem_slug>`` and narrows the slice to
+``scope="local"`` for that pass so each fragment contains only its
+subsystem's entities. The pre-existing ``scope="descendants"`` behavior
+(single merged-fragment artifact) is unchanged.
+
+**Provenance sidecars (Phase 2 Task 28).** After every successful
+artifact body write, ``rebuild_artifacts`` writes
+``<id>.<ext>.provenance.json`` next to the artifact containing
+``{freshness, revision, produced_at, projector}`` sourced from
+``ProjectedView.provenance``. The ``pipeline-html`` renderer bypasses
+``project()`` — those artifacts receive a synthesized provenance stub
+(``freshness="fresh"``, ``revision`` from the materialized slice,
+``projector="pipeline-html"``) so they participate in the same freshness
+summary. Sidecar writes are best-effort; a failure never fails the
+artifact itself. ``architect_evaluate`` reads sidecars via
+``_collect_freshness_summary`` to bucket artifacts as
+``fresh``/``stale``/``pending``, falling back to ``unknown`` when the
+sidecar is absent (pre-Phase-5 artifacts). Sidecar files are excluded
+from the artifact total count.
+
+**Family 5 entity pages.** ``architect_docs formats='entity_pages'``
+now writes per-entity Markdown pages under
+``.architecture/lifecycle/artifacts/entity_pages/family5/`` for
+components, environments, and resources. Requires
+``architecture-model-standard>=1.3.0`` (Family5EntityPage).
+
 ## Package Structure
 
 ```
