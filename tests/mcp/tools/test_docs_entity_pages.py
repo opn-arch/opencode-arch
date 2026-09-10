@@ -48,6 +48,18 @@ def _write_model(tmp_path: Path) -> None:
                   type: internal
                   status: ACTIVE
                   intent: Public API.
+              environments:
+                - id: ENV-1
+                  name: Prod
+                  status: ACTIVE
+                  kind: production
+                  region: us-east-1
+              resources:
+                - id: RES-1
+                  name: DB
+                  status: ACTIVE
+                  kind: database
+                  provider: aws
             relationships:
               - from: COMP-1
                 to: CAP-F1
@@ -55,6 +67,12 @@ def _write_model(tmp_path: Path) -> None:
               - from: COMP-1
                 to: IF-1
                 type: exposes
+              - from: COMP-1
+                to: ENV-1
+                type: allocated-to
+              - from: COMP-1
+                to: RES-1
+                type: consumes
             """
         )
     )
@@ -104,3 +122,25 @@ def test_entity_pages_covers_multiple_families(tmp_path):
     assert (root / "family1").is_dir()
     assert (root / "family3").is_dir()
     assert (root / "family3" / "COMP-1.md").is_file()
+
+
+def test_entity_pages_family5_deployment(tmp_path):
+    """Family 5 renders deployment pages for environments and resources."""
+    _write_model(tmp_path)
+    _run(generate_docs(str(tmp_path), formats="entity_pages"))
+    root = tmp_path / ".architecture" / "lifecycle" / "artifacts" / "entity_pages"
+    fam5 = root / "family5"
+    assert fam5.is_dir(), "family5 entity_pages directory missing"
+    assert (fam5 / "ENV-1.md").is_file()
+    assert (fam5 / "RES-1.md").is_file()
+    env_body = (fam5 / "ENV-1.md").read_text()
+    assert "## Kind" in env_body and "production" in env_body
+    assert "## Region" in env_body and "us-east-1" in env_body
+    assert "## Deployed Components" in env_body and "COMP-1" in env_body
+    res_body = (fam5 / "RES-1.md").read_text()
+    assert "## Kind" in res_body and "database" in res_body
+    assert "## Provider" in res_body and "aws" in res_body
+    assert "## Consumed By" in res_body and "COMP-1" in res_body
+    # Component page in family5 shows Deployed To.
+    comp_body = (fam5 / "COMP-1.md").read_text()
+    assert "## Deployed To" in comp_body and "ENV-1" in comp_body
