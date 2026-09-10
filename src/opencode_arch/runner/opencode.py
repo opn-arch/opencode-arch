@@ -65,8 +65,13 @@ class OpencodeRunner:
         *,
         task_class_name: str,
         repo_path: str = ".",
+        projector_name: str | None = None,
     ) -> RunResult:
         """Route through Policy.pick(...).complete(...) if policy configured, else fall back to run().
+
+        When ``projector_name`` is supplied and matches a ``projector_rules``
+        entry (or a ``"default"`` fallback) in ``policy.yaml``, the per-projector
+        rule's ``task_class`` overrides the caller-supplied ``task_class_name``.
 
         Synchronous. Wraps Completion into RunResult for caller compatibility.
         Falls back to asyncio.run(self.run(prompt, repo_path)) if no policy.yaml found.
@@ -78,7 +83,12 @@ class OpencodeRunner:
             return asyncio.run(self.run(prompt, repo_path))
         from opencode_arch.llm.policy import load_policy, TaskClass
         policy = load_policy(_P(repo_path))
-        provider = policy.pick(TaskClass(task_class_name))
+        effective_task_class = task_class_name
+        if projector_name is not None:
+            resolved = policy.resolve_projector(projector_name)
+            if resolved is not None:
+                effective_task_class = resolved.task_class
+        provider = policy.pick(TaskClass(effective_task_class))
         completion = provider.complete(prompt, model=self.model, max_tokens=4096)
         return RunResult(
             output=completion["text"],

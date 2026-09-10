@@ -238,6 +238,80 @@ for the full 24-task Phase 3 plan and the AMS-side substrate
 (`slice_by_entity`, `entity(<id>)` scope, EntityPageProjector,
 recursion controls on ViewSpec).
 
+## Phase 4 tools + policy + templates
+
+Phase 4 (branch `feat/model-view-mapping-phase-4`) adds one new MCP
+tool, extends the LLM provider layer with policy-side per-projector
+budgets, ships a test-only `MockProvider`, and publishes two cross-repo
+trigger templates. The Phase 4 AMS substrate (WriteBackProjector,
+endpoint extraction, federated M3) is described in
+`../architecture-model-standard/CONTEXT.md`.
+
+### New MCP tool: `architect_propose`
+
+`opencode_arch.mcp.tools.ai.propose.architect_propose_tool` dispatches
+a Phase 4 `WriteBackProjector` variant against a persisted architecture
+package, returning an authored proposal envelope:
+`{ok, proposal_id, work_order_id, apply_hint}`. Rejects any
+`projector_name` without the `.llm` suffix as `INVALID_ARGUMENT` — the
+suffix is the AMS-side write-back contract. Materializes the
+caller-supplied `slice_spec` against the current published root package,
+resolves the projector via `write_back_variants.__all__`, resolves the
+provider via a policy-resolved `LLMProvider`, and persists the resulting
+proposal to `.architecture/ai/proposals/<proposal_id>.yaml`. Envelope
+error codes: `INVALID_ARGUMENT`, `NOT_FOUND` (package or projector),
+`SCHEMA_VIOLATION`, `PRECONDITION_FAILED`, `INTERNAL`.
+
+### Per-projector budget rules
+
+`opencode_arch.llm.policy.Policy` gains `projector_rules:
+dict[str, ProjectorRule]` where
+`ProjectorRule(task_class: str, max_cost_usd_per_call: float)`.
+Resolution order: exact projector name → `"default"` → `None`.
+`OpencodeRunner.run_via_policy(prompt, task_class_name=...,
+projector_name=None)` accepts an optional `projector_name` — when
+resolvable, the projector rule's `task_class` overrides the caller-
+supplied `task_class_name` so per-projector overrides win without
+touching call sites. Existing `TaskClass` routing rules and the
+`global_budget_usd` cap are unchanged.
+
+### Reference-doc formats default-on
+
+`architect_docs(formats="cli_reference")`, `formats="api_reference"`,
+and `formats="plugin_guide"` rebuild via `family6.cli_reference`,
+`family6.api_reference`, and `family6.plugin_guide` projectors +
+markdown renderer. All three are included in the `formats="all"`
+expansion — no opt-in flag required. Contract locked by
+`tests/mcp/tools/test_docs_specs_reference.py`.
+
+### Test-only MockProvider
+
+`opencode_arch.llm.providers.mock.MockProvider(responses)` matches
+prompts by SHA-256 hash and returns canned responses. Key convention:
+`complete` → `sha256(prompt)`; `structured` → `sha256(prompt) +
+":structured"`; `stream` → `sha256(prompt) + ":stream"`. Any
+unregistered prompt raises `KeyError` — tests must be explicit about
+expected LLM interactions. Live LLM tests remain behind
+`AMS_RUN_LLM_INTEGRATION=1`.
+
+### Cross-repo trigger templates (AMS-side)
+
+Two production-ready templates in `../architecture-model-standard/docs/templates/`:
+
+* `child-publish-watcher.sh` — POSIX shell watcher for monorepos.
+  Watches a child repo's `.architecture/lifecycle/CURRENT` via `fswatch`
+  (macOS) / `inotifywait` (Linux) and invokes
+  `opencode-arch invalidate --federated-child <CHILD_ARCH_ID>` in the
+  parent when the child publishes a new generation.
+* `child-publish-webhook.yml` — GitHub Actions workflow for multi-repo
+  setups. Fires `repository_dispatch` on the parent repo with
+  `event_type: child-architecture-published` and a `client_payload`
+  containing `{child_arch_id, revision, sha}` so the parent's
+  federated invalidation runs.
+
+See `../architecture-model-standard/docs/plans/2026-09-08-phase-4-writeback-endpoints-federated.md`
+for the full 28-task Phase 4 plan.
+
 ## Package Structure
 
 ```
