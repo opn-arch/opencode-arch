@@ -35,6 +35,19 @@ class RoutingRule:
     fallback: tuple[str, ...]
 
 
+@dataclass(frozen=True)
+class ProjectorRule:
+    """Per-projector routing override (Phase 4 Task 20).
+
+    Only carries the two knobs the plan calls out: which task class to
+    resolve, and the projector-specific cost cap. Callers combine
+    ``task_class`` with :meth:`Policy.pick` to obtain the actual provider.
+    """
+
+    task_class: str
+    max_cost_usd_per_call: float
+
+
 class _FallbackProvider:
     """Wraps a primary provider + ordered fallbacks. Catches TransientProviderError."""
 
@@ -89,6 +102,7 @@ class Policy:
     rules: dict[TaskClass, RoutingRule]
     global_budget_usd: float
     retry_backoff: tuple[float, ...]
+    projector_rules: dict[str, ProjectorRule] = field(default_factory=dict)
     _spent: dict[str, float] = field(default_factory=dict)
 
     def spend(self, provider_name: str, amount_usd: float) -> None:
@@ -108,6 +122,19 @@ class Policy:
         primary = registry.get_provider(rule.provider)
         fallbacks = tuple(registry.get_provider(n) for n in rule.fallback)
         return _FallbackProvider(primary, fallbacks)
+
+    def resolve_projector(self, projector_name: str) -> ProjectorRule | None:
+        """Return the routing override for ``projector_name``.
+
+        Lookup order: exact projector name → ``"default"`` entry → ``None``.
+        Returning ``None`` signals to the caller that no per-projector rule
+        applies and the caller-supplied task class should be used verbatim.
+        """
+        if projector_name in self.projector_rules:
+            return self.projector_rules[projector_name]
+        if "default" in self.projector_rules:
+            return self.projector_rules["default"]
+        return None
 
 
 def load_policy(repo_path: Path) -> Policy:
@@ -130,4 +157,11 @@ def load_policy(repo_path: Path) -> Policy:
         rules=rules,
         global_budget_usd=float(data.get("global_budget_usd", 0.0)),
         retry_backoff=tuple(data.get("retry_backoff", []) or []),
+        projector_rules={
+            name: ProjectorRule(
+                task_class=str(spec["task_class"]),
+                max_cost_usd_per_call=float(spec["max_cost_usd_per_call"]),
+            )
+            for name, spec in (data.get("projector_rules", {}) or {}).items()
+        },
     )
