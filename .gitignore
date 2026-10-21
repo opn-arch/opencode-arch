@@ -11,4 +11,6 @@ build/
 # Review session — local only
 review/
 .architecture/sil.sqlite
+.architecture/sil.sqlite-shm
+.architecture/sil.sqlite-wal
 .architecture/lifecycle/.locks/
