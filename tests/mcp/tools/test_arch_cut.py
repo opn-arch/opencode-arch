@@ -76,10 +76,57 @@ def test_propose_cut_does_not_mutate_on_reject(tmp_repo):
             proposal=_DROP_ALARM_PROPOSAL,
         )
     )
+    # A rejected proposal yields a verdict (rejections), never a digest.
     assert out["ok"] is False
+    assert "digest" not in out
 
     after = {p.name: p.read_bytes() for p in model_dir.glob("*.v3.yaml")}
     assert before == after
+
+
+def test_propose_cut_gate_discriminates_accept_vs_reject(tmp_repo):
+    """The gate is genuine, not a blanket reject: a conservation-preserving
+    split SUCCEEDS with a digest while the file-dropping split is rejected.
+
+    Proves the B★ property is enforced by the real ``_split``/``apply_proposal``
+    gate rather than being a no-op (the drop and the identity-replace differ
+    only in whether they conserve the global claimed-file set).
+    """
+    from opencode_arch.mcp.tools._openag_loader import load_doc
+
+    doc = load_doc(str(tmp_repo))
+    alarm = next(
+        e
+        for e in doc["entities"]["components"]
+        if e["id"] == "COMP-ALARM"
+    )
+    # Identity replace: re-claims alarm.py, so the global file set is conserved.
+    conserving = {
+        "ops": [
+            {
+                "kind": "replace",
+                "target": "entity",
+                "entity_kind": "components",
+                "value": alarm,
+            }
+        ]
+    }
+
+    accepted = _run(
+        arch_propose_cut(
+            repo_path=str(tmp_repo), node_id="SYS-PUMP", proposal=conserving
+        )
+    )
+    rejected = _run(
+        arch_propose_cut(
+            repo_path=str(tmp_repo), node_id="SYS-PUMP", proposal=_DROP_ALARM_PROPOSAL
+        )
+    )
+
+    assert accepted["ok"] is True
+    assert isinstance(accepted["digest"], str) and accepted["digest"]
+    assert rejected["ok"] is False
+    assert "digest" not in rejected
 
 
 def test_propose_cut_invalid_node_id_errors(tmp_repo):
