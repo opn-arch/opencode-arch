@@ -1103,6 +1103,9 @@ try:
     from opencode_arch.mcp.tools.arch_health import arch_health as _arch_health
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
+    from opencode_arch.mcp.tools.arch_ingest_telemetry import (
+        arch_ingest_telemetry as _arch_ingest_telemetry,
+    )
     from opencode_arch.mcp.tools.arch_history import arch_history as _arch_history
     from opencode_arch.mcp.tools.arch_round import arch_round as _arch_round
     from opencode_arch.mcp.tools.arch_cut import (
@@ -1162,6 +1165,11 @@ try:
             io_kind=io_kind,
             since=since,
         )
+
+    @mcp.tool()
+    async def arch_ingest_telemetry(repo_path: str, events: list[dict]) -> dict:
+        """Append externally-supplied observation events to the journal."""
+        return await _arch_ingest_telemetry(repo_path=repo_path, events=events)
 
     @mcp.tool()
     async def arch_history(
