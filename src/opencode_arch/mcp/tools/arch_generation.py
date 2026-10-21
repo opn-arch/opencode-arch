@@ -5,7 +5,8 @@ continuity lives in the :class:`~openag.kernel.generations.GenerationStore`
 under ``<repo>/.architecture/generations/``.
 
 * ``arch_commit_generation`` records an identity projection of the current
-  model as the next monotone 7-digit generation.
+  model — plus its graph-wide ``graph_health`` projection — as the next
+  monotone 7-digit generation.
 * ``arch_bind`` runs the θ-crosswalk (``kernel.identity.crosswalk``) of the
   latest recorded generation onto the current model, surfacing the per-entity
   bind/ambiguous/new verdict, orphans, and the Layer-2 identity gaps.
@@ -19,16 +20,20 @@ import os
 
 from opencode_arch.mcp.envelope import resolve_repo, tool_result
 from opencode_arch.mcp.tools._observe import observe_tool_call
-from opencode_arch.mcp.tools._openag_loader import load_doc
+from opencode_arch.mcp.tools._openag_loader import build_graph, load_doc
 
 _GENERATIONS_REL = os.path.join(".architecture", "generations")
 
 
-def _current_entities(repo_path: str) -> list[dict]:
-    """Flatten every entity (across all kinds) from the merged openAG doc."""
-    doc = load_doc(repo_path)
+def _flatten_entities(doc: dict) -> list[dict]:
+    """Flatten every entity (across all kinds) from an openAG doc."""
     entities = doc.get("entities") or {}
     return [e for items in entities.values() for e in (items or [])]
+
+
+def _current_entities(repo_path: str) -> list[dict]:
+    """Flatten every entity (across all kinds) from the merged openAG doc."""
+    return _flatten_entities(load_doc(repo_path))
 
 
 def _store(repo_path: str):
@@ -80,10 +85,20 @@ async def arch_bind(repo_path: str) -> dict:
 async def arch_commit_generation(repo_path: str) -> dict:
     """Record the current model as the next monotone generation.
 
-    Returns the new ``gen_id`` (7-digit string) and the committed entity count.
+    Returns the new ``gen_id`` (7-digit string), the committed entity count,
+    and the graph-wide ``graph_health`` projection recorded alongside it.
     """
     with observe_tool_call(repo_path, "arch_commit_generation"):
-        current = _current_entities(repo_path)
+        doc = load_doc(repo_path)
+        current = _flatten_entities(doc)
+        g = build_graph(doc)
+
+        from openag.kernel.health import graph_health
+        from openag.observe import journal
+
+        observations = journal.read(resolve_repo(repo_path))
+        health = graph_health(g, observations)
+
         store = _store(repo_path)
-        gen_id = store.record(current)
-        return {"gen_id": gen_id, "entity_count": len(current)}
+        gen_id = store.record(current, health=health)
+        return {"gen_id": gen_id, "entity_count": len(current), "health": health}
