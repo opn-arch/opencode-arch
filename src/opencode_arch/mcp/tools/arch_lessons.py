@@ -72,15 +72,14 @@ async def arch_lessons(repo_path: str) -> dict:
 
         lessons = derive_lessons(history, observations, gaps, flags)
 
-        # Persist to the append-only ledger. append() is fail-soft (returns a
-        # bool, never raises); the result is intentionally discarded — a
-        # persistence failure must not fail the read. Repeated calls on an
-        # unchanged model accumulate into the ledger by design (the digest
-        # reflects the full lessons.jsonl, consistent with the feedback-journal
-        # pattern); kernel-level dedup is a separate follow-up.
+        # Persist to the append-only ledger via extend(), which skips lessons
+        # already present (by ts-free content key). This keeps repeat calls on
+        # an unchanged model from bloating the ledger with identical duplicates
+        # while still recording genuinely new lessons. extend() is fail-soft
+        # per append (a persistence failure is simply not counted) — a write
+        # failure must never fail the read.
         store = LessonStore(resolved)
-        for les in lessons:
-            store.append(les)
+        store.extend(lessons)
 
         result = digest(store, g)
         return {"digest": result, "proposals": result["proposals"]}

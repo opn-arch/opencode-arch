@@ -127,29 +127,29 @@ def test_missing_model_returns_not_found(tmp_path):
 
 
 def test_idempotent_shape_on_repeat_call(tmp_repo):
+    lessons_path = tmp_repo / ".architecture" / "lessons.jsonl"
     first = _run(arch_lessons(repo_path=str(tmp_repo)))
+    after_first = len(
+        [l for l in lessons_path.read_text().splitlines() if l.strip()]
+    )
     second = _run(arch_lessons(repo_path=str(tmp_repo)))
+    after_second = len(
+        [l for l in lessons_path.read_text().splitlines() if l.strip()]
+    )
     assert first["ok"] is True and second["ok"] is True
     # Shape is stable across calls (digest key set + proposal key sets).
     assert set(first["digest"].keys()) == {"lessons", "proposals"}
     assert set(second["digest"].keys()) == {"lessons", "proposals"}
     for stub in second["proposals"]:
         assert _PROPOSAL_KEYS == set(stub.keys())
-    # The lesson subjects seen on the first call are still present on the second
-    # (the store is append-only; re-mining the same model yields the same subjects).
+    # Dedup: re-mining an unchanged model yields the same subjects and a stable
+    # digest view, and the append-only ledger does NOT grow on repeat (extend()
+    # skips already-persisted lessons by ts-free content key).
     first_subjects = {l["subject"] for l in first["digest"]["lessons"]}
     second_subjects = {l["subject"] for l in second["digest"]["lessons"]}
-    assert first_subjects <= second_subjects
-
-    # The ledger is append-only by design: re-mining the same model re-appends
-    # the same lessons, so the persisted store (and the digest that reflects it)
-    # must not shrink across calls. Kernel-level dedup is a tracked follow-up.
-    assert len(second["digest"]["lessons"]) >= len(first["digest"]["lessons"])
-    lessons_path = tmp_repo / ".architecture" / "lessons.jsonl"
-    persisted = [
-        line for line in lessons_path.read_text().splitlines() if line.strip()
-    ]
-    assert len(persisted) >= 2 * len(first["digest"]["lessons"])
+    assert first_subjects == second_subjects
+    assert len(second["digest"]["lessons"]) == len(first["digest"]["lessons"])
+    assert after_second == after_first
 
 
 def test_self_instruments_journal(tmp_repo):
