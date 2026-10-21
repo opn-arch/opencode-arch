@@ -1103,6 +1103,7 @@ try:
     from opencode_arch.mcp.tools.arch_health import arch_health as _arch_health
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
+    from opencode_arch.mcp.tools.arch_history import arch_history as _arch_history
     from opencode_arch.mcp.tools.arch_round import arch_round as _arch_round
     from opencode_arch.mcp.tools.arch_cut import (
         arch_allocate_contract as _arch_allocate_contract,
@@ -1160,6 +1161,21 @@ try:
             component_id=component_id,
             io_kind=io_kind,
             since=since,
+        )
+
+    @mcp.tool()
+    async def arch_history(
+        repo_path: str,
+        node_id: str | None = None,
+        gen_a: str | None = None,
+        gen_b: str | None = None,
+    ) -> dict:
+        """Return the generation timeline, a node trajectory, or a generation diff."""
+        return await _arch_history(
+            repo_path=repo_path,
+            node_id=node_id,
+            gen_a=gen_a,
+            gen_b=gen_b,
         )
 
     @mcp.tool()
