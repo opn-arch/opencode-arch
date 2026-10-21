@@ -67,6 +67,17 @@ def test_arch_round_node_scope_subset(tmp_repo):
     assert set(scoped["grounded"]).issubset(set(whole["grounded"]))
 
 
+def test_arch_round_node_scope_non_vacuous(tmp_repo):
+    """A node that actually owns a grounded promise yields a non-empty,
+    proper subset of the whole-graph grounded set."""
+    whole = _run(arch_round(repo_path=str(tmp_repo)))
+    scoped = _run(arch_round(repo_path=str(tmp_repo), node_id="CON-OVERDOSE"))
+    assert scoped["ok"] is True
+    assert scoped["grounded"], "expected CON-OVERDOSE to own a grounded promise"
+    assert set(scoped["grounded"]).issubset(set(whole["grounded"]))
+    assert set(scoped["grounded"]) != set(whole["grounded"])
+
+
 def test_arch_round_unknown_node_errors(tmp_repo):
     out = _run(arch_round(repo_path=str(tmp_repo), node_id="CAP-NOPE"))
     assert out["ok"] is False

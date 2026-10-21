@@ -16,31 +16,9 @@ from __future__ import annotations
 
 import hashlib
 import json
-from pathlib import Path
 
-from opencode_arch.mcp.envelope import resolve_repo, tool_result
-
-_MODEL_REL = Path(".architecture") / "model"
-
-
-def _load_doc(repo_path: str):
-    """Resolve the repo + openAG model dir and return the merged doc.
-
-    Raises:
-        ValueError / FileNotFoundError / NotADirectoryError: from
-            ``resolve_repo`` (repo-level validation).
-        FileNotFoundError: when the openAG model dir is absent or empty.
-    """
-    repo = resolve_repo(repo_path)
-    model_dir = repo / _MODEL_REL
-    if not model_dir.is_dir():
-        raise FileNotFoundError(f"openAG model dir not found: {model_dir}")
-    if not any(model_dir.glob("*.v3.yaml")):
-        raise FileNotFoundError(f"openAG model dir is empty: {model_dir}")
-
-    from openag.model_io import load_model_dir
-
-    return load_model_dir(str(model_dir))
+from opencode_arch.mcp.envelope import tool_result
+from opencode_arch.mcp.tools._openag_loader import build_graph, load_doc
 
 
 def _owned_promise_ids(doc: dict, scope_ids: set[str]) -> set[str]:
@@ -66,14 +44,12 @@ async def arch_round(repo_path: str, node_id: str | None = None) -> dict:
     ``contains``-subtree. When ``node_id`` is ``None``, the full grounded
     set is reported.
     """
-    if node_id is not None and (not node_id.strip() or not isinstance(node_id, str)):
+    if node_id is not None and (not isinstance(node_id, str) or not node_id.strip()):
         raise ValueError("node_id must be a non-empty string when provided")
 
-    doc = _load_doc(repo_path)
+    doc = load_doc(repo_path)
 
-    from openag.graph.model_graph import ModelGraph
-
-    g = ModelGraph.from_doc(doc)
+    g = build_graph(doc)
 
     from openag.kernel.round import b_round
 
