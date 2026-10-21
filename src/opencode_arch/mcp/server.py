@@ -1101,6 +1101,7 @@ try:
         arch_slice as _arch_slice,
     )
     from opencode_arch.mcp.tools.arch_health import arch_health as _arch_health
+    from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_round import arch_round as _arch_round
     from opencode_arch.mcp.tools.arch_cut import (
         arch_allocate_contract as _arch_allocate_contract,
@@ -1139,6 +1140,11 @@ try:
     async def arch_health(repo_path: str, node_id: str | None = None) -> dict:
         """Return per-node (with flags) or graph-wide health projection."""
         return await _arch_health(repo_path=repo_path, node_id=node_id)
+
+    @mcp.tool()
+    async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
+        """Return proprioceptive anomaly flags (workspace-wide or node-filtered)."""
+        return await _arch_flags(repo_path=repo_path, node_id=node_id)
 
     @mcp.tool()
     async def arch_round(repo_path: str, node_id: str | None = None) -> dict:
