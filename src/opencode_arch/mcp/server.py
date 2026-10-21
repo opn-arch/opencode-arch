@@ -1100,6 +1100,7 @@ try:
         arch_owed as _arch_owed,
         arch_slice as _arch_slice,
     )
+    from opencode_arch.mcp.tools.arch_health import arch_health as _arch_health
     from opencode_arch.mcp.tools.arch_round import arch_round as _arch_round
     from opencode_arch.mcp.tools.arch_cut import (
         arch_allocate_contract as _arch_allocate_contract,
@@ -1133,6 +1134,11 @@ try:
     async def arch_slice(repo_path: str, node_id: str) -> dict:
         """Return the entity-scoped sub-doc for an entity."""
         return await _arch_slice(repo_path=repo_path, node_id=node_id)
+
+    @mcp.tool()
+    async def arch_health(repo_path: str, node_id: str | None = None) -> dict:
+        """Return per-node (with flags) or graph-wide health projection."""
+        return await _arch_health(repo_path=repo_path, node_id=node_id)
 
     @mcp.tool()
     async def arch_round(repo_path: str, node_id: str | None = None) -> dict:
