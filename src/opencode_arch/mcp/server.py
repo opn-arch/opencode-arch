@@ -1107,6 +1107,7 @@ try:
         arch_ingest_telemetry as _arch_ingest_telemetry,
     )
     from opencode_arch.mcp.tools.arch_history import arch_history as _arch_history
+    from opencode_arch.mcp.tools.arch_lessons import arch_lessons as _arch_lessons
     from opencode_arch.mcp.tools.arch_round import arch_round as _arch_round
     from opencode_arch.mcp.tools.arch_cut import (
         arch_allocate_contract as _arch_allocate_contract,
@@ -1185,6 +1186,11 @@ try:
             gen_a=gen_a,
             gen_b=gen_b,
         )
+
+    @mcp.tool()
+    async def arch_lessons(repo_path: str) -> dict:
+        """Return mined lessons + reviewable proposal stubs (proprioception)."""
+        return await _arch_lessons(repo_path=repo_path)
 
     @mcp.tool()
     async def arch_round(repo_path: str, node_id: str | None = None) -> dict:
