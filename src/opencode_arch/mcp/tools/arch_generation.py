@@ -18,6 +18,7 @@ from __future__ import annotations
 import os
 
 from opencode_arch.mcp.envelope import resolve_repo, tool_result
+from opencode_arch.mcp.tools._observe import observe_tool_call
 from opencode_arch.mcp.tools._openag_loader import load_doc
 
 _GENERATIONS_REL = os.path.join(".architecture", "generations")
@@ -48,30 +49,31 @@ async def arch_bind(repo_path: str) -> dict:
     """
     from openag.kernel.identity import crosswalk, identity_gaps
 
-    current = _current_entities(repo_path)
-    store = _store(repo_path)
-    latest = store.latest()
-    old_entities = latest["entities"] if latest else []
-    sticky = store.sticky_anchors()
+    with observe_tool_call(repo_path, "arch_bind"):
+        current = _current_entities(repo_path)
+        store = _store(repo_path)
+        latest = store.latest()
+        old_entities = latest["entities"] if latest else []
+        sticky = store.sticky_anchors()
 
-    result = crosswalk(old_entities, current, sticky_anchors=sticky)
-    gaps = identity_gaps(result)
+        result = crosswalk(old_entities, current, sticky_anchors=sticky)
+        gaps = identity_gaps(result)
 
-    return {
-        "entries": [
-            {
-                "new_id": e.new_id,
-                "bound_to": e.bound_to,
-                "band": e.band,
-                "score": e.score,
-            }
-            for e in result.entries
-        ],
-        "orphans": result.orphans,
-        "gaps": gaps,
-        "ambiguous": [g for g in gaps if g["gap_type"] == "gap:ambiguous-identity"],
-        "sticky": [e.new_id for e in result.entries if e.band == "bind"],
-    }
+        return {
+            "entries": [
+                {
+                    "new_id": e.new_id,
+                    "bound_to": e.bound_to,
+                    "band": e.band,
+                    "score": e.score,
+                }
+                for e in result.entries
+            ],
+            "orphans": result.orphans,
+            "gaps": gaps,
+            "ambiguous": [g for g in gaps if g["gap_type"] == "gap:ambiguous-identity"],
+            "sticky": [e.new_id for e in result.entries if e.band == "bind"],
+        }
 
 
 @tool_result
@@ -80,7 +82,8 @@ async def arch_commit_generation(repo_path: str) -> dict:
 
     Returns the new ``gen_id`` (7-digit string) and the committed entity count.
     """
-    current = _current_entities(repo_path)
-    store = _store(repo_path)
-    gen_id = store.record(current)
-    return {"gen_id": gen_id, "entity_count": len(current)}
+    with observe_tool_call(repo_path, "arch_commit_generation"):
+        current = _current_entities(repo_path)
+        store = _store(repo_path)
+        gen_id = store.record(current)
+        return {"gen_id": gen_id, "entity_count": len(current)}

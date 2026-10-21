@@ -18,6 +18,7 @@ import hashlib
 import json
 
 from opencode_arch.mcp.envelope import tool_result
+from opencode_arch.mcp.tools._observe import observe_tool_call
 from opencode_arch.mcp.tools._openag_loader import build_graph, load_doc
 
 
@@ -47,44 +48,45 @@ async def arch_round(repo_path: str, node_id: str | None = None) -> dict:
     if node_id is not None and (not isinstance(node_id, str) or not node_id.strip()):
         raise ValueError("node_id must be a non-empty string when provided")
 
-    doc = load_doc(repo_path)
+    with observe_tool_call(repo_path, "arch_round"):
+        doc = load_doc(repo_path)
 
-    g = build_graph(doc)
+        g = build_graph(doc)
 
-    from openag.kernel.round import b_round
+        from openag.kernel.round import b_round
 
-    result = b_round(g)  # no provider → pure-symbolic, deterministic
+        result = b_round(g)  # no provider → pure-symbolic, deterministic
 
-    grounded = result["grounded"]
+        grounded = result["grounded"]
 
-    if node_id is None:
-        scoped_grounded = sorted(grounded)
-    else:
-        from openag.graph.slicer import slice_by_entity
+        if node_id is None:
+            scoped_grounded = sorted(grounded)
+        else:
+            from openag.graph.slicer import slice_by_entity
 
-        try:
-            scope = slice_by_entity(doc, node_id)
-        except KeyError:
-            raise ValueError(f"unknown node_id: {node_id}")
-        # ``nodes`` are dicts; the contains-subtree is the in-scope set
-        # (includes the node itself). Neighbors carry in_scope=False.
-        scope_ids = {
-            n["id"]
-            for n in scope["nodes"]
-            if n.get("in_scope") and n.get("id")
+            try:
+                scope = slice_by_entity(doc, node_id)
+            except KeyError:
+                raise ValueError(f"unknown node_id: {node_id}")
+            # ``nodes`` are dicts; the contains-subtree is the in-scope set
+            # (includes the node itself). Neighbors carry in_scope=False.
+            scope_ids = {
+                n["id"]
+                for n in scope["nodes"]
+                if n.get("in_scope") and n.get("id")
+            }
+            owned = _owned_promise_ids(doc, scope_ids)
+            scoped_grounded = sorted(set(grounded) & owned)
+
+        grounded_digest = hashlib.sha256(
+            json.dumps(sorted(scoped_grounded)).encode()
+        ).hexdigest()
+
+        return {
+            "grounded_digest": grounded_digest,
+            "grounded": scoped_grounded,
+            "ungrounded": result["ungrounded"],
+            "gaps": result["gaps"],
+            "converged": result["converged"],
+            "iterations": result["iterations"],
         }
-        owned = _owned_promise_ids(doc, scope_ids)
-        scoped_grounded = sorted(set(grounded) & owned)
-
-    grounded_digest = hashlib.sha256(
-        json.dumps(sorted(scoped_grounded)).encode()
-    ).hexdigest()
-
-    return {
-        "grounded_digest": grounded_digest,
-        "grounded": scoped_grounded,
-        "ungrounded": result["ungrounded"],
-        "gaps": result["gaps"],
-        "converged": result["converged"],
-        "iterations": result["iterations"],
-    }
