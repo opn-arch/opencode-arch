@@ -1,0 +1,86 @@
+"""G5 identity/generation tools: ``arch_bind`` and ``arch_commit_generation``.
+
+The synchronic B-ROUND fixpoint is stateless across runs; diachronic identity
+continuity lives in the :class:`~openag.kernel.generations.GenerationStore`
+under ``<repo>/.architecture/generations/``.
+
+* ``arch_commit_generation`` records an identity projection of the current
+  model as the next monotone 7-digit generation.
+* ``arch_bind`` runs the θ-crosswalk (``kernel.identity.crosswalk``) of the
+  latest recorded generation onto the current model, surfacing the per-entity
+  bind/ambiguous/new verdict, orphans, and the Layer-2 identity gaps.
+
+Imports of ``openag`` are lazy so this module stays importable without the
+dependency present.
+"""
+from __future__ import annotations
+
+import os
+
+from opencode_arch.mcp.envelope import resolve_repo, tool_result
+from opencode_arch.mcp.tools._openag_loader import load_doc
+
+_GENERATIONS_REL = os.path.join(".architecture", "generations")
+
+
+def _current_entities(repo_path: str) -> list[dict]:
+    """Flatten every entity (across all kinds) from the merged openAG doc."""
+    doc = load_doc(repo_path)
+    entities = doc.get("entities") or {}
+    return [e for items in entities.values() for e in (items or [])]
+
+
+def _store(repo_path: str):
+    """Build a GenerationStore rooted under the resolved repo's generations dir."""
+    from openag.kernel.generations import GenerationStore
+
+    resolved = resolve_repo(repo_path)
+    root = os.path.join(str(resolved), _GENERATIONS_REL)
+    return GenerationStore(root=root)
+
+
+@tool_result
+async def arch_bind(repo_path: str) -> dict:
+    """θ-crosswalk the latest generation onto the current model (pure read).
+
+    Returns the per-entity identity verdict plus orphans, identity gaps, the
+    ambiguous-band sublist, and the sticky (bound) ids.
+    """
+    from openag.kernel.identity import crosswalk, identity_gaps
+
+    current = _current_entities(repo_path)
+    store = _store(repo_path)
+    latest = store.latest()
+    old_entities = latest["entities"] if latest else []
+    sticky = store.sticky_anchors()
+
+    result = crosswalk(old_entities, current, sticky_anchors=sticky)
+    gaps = identity_gaps(result)
+
+    return {
+        "entries": [
+            {
+                "new_id": e.new_id,
+                "bound_to": e.bound_to,
+                "band": e.band,
+                "score": e.score,
+            }
+            for e in result.entries
+        ],
+        "orphans": result.orphans,
+        "gaps": gaps,
+        "ambiguous": [g for g in gaps if g["gap_type"] == "gap:ambiguous-identity"],
+        "sticky": [e.new_id for e in result.entries if e.band == "bind"],
+    }
+
+
+@tool_result
+async def arch_commit_generation(repo_path: str) -> dict:
+    """Record the current model as the next monotone generation.
+
+    Returns the new ``gen_id`` (7-digit string) and the committed entity count.
+    """
+    current = _current_entities(repo_path)
+    store = _store(repo_path)
+    gen_id = store.record(current)
+    return {"gen_id": gen_id, "entity_count": len(current)}
