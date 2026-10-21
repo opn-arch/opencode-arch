@@ -13,21 +13,9 @@ strict precedence order:
 """
 from __future__ import annotations
 
-import os
-
-from opencode_arch.mcp.envelope import resolve_repo, tool_result
+from opencode_arch.mcp.envelope import tool_result
+from opencode_arch.mcp.tools._generations import generation_store
 from opencode_arch.mcp.tools._observe import observe_tool_call
-
-_GENERATIONS_REL = os.path.join(".architecture", "generations")
-
-
-def _store(repo_path: str):
-    """Build a GenerationStore rooted under the resolved repo's generations dir."""
-    from openag.kernel.generations import GenerationStore
-
-    resolved = resolve_repo(repo_path)
-    root = os.path.join(str(resolved), _GENERATIONS_REL)
-    return GenerationStore(root=root)
 
 
 def _timeline_entry(gen: dict) -> dict:
@@ -63,7 +51,7 @@ async def arch_history(
         if (gen_a is None) != (gen_b is None):
             raise ValueError("both gen_a and gen_b are required for a generation diff")
 
-        store = _store(repo_path)
+        store = generation_store(repo_path)
 
         # 1. diff mode — both gen ids given (node_id ignored).
         if gen_a is not None and gen_b is not None:

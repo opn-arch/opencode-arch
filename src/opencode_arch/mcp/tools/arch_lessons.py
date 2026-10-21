@@ -20,15 +20,10 @@ module stays importable without the dependency present.
 """
 from __future__ import annotations
 
-import os
-
 from opencode_arch.mcp.envelope import resolve_repo, tool_result
+from opencode_arch.mcp.tools._generations import generation_store
 from opencode_arch.mcp.tools._observe import observe_tool_call
 from opencode_arch.mcp.tools._openag_loader import build_graph, load_doc
-
-# Generation ledger location (mirrors arch_history.py's duplicated constant;
-# the duplication is pre-existing and acceptable per the task brief).
-_GENERATIONS_REL = os.path.join(".architecture", "generations")
 
 # Real entity node kinds — only these are valid targets for owed-promise gap
 # emission. Promise / evidence scaffolding nodes are excluded.
@@ -46,7 +41,6 @@ async def arch_lessons(repo_path: str) -> dict:
         g = build_graph(doc)
 
         from openag.kernel.gate import emit_gaps_graph
-        from openag.kernel.generations import GenerationStore
         from openag.kernel.lessons import LessonStore, derive_lessons, digest
         from openag.observe import journal
         from openag.observe.audit import audit_observations
@@ -57,8 +51,7 @@ async def arch_lessons(repo_path: str) -> dict:
         observations = journal.read(resolved)
 
         # 2. generation history (health-enriched ledger).
-        gen_root = os.path.join(str(resolved), _GENERATIONS_REL)
-        history = GenerationStore(root=gen_root).all()
+        history = generation_store(repo_path).all()
 
         # 3. audit flags — history MUST be passed so the obs:unreplayable flag
         #    (consumed by the persistent-unreplayable miner) is produced.

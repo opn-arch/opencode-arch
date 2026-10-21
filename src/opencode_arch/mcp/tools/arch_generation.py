@@ -16,13 +16,10 @@ dependency present.
 """
 from __future__ import annotations
 
-import os
-
 from opencode_arch.mcp.envelope import resolve_repo, tool_result
+from opencode_arch.mcp.tools._generations import generation_store
 from opencode_arch.mcp.tools._observe import observe_tool_call
 from opencode_arch.mcp.tools._openag_loader import build_graph, load_doc
-
-_GENERATIONS_REL = os.path.join(".architecture", "generations")
 
 
 def _flatten_entities(doc: dict) -> list[dict]:
@@ -36,15 +33,6 @@ def _current_entities(repo_path: str) -> list[dict]:
     return _flatten_entities(load_doc(repo_path))
 
 
-def _store(repo_path: str):
-    """Build a GenerationStore rooted under the resolved repo's generations dir."""
-    from openag.kernel.generations import GenerationStore
-
-    resolved = resolve_repo(repo_path)
-    root = os.path.join(str(resolved), _GENERATIONS_REL)
-    return GenerationStore(root=root)
-
-
 @tool_result
 async def arch_bind(repo_path: str) -> dict:
     """θ-crosswalk the latest generation onto the current model (pure read).
@@ -56,7 +44,7 @@ async def arch_bind(repo_path: str) -> dict:
 
     with observe_tool_call(repo_path, "arch_bind"):
         current = _current_entities(repo_path)
-        store = _store(repo_path)
+        store = generation_store(repo_path)
         latest = store.latest()
         old_entities = latest["entities"] if latest else []
         sticky = store.sticky_anchors()
@@ -99,6 +87,6 @@ async def arch_commit_generation(repo_path: str) -> dict:
         observations = journal.read(resolve_repo(repo_path))
         health = graph_health(g, observations)
 
-        store = _store(repo_path)
+        store = generation_store(repo_path)
         gen_id = store.record(current, health=health)
         return {"gen_id": gen_id, "entity_count": len(current), "health": health}
