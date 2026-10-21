@@ -1093,6 +1093,94 @@ try:
             component_id=component_id,
         )
 
+    # --- B-ROUND round-centric surface (G1–G5) ---
+    from opencode_arch.mcp.tools.arch_context import (
+        arch_frontier as _arch_frontier,
+        arch_gaps as _arch_gaps,
+        arch_owed as _arch_owed,
+        arch_slice as _arch_slice,
+    )
+    from opencode_arch.mcp.tools.arch_round import arch_round as _arch_round
+    from opencode_arch.mcp.tools.arch_cut import (
+        arch_allocate_contract as _arch_allocate_contract,
+        arch_propose_cut as _arch_propose_cut,
+        arch_score_cut as _arch_score_cut,
+    )
+    from opencode_arch.mcp.tools.arch_integrate import (
+        arch_integrate as _arch_integrate,
+    )
+    from opencode_arch.mcp.tools.arch_generation import (
+        arch_bind as _arch_bind,
+        arch_commit_generation as _arch_commit_generation,
+    )
+
+    @mcp.tool()
+    async def arch_frontier(repo_path: str) -> dict:
+        """Return the ready-promise frontier (node ids) for the round."""
+        return await _arch_frontier(repo_path=repo_path)
+
+    @mcp.tool()
+    async def arch_owed(repo_path: str, node_id: str) -> dict:
+        """Return valence-owed-but-absent attributes for an entity."""
+        return await _arch_owed(repo_path=repo_path, node_id=node_id)
+
+    @mcp.tool()
+    async def arch_gaps(repo_path: str, node_id: str) -> dict:
+        """Return G-DELIVERY typed gaps for an entity."""
+        return await _arch_gaps(repo_path=repo_path, node_id=node_id)
+
+    @mcp.tool()
+    async def arch_slice(repo_path: str, node_id: str) -> dict:
+        """Return the entity-scoped sub-doc for an entity."""
+        return await _arch_slice(repo_path=repo_path, node_id=node_id)
+
+    @mcp.tool()
+    async def arch_round(repo_path: str, node_id: str | None = None) -> dict:
+        """Run the B-ROUND least-fixpoint (whole-graph or node-scoped)."""
+        return await _arch_round(repo_path=repo_path, node_id=node_id)
+
+    @mcp.tool()
+    async def arch_propose_cut(repo_path: str, node_id: str, proposal: dict) -> dict:
+        """Apply a partition-refinement proposal via the gated-write path."""
+        return await _arch_propose_cut(
+            repo_path=repo_path, node_id=node_id, proposal=proposal
+        )
+
+    @mcp.tool()
+    async def arch_score_cut(
+        nodes: list[str], edges: list[list[str]], cells: list[list[str]]
+    ) -> dict:
+        """Score a candidate cut of a ground-graph slice (pure read)."""
+        return await _arch_score_cut(nodes=nodes, edges=edges, cells=cells)
+
+    @mcp.tool()
+    async def arch_allocate_contract(interface_cut: dict) -> dict:
+        """Allocate producer/consumer child contracts (A2 down-law, pure)."""
+        return await _arch_allocate_contract(interface_cut=interface_cut)
+
+    @mcp.tool()
+    async def arch_integrate(
+        children: list[dict],
+        interface_id: str,
+        parent_guarantee: dict | None = None,
+    ) -> dict:
+        """Run the B3 integration round over an interface's children (pure)."""
+        return await _arch_integrate(
+            children=children,
+            interface_id=interface_id,
+            parent_guarantee=parent_guarantee,
+        )
+
+    @mcp.tool()
+    async def arch_bind(repo_path: str) -> dict:
+        """θ-crosswalk the latest generation onto the current model (pure read)."""
+        return await _arch_bind(repo_path=repo_path)
+
+    @mcp.tool()
+    async def arch_commit_generation(repo_path: str) -> dict:
+        """Record the current model as the next monotone generation."""
+        return await _arch_commit_generation(repo_path=repo_path)
+
 except ImportError:
     # mcp package not available - tools still work as standalone async functions
     mcp = None
