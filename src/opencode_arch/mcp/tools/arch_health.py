@@ -11,31 +11,30 @@ directory of ``*.v3.yaml`` fragments. Observations are read from
 from __future__ import annotations
 
 from opencode_arch.mcp.envelope import resolve_repo, tool_result
-from opencode_arch.mcp.tools._observe import observe_tool_call
+from opencode_arch.mcp._arch_tool import arch_tool
 from opencode_arch.mcp.tools._openag_loader import build_graph, load_doc
 
 
-@tool_result
+@arch_tool
 async def arch_health(repo_path: str, node_id: str | None = None) -> dict:
     """Return per-node (with flags) or graph-wide health projection."""
-    with observe_tool_call(repo_path, "arch_health"):
-        # Validate node_id up front (mirrors arch_context.py), but keep the
-        # None fast-path: a None node_id is the valid graph-wide case.
-        if node_id is not None and (not node_id or not isinstance(node_id, str)):
-            raise ValueError("node_id must be a non-empty string")
+    # Validate node_id up front (mirrors arch_context.py), but keep the
+    # None fast-path: a None node_id is the valid graph-wide case.
+    if node_id is not None and (not node_id or not isinstance(node_id, str)):
+        raise ValueError("node_id must be a non-empty string")
 
-        doc = load_doc(repo_path)
-        g = build_graph(doc)
+    doc = load_doc(repo_path)
+    g = build_graph(doc)
 
-        from openag.kernel.health import graph_health, node_health
-        from openag.observe import journal
+    from openag.kernel.health import graph_health, node_health
+    from openag.observe import journal
 
-        observations = journal.read(resolve_repo(repo_path))
+    observations = journal.read(resolve_repo(repo_path))
 
-        if node_id is None:
-            return graph_health(g, observations)
+    if node_id is None:
+        return graph_health(g, observations)
 
-        try:
-            return node_health(g, node_id, observations)
-        except KeyError:
-            raise ValueError(f"unknown node_id: {node_id}")
+    try:
+        return node_health(g, node_id, observations)
+    except KeyError:
+        raise ValueError(f"unknown node_id: {node_id}")

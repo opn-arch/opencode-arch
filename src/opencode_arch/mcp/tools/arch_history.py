@@ -13,9 +13,8 @@ strict precedence order:
 """
 from __future__ import annotations
 
-from opencode_arch.mcp.envelope import tool_result
+from opencode_arch.mcp._arch_tool import arch_tool
 from opencode_arch.mcp.tools._generations import generation_store
-from opencode_arch.mcp.tools._observe import observe_tool_call
 
 
 def _timeline_entry(gen: dict) -> dict:
@@ -30,7 +29,7 @@ def _timeline_entry(gen: dict) -> dict:
     }
 
 
-@tool_result
+@arch_tool
 async def arch_history(
     repo_path: str,
     node_id: str | None = None,
@@ -38,39 +37,38 @@ async def arch_history(
     gen_b: str | None = None,
 ) -> dict:
     """Return the generation timeline, a node trajectory, or a generation diff."""
-    with observe_tool_call(repo_path, "arch_history"):
-        # Up-front argument validation (mirrors arch_health.py's node_id guard).
-        if node_id is not None and (not node_id or not isinstance(node_id, str)):
-            raise ValueError("node_id must be a non-empty string")
-        if gen_a is not None and (not gen_a or not isinstance(gen_a, str)):
-            raise ValueError("gen_a must be a non-empty string")
-        if gen_b is not None and (not gen_b or not isinstance(gen_b, str)):
-            raise ValueError("gen_b must be a non-empty string")
+    # Up-front argument validation (mirrors arch_health.py's node_id guard).
+    if node_id is not None and (not node_id or not isinstance(node_id, str)):
+        raise ValueError("node_id must be a non-empty string")
+    if gen_a is not None and (not gen_a or not isinstance(gen_a, str)):
+        raise ValueError("gen_a must be a non-empty string")
+    if gen_b is not None and (not gen_b or not isinstance(gen_b, str)):
+        raise ValueError("gen_b must be a non-empty string")
 
-        # Exactly-one-gen guard: a diff needs both endpoints.
-        if (gen_a is None) != (gen_b is None):
-            raise ValueError("both gen_a and gen_b are required for a generation diff")
+    # Exactly-one-gen guard: a diff needs both endpoints.
+    if (gen_a is None) != (gen_b is None):
+        raise ValueError("both gen_a and gen_b are required for a generation diff")
 
-        store = generation_store(repo_path)
+    store = generation_store(repo_path)
 
-        # 1. diff mode — both gen ids given (node_id ignored).
-        if gen_a is not None and gen_b is not None:
-            try:
-                diff = store.diff_generations(gen_a, gen_b)
-            except KeyError as exc:
-                raise ValueError(f"unknown generation: {exc}")
-            return {"mode": "diff", "gen_a": gen_a, "gen_b": gen_b, "diff": diff}
+    # 1. diff mode — both gen ids given (node_id ignored).
+    if gen_a is not None and gen_b is not None:
+        try:
+            diff = store.diff_generations(gen_a, gen_b)
+        except KeyError as exc:
+            raise ValueError(f"unknown generation: {exc}")
+        return {"mode": "diff", "gen_a": gen_a, "gen_b": gen_b, "diff": diff}
 
-        # 2. trajectory mode — a node's verdict history (empty list is not error).
-        if node_id is not None:
-            return {
-                "mode": "trajectory",
-                "node_id": node_id,
-                "history": store.node_history(node_id),
-            }
-
-        # 3. timeline mode — concise per-generation rollup.
+    # 2. trajectory mode — a node's verdict history (empty list is not error).
+    if node_id is not None:
         return {
-            "mode": "timeline",
-            "generations": [_timeline_entry(gen) for gen in store.all()],
+            "mode": "trajectory",
+            "node_id": node_id,
+            "history": store.node_history(node_id),
         }
+
+    # 3. timeline mode — concise per-generation rollup.
+    return {
+        "mode": "timeline",
+        "generations": [_timeline_entry(gen) for gen in store.all()],
+    }

@@ -13,33 +13,32 @@ from __future__ import annotations
 import dataclasses
 
 from opencode_arch.mcp.envelope import resolve_repo, tool_result
-from opencode_arch.mcp.tools._observe import observe_tool_call
+from opencode_arch.mcp._arch_tool import arch_tool
 from opencode_arch.mcp.tools._openag_loader import build_graph, load_doc
 
 
-@tool_result
+@arch_tool
 async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
     """Return proprioceptive anomaly flags (workspace-wide or node-filtered)."""
-    with observe_tool_call(repo_path, "arch_flags"):
-        # Validate node_id up front (mirrors arch_health.py), but keep the
-        # None fast-path: a None node_id is the valid workspace-wide case.
-        if node_id is not None and (not node_id or not isinstance(node_id, str)):
-            raise ValueError("node_id must be a non-empty string")
+    # Validate node_id up front (mirrors arch_health.py), but keep the
+    # None fast-path: a None node_id is the valid workspace-wide case.
+    if node_id is not None and (not node_id or not isinstance(node_id, str)):
+        raise ValueError("node_id must be a non-empty string")
 
-        doc = load_doc(repo_path)
-        g = build_graph(doc)
+    doc = load_doc(repo_path)
+    g = build_graph(doc)
 
-        from openag.observe import journal
-        from openag.observe.audit import audit_observations
+    from openag.observe import journal
+    from openag.observe.audit import audit_observations
 
-        observations = journal.read(resolve_repo(repo_path))
-        flags = audit_observations(g, observations)
+    observations = journal.read(resolve_repo(repo_path))
+    flags = audit_observations(g, observations)
 
-        if node_id is not None:
-            try:
-                g.node(node_id)
-            except KeyError:
-                raise ValueError(f"unknown node_id: {node_id}")
-            flags = [f for f in flags if f.component_id == node_id]
+    if node_id is not None:
+        try:
+            g.node(node_id)
+        except KeyError:
+            raise ValueError(f"unknown node_id: {node_id}")
+        flags = [f for f in flags if f.component_id == node_id]
 
-        return {"flags": [dataclasses.asdict(f) for f in flags]}
+    return {"flags": [dataclasses.asdict(f) for f in flags]}

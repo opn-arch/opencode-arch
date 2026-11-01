@@ -18,50 +18,49 @@ import hashlib
 import json
 
 from opencode_arch.mcp.envelope import tool_result
-from opencode_arch.mcp.tools._observe import observe_tool_call
+from opencode_arch.mcp._arch_tool import arch_tool
 from opencode_arch.mcp.tools._openag_loader import build_graph, load_doc
 
 
-@tool_result
+@arch_tool
 async def arch_propose_cut(repo_path: str, node_id: str, proposal: dict) -> dict:
     """Apply a partition-refinement proposal via the gated-write path.
 
     Returns a digest of the applied doc on success, or a sorted list of
     rejection strings on a gate/conservation failure (without mutating).
     """
-    with observe_tool_call(repo_path, "arch_propose_cut"):
-        if not isinstance(node_id, str) or not node_id.strip():
-            raise ValueError("node_id must be a non-empty string")
-        if not isinstance(proposal, dict):
-            raise ValueError("proposal must be a dict")
+    if not isinstance(node_id, str) or not node_id.strip():
+        raise ValueError("node_id must be a non-empty string")
+    if not isinstance(proposal, dict):
+        raise ValueError("proposal must be a dict")
 
-        doc = load_doc(repo_path)
-        g = build_graph(doc)
+    doc = load_doc(repo_path)
+    g = build_graph(doc)
 
-        from openag.llm.proposal import proposal_from_dict
+    from openag.llm.proposal import proposal_from_dict
 
-        parsed = proposal_from_dict(
-            proposal, task_class="grow.decompose", prompt_digest="arch_propose_cut"
-        )
+    parsed = proposal_from_dict(
+        proposal, task_class="grow.decompose", prompt_digest="arch_propose_cut"
+    )
 
-        from openag.kernel.round import _split
+    from openag.kernel.round import _split
 
-        try:
-            new_g = _split(g, parsed)
-        except ValueError as exc:
-            msg = str(exc)
-            if msg.startswith("invalid proposal: "):
-                remainder = msg[len("invalid proposal: ") :]
-                rejections = remainder.split("; ")
-            else:
-                rejections = [f"conservation: {msg}"]
-            return {"ok": False, "rejections": sorted(rejections)}
+    try:
+        new_g = _split(g, parsed)
+    except ValueError as exc:
+        msg = str(exc)
+        if msg.startswith("invalid proposal: "):
+            remainder = msg[len("invalid proposal: ") :]
+            rejections = remainder.split("; ")
+        else:
+            rejections = [f"conservation: {msg}"]
+        return {"ok": False, "rejections": sorted(rejections)}
 
-        applied = new_g.to_doc()
-        digest = hashlib.sha256(
-            json.dumps(applied, sort_keys=True, default=str).encode()
-        ).hexdigest()
-        return {"digest": digest, "node_id": node_id}
+    applied = new_g.to_doc()
+    digest = hashlib.sha256(
+        json.dumps(applied, sort_keys=True, default=str).encode()
+    ).hexdigest()
+    return {"digest": digest, "node_id": node_id}
 
 
 @tool_result

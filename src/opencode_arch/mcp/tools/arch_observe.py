@@ -6,19 +6,19 @@ journal (``<repo_path>/.architecture/observations.jsonl``). UNLIKE
 observations are model-independent, so a repo with no ``.architecture/model/``
 dir but WITH observations still works.
 
-NOTE: this tool is itself instrumented via ``observe_tool_call`` (consistent
+NOTE: this tool is itself instrumented via ``@arch_tool`` (consistent
 with every other ``arch_*`` tool, and philosophically correct for
-self-proprioception). As a consequence it emits its OWN ``oca:arch_observe``
+self-proprioception). As a consequence it emits its OWN ``tool:arch_observe``
 ``tool_call`` observation at entry, which will then appear in a subsequent
 UNFILTERED read.
 """
 from __future__ import annotations
 
 from opencode_arch.mcp.envelope import resolve_repo, tool_result
-from opencode_arch.mcp.tools._observe import observe_tool_call
+from opencode_arch.mcp._arch_tool import arch_tool
 
 
-@tool_result
+@arch_tool
 async def arch_observe(
     repo_path: str,
     component_id: str | None = None,
@@ -26,18 +26,17 @@ async def arch_observe(
     since: str | None = None,
 ) -> dict:
     """Return raw filtered runtime observation records (live proprioception)."""
-    with observe_tool_call(repo_path, "arch_observe"):
-        repo = resolve_repo(repo_path)
+    repo = resolve_repo(repo_path)
 
-        from openag.observe import journal
+    from openag.observe import journal
 
-        records = journal.read(repo)
+    records = journal.read(repo)
 
-        if component_id is not None:
-            records = [r for r in records if r.get("component_id") == component_id]
-        if io_kind is not None:
-            records = [r for r in records if r.get("io_kind") == io_kind]
-        if since is not None:
-            records = [r for r in records if r.get("ts", "") >= since]
+    if component_id is not None:
+        records = [r for r in records if r.get("component_id") == component_id]
+    if io_kind is not None:
+        records = [r for r in records if r.get("io_kind") == io_kind]
+    if since is not None:
+        records = [r for r in records if r.get("ts", "") >= since]
 
-        return {"observations": records}
+    return {"observations": records}

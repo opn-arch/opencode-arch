@@ -21,8 +21,8 @@ we build the record ourselves (preserving ``ev["ts"]`` when present) and
 append it directly using the same fail-soft file-write semantics. Shape
 validation still goes through the canonical ``Observation``.
 
-NOTE: this tool is itself instrumented via ``observe_tool_call``, so each
-call ALSO appends one ``oca:arch_ingest_telemetry`` ``tool_call`` record
+NOTE: this tool is itself instrumented via ``@arch_tool``, so each
+call ALSO appends ``tool:arch_ingest_telemetry`` ``tool_call`` records
 to the journal. That self-entry is NOT counted in the returned
 ``{ingested, rejected}`` summary (which counts only the supplied events).
 """
@@ -34,7 +34,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from opencode_arch.mcp.envelope import resolve_repo, tool_result
-from opencode_arch.mcp.tools._observe import observe_tool_call
+from opencode_arch.mcp._arch_tool import arch_tool
 
 _REL = Path(".architecture/observations.jsonl")
 
@@ -70,47 +70,46 @@ def _append_record(repo: Path | str, record: dict) -> bool:
         return False
 
 
-@tool_result
+@arch_tool
 async def arch_ingest_telemetry(repo_path: str, events: list[dict]) -> dict:
     """Append externally-supplied observation events to the journal."""
-    with observe_tool_call(repo_path, "arch_ingest_telemetry"):
-        repo = resolve_repo(repo_path)
+    repo = resolve_repo(repo_path)
 
-        if not isinstance(events, list):
-            raise ValueError("events must be a list")
+    if not isinstance(events, list):
+        raise ValueError("events must be a list")
 
-        from openag.observe.event import Observation
+    from openag.observe.event import Observation
 
-        ingested = 0
-        rejected = 0
+    ingested = 0
+    rejected = 0
 
-        for ev in events:
-            if not isinstance(ev, dict):
-                rejected += 1
-                continue
-            try:
-                obs = Observation(
-                    component_id=ev["component_id"],
-                    io_kind=ev["io_kind"],
-                    direction=ev["direction"],
-                    name=ev["name"],
-                    payload_digest=ev.get("payload_digest", ""),
-                    meta=ev.get("meta", {}),
-                )
-            except Exception:
-                rejected += 1
-                continue
+    for ev in events:
+        if not isinstance(ev, dict):
+            rejected += 1
+            continue
+        try:
+            obs = Observation(
+                component_id=ev["component_id"],
+                io_kind=ev["io_kind"],
+                direction=ev["direction"],
+                name=ev["name"],
+                payload_digest=ev.get("payload_digest", ""),
+                meta=ev.get("meta", {}),
+            )
+        except Exception:
+            rejected += 1
+            continue
 
-            record = obs.to_record()
-            ts = ev.get("ts")
-            if isinstance(ts, str) and ts:
-                record["ts"] = ts
-            else:
-                record["ts"] = _now_iso()
+        record = obs.to_record()
+        ts = ev.get("ts")
+        if isinstance(ts, str) and ts:
+            record["ts"] = ts
+        else:
+            record["ts"] = _now_iso()
 
-            if _append_record(repo, record):
-                ingested += 1
-            else:
-                rejected += 1
+        if _append_record(repo, record):
+            ingested += 1
+        else:
+            rejected += 1
 
-        return {"ingested": ingested, "rejected": rejected}
+    return {"ingested": ingested, "rejected": rejected}

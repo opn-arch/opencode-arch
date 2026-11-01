@@ -43,10 +43,10 @@ def test_arch_frontier_emits_tool_call_observation(tmp_repo):
     tool_calls = [
         r
         for r in records
-        if r.get("component_id") == "oca:arch_frontier"
+        if r.get("component_id") == "tool:arch_frontier"
         and r.get("io_kind") == "tool_call"
     ]
-    assert tool_calls, f"no oca:arch_frontier tool_call observation in {records!r}"
+    assert tool_calls, f"no tool:arch_frontier tool_call observation in {records!r}"
 
 
 def test_bad_repo_still_errors_without_exception(tmp_path):
@@ -63,9 +63,9 @@ def test_arch_round_binds_context_for_downstream_kernel_emits(tmp_repo):
 
     records = read_journal(tmp_repo)
     tool_calls = [
-        r for r in records if r.get("component_id") == "oca:arch_round"
+        r for r in records if r.get("component_id") == "tool:arch_round"
     ]
-    assert tool_calls, f"no oca:arch_round observation in {records!r}"
+    assert tool_calls, f"no tool:arch_round observation in {records!r}"
 
     kernel_emits = [
         r

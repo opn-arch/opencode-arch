@@ -17,8 +17,8 @@ dependency present.
 from __future__ import annotations
 
 from opencode_arch.mcp.envelope import resolve_repo, tool_result
+from opencode_arch.mcp._arch_tool import arch_tool
 from opencode_arch.mcp.tools._generations import generation_store
-from opencode_arch.mcp.tools._observe import observe_tool_call
 from opencode_arch.mcp.tools._openag_loader import build_graph, load_doc
 
 
@@ -33,7 +33,7 @@ def _current_entities(repo_path: str) -> list[dict]:
     return _flatten_entities(load_doc(repo_path))
 
 
-@tool_result
+@arch_tool
 async def arch_bind(repo_path: str) -> dict:
     """θ-crosswalk the latest generation onto the current model (pure read).
 
@@ -42,51 +42,49 @@ async def arch_bind(repo_path: str) -> dict:
     """
     from openag.kernel.identity import crosswalk, identity_gaps
 
-    with observe_tool_call(repo_path, "arch_bind"):
-        current = _current_entities(repo_path)
-        store = generation_store(repo_path)
-        latest = store.latest()
-        old_entities = latest["entities"] if latest else []
-        sticky = store.sticky_anchors()
+    current = _current_entities(repo_path)
+    store = generation_store(repo_path)
+    latest = store.latest()
+    old_entities = latest["entities"] if latest else []
+    sticky = store.sticky_anchors()
 
-        result = crosswalk(old_entities, current, sticky_anchors=sticky)
-        gaps = identity_gaps(result)
+    result = crosswalk(old_entities, current, sticky_anchors=sticky)
+    gaps = identity_gaps(result)
 
-        return {
-            "entries": [
-                {
-                    "new_id": e.new_id,
-                    "bound_to": e.bound_to,
-                    "band": e.band,
-                    "score": e.score,
-                }
-                for e in result.entries
-            ],
-            "orphans": result.orphans,
-            "gaps": gaps,
-            "ambiguous": [g for g in gaps if g["gap_type"] == "gap:ambiguous-identity"],
-            "sticky": [e.new_id for e in result.entries if e.band == "bind"],
-        }
+    return {
+        "entries": [
+            {
+                "new_id": e.new_id,
+                "bound_to": e.bound_to,
+                "band": e.band,
+                "score": e.score,
+            }
+            for e in result.entries
+        ],
+        "orphans": result.orphans,
+        "gaps": gaps,
+        "ambiguous": [g for g in gaps if g["gap_type"] == "gap:ambiguous-identity"],
+        "sticky": [e.new_id for e in result.entries if e.band == "bind"],
+    }
 
 
-@tool_result
+@arch_tool
 async def arch_commit_generation(repo_path: str) -> dict:
     """Record the current model as the next monotone generation.
 
     Returns the new ``gen_id`` (7-digit string), the committed entity count,
     and the graph-wide ``graph_health`` projection recorded alongside it.
     """
-    with observe_tool_call(repo_path, "arch_commit_generation"):
-        doc = load_doc(repo_path)
-        current = _flatten_entities(doc)
-        g = build_graph(doc)
+    doc = load_doc(repo_path)
+    current = _flatten_entities(doc)
+    g = build_graph(doc)
 
-        from openag.kernel.health import graph_health
-        from openag.observe import journal
+    from openag.kernel.health import graph_health
+    from openag.observe import journal
 
-        observations = journal.read(resolve_repo(repo_path))
-        health = graph_health(g, observations)
+    observations = journal.read(resolve_repo(repo_path))
+    health = graph_health(g, observations)
 
-        store = generation_store(repo_path)
-        gen_id = store.record(current, health=health)
-        return {"gen_id": gen_id, "entity_count": len(current), "health": health}
+    store = generation_store(repo_path)
+    gen_id = store.record(current, health=health)
+    return {"gen_id": gen_id, "entity_count": len(current), "health": health}
