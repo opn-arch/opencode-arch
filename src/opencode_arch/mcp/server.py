@@ -1102,6 +1102,7 @@ try:
     )
     from opencode_arch.mcp.tools.arch_health import arch_health as _arch_health
     from opencode_arch.mcp.tools.arch_scan import arch_scan as _arch_scan
+    from opencode_arch.mcp.tools.arch_extract import arch_extract as _arch_extract
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1152,6 +1153,17 @@ try:
     async def arch_scan(repo_path: str, mode: str = "full") -> dict:
         """Return the module / import-edge inventory of the repo's source tree."""
         return await _arch_scan(repo_path=repo_path, mode=mode)
+
+    @mcp.tool()
+    async def arch_extract(
+        repo_path: str, model_yaml: str = "", context_tokens: int = 0
+    ) -> dict:
+        """Extract a v3 model from source and commit a generation."""
+        return await _arch_extract(
+            repo_path=repo_path,
+            model_yaml=model_yaml,
+            context_tokens=context_tokens,
+        )
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
