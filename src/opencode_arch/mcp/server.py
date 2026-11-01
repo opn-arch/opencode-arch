@@ -1129,6 +1129,7 @@ try:
     from opencode_arch.mcp.tools.lifecycle.arch_proposal_apply import arch_proposal_apply as _arch_proposal_apply
     from opencode_arch.mcp.tools.lifecycle.arch_slice_materialize import arch_slice_materialize as _arch_slice_materialize
     from opencode_arch.mcp.tools.lifecycle.arch_view_project import arch_view_project as _arch_view_project
+    from opencode_arch.mcp.tools.lifecycle.arch_view_render import arch_view_render as _arch_view_render
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1334,6 +1335,11 @@ try:
     async def arch_view_project(repo_path: str = "", entity_id: str = "", model_yaml: str = "") -> dict:
         """Project an openAG model doc into a viewer payload view."""
         return await _arch_view_project(repo_path=repo_path, entity_id=entity_id, model_yaml=model_yaml)
+
+    @mcp.tool()
+    async def arch_view_render(repo_path: str = "", model_yaml: str = "") -> dict:
+        """Render an openAG model doc into the self-contained viewer HTML."""
+        return await _arch_view_render(repo_path=repo_path, model_yaml=model_yaml)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
