@@ -1132,6 +1132,7 @@ try:
     from opencode_arch.mcp.tools.lifecycle.arch_view_render import arch_view_render as _arch_view_render
     from opencode_arch.mcp.tools.lifecycle.arch_package_children_add import arch_package_children_add as _arch_package_children_add
     from opencode_arch.mcp.tools.lifecycle.arch_package_stale import arch_package_stale as _arch_package_stale
+    from opencode_arch.mcp.tools.lifecycle.arch_package_merge import arch_package_merge as _arch_package_merge
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1352,6 +1353,11 @@ try:
     async def arch_package_stale(repo_path: str = "", changed_paths: list[str] | None = None, model_yaml: str = "") -> dict:
         """Return entities made stale by changed_paths, anchored to the latest generation."""
         return await _arch_package_stale(repo_path=repo_path, changed_paths=changed_paths, model_yaml=model_yaml)
+
+    @mcp.tool()
+    async def arch_package_merge(repo_path: str = "", base_revision: str = "", local_revision: str = "", remote_revision: str = "") -> dict:
+        """Three-way merge base/local/remote generation snapshots into a new generation."""
+        return await _arch_package_merge(repo_path=repo_path, base_revision=base_revision, local_revision=local_revision, remote_revision=remote_revision)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
