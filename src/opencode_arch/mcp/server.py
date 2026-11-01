@@ -1108,6 +1108,7 @@ try:
     from opencode_arch.mcp.tools.arch_gate import arch_gate as _arch_gate
     from opencode_arch.mcp.tools.arch_check import arch_check as _arch_check
     from opencode_arch.mcp.tools.arch_evaluate import arch_evaluate as _arch_evaluate
+    from opencode_arch.mcp.tools.arch_group import arch_group as _arch_group
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1208,6 +1209,11 @@ try:
     async def arch_evaluate(repo_path: str = "") -> dict:
         """Health check: coverage, health score, promise rollup, requirement count."""
         return await _arch_evaluate(repo_path=repo_path)
+
+    @mcp.tool()
+    async def arch_group(repo_path: str = "", target_groups: int = 0, model_yaml: str = "") -> dict:
+        """Group repository modules by the model's A1 containment partition."""
+        return await _arch_group(repo_path=repo_path, target_groups=target_groups, model_yaml=model_yaml)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
