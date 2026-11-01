@@ -1115,6 +1115,7 @@ try:
     from opencode_arch.mcp.tools.arch_export import arch_export as _arch_export
     from opencode_arch.mcp.tools.arch_author import arch_author as _arch_author
     from opencode_arch.mcp.tools.arch_ingest import arch_ingest as _arch_ingest
+    from opencode_arch.mcp.tools.arch_llm_audit import arch_llm_audit as _arch_llm_audit
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1250,6 +1251,11 @@ try:
     async def arch_ingest(repo_path: str = "", source_graph_json: str = "") -> dict:
         """Ingest a SourceGraph JSON string into a deterministic openAG model doc."""
         return await _arch_ingest(repo_path=repo_path, source_graph_json=source_graph_json)
+
+    @mcp.tool()
+    async def arch_llm_audit(repo_path: str = "", model_yaml: str = "") -> dict:
+        """Run a deterministic decomposition second-opinion audit over the model."""
+        return await _arch_llm_audit(repo_path=repo_path, model_yaml=model_yaml)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
