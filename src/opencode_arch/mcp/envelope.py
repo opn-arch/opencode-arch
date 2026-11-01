@@ -16,7 +16,6 @@ ERROR_CODES: frozenset[str] = frozenset({
     "SCHEMA_VIOLATION",
     "PRECONDITION_FAILED",
     "INTERNAL",
-    "PHASE1_MISMATCH",
 })
 
 

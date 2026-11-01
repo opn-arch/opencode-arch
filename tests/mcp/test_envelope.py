@@ -57,7 +57,6 @@ def test_error_codes_frozen():
         "SCHEMA_VIOLATION",
         "PRECONDITION_FAILED",
         "INTERNAL",
-        "PHASE1_MISMATCH",
     })
 
 
