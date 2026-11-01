@@ -1139,6 +1139,7 @@ try:
     from opencode_arch.mcp.tools.ai.arch_job_get import arch_job_get as _arch_job_get
     from opencode_arch.mcp.tools.ai.arch_job_transition import arch_job_transition as _arch_job_transition
     from opencode_arch.mcp.tools.ai.arch_job_run import arch_job_run as _arch_job_run
+    from opencode_arch.mcp.tools.arch_work_issue import arch_work_issue as _arch_work_issue
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1410,6 +1411,21 @@ try:
     async def arch_job_run(repo_path: str = "", job_id: str = "") -> dict:
         """Execute a queued AI Job via the configured proposer plugin."""
         return await _arch_job_run(repo_path=repo_path, job_id=job_id)
+
+    @mcp.tool()
+    async def arch_work_issue(
+        repo_path: str = "",
+        issue_id: int = 0,
+        dry_run: bool = False,
+        force: bool = False,
+    ) -> dict:
+        """Execute the comment→issue→dev ceremony loop for one logs-db issue."""
+        return await _arch_work_issue(
+            repo_path=repo_path,
+            issue_id=issue_id,
+            dry_run=dry_run,
+            force=force,
+        )
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
