@@ -1114,6 +1114,7 @@ try:
     from opencode_arch.mcp.tools.arch_docs import arch_docs as _arch_docs
     from opencode_arch.mcp.tools.arch_export import arch_export as _arch_export
     from opencode_arch.mcp.tools.arch_author import arch_author as _arch_author
+    from opencode_arch.mcp.tools.arch_ingest import arch_ingest as _arch_ingest
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1244,6 +1245,11 @@ try:
     async def arch_author(repo_path: str = "", requirements_text: str = "") -> dict:
         """Forward-author a concept-phase model from requirements and record a generation."""
         return await _arch_author(repo_path=repo_path, requirements_text=requirements_text)
+
+    @mcp.tool()
+    async def arch_ingest(repo_path: str = "", source_graph_json: str = "") -> dict:
+        """Ingest a SourceGraph JSON string into a deterministic openAG model doc."""
+        return await _arch_ingest(repo_path=repo_path, source_graph_json=source_graph_json)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
