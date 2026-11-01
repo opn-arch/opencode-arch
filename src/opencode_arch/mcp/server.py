@@ -1126,6 +1126,7 @@ try:
     from opencode_arch.mcp.tools.lifecycle.arch_package_list_generations import arch_package_list_generations as _arch_package_list_generations
     from opencode_arch.mcp.tools.lifecycle.arch_package_diff import arch_package_diff as _arch_package_diff
     from opencode_arch.mcp.tools.lifecycle.arch_proposal_validate import arch_proposal_validate as _arch_proposal_validate
+    from opencode_arch.mcp.tools.lifecycle.arch_proposal_apply import arch_proposal_apply as _arch_proposal_apply
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1316,6 +1317,11 @@ try:
     async def arch_proposal_validate(repo_path: str = "", proposal: dict | None = None, model_yaml: str = "", task_class: str = "", prompt_digest: str = "") -> dict:
         """Validate a typed proposal against an openAG model doc."""
         return await _arch_proposal_validate(repo_path=repo_path, proposal=proposal, model_yaml=model_yaml, task_class=task_class, prompt_digest=prompt_digest)
+
+    @mcp.tool()
+    async def arch_proposal_apply(repo_path: str = "", proposal: dict | None = None, model_yaml: str = "", task_class: str = "", prompt_digest: str = "", reason: str = "", dry_run: bool = False) -> dict:
+        """Apply a typed proposal to an openAG model doc and publish a generation."""
+        return await _arch_proposal_apply(repo_path=repo_path, proposal=proposal, model_yaml=model_yaml, task_class=task_class, prompt_digest=prompt_digest, reason=reason, dry_run=dry_run)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
