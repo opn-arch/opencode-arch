@@ -1,0 +1,154 @@
+meta:
+  schema_version: '3.0'
+  standard: openAG
+  standard_ext: null
+  project: insulin-pump
+  subsystem: exemplar
+  domain_profiles:
+  - software
+  generated_by: hand-authored (Sommerville Insulin Pump exemplar; S7.2)
+  generated_at: '2026-10-19T00:00:00Z'
+  source_root: insulin_pump/
+  note: |
+    Sommerville Insulin Pump control system, authored as an openAG v3 model
+    for blind re-derivation validation. Design-tier (no real source); file
+    paths are synthetic and form a complete partition of a synthetic ground graph.
+
+entities:
+  constraints:
+  - id: CON-OVERDOSE
+    name: Overdose limit
+    kind: Constraint
+    description: >-
+      Overdose causing hypoglycemia is the dominant hazard; single and cumulative
+      dose must be bounded.
+    promises:
+    - id: PR-CON-OVERDOSE-intent
+      attribute: intent
+      content:
+      - Bound insulin delivery so an overdose (hypoglycemia) hazard cannot occur.
+      owner_entity: CON-OVERDOSE
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A4
+      valence: every Constraint MUST declare the hazard/intent it governs
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+    - id: PR-CON-OVERDOSE-threshold
+      attribute: success_criteria
+      content:
+      - Single dose MUST NOT exceed a configured maximum; cumulative dose over the
+        control period MUST NOT exceed a configured ceiling.
+      owner_entity: CON-OVERDOSE
+      delivered_from: null
+      verified_by:
+      - 'spec:sommerville-insulin-pump'
+      status: verified
+      gap_type: null
+      axis: A4
+      valence: every safety Constraint MUST declare a verifiable quantitative threshold
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+      hidden: true
+
+  - id: CON-UNDERDOSE
+    name: Underdose limit
+    kind: Constraint
+    description: >-
+      Persistent underdosing (hyperglycemia) degrades efficacy; a minimum effective
+      response must be assured.
+    promises:
+    - id: PR-CON-UNDERDOSE-intent
+      attribute: intent
+      content:
+      - Ensure insulin delivery is sufficient to avoid sustained hyperglycemia.
+      owner_entity: CON-UNDERDOSE
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A4
+      valence: every Constraint MUST declare the hazard/intent it governs
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+    - id: PR-CON-UNDERDOSE-threshold
+      attribute: success_criteria
+      content:
+      - When glucose is above the safe band and rising, the delivered dose MUST
+        meet a configured minimum effective amount.
+      owner_entity: CON-UNDERDOSE
+      delivered_from: null
+      verified_by:
+      - 'spec:sommerville-insulin-pump'
+      status: verified
+      gap_type: null
+      axis: A4
+      valence: every safety Constraint MUST declare a verifiable quantitative threshold
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+      hidden: true
+
+  - id: CON-DELIVERY-FAILURE
+    name: Delivery failure detection
+    kind: Constraint
+    description: >-
+      Pump jam, empty reservoir, or power loss must be detected and alarmed, never
+      silently acted on.
+    promises:
+    - id: PR-CON-DELIVERY-FAILURE-intent
+      attribute: intent
+      content:
+      - Detect delivery faults and fail safe rather than silently mis-deliver.
+      owner_entity: CON-DELIVERY-FAILURE
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A4
+      valence: every Constraint MUST declare the hazard/intent it governs
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+    - id: PR-CON-DELIVERY-FAILURE-threshold
+      attribute: success_criteria
+      content:
+      - A pump jam, empty reservoir, or power loss MUST be detected within one
+        control cycle, suspend dosing, and raise the alarm.
+      owner_entity: CON-DELIVERY-FAILURE
+      delivered_from: null
+      verified_by:
+      - 'spec:sommerville-insulin-pump'
+      status: verified
+      gap_type: null
+      axis: A4
+      valence: every safety Constraint MUST declare a verifiable quantitative threshold
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+      hidden: true
+
+  - id: CON-SAFE-BAND
+    name: Safe glucose band
+    kind: Constraint
+    description: Blood glucose must be kept within a clinically safe band.
+    promises:
+    - id: PR-CON-SAFE-BAND-intent
+      attribute: intent
+      content:
+      - Keep the patient's blood glucose within a clinically safe band.
+      owner_entity: CON-SAFE-BAND
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A4
+      valence: every Constraint MUST declare the hazard/intent it governs
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+    - id: PR-CON-SAFE-BAND-threshold
+      attribute: success_criteria
+      content:
+      - Blood glucose MUST be kept within the safe band 3-20 mmol/L.
+      owner_entity: CON-SAFE-BAND
+      delivered_from: null
+      verified_by:
+      - 'spec:sommerville-insulin-pump'
+      status: verified
+      gap_type: null
+      axis: A4
+      valence: every safety Constraint MUST declare a verifiable quantitative threshold
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+      hidden: true

@@ -1,0 +1,131 @@
+meta:
+  schema_version: '3.0'
+  standard: openAG
+  standard_ext: null
+  project: insulin-pump
+  subsystem: exemplar
+  domain_profiles:
+  - software
+  generated_by: hand-authored (Sommerville Insulin Pump exemplar; S7.2)
+  generated_at: '2026-10-19T00:00:00Z'
+  source_root: insulin_pump/
+  note: |
+    Sommerville Insulin Pump control system, authored as an openAG v3 model
+    for blind re-derivation validation. Design-tier (no real source); file
+    paths are synthetic and form a complete partition of a synthetic ground graph.
+
+entities:
+  behaviors:
+  - id: BEH-CONTROL-LOOP
+    name: Periodic control loop
+    kind: Behavior
+    description: >-
+      The periodic closed-loop cycle: measure blood glucose, compute the
+      required insulin dose, and deliver the metered dose.
+    promises:
+    - id: PR-BEH-CONTROL-LOOP-behavior
+      attribute: behavior
+      content:
+      - 'On each clock tick: read glucose from the sensor, compute dose from the
+        level and its rate of change, then command the pump to deliver.'
+      owner_entity: BEH-CONTROL-LOOP
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A7
+      valence: every Behavior MUST declare the behavior it performs
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+    - id: PR-BEH-CONTROL-LOOP-success
+      attribute: success_criteria
+      content:
+      - Each cycle completes within the clock period and never commands a dose
+        that violates the overdose, underdose, or safe-band constraints.
+      owner_entity: BEH-CONTROL-LOOP
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A7
+      valence: every Behavior MUST declare a verifiable success criterion
+
+  - id: BEH-RUNNING
+    name: Running mode
+    kind: Behavior
+    description: >-
+      Normal operating mode: the control loop runs periodically and the device
+      delivers insulin.
+    promises:
+    - id: PR-BEH-RUNNING-behavior
+      attribute: behavior
+      content:
+      - Drives the periodic control loop and transitions to manual, testing, or
+        failure mode on the corresponding event.
+      owner_entity: BEH-RUNNING
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A7
+      valence: every Behavior MUST declare the behavior it performs
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: BEH-MANUAL
+    name: Manual mode
+    kind: Behavior
+    description: >-
+      Operator-directed mode in which dosing follows manual input rather than the
+      automatic control loop.
+    promises:
+    - id: PR-BEH-MANUAL-behavior
+      attribute: behavior
+      content:
+      - Accepts operator-directed dosing and suspends the automatic control loop.
+      owner_entity: BEH-MANUAL
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A7
+      valence: every Behavior MUST declare the behavior it performs
+
+  - id: BEH-TESTING
+    name: Testing mode
+    kind: Behavior
+    description: >-
+      Self-test / diagnostic mode exercising sensor, pump, display, and alarm
+      without delivering therapeutic insulin.
+    promises:
+    - id: PR-BEH-TESTING-behavior
+      attribute: behavior
+      content:
+      - Exercises sensor, pump, display, and alarm subsystems for diagnostics
+        without delivering therapeutic insulin.
+      owner_entity: BEH-TESTING
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A7
+      valence: every Behavior MUST declare the behavior it performs
+
+  - id: BEH-FAILURE
+    name: Failure mode
+    kind: Behavior
+    description: >-
+      Safe state entered on a detected hazard (pump jam, empty reservoir, power
+      loss): dosing is suspended and the alarm is raised.
+    promises:
+    - id: PR-BEH-FAILURE-behavior
+      attribute: behavior
+      content:
+      - Suspends dosing, raises the hazard alarm, and surfaces the fault on the
+        display when a hazard is detected.
+      owner_entity: BEH-FAILURE
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A7
+      valence: every Behavior MUST declare the behavior it performs
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'

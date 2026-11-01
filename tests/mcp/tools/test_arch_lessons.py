@@ -25,10 +25,7 @@ import pytest
 
 from opencode_arch.mcp.tools.arch_lessons import arch_lessons
 
-_EXEMPLAR_DIR = Path(
-    "/Users/baigm2/Documents/Projects/openAG/.worktrees/"
-    "b-round-local-recursive/.architecture/exemplars/insulin-pump"
-)
+_EXEMPLAR_DIR = Path(__file__).resolve().parents[2] / "fixtures" / "exemplars" / "insulin-pump"
 
 _PROPOSAL_KEYS = {"ops", "rationale", "lesson_type", "subject", "severity"}
 _SEVERITY_RANK = {"error": 0, "warn": 1, "info": 2}

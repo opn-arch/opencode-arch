@@ -19,10 +19,7 @@ import pytest
 from opencode_arch.mcp.tools.arch_generation import arch_commit_generation
 from opencode_arch.mcp.tools.arch_history import arch_history
 
-_EXEMPLAR_DIR = Path(
-    "/Users/baigm2/Documents/Projects/openAG/.worktrees/"
-    "b-round-local-recursive/.architecture/exemplars/insulin-pump"
-)
+_EXEMPLAR_DIR = Path(__file__).resolve().parents[2] / "fixtures" / "exemplars" / "insulin-pump"
 
 _TIMELINE_KEYS = {
     "gen_id",

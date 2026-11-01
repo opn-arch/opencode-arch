@@ -1,0 +1,94 @@
+meta:
+  schema_version: '3.0'
+  standard: openAG
+  standard_ext: null
+  project: insulin-pump
+  subsystem: exemplar
+  domain_profiles:
+  - software
+  generated_by: hand-authored (Sommerville Insulin Pump exemplar; S7.2)
+  generated_at: '2026-10-19T00:00:00Z'
+  source_root: insulin_pump/
+  note: |
+    Sommerville Insulin Pump control system, authored as an openAG v3 model
+    for blind re-derivation validation. Design-tier (no real source); file
+    paths are synthetic and form a complete partition of a synthetic ground graph.
+
+entities:
+  interfaces:
+  - id: IF-ALARM
+    name: Hazard alert interface
+    kind: Interface
+    subkind: message
+    description: Audible/visible hazard alert surfaced to the patient.
+    promises:
+    - id: PR-IF-ALARM-contract
+      attribute: contract
+      content:
+      - Delivers a hazard alert message to the patient when a hazard is active.
+      owner_entity: IF-ALARM
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A3
+      valence: every Interface MUST declare a static contract
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: IF-DISPLAY
+    name: User display/control interface
+    kind: Interface
+    subkind: message
+    description: Patient-facing display of readings/status and control input.
+    promises:
+    - id: PR-IF-DISPLAY-contract
+      attribute: contract
+      content:
+      - Presents glucose readings, device status, and hazard messages; accepts
+        patient control input.
+      owner_entity: IF-DISPLAY
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A3
+      valence: every Interface MUST declare a static contract
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: IF-PUMP
+    name: Pump actuator interface
+    kind: Interface
+    subkind: message
+    description: Dose command to the pump actuator.
+    promises:
+    - id: PR-IF-PUMP-contract
+      attribute: contract
+      content:
+      - Carries a metered dose command to the pump and returns a delivery/fault status.
+      owner_entity: IF-PUMP
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A3
+      valence: every Interface MUST declare a static contract
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: IF-SENSOR
+    name: Glucose read interface
+    kind: Interface
+    subkind: message
+    description: Glucose reading exposed by the sensor.
+    promises:
+    - id: PR-IF-SENSOR-contract
+      attribute: contract
+      content:
+      - Exposes the current blood glucose reading to the controller.
+      owner_entity: IF-SENSOR
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A3
+      valence: every Interface MUST declare a static contract
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'

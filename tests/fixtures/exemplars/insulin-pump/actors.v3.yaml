@@ -1,0 +1,58 @@
+meta:
+  schema_version: '3.0'
+  standard: openAG
+  standard_ext: null
+  project: insulin-pump
+  subsystem: exemplar
+  domain_profiles:
+  - software
+  generated_by: hand-authored (Sommerville Insulin Pump exemplar; S7.2)
+  generated_at: '2026-10-19T00:00:00Z'
+  source_root: insulin_pump/
+  note: |
+    Sommerville Insulin Pump control system, authored as an openAG v3 model
+    for blind re-derivation validation. Design-tier (no real source); file
+    paths are synthetic and form a complete partition of a synthetic ground graph.
+
+entities:
+  actors:
+  - id: ACT-PATIENT
+    name: Patient
+    kind: Actor
+    description: >-
+      The diabetic user who wears the insulin pump, receives metered insulin,
+      and must notice and respond to display readings and hazard alarms.
+    promises:
+    - id: PR-ACT-PATIENT-role
+      attribute: role
+      content:
+      - Wears the device, receives insulin doses, and responds to display
+        readings and hazard alarms.
+      owner_entity: ACT-PATIENT
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A3
+      valence: every Actor MUST declare the role it plays against the system boundary
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: ACT-CLINICIAN
+    name: Clinician
+    kind: Actor
+    description: >-
+      The medical professional who configures safe dose parameters and reviews
+      delivery logs.
+    promises:
+    - id: PR-ACT-CLINICIAN-role
+      attribute: role
+      content:
+      - Configures safe dose parameters and reviews delivery/diagnostic logs.
+      owner_entity: ACT-CLINICIAN
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A3
+      valence: every Actor MUST declare the role it plays against the system boundary
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'

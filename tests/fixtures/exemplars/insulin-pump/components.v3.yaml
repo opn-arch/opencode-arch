@@ -1,0 +1,163 @@
+meta:
+  schema_version: '3.0'
+  standard: openAG
+  standard_ext: null
+  project: insulin-pump
+  subsystem: exemplar
+  domain_profiles:
+  - software
+  generated_by: hand-authored (Sommerville Insulin Pump exemplar; S7.2)
+  generated_at: '2026-10-19T00:00:00Z'
+  source_root: insulin_pump/
+  note: |
+    Sommerville Insulin Pump control system, authored as an openAG v3 model
+    for blind re-derivation validation. Design-tier (no real source); file
+    paths are synthetic and form a complete partition of a synthetic ground graph.
+
+entities:
+  components:
+  - id: COMP-ALARM
+    name: Alarm
+    kind: Component
+    description: Raises an audible/visible hazard alert on a detected unsafe condition.
+    files:
+    - insulin_pump/alarm.py
+    promises:
+    - id: PR-COMP-ALARM-contract
+      attribute: contract
+      content:
+      - Raises a hazard alarm when commanded by the safety logic and exposes the
+        alert interface.
+      owner_entity: COMP-ALARM
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A2
+      valence: every Component MUST declare the capability-realization contract it fulfils
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: COMP-CLOCK
+    name: Clock
+    kind: Component
+    description: Drives the periodic control cycle with a fixed-period tick.
+    files:
+    - insulin_pump/clock.py
+    promises:
+    - id: PR-COMP-CLOCK-contract
+      attribute: contract
+      content:
+      - Emits a fixed-period tick that drives each iteration of the control loop.
+      owner_entity: COMP-CLOCK
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A2
+      valence: every Component MUST declare the capability-realization contract it fulfils
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: COMP-CONTROLLER
+    name: Controller
+    kind: Component
+    description: >-
+      Holds the compute-dose algorithm and the operating-mode state machine;
+      consumes glucose readings and commands pump doses.
+    files:
+    - insulin_pump/controller.py
+    promises:
+    - id: PR-COMP-CONTROLLER-contract
+      attribute: contract
+      content:
+      - Computes the insulin dose from glucose level and rate of change and
+        drives the operating-mode state machine.
+      owner_entity: COMP-CONTROLLER
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A2
+      valence: every Component MUST declare the capability-realization contract it fulfils
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: COMP-DISPLAY
+    name: Display
+    kind: Component
+    description: Presents glucose readings, device status, and hazard messages to the patient.
+    files:
+    - insulin_pump/display.py
+    promises:
+    - id: PR-COMP-DISPLAY-contract
+      attribute: contract
+      content:
+      - Renders glucose readings, device state, and hazard messages via the
+        display interface.
+      owner_entity: COMP-DISPLAY
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A2
+      valence: every Component MUST declare the capability-realization contract it fulfils
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: COMP-POWER
+    name: Power supply
+    kind: Component
+    description: Battery/power supply for the device; monitored for loss of power.
+    files:
+    - insulin_pump/power.py
+    promises:
+    - id: PR-COMP-POWER-contract
+      attribute: contract
+      content:
+      - Supplies regulated power to the device and reports low-battery / power-loss state.
+      owner_entity: COMP-POWER
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A2
+      valence: every Component MUST declare the capability-realization contract it fulfils
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: COMP-PUMP
+    name: Pump
+    kind: Component
+    description: Delivers the metered insulin dose and reports delivery faults.
+    files:
+    - insulin_pump/pump.py
+    promises:
+    - id: PR-COMP-PUMP-contract
+      attribute: contract
+      content:
+      - Delivers the commanded metered insulin dose and reports jams / empty
+        reservoir via the pump interface.
+      owner_entity: COMP-PUMP
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A2
+      valence: every Component MUST declare the capability-realization contract it fulfils
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: COMP-SENSOR
+    name: Sensor
+    kind: Component
+    description: Measures blood glucose and exposes readings to the controller.
+    files:
+    - insulin_pump/sensor.py
+    promises:
+    - id: PR-COMP-SENSOR-contract
+      attribute: contract
+      content:
+      - Measures blood glucose and exposes the reading through the sensor interface.
+      owner_entity: COMP-SENSOR
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A2
+      valence: every Component MUST declare the capability-realization contract it fulfils
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'

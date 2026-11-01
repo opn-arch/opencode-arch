@@ -1,0 +1,39 @@
+meta:
+  schema_version: '3.0'
+  standard: openAG
+  standard_ext: null
+  project: insulin-pump
+  subsystem: exemplar
+  domain_profiles:
+  - software
+  generated_by: hand-authored (Sommerville Insulin Pump exemplar; S7.2)
+  generated_at: '2026-10-19T00:00:00Z'
+  source_root: insulin_pump/
+  note: |
+    Sommerville Insulin Pump control system, authored as an openAG v3 model
+    for blind re-derivation validation. Design-tier (no real source); file
+    paths are synthetic and form a complete partition of a synthetic ground graph.
+
+entities:
+  systems:
+  - id: SYS-INSULIN-PUMP
+    name: Insulin Pump Control System
+    kind: System
+    description: >-
+      A closed-loop insulin delivery control system: it periodically measures
+      blood glucose, computes a safe insulin dose, delivers metered insulin, and
+      detects hazards to warn the patient.
+    promises:
+    - id: PR-SYS-INSULIN-PUMP-intent
+      attribute: intent
+      content:
+      - Maintain the patient's blood glucose within a safe band by closed-loop
+        metered insulin delivery, failing safe on any detected hazard.
+      owner_entity: SYS-INSULIN-PUMP
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A1
+      valence: every System MUST declare the intent it realizes
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'

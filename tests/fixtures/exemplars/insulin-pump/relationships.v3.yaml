@@ -1,0 +1,76 @@
+meta:
+  schema_version: '3.0'
+  standard: openAG
+  standard_ext: null
+  project: insulin-pump
+  subsystem: exemplar
+  domain_profiles:
+  - software
+  generated_by: hand-authored (Sommerville Insulin Pump exemplar; S7.2)
+  generated_at: '2026-10-19T00:00:00Z'
+  source_root: insulin_pump/
+  note: |
+    Sommerville Insulin Pump control system, authored as an openAG v3 model
+    for blind re-derivation validation. Design-tier (no real source); file
+    paths are synthetic and form a complete partition of a synthetic ground graph.
+
+relationships:
+# A1 containment — strict tree: every entity has exactly one container.
+- {from: SYS-INSULIN-PUMP, to: CAP-SENSE, type: contains}
+- {from: SYS-INSULIN-PUMP, to: CAP-DOSE, type: contains}
+- {from: SYS-INSULIN-PUMP, to: CAP-DELIVER, type: contains}
+- {from: SYS-INSULIN-PUMP, to: CAP-SAFETY, type: contains}
+- {from: SYS-INSULIN-PUMP, to: ACT-PATIENT, type: contains}
+- {from: SYS-INSULIN-PUMP, to: ACT-CLINICIAN, type: contains}
+- {from: SYS-INSULIN-PUMP, to: IF-SENSOR, type: contains}
+- {from: SYS-INSULIN-PUMP, to: IF-PUMP, type: contains}
+- {from: SYS-INSULIN-PUMP, to: IF-DISPLAY, type: contains}
+- {from: SYS-INSULIN-PUMP, to: IF-ALARM, type: contains}
+- {from: SYS-INSULIN-PUMP, to: CON-OVERDOSE, type: contains}
+- {from: SYS-INSULIN-PUMP, to: CON-UNDERDOSE, type: contains}
+- {from: SYS-INSULIN-PUMP, to: CON-DELIVERY-FAILURE, type: contains}
+- {from: SYS-INSULIN-PUMP, to: CON-SAFE-BAND, type: contains}
+- {from: SYS-INSULIN-PUMP, to: BEH-CONTROL-LOOP, type: contains}
+- {from: SYS-INSULIN-PUMP, to: BEH-RUNNING, type: contains}
+- {from: SYS-INSULIN-PUMP, to: BEH-MANUAL, type: contains}
+- {from: SYS-INSULIN-PUMP, to: BEH-TESTING, type: contains}
+- {from: SYS-INSULIN-PUMP, to: BEH-FAILURE, type: contains}
+- {from: CAP-SENSE, to: COMP-SENSOR, type: contains}
+- {from: CAP-DOSE, to: COMP-CONTROLLER, type: contains}
+- {from: CAP-DOSE, to: COMP-CLOCK, type: contains}
+- {from: CAP-DELIVER, to: COMP-PUMP, type: contains}
+- {from: CAP-DELIVER, to: COMP-POWER, type: contains}
+- {from: CAP-SAFETY, to: COMP-DISPLAY, type: contains}
+- {from: CAP-SAFETY, to: COMP-ALARM, type: contains}
+# A2 realization — each component realizes its capability.
+- {from: COMP-SENSOR, to: CAP-SENSE, type: realizes}
+- {from: COMP-CONTROLLER, to: CAP-DOSE, type: realizes}
+- {from: COMP-CLOCK, to: CAP-DOSE, type: realizes}
+- {from: COMP-PUMP, to: CAP-DELIVER, type: realizes}
+- {from: COMP-POWER, to: CAP-DELIVER, type: realizes}
+- {from: COMP-DISPLAY, to: CAP-SAFETY, type: realizes}
+- {from: COMP-ALARM, to: CAP-SAFETY, type: realizes}
+# A3 boundary — exposes.
+- {from: COMP-SENSOR, to: IF-SENSOR, type: exposes}
+- {from: COMP-PUMP, to: IF-PUMP, type: exposes}
+- {from: COMP-DISPLAY, to: IF-DISPLAY, type: exposes}
+- {from: COMP-ALARM, to: IF-ALARM, type: exposes}
+# A3 boundary — consumes.
+- {from: COMP-CONTROLLER, to: IF-SENSOR, type: consumes}
+- {from: COMP-CONTROLLER, to: IF-PUMP, type: consumes}
+- {from: ACT-PATIENT, to: IF-DISPLAY, type: consumes}
+- {from: ACT-PATIENT, to: IF-ALARM, type: consumes}
+- {from: ACT-CLINICIAN, to: IF-DISPLAY, type: consumes}
+# A4 governance — constrained-by.
+- {from: BEH-CONTROL-LOOP, to: CON-OVERDOSE, type: constrained-by}
+- {from: BEH-CONTROL-LOOP, to: CON-UNDERDOSE, type: constrained-by}
+- {from: BEH-CONTROL-LOOP, to: CON-SAFE-BAND, type: constrained-by}
+- {from: COMP-PUMP, to: CON-DELIVERY-FAILURE, type: constrained-by}
+# A4 traceability — traces-to.
+- {from: COMP-CONTROLLER, to: BEH-CONTROL-LOOP, type: traces-to}
+# A5 triggers — operating-mode state machine + control loop.
+- {from: BEH-RUNNING, to: BEH-CONTROL-LOOP, type: triggers}
+- {from: BEH-CONTROL-LOOP, to: BEH-RUNNING, type: triggers}
+- {from: BEH-RUNNING, to: BEH-FAILURE, type: triggers}
+- {from: BEH-RUNNING, to: BEH-MANUAL, type: triggers}
+- {from: BEH-RUNNING, to: BEH-TESTING, type: triggers}

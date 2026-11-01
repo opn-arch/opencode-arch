@@ -1,0 +1,94 @@
+meta:
+  schema_version: '3.0'
+  standard: openAG
+  standard_ext: null
+  project: insulin-pump
+  subsystem: exemplar
+  domain_profiles:
+  - software
+  generated_by: hand-authored (Sommerville Insulin Pump exemplar; S7.2)
+  generated_at: '2026-10-19T00:00:00Z'
+  source_root: insulin_pump/
+  note: |
+    Sommerville Insulin Pump control system, authored as an openAG v3 model
+    for blind re-derivation validation. Design-tier (no real source); file
+    paths are synthetic and form a complete partition of a synthetic ground graph.
+
+entities:
+  capabilities:
+  - id: CAP-SENSE
+    name: Measure blood glucose
+    kind: Capability
+    description: >-
+      Periodically measure the patient's blood glucose level from the sensor.
+    promises:
+    - id: PR-CAP-SENSE-intent
+      attribute: intent
+      content:
+      - Measure the patient's current blood glucose level for the control loop.
+      owner_entity: CAP-SENSE
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A1
+      valence: every Capability MUST declare the intent it realizes
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: CAP-DOSE
+    name: Compute insulin dose
+    kind: Capability
+    description: >-
+      Compute the required insulin dose from the glucose level and its rate of
+      change.
+    promises:
+    - id: PR-CAP-DOSE-intent
+      attribute: intent
+      content:
+      - Compute a safe insulin dose from the glucose level and its rate of change.
+      owner_entity: CAP-DOSE
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A1
+      valence: every Capability MUST declare the intent it realizes
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: CAP-DELIVER
+    name: Deliver metered insulin
+    kind: Capability
+    description: >-
+      Deliver the computed, metered insulin dose via the pump.
+    promises:
+    - id: PR-CAP-DELIVER-intent
+      attribute: intent
+      content:
+      - Deliver the computed metered insulin dose via the pump actuator.
+      owner_entity: CAP-DELIVER
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A1
+      valence: every Capability MUST declare the intent it realizes
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'
+
+  - id: CAP-SAFETY
+    name: Detect hazards and warn
+    kind: Capability
+    description: >-
+      Detect hazardous conditions and warn the patient via the display and alarm.
+    promises:
+    - id: PR-CAP-SAFETY-intent
+      attribute: intent
+      content:
+      - Detect hazards and warn the patient through the display and audible alarm.
+      owner_entity: CAP-SAFETY
+      delivered_from: null
+      verified_by: []
+      status: delivered
+      gap_type: null
+      axis: A1
+      valence: every Capability MUST declare the intent it realizes
+      provenance: 'Sommerville, Software Engineering — insulin pump exemplar'

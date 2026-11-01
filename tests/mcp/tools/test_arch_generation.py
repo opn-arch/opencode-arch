@@ -19,10 +19,7 @@ from opencode_arch.mcp.tools.arch_generation import (
     arch_commit_generation,
 )
 
-_EXEMPLAR_DIR = Path(
-    "/Users/baigm2/Documents/Projects/openAG/.worktrees/"
-    "b-round-local-recursive/.architecture/exemplars/insulin-pump"
-)
+_EXEMPLAR_DIR = Path(__file__).resolve().parents[2] / "fixtures" / "exemplars" / "insulin-pump"
 
 
 def _run(coro):
