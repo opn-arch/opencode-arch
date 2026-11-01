@@ -1111,6 +1111,7 @@ try:
     from opencode_arch.mcp.tools.arch_group import arch_group as _arch_group
     from opencode_arch.mcp.tools.arch_decompose import arch_decompose as _arch_decompose
     from opencode_arch.mcp.tools.arch_diff import arch_diff as _arch_diff
+    from opencode_arch.mcp.tools.arch_docs import arch_docs as _arch_docs
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1226,6 +1227,11 @@ try:
     async def arch_diff(repo_path: str = "", model_a_yaml: str = "", model_b_yaml: str = "") -> dict:
         """Diff two architecture model docs (model_b defaults to git HEAD)."""
         return await _arch_diff(repo_path=repo_path, model_a_yaml=model_a_yaml, model_b_yaml=model_b_yaml)
+
+    @mcp.tool()
+    async def arch_docs(repo_path: str = "", formats: str = "all", model_yaml: str = "") -> dict:
+        """Generate openAG-shaped SE documentation from the model."""
+        return await _arch_docs(repo_path=repo_path, formats=formats, model_yaml=model_yaml)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
