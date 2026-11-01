@@ -1138,6 +1138,7 @@ try:
     from opencode_arch.mcp.tools.ai.arch_workorder_submit import arch_workorder_submit as _arch_workorder_submit
     from opencode_arch.mcp.tools.ai.arch_job_get import arch_job_get as _arch_job_get
     from opencode_arch.mcp.tools.ai.arch_job_transition import arch_job_transition as _arch_job_transition
+    from opencode_arch.mcp.tools.ai.arch_job_run import arch_job_run as _arch_job_run
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1404,6 +1405,11 @@ try:
             result_ref=result_ref,
             error=error,
         )
+
+    @mcp.tool()
+    async def arch_job_run(repo_path: str = "", job_id: str = "") -> dict:
+        """Execute a queued AI Job via the configured proposer plugin."""
+        return await _arch_job_run(repo_path=repo_path, job_id=job_id)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
