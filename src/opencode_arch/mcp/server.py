@@ -1134,6 +1134,7 @@ try:
     from opencode_arch.mcp.tools.lifecycle.arch_package_stale import arch_package_stale as _arch_package_stale
     from opencode_arch.mcp.tools.lifecycle.arch_package_merge import arch_package_merge as _arch_package_merge
     from opencode_arch.mcp.tools.lifecycle.arch_artifact_plan import arch_artifact_plan as _arch_artifact_plan
+    from opencode_arch.mcp.tools.lifecycle.arch_artifact_rebuild import arch_artifact_rebuild as _arch_artifact_rebuild
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1364,6 +1365,11 @@ try:
     async def arch_artifact_plan(repo_path: str = "", artifact_specs: list[dict] | None = None) -> dict:
         """Return the deterministic topological rebuild plan for artifact_specs."""
         return await _arch_artifact_plan(repo_path=repo_path, artifact_specs=artifact_specs)
+
+    @mcp.tool()
+    async def arch_artifact_rebuild(repo_path: str = "", artifact_specs: list[dict] | None = None, force: bool = False) -> dict:
+        """Render + write openAG artifacts over the live model doc via the viewer."""
+        return await _arch_artifact_rebuild(repo_path=repo_path, artifact_specs=artifact_specs, force=force)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
