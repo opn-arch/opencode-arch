@@ -1119,6 +1119,7 @@ try:
     from opencode_arch.mcp.tools.arch_stats import arch_stats as _arch_stats
     from opencode_arch.mcp.tools.arch_require import arch_require as _arch_require
     from opencode_arch.mcp.tools.arch_trace_requirements import arch_trace_requirements as _arch_trace_requirements
+    from opencode_arch.mcp.tools.arch_correct import arch_correct as _arch_correct
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1274,6 +1275,11 @@ try:
     async def arch_trace_requirements(repo_path: str = "", model_yaml: str = "", requirements_yaml: str = "") -> dict:
         """Trace requirements (from arg or the repo ledger) to model entities."""
         return await _arch_trace_requirements(repo_path=repo_path, model_yaml=model_yaml, requirements_yaml=requirements_yaml)
+
+    @mcp.tool()
+    async def arch_correct(repo_path: str = "", correction_type: str = "", target: str = "", reason: str = "", suggestion: dict | None = None) -> dict:
+        """Store a structured architecture-model correction for the repo."""
+        return await _arch_correct(repo_path=repo_path, correction_type=correction_type, target=target, reason=reason, suggestion=suggestion)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
