@@ -1117,6 +1117,7 @@ try:
     from opencode_arch.mcp.tools.arch_ingest import arch_ingest as _arch_ingest
     from opencode_arch.mcp.tools.arch_llm_audit import arch_llm_audit as _arch_llm_audit
     from opencode_arch.mcp.tools.arch_stats import arch_stats as _arch_stats
+    from opencode_arch.mcp.tools.arch_require import arch_require as _arch_require
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1262,6 +1263,11 @@ try:
     async def arch_stats(repo_path: str = "", tool_filter: str = "") -> dict:
         """Aggregate per-tool telemetry and optional model rollup for the repo."""
         return await _arch_stats(repo_path=repo_path, tool_filter=tool_filter)
+
+    @mcp.tool()
+    async def arch_require(repo_path: str = "", requirement: str = "", component_id: str = "", priority: str = "must", context: str = "") -> dict:
+        """Capture a MoSCoW-prioritized functional requirement for the repo."""
+        return await _arch_require(repo_path=repo_path, requirement=requirement, component_id=component_id, priority=priority, context=context)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
