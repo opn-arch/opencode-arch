@@ -1124,6 +1124,7 @@ try:
     from opencode_arch.mcp.tools.lifecycle.arch_package_publish import arch_package_publish as _arch_package_publish
     from opencode_arch.mcp.tools.lifecycle.arch_package_load import arch_package_load as _arch_package_load
     from opencode_arch.mcp.tools.lifecycle.arch_package_list_generations import arch_package_list_generations as _arch_package_list_generations
+    from opencode_arch.mcp.tools.lifecycle.arch_package_diff import arch_package_diff as _arch_package_diff
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1304,6 +1305,11 @@ try:
     async def arch_package_list_generations(repo_path: str = "") -> dict:
         """List published openAG generation snapshots in store order."""
         return await _arch_package_list_generations(repo_path=repo_path)
+
+    @mcp.tool()
+    async def arch_package_diff(repo_path: str = "", gen_a: str = "", gen_b: str = "") -> dict:
+        """Diff two published openAG generation snapshots."""
+        return await _arch_package_diff(repo_path=repo_path, gen_a=gen_a, gen_b=gen_b)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
