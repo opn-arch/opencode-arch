@@ -1112,6 +1112,7 @@ try:
     from opencode_arch.mcp.tools.arch_decompose import arch_decompose as _arch_decompose
     from opencode_arch.mcp.tools.arch_diff import arch_diff as _arch_diff
     from opencode_arch.mcp.tools.arch_docs import arch_docs as _arch_docs
+    from opencode_arch.mcp.tools.arch_export import arch_export as _arch_export
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1232,6 +1233,11 @@ try:
     async def arch_docs(repo_path: str = "", formats: str = "all", model_yaml: str = "") -> dict:
         """Generate openAG-shaped SE documentation from the model."""
         return await _arch_docs(repo_path=repo_path, formats=formats, model_yaml=model_yaml)
+
+    @mcp.tool()
+    async def arch_export(repo_path: str = "", output_dir: str = "", fmt: str = "graphml", model_yaml: str = "") -> dict:
+        """Export the model as a graph file (graphml/json-graph) to a directory."""
+        return await _arch_export(repo_path=repo_path, output_dir=output_dir, fmt=fmt, model_yaml=model_yaml)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
