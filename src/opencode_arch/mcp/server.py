@@ -1101,6 +1101,7 @@ try:
         arch_slice as _arch_slice,
     )
     from opencode_arch.mcp.tools.arch_health import arch_health as _arch_health
+    from opencode_arch.mcp.tools.arch_scan import arch_scan as _arch_scan
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1146,6 +1147,11 @@ try:
     async def arch_health(repo_path: str, node_id: str | None = None) -> dict:
         """Return per-node (with flags) or graph-wide health projection."""
         return await _arch_health(repo_path=repo_path, node_id=node_id)
+
+    @mcp.tool()
+    async def arch_scan(repo_path: str, mode: str = "full") -> dict:
+        """Return the module / import-edge inventory of the repo's source tree."""
+        return await _arch_scan(repo_path=repo_path, mode=mode)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
