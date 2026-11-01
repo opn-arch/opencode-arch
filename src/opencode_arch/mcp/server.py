@@ -1137,6 +1137,7 @@ try:
     from opencode_arch.mcp.tools.lifecycle.arch_artifact_rebuild import arch_artifact_rebuild as _arch_artifact_rebuild
     from opencode_arch.mcp.tools.ai.arch_workorder_submit import arch_workorder_submit as _arch_workorder_submit
     from opencode_arch.mcp.tools.ai.arch_job_get import arch_job_get as _arch_job_get
+    from opencode_arch.mcp.tools.ai.arch_job_transition import arch_job_transition as _arch_job_transition
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1382,6 +1383,27 @@ try:
     async def arch_job_get(repo_path: str = "", job_id: str = "") -> dict:
         """Fetch a persisted AI Job by id."""
         return await _arch_job_get(repo_path=repo_path, job_id=job_id)
+
+    @mcp.tool()
+    async def arch_job_transition(
+        repo_path: str = "",
+        job_id: str = "",
+        new_state: str = "",
+        reason: str | None = None,
+        actor: str | None = None,
+        result_ref: str | None = None,
+        error: str | None = None,
+    ) -> dict:
+        """Transition an AI Job to a new state (guards terminal transitions)."""
+        return await _arch_job_transition(
+            repo_path=repo_path,
+            job_id=job_id,
+            new_state=new_state,
+            reason=reason,
+            actor=actor,
+            result_ref=result_ref,
+            error=error,
+        )
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
