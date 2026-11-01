@@ -1104,6 +1104,7 @@ try:
     from opencode_arch.mcp.tools.arch_scan import arch_scan as _arch_scan
     from opencode_arch.mcp.tools.arch_extract import arch_extract as _arch_extract
     from opencode_arch.mcp.tools.arch_pipeline import arch_pipeline as _arch_pipeline
+    from opencode_arch.mcp.tools.arch_validate import arch_validate as _arch_validate
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1184,6 +1185,11 @@ try:
             clear_cache=clear_cache,
             scope=scope,
         )
+
+    @mcp.tool()
+    async def arch_validate(repo_path: str = "", model_yaml: str = "") -> dict:
+        """Validate a model (schema + axis lint) and return a bounded score."""
+        return await _arch_validate(repo_path=repo_path, model_yaml=model_yaml)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
