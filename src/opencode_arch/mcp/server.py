@@ -1136,6 +1136,7 @@ try:
     from opencode_arch.mcp.tools.lifecycle.arch_artifact_plan import arch_artifact_plan as _arch_artifact_plan
     from opencode_arch.mcp.tools.lifecycle.arch_artifact_rebuild import arch_artifact_rebuild as _arch_artifact_rebuild
     from opencode_arch.mcp.tools.ai.arch_workorder_submit import arch_workorder_submit as _arch_workorder_submit
+    from opencode_arch.mcp.tools.ai.arch_job_get import arch_job_get as _arch_job_get
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1376,6 +1377,11 @@ try:
     async def arch_workorder_submit(repo_path: str = "", work_order: dict | None = None) -> dict:
         """Persist an AI WorkOrder, create its draft tracking Job, and journal the submission."""
         return await _arch_workorder_submit(repo_path=repo_path, work_order=work_order)
+
+    @mcp.tool()
+    async def arch_job_get(repo_path: str = "", job_id: str = "") -> dict:
+        """Fetch a persisted AI Job by id."""
+        return await _arch_job_get(repo_path=repo_path, job_id=job_id)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
