@@ -1120,6 +1120,7 @@ try:
     from opencode_arch.mcp.tools.arch_require import arch_require as _arch_require
     from opencode_arch.mcp.tools.arch_trace_requirements import arch_trace_requirements as _arch_trace_requirements
     from opencode_arch.mcp.tools.arch_correct import arch_correct as _arch_correct
+    from opencode_arch.mcp.tools.arch_feedback import arch_feedback as _arch_feedback
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1280,6 +1281,11 @@ try:
     async def arch_correct(repo_path: str = "", correction_type: str = "", target: str = "", reason: str = "", suggestion: dict | None = None) -> dict:
         """Store a structured architecture-model correction for the repo."""
         return await _arch_correct(repo_path=repo_path, correction_type=correction_type, target=target, reason=reason, suggestion=suggestion)
+
+    @mcp.tool()
+    async def arch_feedback(repo_path: str = "", feedback_type: str = "", content: str = "", context: dict | None = None, rating: int | None = None, correction: dict | None = None) -> dict:
+        """Record user feedback for model improvement into the repo ledger."""
+        return await _arch_feedback(repo_path=repo_path, feedback_type=feedback_type, content=content, context=context, rating=rating, correction=correction)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
