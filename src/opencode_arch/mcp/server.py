@@ -1122,6 +1122,7 @@ try:
     from opencode_arch.mcp.tools.arch_correct import arch_correct as _arch_correct
     from opencode_arch.mcp.tools.arch_feedback import arch_feedback as _arch_feedback
     from opencode_arch.mcp.tools.lifecycle.arch_package_publish import arch_package_publish as _arch_package_publish
+    from opencode_arch.mcp.tools.lifecycle.arch_package_load import arch_package_load as _arch_package_load
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1292,6 +1293,11 @@ try:
     async def arch_package_publish(repo_path: str = "", model_yaml: str = "", reason: str = "") -> dict:
         """Publish the repo's model as the next openAG generation snapshot."""
         return await _arch_package_publish(repo_path=repo_path, model_yaml=model_yaml, reason=reason)
+
+    @mcp.tool()
+    async def arch_package_load(repo_path: str = "", gen_id: str = "") -> dict:
+        """Load a published openAG generation snapshot (latest when gen_id empty)."""
+        return await _arch_package_load(repo_path=repo_path, gen_id=gen_id)
 
     @mcp.tool()
     async def arch_flags(repo_path: str, node_id: str | None = None) -> dict:
