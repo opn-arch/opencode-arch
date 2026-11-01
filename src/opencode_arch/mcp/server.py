@@ -1103,6 +1103,7 @@ try:
     from opencode_arch.mcp.tools.arch_health import arch_health as _arch_health
     from opencode_arch.mcp.tools.arch_scan import arch_scan as _arch_scan
     from opencode_arch.mcp.tools.arch_extract import arch_extract as _arch_extract
+    from opencode_arch.mcp.tools.arch_pipeline import arch_pipeline as _arch_pipeline
     from opencode_arch.mcp.tools.arch_flags import arch_flags as _arch_flags
     from opencode_arch.mcp.tools.arch_observe import arch_observe as _arch_observe
     from opencode_arch.mcp.tools.arch_ingest_telemetry import (
@@ -1163,6 +1164,25 @@ try:
             repo_path=repo_path,
             model_yaml=model_yaml,
             context_tokens=context_tokens,
+        )
+
+    @mcp.tool()
+    async def arch_pipeline(
+        repo_path: str,
+        stage: str = "",
+        recursive: bool = True,
+        resolutions: list[dict] | None = None,
+        clear_cache: bool = False,
+        scope: str = "",
+    ) -> dict:
+        """Run the openAG B-ROUND pipeline over source and commit a generation."""
+        return await _arch_pipeline(
+            repo_path=repo_path,
+            stage=stage,
+            recursive=recursive,
+            resolutions=resolutions,
+            clear_cache=clear_cache,
+            scope=scope,
         )
 
     @mcp.tool()
