@@ -54,6 +54,7 @@ async def arch_pipeline(
     from openag.extract.pipeline import _seed_doc
     from openag.kernel.pipeline import run_pipeline
     from openag.kernel.generations import GenerationStore
+    from openag.model_io import save_model_dir
     from openag.observe._fields import now_iso
 
     src_root = resolved / "src"
@@ -70,9 +71,14 @@ async def arch_pipeline(
     store = GenerationStore(root=gen_root)
     gen_id = store.record(entities, reason="arch_pipeline")
 
+    model_dir = save_model_dir(
+        str(resolved / ".architecture" / "model"), g.to_doc()
+    )
+
     grounding = summary["grounding"]
     return {
         "generation": gen_id,
+        "model_dir": model_dir,
         "stage": summary["stage"],
         "iterations": summary["iterations"],
         "converged": grounding["converged"],

@@ -38,6 +38,7 @@ async def arch_extract(
 
     from openag.extract.pipeline import extract_model
     from openag.kernel.generations import GenerationStore
+    from openag.model_io import save_model_dir
 
     src_root = resolved / "src"
     if not src_root.is_dir():
@@ -54,8 +55,13 @@ async def arch_extract(
     store = GenerationStore(root=gen_root)
     gen_id = store.record(entities, reason="arch_extract")
 
+    model_dir = save_model_dir(
+        str(resolved / ".architecture" / "model"), doc
+    )
+
     return {
         "generation": gen_id,
+        "model_dir": model_dir,
         "entities": len(entities),
         "relationships": len(doc.get("relationships") or []),
     }
