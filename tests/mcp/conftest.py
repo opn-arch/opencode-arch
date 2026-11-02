@@ -33,19 +33,3 @@ def _seed_model():
         return Path(repo)
 
     return _seed
-
-
-@pytest.fixture
-def _seed_model_with_signals(_seed_model):
-    """Seed a repo whose model mines >= 1 lesson.
-
-    The insulin-pump exemplar carries owed-promise gaps, so the
-    always-error ``lesson:recurring-gap`` miner fires on the seeded
-    model alone (no generation history needed) — enough signal for a
-    lesson-materialization gate to pick a top lesson.
-    """
-
-    def _seed(repo: Path) -> Path:
-        return _seed_model(Path(repo))
-
-    return _seed
