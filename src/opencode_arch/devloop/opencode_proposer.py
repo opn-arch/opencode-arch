@@ -12,7 +12,10 @@ INSIDE :func:`propose`. Config the dev-loop to use it via::
 """
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from openag.ai.work_order import WorkOrder
 
 # Minimal ModelPatch shape used only to steer the structured instruction.
 _PATCH_SCHEMA: dict[str, Any] = {
@@ -27,7 +30,7 @@ _PATCH_SCHEMA: dict[str, Any] = {
 }
 
 
-def _build_prompt(wo) -> str:
+def _build_prompt(wo: "WorkOrder") -> str:
     """Build an authoring prompt from the WorkOrder intent + parameters."""
     lines = [
         "You are an architecture model editor.",
@@ -50,11 +53,16 @@ def _build_prompt(wo) -> str:
     return "\n".join(lines)
 
 
-def propose(wo) -> dict:
+def propose(wo: "WorkOrder") -> dict:
     """Author a ModelPatch for ``wo`` via a real OpenCode-backed provider.
 
     Returns the structured ModelPatch dict. An invalid result is returned
     as-is so the openAG worker can reject it — no silent fabrication.
+
+    The prompt pins the authored component id (``COMP-OPENCODE-LIVE``) so the
+    opt-in live test can assert on an exact outcome; this makes the result
+    dependent on the backing model's prompt adherence, which is acceptable
+    only because this path is env-gated and never runs in the default suite.
     """
     from opencode_arch.llm.providers.mcp import MCPProvider
 
