@@ -249,6 +249,11 @@ frontier may be empty — get node ids from `arch_health` (`worst_offenders`) or
 model from the Python AST, not from an LLM — so results are reproducible and
 the agent reasons over a stable graph.
 
+For a complete tool-by-tool breakdown of what each `arch_*` tool delegates to
+in the openAG engine and what OCA adds on top, see
+[`docs/openag-mapping.md`](docs/openag-mapping.md) (PDF:
+[`docs/openag-mapping.pdf`](docs/openag-mapping.pdf)).
+
 ## Skills
 
 This repo ships OpenCode **skills** (under `skills/`) alongside the `arch_*`
