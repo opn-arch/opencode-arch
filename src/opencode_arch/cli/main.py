@@ -7,12 +7,37 @@ import sys
 from pathlib import Path
 
 
+# Subcommands that are NOT the interactive launcher. Bare invocation or a
+# leading path-like argument (anything not in this set, and not -h/--help) is
+# treated as "launch an OpenCode session".
+_KNOWN_SUBCOMMANDS = {
+    "extract", "generate", "bench", "metrics", "report", "export-data", "launch",
+}
+
+
 def main():
+    # Launch dispatch (restores pre-trim behavior): bare `opencode-arch` or a
+    # leading path-like token drops into an architecture-aware OpenCode session.
+    argv = sys.argv[1:]
+    if not argv:
+        from opencode_arch.cli.launch import run_launch
+        run_launch(repo_path=None)
+        return
+    first = argv[0]
+    if first not in _KNOWN_SUBCOMMANDS and first not in ("-h", "--help"):
+        from opencode_arch.cli.launch import run_launch
+        run_launch(repo_path=first)
+        return
+
     parser = argparse.ArgumentParser(
         prog="opencode-arch",
-        description="Architecture-aware development — run commands",
+        description="Architecture-aware development — launch a session or run commands",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # launch
+    launch_p = subparsers.add_parser("launch", help="Launch an architecture-aware OpenCode session")
+    launch_p.add_argument("repo_path", nargs="?", default=None, help="Target repo (default: current dir)")
 
     # extract
     extract_p = subparsers.add_parser("extract", help="Extract architecture from a repository")
@@ -55,14 +80,15 @@ def main():
     export_p.add_argument("--output", "-o", default="corpus.jsonl", help="Output file (default: corpus.jsonl)")
     export_p.add_argument("--include-telemetry", action="store_true", help="Include telemetry DB records")
 
-    # No subcommand: print help and exit non-zero (a subcommand is required).
-    if len(sys.argv) <= 1:
-        parser.print_help()
-        sys.exit(1)
-
+    # No subcommand: handled above by launch dispatch. Anything reaching here
+    # has a recognized subcommand (or -h/--help, which argparse handles).
     args = parser.parse_args()
 
-    if args.command == "extract":
+    if args.command == "launch":
+        from opencode_arch.cli.launch import run_launch
+        run_launch(repo_path=args.repo_path)
+
+    elif args.command == "extract":
         from opencode_arch.cli.extract import run_extract
         from opencode_arch.runner.opencode import OpencodeRunner
         runner = OpencodeRunner(timeout=args.timeout, model=args.model)
