@@ -69,6 +69,7 @@ try:
     from opencode_arch.mcp.tools.arch_history import arch_history as _arch_history
     from opencode_arch.mcp.tools.arch_lessons import arch_lessons as _arch_lessons
     from opencode_arch.mcp.tools.arch_round import arch_round as _arch_round
+    from opencode_arch.mcp.tools.arch_grow import arch_grow as _arch_grow
     from opencode_arch.mcp.tools.arch_cut import (
         arch_allocate_contract as _arch_allocate_contract,
         arch_propose_cut as _arch_propose_cut,
@@ -397,6 +398,15 @@ try:
     async def arch_round(repo_path: str, node_id: str | None = None) -> dict:
         """Run the B-ROUND least-fixpoint (whole-graph or node-scoped)."""
         return await _arch_round(repo_path=repo_path, node_id=node_id)
+
+    @mcp.tool()
+    async def arch_grow(repo_path: str, root: str, budget: float = 100.0,
+                        max_iterations: int = 8, model: str | None = None,
+                        no_provider: bool = False) -> dict:
+        """Standalone scoped forward-GROW operator."""
+        return await _arch_grow(repo_path=repo_path, root=root, budget=budget,
+                                max_iterations=max_iterations, model=model,
+                                no_provider=no_provider)
 
     @mcp.tool()
     async def arch_propose_cut(repo_path: str, node_id: str, proposal: dict) -> dict:
