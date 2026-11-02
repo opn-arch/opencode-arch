@@ -71,6 +71,7 @@ try:
     from opencode_arch.mcp.tools.arch_round import arch_round as _arch_round
     from opencode_arch.mcp.tools.arch_grow import arch_grow as _arch_grow
     from opencode_arch.mcp.tools.arch_mine import arch_mine as _arch_mine
+    from opencode_arch.mcp.tools.arch_compliance import arch_compliance as _arch_compliance
     from opencode_arch.mcp.tools.arch_cut import (
         arch_allocate_contract as _arch_allocate_contract,
         arch_propose_cut as _arch_propose_cut,
@@ -418,6 +419,11 @@ try:
         return await _arch_mine(repo_path=repo_path, db=db, reservoir=reservoir,
                                 ledger=ledger, repo=repo, session=session,
                                 model=model)
+
+    @mcp.tool()
+    async def arch_compliance(repo_path: str = "", report: str = "matrix") -> dict:
+        """Return an openAG compliance report (matrix | axes | scoring)."""
+        return await _arch_compliance(repo_path=repo_path, report=report)
 
     @mcp.tool()
     async def arch_propose_cut(repo_path: str, node_id: str, proposal: dict) -> dict:
