@@ -55,13 +55,6 @@ def main():
     export_p.add_argument("--output", "-o", default="corpus.jsonl", help="Output file (default: corpus.jsonl)")
     export_p.add_argument("--include-telemetry", action="store_true", help="Include telemetry DB records")
 
-    # export
-    exp_p = subparsers.add_parser("export", help="Export flat files for mobile AI")
-    exp_p.add_argument("repo_path", help="Path to the target repository")
-    exp_p.add_argument("--output", "-o", default=None, help="Output path (dir or .zip)")
-    exp_p.add_argument("--format", choices=["dir", "zip"], default="dir", help="Output format (default: dir)")
-    exp_p.add_argument("--prefix", default="", help="File prefix override")
-
     # No subcommand: print help and exit non-zero (a subcommand is required).
     if len(sys.argv) <= 1:
         parser.print_help()
@@ -116,28 +109,6 @@ def main():
             output=args.output,
             include_telemetry=args.include_telemetry,
         )
-
-    elif args.command == "export":
-        from opencode_arch.mcp.tools.export import export_repository
-        result = asyncio.run(export_repository(
-            repo_path=args.repo_path,
-            output_dir=args.output or "",
-            output_format=args.format,
-            prefix=args.prefix,
-        ))
-        _print_export_result(result)
-
-
-def _print_export_result(result: dict):
-    if result.get("error"):
-        print(f"Export failed: {result['error']}")
-        sys.exit(1)
-    print(f"\nExport Complete")
-    print(f"  Output:  {result['output']}")
-    print(f"  Format:  {result['format']}")
-    print(f"  Files:   {result['file_count']}")
-    print(f"  Size:    {result['total_size_bytes']:,} bytes")
-    print(f"  Prefix:  {result['prefix']}")
 
 
 def _print_extract_result(result: dict):
