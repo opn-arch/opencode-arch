@@ -1,12 +1,11 @@
 # opencode-arch
 
-**Architecture extraction and validation for Python codebases.**
+**Architecture extraction, validation, and lifecycle tooling for codebases — openAG edition.**
 
-Mechanically verify that your architecture model matches your code. Compress entire repositories into ~430 tokens for AI agents. Produce training data for LLM fine-tuning.
+Scan a repository into a graph-native architecture model, mechanically score how well that model represents the code, and expose the whole surface to AI agents over MCP as ~60 `arch_*` tools.
 
 ![PyPI](https://img.shields.io/pypi/v/opencode-arch)
 ![Python](https://img.shields.io/pypi/pyversions/opencode-arch)
-![Tests](https://img.shields.io/badge/tests-278%20passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ---
@@ -16,16 +15,30 @@ Mechanically verify that your architecture model matches your code. Compress ent
 | Problem | Solution |
 |---------|----------|
 | Architecture docs drift from code | Mechanical representativeness scoring — know exactly when your model is wrong |
-| AI agents burn tokens reading every file | Token arbitrage — full repo AST compressed to ~430 tokens of dense context |
-| No structured architecture data for training | Produces (code, model, metrics) triples ready for fine-tuning |
-| Manual component boundary decisions | Auto-groups modules by import affinity, name prefix, and subdirectory |
+| AI agents burn tokens reading every file | Entity-scoped slices — read just the sub-doc for one node instead of the whole repo |
+| No structured architecture data | A persisted, versioned v3 model graph with monotone generations you can diff |
+| Manual component boundary decisions | Deterministic B-ROUND fixpoint auto-partitions modules into systems/components |
 
-## Features
+## The openAG model
 
-- **Representativeness Scoring** — File coverage, relationship accuracy, boundary coherence, behavioral coverage. Four mechanical sub-scores that tell you if your model is accurate.
-- **Token Arbitrage** — Compress a full repository's AST into a dense context string within any token budget. Agents reason about the whole codebase without reading every file.
-- **Living Documentation** — Components, relationships, behaviors, and event chains extracted directly from code and stored as `.architecture-model.yaml`.
-- **Training Data Export** — Structured triples in `.architecture/` for LLM fine-tuning pipelines.
+The live engine is **openAG** — a graph-native successor to the earlier AMS flow. It works in two phases: **write the model once, then read it.**
+
+- A **writer** (`arch_pipeline` or `arch_extract`) scans the source, runs the deterministic B-ROUND fixpoint, and persists the model.
+- Every other `arch_*` tool is a **reader** over that persisted model.
+
+Until a writer has run, readers raise `FileNotFoundError: openAG model dir not found/empty`.
+
+Extraction is **Python-AST-only and coarse by design**: one System + one Component claiming every scanned file, refined by the fixpoint. There is no LLM enrichment loop and no per-stage quality score — scores come from the `arch_evaluate` / `arch_validate` readers.
+
+After a writer runs, the target repo contains:
+
+```
+.architecture/
+├── model/
+│   └── model.v3.yaml        # the persisted graph-native model
+└── generations/
+    └── openAG-tool/         # monotone generation snapshots
+```
 
 ## Installation
 
@@ -44,28 +57,20 @@ Requires Python 3.11+.
 ## Quick Start
 
 ```bash
-# Launch interactive architecture-aware development
+# Launch an architecture-aware OpenCode session (scans + injects context)
 opencode-arch
 
 # Or target a specific repo
 opencode-arch /path/to/your/repo
 ```
 
-This scans the codebase (<1s), loads/bootstraps the architecture model, injects compressed context into your session, and launches OpenCode with full architecture awareness.
-
-```bash
-# One-shot commands also available:
-opencode-arch extract /path/to/repo    # Extract architecture
-opencode-arch export-data              # Export training data
-```
-
-After extraction, your repo contains:
+Or drive the model directly over MCP (the primary interface). The minimal loop:
 
 ```
-.architecture-model.yaml     # Component model (YAML)
-.architecture/
-├── manifest.json            # Full AST scan (modules, functions, imports)
-└── metrics.json             # Representativeness scores + telemetry
+arch_pipeline(repo_path)      # 1. WRITE the model (required, first)
+arch_evaluate(repo_path)      # 2. overall health / score
+arch_validate(repo_path)      # 3. schema + axis-lint score (0–100)
+arch_decompose(repo_path)     # 4. inspect the System decomposition
 ```
 
 ## CLI
@@ -73,11 +78,13 @@ After extraction, your repo contains:
 | Command | Purpose |
 |---------|---------|
 | `opencode-arch` | **Launch interactive session** (default — scans, injects context, opens OpenCode) |
-| `opencode-arch extract <repo>` | Extract architecture model from a repository |
-| `opencode-arch generate <repo>` | Generate code with test-guided verification |
-| `opencode-arch bench <repo1> <repo2> ...` | Benchmark extraction across multiple repos |
-| `opencode-arch metrics` | View extraction history and scores |
-| `opencode-arch export-data` | Export training corpus (JSONL) |
+| `opencode-arch launch [repo]` | Explicit launch form |
+| `opencode-arch extract <repo>` | Extract an architecture model from a repository |
+| `opencode-arch generate <repo>` | Generate code and run its tests (test-guided loop) |
+| `opencode-arch bench <repo...>` | Benchmark extraction across multiple repos |
+| `opencode-arch metrics` | View recorded metrics / learning curve / drift flags |
+| `opencode-arch report` | Display the latest report card |
+| `opencode-arch export-data` | Export a training corpus (JSONL) from `.architecture/` artifacts |
 
 Options for `extract`:
 
@@ -96,116 +103,151 @@ Register as an MCP server for use with AI coding agents:
 opencode mcp add
 ```
 
-### 9 Tools
+The server exposes the full `arch_*` surface (~60 tools). Every tool takes
+`repo_path` (the target repo to operate on). Grouped by role:
+
+### Writers — populate the model
 
 | Tool | Purpose |
 |------|---------|
-| `architect_scan` | AST scanning — returns modules, functions, classes, imports |
-| `architect_slice` | Token-compressed context (the core innovation) |
-| `architect_validate` | Structural validation, returns score 0–100 |
-| `architect_extract` | Store validated model + record telemetry |
-| `architect_generate` | Run test suite against generated code |
-| `architect_group` | Auto-group modules into logical components |
-| `architect_check` | Verify representativeness (4 sub-scores) |
-| `architect_require` | Capture functional requirements from conversation |
-| `architect_feedback` | Record corrections, ratings, and training data |
+| `arch_pipeline` | Run the B-ROUND fixpoint over source and commit a generation |
+| `arch_extract` | Scan → extract a v3 model and commit a generation (lighter than pipeline) |
+| `arch_author` | Forward-author a concept-phase model from requirements text |
+| `arch_ingest` | Ingest a SourceGraph JSON into a deterministic model doc |
+| `arch_grow` | Scoped forward-GROW operator from a root node |
+
+### Scan & inspect — readers
+
+| Tool | Purpose |
+|------|---------|
+| `arch_scan` | Module / import-edge inventory of the source tree (no model needed) |
+| `arch_slice` | Entity-scoped sub-doc for a `node_id` (token-efficient context) |
+| `arch_frontier` | Ready-promise node ids — the discovery entry point |
+| `arch_owed` | Valence-owed-but-absent attributes for a `node_id` |
+| `arch_gaps` | G-DELIVERY typed gaps for a `node_id` |
+| `arch_health` | Graph-wide or per-node health projection |
+| `arch_decompose` | System-level decomposition + split candidates |
+| `arch_group` | Group modules by the model's A1 containment partition |
+| `arch_round` | Run the B-ROUND least-fixpoint (whole-graph or node-scoped) |
+| `arch_compliance` | openAG compliance report (matrix / axes / scoring) |
+
+### Validate & gate
+
+| Tool | Purpose |
+|------|---------|
+| `arch_validate` | Schema + axis-lint, returns a bounded score (0–100) |
+| `arch_check` | Representativeness against the code ground graph |
+| `arch_gate` | L2 development gate (owed + completeness gaps, scored) |
+| `arch_evaluate` | Health rollup: coverage, score, promise rollup, requirement count |
+| `arch_llm_audit` | Deterministic decomposition second-opinion audit |
+
+### Change tracking & history
+
+| Tool | Purpose |
+|------|---------|
+| `arch_diff` | Diff two model docs (defaults to git HEAD baseline) |
+| `arch_history` | Generation timeline, node trajectory, or generation diff |
+| `arch_commit_generation` | Record the current model as the next monotone generation |
+| `arch_bind` | θ-crosswalk the latest generation onto the current model |
+
+### Docs, export & views
+
+| Tool | Purpose |
+|------|---------|
+| `arch_docs` | Generate openAG-shaped SE documentation |
+| `arch_export` | Export the model as graphml / json-graph |
+| `arch_view_project` / `arch_view_render` | Project / render the model into the viewer |
+| `arch_slice_materialize` | Materialize an entity-scoped slice doc |
+| `arch_artifact_plan` / `arch_artifact_rebuild` | Plan / rebuild derived artifacts |
+
+### Requirements & feedback
+
+| Tool | Purpose |
+|------|---------|
+| `arch_require` | Capture a MoSCoW-prioritized functional requirement |
+| `arch_trace_requirements` | Trace requirements to model entities |
+| `arch_correct` | Store a structured model correction |
+| `arch_feedback` | Record user feedback / ratings / corrections |
+
+### Decomposition primitives
+
+| Tool | Purpose |
+|------|---------|
+| `arch_propose_cut` | Apply a partition-refinement proposal (gated write) |
+| `arch_score_cut` | Score a candidate cut of a ground-graph slice |
+| `arch_allocate_contract` | Allocate producer/consumer child contracts (A2 down-law) |
+| `arch_integrate` | Run the B3 integration round over an interface's children |
+
+### Lifecycle / packaging (generations)
+
+| Tool | Purpose |
+|------|---------|
+| `arch_package_publish` | Publish the model as the next generation snapshot |
+| `arch_package_load` | Load a published generation snapshot |
+| `arch_package_list_generations` | List published snapshots |
+| `arch_package_diff` | Diff two published snapshots |
+| `arch_package_merge` | Three-way merge base/local/remote snapshots |
+| `arch_package_stale` | Entities made stale by changed paths |
+| `arch_package_children_add` | Append a child package ref |
+
+### AI jobs & proposals
+
+| Tool | Purpose |
+|------|---------|
+| `arch_proposal_validate` / `arch_proposal_apply` | Validate / apply a typed proposal |
+| `arch_workorder_submit` | Persist an AI WorkOrder + draft tracking Job |
+| `arch_job_get` / `arch_job_transition` / `arch_job_run` | Fetch / transition / execute an AI Job |
+| `arch_work_issue` | Execute the comment→issue→dev ceremony loop |
+
+### Proprioception & learning
+
+| Tool | Purpose |
+|------|---------|
+| `arch_flags` | Proprioceptive anomaly flags |
+| `arch_observe` | Raw runtime observation records |
+| `arch_ingest_telemetry` | Append external observation events |
+| `arch_lessons` | Mined lessons + reviewable proposal stubs |
+| `arch_learn` / `arch_learn_approve` | Materialize / release a learning WorkOrder |
+| `arch_mine` | Reservoir-mining pass over OpenCode sessions |
+| `arch_stats` | Aggregate per-tool telemetry + model rollup |
 
 ### Typical Agent Workflow
 
 ```
-scan → slice → (agent produces YAML) → validate → check → extract
+arch_pipeline → arch_evaluate → arch_validate → arch_decompose
+                                                     │
+                      arch_frontier → (node_id) → arch_owed / arch_gaps / arch_slice
 ```
 
-The agent calls `scan` to understand the repo, `slice` to get compressed context, produces an architecture model, then `validate` + `check` gate quality before `extract` persists it.
+The agent writes the model once with `arch_pipeline`, checks overall health
+with `arch_evaluate` / `arch_validate`, inspects the decomposition, then drills
+into individual nodes via the node-scoped readers. On a coarse model the
+frontier may be empty — get node ids from `arch_health` (`worst_offenders`) or
+`arch_decompose` instead.
 
 ## How It Works
 
 ```
 ┌─────────────────────────────────────────────────┐
 │  AI Agent (frontier model)                      │
-│  Receives ~430 tokens of compressed context     │
-│  Produces architecture YAML                     │
+│  Calls arch_* tools over MCP                    │
 └────────────────────┬────────────────────────────┘
                      │ MCP Protocol
 ┌────────────────────▼────────────────────────────┐
 │  opencode-arch (FastMCP server)                 │
-│  scan → slice → validate → check → extract     │
+│  writers populate .architecture/model/          │
+│  readers project / score / diff that model      │
 └────────────────────┬────────────────────────────┘
-                     │
+                     │ depends on
 ┌────────────────────▼────────────────────────────┐
-│  architecture-model-standard (library)          │
-│  AST scanning │ YAML parsing │ Validation       │
-│  Context formatting │ Model slicing             │
+│  openAG (graph-native engine)                   │
+│  B-ROUND fixpoint │ generations │ promises       │
 └─────────────────────────────────────────────────┘
 ```
 
-**Key design decision:** The agent IS the oracle. Tools never call external models — they provide compressed context to the frontier model already in the conversation.
-
-## Benchmarks
-
-Achieved automatically with no human tuning:
-
-| Repository | Modules | Components | Overall Score |
-|------------|---------|------------|---------------|
-| FastAPI | 25 | 9 | 98.1% |
-| Pydantic | 69 | 40 | 98.0% |
-| httpx | 23 | 10 | 96.0% |
-| Requests | 19 | 9 | 94.2% |
-| Flask | 6 | 6 | 100.0% |
-| Celery | 161 | 23 | 84.0% |
-
-Scores are composite representativeness: file coverage × relationship accuracy × boundary coherence × behavioral coverage.
-
-## Training Data
-
-Each extraction produces a structured triple:
-
-```
-(.architecture-model.yaml, manifest.json, metrics.json)
-```
-
-This enables:
-- Fine-tuning models on architecture extraction tasks
-- Evaluating model quality with mechanical ground truth
-- Building datasets across many repositories with `bench`
-
-Export with:
-
-```bash
-opencode-arch export-data --format=jsonl
-```
-
-## Architecture Model Schema
-
-```yaml
-meta:
-  project: my-project
-  schema_version: '1.3'
-entities:
-  components:
-    - id: COMP-1
-      name: APILayer
-      status: ACTIVE
-  capabilities:
-    - id: CAP-F1
-      name: RequestHandling
-      status: ACTIVE
-relationships:
-  - from: COMP-1
-    to: CAP-F1
-    type: realizes
-```
-
-Relationship types: `realizes`, `uses`, `constrains`, `contains`, `triggers`, `depends_on`, `implements`, `exposes`.
-
-## Development
-
-```bash
-git clone https://github.com/anomalyco/opencode-arch
-cd opencode-arch
-pip install -e ".[dev]"
-pytest tests/ -v  # 278 tests, ~20s
-```
+**Key design decision:** extraction is deterministic. The writer derives the
+model from the Python AST, not from an LLM — so results are reproducible and
+the agent reasons over a stable graph.
 
 ## Skills
 
@@ -241,6 +283,15 @@ ln -snf "$(pwd)/skills/extraction" ~/.config/opencode/skills/extraction
 
 Symlinking is the eventually-recommended mechanism (single source of truth,
 zero drift) but is deferred until the skills stabilise.
+
+## Development
+
+```bash
+git clone https://github.com/anomalyco/opencode-arch
+cd opencode-arch
+pip install -e ".[dev]"
+pytest tests/ -v --ignore=tests/logs_db/test_client.py
+```
 
 ## Contributing
 
