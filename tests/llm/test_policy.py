@@ -55,7 +55,7 @@ def test_policy_fallback_on_transient_error(monkeypatch):
         TransientProviderError,
     )
     from opencode_arch.llm import registry
-    from architecture_model.llm import LLMProvider
+    from openag.llm import LLMProvider
 
     registry.clear_cache()
 
