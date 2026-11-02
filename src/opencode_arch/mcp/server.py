@@ -69,6 +69,7 @@ try:
     from opencode_arch.mcp.tools.arch_history import arch_history as _arch_history
     from opencode_arch.mcp.tools.arch_lessons import arch_lessons as _arch_lessons
     from opencode_arch.mcp.tools.arch_learn import arch_learn as _arch_learn
+    from opencode_arch.mcp.tools.arch_learn_approve import arch_learn_approve as _arch_learn_approve
     from opencode_arch.mcp.tools.arch_round import arch_round as _arch_round
     from opencode_arch.mcp.tools.arch_grow import arch_grow as _arch_grow
     from opencode_arch.mcp.tools.arch_mine import arch_mine as _arch_mine
@@ -406,6 +407,17 @@ try:
         """Materialize a draft WorkOrder from the top mined lesson (gated)."""
         return await _arch_learn(
             repo_path=repo_path, subject=subject, lesson_type=lesson_type
+        )
+
+    @mcp.tool()
+    async def arch_learn_approve(
+        repo_path: str = "",
+        job_id: str = "",
+        dry_run: bool = False,
+    ) -> dict:
+        """Release a draft learning Job: author via proposer, then apply+publish."""
+        return await _arch_learn_approve(
+            repo_path=repo_path, job_id=job_id, dry_run=dry_run
         )
 
     @mcp.tool()
