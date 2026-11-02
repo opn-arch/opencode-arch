@@ -47,6 +47,7 @@ testpaths = ["tests"]
 asyncio_mode = "auto"
 markers = [
     "e2e: expensive end-to-end tests requiring LLM calls (deselect with '-m \"not e2e\"')",
+    "opencode_live: opt-in tests that invoke a real OpenCode-backed proposer (gated by OPENCODE_LIVE env)",
     "no_pkg_init: opt out of the lifecycle-test autouse fixture that pre-writes package.yaml",
 ]
 

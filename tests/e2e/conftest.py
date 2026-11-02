@@ -45,10 +45,14 @@ def pytest_addoption(parser):
 
 
 def pytest_collection_modifyitems(config, items):
+    # Gate only EXPLICITLY-marked expensive benchmarks (@pytest.mark.e2e)
+    # behind --e2e. Fast, network-free tests in this package (e.g. the
+    # deterministic self-improvement loop) carry no marker and run by
+    # default so they participate in the standard regression gate.
     if not config.getoption("--e2e"):
-        skip = pytest.mark.skip(reason="E2E tests require --e2e flag")
+        skip = pytest.mark.skip(reason="E2E benchmarks require --e2e flag")
         for item in items:
-            if "e2e" in item.keywords:
+            if item.get_closest_marker("e2e") is not None:
                 item.add_marker(skip)
 
 
