@@ -68,6 +68,7 @@ try:
     )
     from opencode_arch.mcp.tools.arch_history import arch_history as _arch_history
     from opencode_arch.mcp.tools.arch_lessons import arch_lessons as _arch_lessons
+    from opencode_arch.mcp.tools.arch_learn import arch_learn as _arch_learn
     from opencode_arch.mcp.tools.arch_round import arch_round as _arch_round
     from opencode_arch.mcp.tools.arch_grow import arch_grow as _arch_grow
     from opencode_arch.mcp.tools.arch_mine import arch_mine as _arch_mine
@@ -395,6 +396,17 @@ try:
     async def arch_lessons(repo_path: str) -> dict:
         """Return mined lessons + reviewable proposal stubs (proprioception)."""
         return await _arch_lessons(repo_path=repo_path)
+
+    @mcp.tool()
+    async def arch_learn(
+        repo_path: str,
+        subject: str | None = None,
+        lesson_type: str | None = None,
+    ) -> dict:
+        """Materialize a draft WorkOrder from the top mined lesson (gated)."""
+        return await _arch_learn(
+            repo_path=repo_path, subject=subject, lesson_type=lesson_type
+        )
 
     @mcp.tool()
     async def arch_round(repo_path: str, node_id: str | None = None) -> dict:
