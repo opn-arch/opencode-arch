@@ -119,3 +119,27 @@ def test_arch_learn_approve_unknown_job_returns_not_found(tmp_path, _seed_model)
     assert env["ok"] is False
     assert env["error"]["code"] == "NOT_FOUND"
     assert env["error"]["details"]["reason"] == "job_missing"
+
+
+def test_arch_learn_approve_non_draft_job_returns_precondition_failed(
+    tmp_path, _seed_model
+):
+    job_id = _draft_job(tmp_path, _seed_model)
+    # First approval drives the job to completion (no longer draft).
+    first = _run(
+        arch_learn_approve(
+            repo_path=str(tmp_path), job_id=job_id, proposer=_valid_proposer
+        )
+    )
+    assert first["ok"] is True
+    assert first["job_state"] == "completed"
+
+    # Re-approving the same (now non-draft) job is an illegal transition.
+    env = _run(
+        arch_learn_approve(
+            repo_path=str(tmp_path), job_id=job_id, proposer=_valid_proposer
+        )
+    )
+    assert env["ok"] is False
+    assert env["error"]["code"] == "PRECONDITION_FAILED"
+    assert env["error"]["details"]["reason"] == "job_not_draft"

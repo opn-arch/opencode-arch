@@ -48,7 +48,7 @@ async def arch_learn_approve(
     """Release a draft learning Job: author via proposer, then apply+publish."""
     import yaml
 
-    from openag.ai.jobs import JobState, JobStore
+    from openag.ai.jobs import InvalidTransitionError, JobState, JobStore
     from openag.ai.worker import run_job
     from opencode_arch.mcp.envelope import err, ok, resolve_repo
     from opencode_arch.mcp.tools._devloop import (
@@ -79,8 +79,15 @@ async def arch_learn_approve(
             return err("PRECONDITION_FAILED", str(exc), reason=exc.reason)
 
     # ---- Release the gate: draft -> approved -> queued ------------------
-    store.transition(job_id, JobState.approved, actor="arch_learn_approve")
-    store.transition(job_id, JobState.queued, actor="arch_learn_approve")
+    try:
+        store.transition(job_id, JobState.approved, actor="arch_learn_approve")
+        store.transition(job_id, JobState.queued, actor="arch_learn_approve")
+    except InvalidTransitionError as exc:
+        return err(
+            "PRECONDITION_FAILED",
+            f"job {job_id} is not in draft state: {exc}",
+            reason="job_not_draft",
+        )
 
     # ---- Run the job (author the proposal) ------------------------------
     final = run_job(str(repo), job_id, proposer=proposer)
