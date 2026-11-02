@@ -66,7 +66,35 @@ async def arch_lessons(repo_path: str) -> dict:
     # 5. LLM-call audit journal (prompt-churn signal).
     llm_calls = llm_journal.read(resolved)
 
-    lessons = derive_lessons(history, observations, gaps, flags, llm_calls=llm_calls)
+    # 6. grounded-attribute index (entity id -> set of verified attributes).
+    grounded_index: dict[str, set[str]] = {}
+    for items in (doc.get("entities") or {}).values():
+        for e in items:
+            eid = e.get("id")
+            if not eid:
+                continue
+            grounded = {
+                p.get("attribute")
+                for p in (e.get("promises") or [])
+                if p.get("status") == "verified" and p.get("attribute")
+            }
+            if grounded:
+                grounded_index[eid] = grounded
+
+    # 7. proposed-promise reservoir (contradiction signal).
+    from openag.mining.reservoir import load_records
+    import os
+    reservoir_path = os.path.join(
+        str(resolved), ".architecture", "reservoir", "promises.jsonl"
+    )
+    try:
+        reservoir = load_records(reservoir_path)
+    except Exception:
+        reservoir = []
+
+    lessons = derive_lessons(history, observations, gaps, flags,
+                             llm_calls=llm_calls, reservoir=reservoir,
+                             grounded_index=grounded_index)
 
     # Persist to the append-only ledger via extend(), which skips lessons
     # already present (by ts-free content key). This keeps repeat calls on
