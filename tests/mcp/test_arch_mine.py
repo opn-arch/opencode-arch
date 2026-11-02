@@ -12,20 +12,12 @@ through ``OpencodeProvider``'s ``runner`` seam (no network, no subprocess).
 from __future__ import annotations
 
 import asyncio
-import shutil
 import sqlite3
 from pathlib import Path
 
 import pytest
 
 from opencode_arch.mcp.tools.arch_mine import arch_mine
-
-_EXEMPLAR_DIR = (
-    Path(__file__).resolve().parents[1]
-    / "fixtures"
-    / "exemplars"
-    / "insulin-pump"
-)
 
 #: Captured-shape extract reply (mirrors openAG's captured_extract.json).
 #: Fenced JSON exercises ``OpencodeProvider._extract_json`` fence handling.
@@ -40,20 +32,6 @@ _CAPTURED_EXTRACT = """\
 
 def _run(coro):
     return asyncio.run(coro)
-
-
-@pytest.fixture
-def _seed_model():
-    """Return a seeder that writes the insulin-pump openAG model fragments."""
-
-    def _seed(repo: Path) -> Path:
-        model_dir = Path(repo) / ".architecture" / "model"
-        model_dir.mkdir(parents=True, exist_ok=True)
-        for frag in sorted(_EXEMPLAR_DIR.glob("*.v3.yaml")):
-            shutil.copy(frag, model_dir / frag.name)
-        return Path(repo)
-
-    return _seed
 
 
 @pytest.fixture
