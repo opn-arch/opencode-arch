@@ -70,6 +70,7 @@ try:
     from opencode_arch.mcp.tools.arch_lessons import arch_lessons as _arch_lessons
     from opencode_arch.mcp.tools.arch_round import arch_round as _arch_round
     from opencode_arch.mcp.tools.arch_grow import arch_grow as _arch_grow
+    from opencode_arch.mcp.tools.arch_mine import arch_mine as _arch_mine
     from opencode_arch.mcp.tools.arch_cut import (
         arch_allocate_contract as _arch_allocate_contract,
         arch_propose_cut as _arch_propose_cut,
@@ -407,6 +408,16 @@ try:
         return await _arch_grow(repo_path=repo_path, root=root, budget=budget,
                                 max_iterations=max_iterations, model=model,
                                 no_provider=no_provider)
+
+    @mcp.tool()
+    async def arch_mine(repo_path: str = "", db: str = "", reservoir: str = "",
+                        ledger: str = "", repo: str | None = None,
+                        session: str | None = None,
+                        model: str | None = None) -> dict:
+        """Run the openAG reservoir-mining pass over opencode sessions."""
+        return await _arch_mine(repo_path=repo_path, db=db, reservoir=reservoir,
+                                ledger=ledger, repo=repo, session=session,
+                                model=model)
 
     @mcp.tool()
     async def arch_propose_cut(repo_path: str, node_id: str, proposal: dict) -> dict:
