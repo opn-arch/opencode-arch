@@ -83,13 +83,13 @@ async def arch_lessons(repo_path: str) -> dict:
 
     # 7. proposed-promise reservoir (contradiction signal).
     from openag.mining.reservoir import load_records
-    import os
-    reservoir_path = os.path.join(
-        str(resolved), ".architecture", "reservoir", "promises.jsonl"
-    )
+    reservoir_path = resolved / ".architecture" / "reservoir" / "promises.jsonl"
     try:
-        reservoir = load_records(reservoir_path)
-    except Exception:
+        reservoir = load_records(str(reservoir_path))
+    except (OSError, ValueError):
+        # Missing file is already handled inside load_records; a corrupt JSONL
+        # line raises json.JSONDecodeError (a ValueError). A bad reservoir must
+        # never fail the read tool.
         reservoir = []
 
     lessons = derive_lessons(history, observations, gaps, flags,
