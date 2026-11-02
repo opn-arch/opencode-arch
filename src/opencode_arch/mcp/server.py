@@ -6,9 +6,6 @@ Run with: python -m opencode_arch.mcp.server
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
 try:
     from mcp.server.fastmcp import FastMCP
 
