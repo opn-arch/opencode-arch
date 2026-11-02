@@ -11,7 +11,7 @@ import os
 import urllib.request
 from typing import Iterator
 
-from architecture_model.llm import Completion, LLMProvider
+from openag.llm import Completion, LLMProvider
 
 
 class RelayExtProvider:

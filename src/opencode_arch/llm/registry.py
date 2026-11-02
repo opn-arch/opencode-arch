@@ -1,7 +1,7 @@
 """Provider registry with cached instantiation."""
 from __future__ import annotations
 
-from architecture_model.llm import LLMProvider
+from openag.llm import LLMProvider
 
 _CACHE: dict[str, LLMProvider] = {}
 

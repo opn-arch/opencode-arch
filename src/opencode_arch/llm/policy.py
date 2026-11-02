@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterator
 
-from architecture_model.llm import Completion, LLMProvider
+from openag.llm import Completion, LLMProvider
 
 from opencode_arch.llm import registry
 

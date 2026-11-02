@@ -6,7 +6,7 @@ import os
 import urllib.request
 from typing import Iterator
 
-from architecture_model.llm import Completion
+from openag.llm import Completion
 
 
 _ANTHROPIC_STOP_MAP = {

@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Iterator
 
-from architecture_model.llm import Completion, LLMProvider
+from openag.llm import Completion, LLMProvider
 
 
 class MCPProvider:
