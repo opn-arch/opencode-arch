@@ -1,36 +1,42 @@
-# Skill: Test-Guided Code Generation
+---
+name: generation
+description: "Use when asked to generate code from an architecture model or run test-guided code generation against an openAG model"
+---
 
-## When to Use
+# Test-Guided Code Generation
 
-Use when generating code from an architecture model that must pass existing tests.
+## Status: not available in openAG
 
-## Workflow
+<!-- legacy-ok:start -->
+There is **no code-generation tool** in the current openAG toolset. The legacy
+AMS `architect_generate` (and the `architect_scan` / `architect_slice` /
+`architect_extract` flow it depended on) do **not** exist here. Do not attempt
+to call them — they will fail.
+<!-- legacy-ok:end -->
 
-1. **Scan + Slice**: Get context for the target component.
-   ```
-   architect_scan(repo_path)
-   architect_slice(repo_path, focus="<component-or-layer>", budget=4000)
-   ```
+If a user asks to "generate code from the architecture model" or "make the code
+pass the tests from the model", explain that openAG does not generate code. It
+is an **analysis / modeling** toolset, not a codegen engine.
 
-2. **Generate**: Write code for the target component using:
-   - The architecture model constraints (from slice)
-   - The existing test file expectations
-   - The project's coding patterns
+## What to do instead
 
-3. **Test**: Call `architect_generate(repo_path)` to run the test suite.
-   - Check pass_rate and failures.
+Use the inspection tools to surface what the model says *should* exist, then
+implement it yourself with normal editing + testing:
 
-4. **Iterate on failures**:
-   - Read failure messages from the result
-   - Fix only the failing components
-   - Re-run tests
-   - Repeat until pass_rate reaches target (usually 1.0)
+- `arch_pipeline(repo_path=...)` → write the model first (see the `extraction`
+  skill for the full write-once-then-read workflow).
+- `arch_frontier(repo_path=...)` → find candidate node ids (fall back to
+  `arch_health` `worst_offenders` or `arch_decompose` if the frontier is empty).
+- `arch_owed(repo_path=..., node_id=...)` → the attributes/promises a component
+  still owes (intent, contract, produces, consumes, behavior, …).
+- `arch_gaps(repo_path=..., node_id=...)` → typed G-DELIVERY gaps for a node.
+- `arch_slice(repo_path=..., node_id=...)` → the entity-scoped sub-doc for
+  context while you implement.
 
-5. **Store success**: If a model update was needed, call `architect_extract` to persist.
+Then write and run tests with your normal tooling. openAG does not run the test
+suite or emit code.
 
-## Guidelines
+## Related
 
-- Generate one component at a time for complex systems
-- Use relative imports matching the project structure
-- Check existing test imports to understand expected module layout
-- Maximum 3 retry iterations before escalating to user
+See the `extraction` skill for the canonical openAG model-building workflow and
+the full `arch_*` tool reference.

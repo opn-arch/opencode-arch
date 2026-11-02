@@ -207,6 +207,41 @@ pip install -e ".[dev]"
 pytest tests/ -v  # 278 tests, ~20s
 ```
 
+## Skills
+
+This repo ships OpenCode **skills** (under `skills/`) alongside the `arch_*`
+MCP tools, so the guidance and the tools version together and cannot drift. A
+drift test (`tests/test_skills_drift.py`) fails CI if a skill references a tool
+that no longer exists or uses legacy vocabulary.
+
+Install them into your global OpenCode skills directory:
+
+```bash
+./scripts/install-skills.sh
+```
+
+This **copies** each `skills/<name>/` into `~/.config/opencode/skills/<name>/`
+(re-runnable; no dependency on this checkout staying on disk). The skills must
+be global because the `arch_*` tools run against arbitrary target repos — a
+project-local `.opencode/skills/` would only be found inside this worktree.
+
+Shipped skills:
+
+| Skill | Purpose |
+|-------|---------|
+| `extraction` | openAG write-once-then-read architecture extraction workflow |
+| `generation` | Stub — code generation is not available in openAG; points to the real inspection tools |
+
+**For later (deferred upgrade):** symlink instead of copy, so edits here are
+picked up live without re-running the installer:
+
+```bash
+ln -snf "$(pwd)/skills/extraction" ~/.config/opencode/skills/extraction
+```
+
+Symlinking is the eventually-recommended mechanism (single source of truth,
+zero drift) but is deferred until the skills stabilise.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
