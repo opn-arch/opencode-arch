@@ -41,17 +41,14 @@ async def arch_lessons(repo_path: str) -> dict:
 
     from openag.kernel.gate import emit_gaps_graph
     from openag.kernel.lessons import LessonStore, derive_lessons, digest
-    from openag.observe import journal
     from openag.llm import journal as llm_journal
+    from openag.observe import journal
     from openag.observe.audit import audit_observations
 
     resolved = resolve_repo(repo_path)
 
     # 1. runtime observations (model-independent journal).
     observations = journal.read(resolved)
-
-    # 5. LLM-call audit journal (prompt-churn signal).
-    llm_calls = llm_journal.read(resolved)
 
     # 2. generation history (health-enriched ledger).
     history = generation_store(repo_path).all()
@@ -65,6 +62,9 @@ async def arch_lessons(repo_path: str) -> dict:
     for eid in g.entity_nodes():
         if g.node(eid).get("kind") in _REAL_ENTITY_KINDS:
             gaps += emit_gaps_graph(g, eid)
+
+    # 5. LLM-call audit journal (prompt-churn signal).
+    llm_calls = llm_journal.read(resolved)
 
     lessons = derive_lessons(history, observations, gaps, flags, llm_calls=llm_calls)
 
